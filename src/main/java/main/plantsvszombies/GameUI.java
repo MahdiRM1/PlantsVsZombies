@@ -22,6 +22,7 @@ public class GameUI {
         mainPane = new StackPane(bPane);
         Scene scene = new Scene(mainPane, Constants.width, Constants.height);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 

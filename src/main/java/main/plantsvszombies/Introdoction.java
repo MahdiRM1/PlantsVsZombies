@@ -16,6 +16,7 @@ public class Introdoction {
         this.stage = stage;
         Scene scene = new Scene(Pane(), Constants.width, Constants.height);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
