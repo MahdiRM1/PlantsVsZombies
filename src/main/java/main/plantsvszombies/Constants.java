@@ -7,4 +7,5 @@ public final class Constants {
     public static final double height = Screen.getPrimary().getVisualBounds().getHeight();
     public static final double TILE_HEIGHT = height/7;
     public static final double TILE_WIDTH = width/10;
+
 }

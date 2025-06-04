@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -14,8 +16,10 @@ import javafx.stage.Stage;
 public class GameUI {
 
     public final StackPane mainPane;
+    public Plant selectedPlant;
 
     public GameUI(Stage stage){
+        selectedPlant = null;
         BorderPane bPane = new BorderPane();
         bPane.setBottom(map());
         bPane.setTop(cardBar());
@@ -28,7 +32,17 @@ public class GameUI {
 
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
-        for (int i = 1; i <= 10; i++) {
+        Button peashoter = new Button();
+        ImageView image = new ImageView(new Image("file:Pictures/peashooterCard.png"));
+        image.setFitWidth(Constants.TILE_HEIGHT);
+        image.setFitHeight(Constants.TILE_WIDTH);
+        peashoter.setGraphic(image);
+        peashoter.setOnAction(event -> {
+            if(selectedPlant == null) selectedPlant = new PeaShooter();
+            else selectedPlant = null;
+        });
+        cardBar.getChildren().add(peashoter);
+        for (int i = 2; i <= 10; i++) {
             Button btn = new Button("" + i);
             btn.setPrefSize(Constants.TILE_HEIGHT, Constants.TILE_WIDTH);
             cardBar.getChildren().add(btn);
@@ -48,8 +62,12 @@ public class GameUI {
         GridPane gPane = new GridPane();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
-                Button btn = new Button(i + " " + j);
+                Button btn = new Button();
                 btn.setPrefSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
+                btn.setOnAction(event -> {
+                    if(selectedPlant != null) btn.setGraphic(selectedPlant.getGif());
+                    selectedPlant = null;
+                });
                 gPane.add(btn, i, j);
             }
         }
