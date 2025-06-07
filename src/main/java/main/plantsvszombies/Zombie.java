@@ -7,6 +7,12 @@ public abstract class Zombie {
     protected int hp;
     protected int speed;
     protected ImageView gif;
+    protected int i , j;
+
+    public Zombie(int i) {
+        this.i = i;
+        j = 9;
+    }
 
     public void eatPlant(){}
 
@@ -16,5 +22,13 @@ public abstract class Zombie {
 
     public ImageView getGif() {
         return gif;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public int getJ() {
+        return j;
     }
 }
