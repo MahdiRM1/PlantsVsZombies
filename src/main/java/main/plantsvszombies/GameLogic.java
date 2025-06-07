@@ -1,7 +1,5 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.ImageView;
-
 public class GameLogic {
     private final Plant[][] pottedPlants = new Plant[5][9];
     private final Zombie[][] zombies = new Zombie[5][10];

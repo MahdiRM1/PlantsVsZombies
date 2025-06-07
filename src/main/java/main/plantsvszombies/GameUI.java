@@ -7,10 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class GameUI {
@@ -63,10 +60,16 @@ public class GameUI {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 5; j++) {
                 Button btn = new Button();
+                if(i == 8 && j == 2){
+                    Zombie zombie = new OriginalZombie();
+                    btn.setGraphic(zombie.getGif());
+                }
                 btn.setPrefSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
                 btn.setOnAction(event -> {
-                    if(selectedPlant != null) btn.setGraphic(selectedPlant.getGif());
-                    selectedPlant = null;
+                    if(selectedPlant != null) {
+                        btn.setGraphic(selectedPlant.getGif());
+                        selectedPlant = null;
+                    }
                 });
                 gPane.add(btn, i, j);
             }
