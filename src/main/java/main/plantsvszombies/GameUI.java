@@ -1,5 +1,7 @@
 package main.plantsvszombies;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,23 +11,29 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GameUI {
 
     private final GameLogic gameLogic;
     private final StackPane mainPane;
     private Plant selectedPlant;
+    Zombie z;
 
     public GameUI(Stage stage){
-        selectedPlant = null;
         gameLogic = new GameLogic();
         BorderPane bPane = new BorderPane();
         bPane.setBottom(map());
         bPane.setTop(cardBar());
-        mainPane = new StackPane(bPane, movement());
+        mainPane = new StackPane(bPane);
+        z = new OriginalZombie(2);
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event ->
+            mainPane.getChildren().add(movement())
+        ));
+        tl.setCycleCount(2000);
+        tl.play();
         Scene scene = new Scene(mainPane, Constants.width, Constants.height);
         stage.setScene(scene);
-        stage.setMaximized(true);
         stage.show();
     }
 
@@ -80,6 +88,8 @@ public class GameUI {
 
     private AnchorPane movement(){
         AnchorPane pane = new AnchorPane();
+        z.getGif().setLayoutX(z.getGif().getLayoutX() - 1.4);
+        pane.getChildren().add(z.getGif());
         pane.setMouseTransparent(true);
         return pane;
     }
