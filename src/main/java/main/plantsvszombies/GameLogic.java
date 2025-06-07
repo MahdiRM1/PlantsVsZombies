@@ -1,25 +1,25 @@
 package main.plantsvszombies;
 
+import java.util.ArrayList;
+
 public class GameLogic {
     private final Plant[][] pottedPlants = new Plant[5][9];
-    private final Zombie[][] zombies = new Zombie[5][10];
+    private ArrayList<Zombie> zombies = new ArrayList<>();
 
     public GameLogic(){
     }
 
     public void setPlant(int i, int j, Plant plant){
-        pottedPlants[i][j] = plant;
+        if(pottedPlants[i][j] == null) pottedPlants[i][j] = plant;
     }
 
     public void addZombie(int i){
-        zombies[i][9] = new OriginalZombie();
+        zombies.add(new OriginalZombie(i));
     }
 
     public void checkCorrespondence(){
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
-                if(pottedPlants[i][j] != null && zombies[i][j] != null) zombies[i][j].eatPlant();
-            }
+        for(Zombie zombie: zombies) {
+            if(pottedPlants[zombie.getI()][zombie.getJ()] != null) zombie.eatPlant();
         }
     }
 
@@ -27,11 +27,12 @@ public class GameLogic {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 9; j++) {
                 try {
-                    if(pottedPlants[i][j].getHp() == 0) pottedPlants[i][j] = null;
-                    if(zombies[i][j].getHp() == 0) zombies[i][j] = null;
-                } catch (NullPointerException e) {
-                }
+                    if(pottedPlants[i][j].getHp() <= 0) pottedPlants[i][j] = null;
+                } catch (NullPointerException e) {}
             }
+        }
+        for (int i = 0; i < zombies.size(); i++) {
+            if(zombies.get(i).getHp() <= 0) zombies.remove(i);
         }
     }
 }

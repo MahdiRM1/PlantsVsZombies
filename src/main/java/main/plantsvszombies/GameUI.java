@@ -12,15 +12,17 @@ import javafx.stage.Stage;
 
 public class GameUI {
 
-    public final StackPane mainPane;
-    public Plant selectedPlant;
+    private final GameLogic gameLogic;
+    private final StackPane mainPane;
+    private Plant selectedPlant;
 
     public GameUI(Stage stage){
         selectedPlant = null;
+        gameLogic = new GameLogic();
         BorderPane bPane = new BorderPane();
         bPane.setBottom(map());
         bPane.setTop(cardBar());
-        mainPane = new StackPane(bPane);
+        mainPane = new StackPane(bPane, movement());
         Scene scene = new Scene(mainPane, Constants.width, Constants.height);
         stage.setScene(scene);
         stage.setMaximized(true);
@@ -57,23 +59,28 @@ public class GameUI {
 
     private GridPane map(){
         GridPane gPane = new GridPane();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
                 Button btn = new Button();
-                if(i == 8 && j == 2){
-                    Zombie zombie = new OriginalZombie();
-                    btn.setGraphic(zombie.getGif());
-                }
                 btn.setPrefSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
+                int finalI = i;
+                int finalJ = j;
                 btn.setOnAction(event -> {
                     if(selectedPlant != null) {
-                        btn.setGraphic(selectedPlant.getGif());
+                        gameLogic.setPlant(finalI, finalJ, selectedPlant);
+                        if(btn.getGraphic() == null) btn.setGraphic(selectedPlant.getGif());
                         selectedPlant = null;
                     }
                 });
-                gPane.add(btn, i, j);
+                gPane.add(btn, j, i);
             }
         }
         return gPane;
+    }
+
+    private AnchorPane movement(){
+        AnchorPane pane = new AnchorPane();
+        pane.setMouseTransparent(true);
+        return pane;
     }
 }
