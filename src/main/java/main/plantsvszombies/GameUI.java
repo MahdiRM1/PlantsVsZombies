@@ -18,6 +18,7 @@ public class GameUI {
     private final GameLogic gameLogic;
     private final StackPane mainPane;
     private Plant selectedPlant;
+    AnchorPane pane = new AnchorPane();
     Zombie z;
 
     public GameUI(Stage stage){
@@ -27,9 +28,11 @@ public class GameUI {
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
         z = new OriginalZombie(2);
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event ->
-            mainPane.getChildren().add(movement())
-        ));
+        pane.getChildren().add(z.getPicture());
+        mainPane.getChildren().add(pane);
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            movement();
+        }));
         tl.setCycleCount(2000);
         tl.play();
         Scene scene = new Scene(mainPane, Constants.width, Constants.height);
@@ -40,7 +43,7 @@ public class GameUI {
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
         Button peashoter = new Button();
-        ImageView image = new ImageView(new Image("file:Pictures/peaShooterCard.png"));
+        ImageView image = new ImageView(new Image("file:Pictures/peashooterCard.png"));
         image.setFitWidth(Constants.TILE_HEIGHT);
         image.setFitHeight(Constants.TILE_WIDTH);
         peashoter.setGraphic(image);
@@ -86,11 +89,11 @@ public class GameUI {
         return gPane;
     }
 
-    private AnchorPane movement(){
-        AnchorPane pane = new AnchorPane();
-        z.getGif().setLayoutX(z.getGif().getLayoutX() - 1.4);
-        pane.getChildren().add(z.getGif());
-        pane.setMouseTransparent(true);
-        return pane;
+    public void movement(){
+        z.move();
+        pane.getChildren().removeLast();
+        pane.getChildren().add(z.getPicture());
+        mainPane.getChildren().removeLast();
+        mainPane.getChildren().add(pane);
     }
 }
