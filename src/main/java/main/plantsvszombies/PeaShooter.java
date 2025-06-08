@@ -13,4 +13,5 @@ public class PeaShooter extends PeaPlant{
        gif.setFitHeight(Constants.TILE_HEIGHT * 0.8);
        gif.setFitWidth(Constants.TILE_WIDTH * 0.8);
     }
+
 }

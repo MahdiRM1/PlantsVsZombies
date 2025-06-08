@@ -5,28 +5,27 @@ import javafx.scene.image.ImageView;
 
 public class OriginalZombie extends Zombie{
 
-    ImageView[] zombiepic = new ImageView[22];
-    int nowPic;
+    private final Image[] zombiepic = new Image[22];
+    private int nowPic;
 
-    public OriginalZombie(int i){
-        super(i);
+    public OriginalZombie(int row){
+        super(row);
         hp = 100;
         speed = 4;
-        for (int j = 0; j < 22; j++) {
-            zombiepic[j] = new ImageView(new Image("file:Pictures/normalZombie/Zombie_" + j + ".png"));
-            zombiepic[j].setFitWidth(Constants.ZOMBIE_GIF_WEIGHT);
-            zombiepic[j].setFitHeight(Constants.ZOMBIE_GIF_HEIGHT);
-            zombiepic[j].setLayoutY(Constants.height - zombiepic[j].getFitHeight() - (4-i) * Constants.TILE_HEIGHT);
-            zombiepic[j].setLayoutX(Constants.width - zombiepic[j].getFitHeight());
+        for (int i = 0; i < 22; i++) {
+            zombiepic[i] = new Image("file:Pictures/normalZombie/Zombie_" + i + ".png");
         }
-        picture = zombiepic[nowPic];
+        picture = new ImageView(zombiepic[nowPic]);
+        picture.setFitWidth(Constants.ZOMBIE_GIF_WEIGHT);
+        picture.setFitHeight(Constants.ZOMBIE_GIF_HEIGHT);
+        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_HEIGHT);
+        picture.setLayoutX(Constants.width - picture.getFitHeight());
     }
 
     @Override
     public void move(){
         nowPic = (nowPic + 1) % 22;
-        double lx = picture.getLayoutX();
-        picture = zombiepic[nowPic];
-        picture.setLayoutX(lx - Constants.TILE_WIDTH/(speed*20));
+        picture.setImage(zombiepic[nowPic]);
+        picture.setLayoutX(picture.getLayoutX() - Constants.TILE_WIDTH/(speed*20));
     }
 }

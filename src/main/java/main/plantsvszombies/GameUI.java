@@ -13,6 +13,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class GameUI {
 
     private final GameLogic gameLogic;
@@ -27,7 +30,9 @@ public class GameUI {
         bPane.setBottom(map());
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
-        z = new OriginalZombie(2);
+        Random rdm = new Random();
+        z = new OriginalZombie(rdm.nextInt(5));
+        gameLogic.addZombie(z);
         pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
@@ -71,20 +76,19 @@ public class GameUI {
 
     private GridPane map(){
         GridPane gPane = new GridPane();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
                 Button btn = new Button();
+                int Row = row; int Col = col;
                 btn.setPrefSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
-                int finalI = i;
-                int finalJ = j;
                 btn.setOnAction(event -> {
                     if(selectedPlant != null) {
-                        gameLogic.setPlant(finalI, finalJ, selectedPlant);
+                        gameLogic.setPlant(Row, Col, selectedPlant);
                         if(btn.getGraphic() == null) btn.setGraphic(selectedPlant.getGif());
                         selectedPlant = null;
                     }
                 });
-                gPane.add(btn, j, i);
+                gPane.add(btn, col, row);
             }
         }
         return gPane;
@@ -92,9 +96,15 @@ public class GameUI {
 
     public void movement(){
         z.move();
-        pane.getChildren().removeLast();
-        pane.getChildren().add(z.getPicture());
-        mainPane.getChildren().removeLast();
-        mainPane.getChildren().add(pane);
+
+        ArrayList<Integer[]> temp = gameLogic.plantsAligned();
+        ArrayList<ImageView> images = new ArrayList<>();
+        for(Integer[] a : temp) {
+            ImageView imageView = new ImageView("file:Pictures/normalBullet.png");
+            imageView.setLayoutX(a[1]*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.5);
+            imageView.setLayoutY(Constants.height - (5-a[0])*Constants.TILE_HEIGHT);
+            images.add(imageView);
+        }
+        pane.getChildren().addAll(images);
     }
 }
