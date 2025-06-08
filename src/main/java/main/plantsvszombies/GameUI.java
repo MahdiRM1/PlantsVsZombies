@@ -40,7 +40,7 @@ public class GameUI {
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
         Button peashoter = new Button();
-        ImageView image = new ImageView(new Image("file:Pictures/peashooterCard.png"));
+        ImageView image = new ImageView(new Image("file:Pictures/peaShooterCard.png"));
         image.setFitWidth(Constants.TILE_HEIGHT);
         image.setFitHeight(Constants.TILE_WIDTH);
         peashoter.setGraphic(image);
