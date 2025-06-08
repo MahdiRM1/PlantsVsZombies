@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class Introdoction {
+public class Introduction {
 
     private Stage stage;
 
@@ -32,14 +32,14 @@ public class Introdoction {
     private Button initializeBtn(String str){
         Button btn = new Button(str);
         btn.setStyle(
-                "-fx-background-radius: 20; " +
-                        "-fx-min-width: 150px; " +
-                        "-fx-min-height: 75px; " +
-                        "-fx-background-color: rgb(206, 175, 0); "  +
-                        "-fx-text-fill: white; " +
-                        "-fx-font-size: 50px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
+            "-fx-background-radius: 20; " +
+            "-fx-min-width: 150px; " +
+            "-fx-min-height: 75px; " +
+            "-fx-background-color: rgb(206, 175, 0); "  +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 50px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
         );
         btn.setOnMouseEntered(event ->
                 btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(134, 114, 1); ")
