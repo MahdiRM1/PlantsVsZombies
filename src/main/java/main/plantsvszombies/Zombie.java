@@ -7,11 +7,11 @@ public abstract class Zombie {
     protected int hp;
     protected int speed;
     protected ImageView picture;
-    protected int i , j;
+    protected int row , col;
 
-    public Zombie(int i) {
-        this.i = i;
-        j = 9;
+    public Zombie(int row) {
+        this.row = row;
+        col = 9;
     }
 
     public void eatPlant(){}
@@ -26,11 +26,11 @@ public abstract class Zombie {
         return picture;
     }
 
-    public int getI() {
-        return i;
+    public int getRow() {
+        return row;
     }
 
-    public int getJ() {
-        return j;
+    public int getCol() {
+        return col;
     }
 }
