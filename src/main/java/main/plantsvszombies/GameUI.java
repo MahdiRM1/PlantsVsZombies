@@ -13,6 +13,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class GameUI {
 
     private final GameLogic gameLogic;
@@ -28,11 +30,14 @@ public class GameUI {
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
         z = new OriginalZombie(2);
+        gameLogic.addZombie(z.row);
         pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
+
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             movement();
+            temp();
         }));
         tl.setCycleCount(2000);
         tl.play();
@@ -96,5 +101,9 @@ public class GameUI {
         pane.getChildren().add(z.getPicture());
         mainPane.getChildren().removeLast();
         mainPane.getChildren().add(pane);
+    }
+    public void temp() {
+        ArrayList<Integer[]> temp2 = gameLogic.plantsAligned();
+        for (Integer[] t : temp2) System.out.println(t[0] + " " + t[1]);
     }
 }

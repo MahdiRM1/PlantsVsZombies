@@ -14,12 +14,13 @@ public class GameLogic {
     }
 
     public void addZombie(int i){
+        System.out.println("zombie in line " + i + "added");
         zombies.add(new OriginalZombie(i));
     }
 
     public void checkCorrespondence(){
         for(Zombie zombie: zombies) {
-            if(pottedPlants[zombie.getI()][zombie.getJ()] != null) zombie.eatPlant();
+            if(pottedPlants[zombie.getRow()][zombie.getCol()] != null) zombie.eatPlant();
         }
     }
 
@@ -34,5 +35,21 @@ public class GameLogic {
         for (int i = 0; i < zombies.size(); i++) {
             if(zombies.get(i).getHp() <= 0) zombies.remove(i);
         }
+    }
+    public ArrayList<Integer[]> plantsAligned() {
+        ArrayList<Integer[]> shooterCoordination = new ArrayList<>();
+        for (Zombie z : zombies){
+            ArrayList<Integer> plantsAhead = checkRow(z.row, z.col);
+            for(Integer integer : plantsAhead) shooterCoordination.add(new Integer[]{z.row, integer});
+        }
+        return shooterCoordination;
+    }
+
+    private ArrayList<Integer> checkRow(int row, int col){
+        ArrayList<Integer> plantsX = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            if(pottedPlants[row][i] instanceof PeaPlant) plantsX.add(i);
+        }
+        return plantsX;
     }
 }
