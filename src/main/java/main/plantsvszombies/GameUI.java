@@ -29,6 +29,7 @@ public class GameUI {
         mainPane = new StackPane(bPane);
         z = new OriginalZombie(2);
         pane.getChildren().add(z.getPicture());
+        pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             movement();
