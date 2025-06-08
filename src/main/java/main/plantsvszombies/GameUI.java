@@ -32,11 +32,10 @@ public class GameUI {
         mainPane = new StackPane(bPane);
         Random rdm = new Random();
         z = new OriginalZombie(rdm.nextInt(5));
-        gameLogic.addZombie(z.getRow());
+        gameLogic.addZombie(z);
         pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
-
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             movement();
         }));
@@ -97,9 +96,15 @@ public class GameUI {
 
     public void movement(){
         z.move();
-        pane.getChildren().removeLast();
-        pane.getChildren().add(z.getPicture());
-        mainPane.getChildren().removeLast();
-        mainPane.getChildren().add(pane);
+
+        ArrayList<Integer[]> temp = gameLogic.plantsAligned();
+        ArrayList<ImageView> images = new ArrayList<>();
+        for(Integer[] a : temp) {
+            ImageView imageView = new ImageView("file:Pictures/normalBullet.png");
+            imageView.setLayoutX(a[1]*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.5);
+            imageView.setLayoutY(Constants.height - (5-a[0])*Constants.TILE_HEIGHT);
+            images.add(imageView);
+        }
+        pane.getChildren().addAll(images);
     }
 }
