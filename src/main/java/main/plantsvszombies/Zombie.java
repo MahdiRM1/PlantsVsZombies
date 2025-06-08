@@ -6,7 +6,7 @@ public abstract class Zombie {
 
     protected int hp;
     protected int speed;
-    protected ImageView gif;
+    protected ImageView picture;
     protected int i , j;
 
     public Zombie(int i) {
@@ -16,12 +16,14 @@ public abstract class Zombie {
 
     public void eatPlant(){}
 
+    public abstract void move();
+
     public int getHp() {
         return hp;
     }
 
-    public ImageView getGif() {
-        return gif;
+    public ImageView getPicture() {
+        return picture;
     }
 
     public int getI() {
