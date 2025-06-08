@@ -13,8 +13,8 @@ public class GameLogic {
         if(pottedPlants[i][j] == null) pottedPlants[i][j] = plant;
     }//doroste
 
-    public void addZombie(int i){
-        zombies.add(new OriginalZombie(i));
+    public void addZombie(Zombie z){
+        zombies.add(z);
     }//doroste
 
     public void checkCorrespondence(){
