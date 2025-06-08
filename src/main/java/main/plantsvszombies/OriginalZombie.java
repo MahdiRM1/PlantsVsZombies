@@ -27,6 +27,6 @@ public class OriginalZombie extends Zombie{
         nowPic = (nowPic + 1) % 22;
         double lx = picture.getLayoutX();
         picture = zombiepic[nowPic];
-        picture.setLayoutX(lx - Constants.TILE_WIDTH/(4*20));
+        picture.setLayoutX(lx - Constants.TILE_WIDTH/(speed*20));
     }
 }
