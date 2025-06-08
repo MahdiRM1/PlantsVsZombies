@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameUI {
 
@@ -29,15 +30,15 @@ public class GameUI {
         bPane.setBottom(map());
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
-        z = new OriginalZombie(2);
-        gameLogic.addZombie(z.row);
+        Random rdm = new Random();
+        z = new OriginalZombie(rdm.nextInt(5));
+        gameLogic.addZombie(z.getRow());
         pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
 
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             movement();
-            temp();
         }));
         tl.setCycleCount(2000);
         tl.play();
@@ -76,20 +77,19 @@ public class GameUI {
 
     private GridPane map(){
         GridPane gPane = new GridPane();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
                 Button btn = new Button();
+                int Row = row; int Col = col;
                 btn.setPrefSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
-                int finalI = i;
-                int finalJ = j;
                 btn.setOnAction(event -> {
                     if(selectedPlant != null) {
-                        gameLogic.setPlant(finalI, finalJ, selectedPlant);
+                        gameLogic.setPlant(Row, Col, selectedPlant);
                         if(btn.getGraphic() == null) btn.setGraphic(selectedPlant.getGif());
                         selectedPlant = null;
                     }
                 });
-                gPane.add(btn, j, i);
+                gPane.add(btn, col, row);
             }
         }
         return gPane;
@@ -101,9 +101,5 @@ public class GameUI {
         pane.getChildren().add(z.getPicture());
         mainPane.getChildren().removeLast();
         mainPane.getChildren().add(pane);
-    }
-    public void temp() {
-        ArrayList<Integer[]> temp2 = gameLogic.plantsAligned();
-        for (Integer[] t : temp2) System.out.println(t[0] + " " + t[1]);
     }
 }

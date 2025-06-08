@@ -4,19 +4,18 @@ import java.util.ArrayList;
 
 public class GameLogic {
     private final Plant[][] pottedPlants = new Plant[5][9];
-    private ArrayList<Zombie> zombies = new ArrayList<>();
+    private final ArrayList<Zombie> zombies = new ArrayList<>();
 
     public GameLogic(){
     }
 
     public void setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) pottedPlants[i][j] = plant;
-    }
+    }//doroste
 
     public void addZombie(int i){
-        System.out.println("zombie in line " + i + "added");
         zombies.add(new OriginalZombie(i));
-    }
+    }//doroste
 
     public void checkCorrespondence(){
         for(Zombie zombie: zombies) {
@@ -36,20 +35,22 @@ public class GameLogic {
             if(zombies.get(i).getHp() <= 0) zombies.remove(i);
         }
     }
+
     public ArrayList<Integer[]> plantsAligned() {
         ArrayList<Integer[]> shooterCoordination = new ArrayList<>();
         for (Zombie z : zombies){
-            ArrayList<Integer> plantsAhead = checkRow(z.row, z.col);
-            for(Integer integer : plantsAhead) shooterCoordination.add(new Integer[]{z.row, integer});
+            ArrayList<Integer> plantsAhead = checkRow(z.getRow(), z.getCol());
+            for(Integer integer : plantsAhead) shooterCoordination.add(new Integer[]{z.getRow(), integer});
         }
         return shooterCoordination;
-    }
+    }//doroste
 
     private ArrayList<Integer> checkRow(int row, int col){
         ArrayList<Integer> plantsX = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
+        if(col == 9) col--;
+        for (int i = 0; i < col; i++) {
             if(pottedPlants[row][i] instanceof PeaPlant) plantsX.add(i);
         }
         return plantsX;
-    }
+    }//doroste
 }
