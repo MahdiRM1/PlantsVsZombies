@@ -48,10 +48,17 @@ public class GameLogic {
     }
 
 
-    public void checkCorrespondence(){
+    public ArrayList<Integer[]> checkCorrespondence(){
+        ArrayList<Integer[]> coordination = new ArrayList<>();
         for(Zombie zombie: zombies) {
-            if(pottedPlants[zombie.getRow()][zombie.getCol()] != null) zombie.eatPlant();
+            try{
+                if (pottedPlants[zombie.getRow()][zombie.getCol()] != null) {
+                    coordination.add(new Integer[]{zombie.getRow(), zombie.getCol()});
+                    zombie.eatPlant(pottedPlants[zombie.getRow()][zombie.getCol()]);
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {}
         }
+        return coordination;
     }
 
     public ArrayList<ImageView> checkDied(){
@@ -83,7 +90,7 @@ public class GameLogic {
 
     private ArrayList<Integer> checkRow(int row, int col){
         ArrayList<Integer> plantsX = new ArrayList<>();
-        if(col == 9) col--;
+        if(col >= 9) col = 8;
         for (int i = 0; i <= col; i++) {
             if(pottedPlants[row][i] instanceof PeaPlant) plantsX.add(i);
         }

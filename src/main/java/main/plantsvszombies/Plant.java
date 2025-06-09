@@ -8,6 +8,10 @@ public abstract class Plant {
     protected int hp;
     protected ImageView gif;
 
+    public void damage(){
+        hp -= 100;
+    }
+
     public ImageView getGif() {
         return gif;
     }

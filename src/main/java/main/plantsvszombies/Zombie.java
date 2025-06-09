@@ -14,7 +14,9 @@ public abstract class Zombie {
         col = 9;
     }
 
-    public void eatPlant(){}
+    public void eatPlant(Plant plant){
+        plant.damage();
+    }
 
     public void damage(){
         hp -= 20;
