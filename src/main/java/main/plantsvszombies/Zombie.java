@@ -16,6 +16,10 @@ public abstract class Zombie {
 
     public void eatPlant(){}
 
+    public void damage(){
+        hp -= 20;
+    }
+
     public abstract void move();
 
     public int getHp() {
