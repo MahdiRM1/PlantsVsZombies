@@ -19,7 +19,7 @@ public class OriginalZombie extends Zombie{
         picture.setFitWidth(Constants.ZOMBIE_GIF_WEIGHT);
         picture.setFitHeight(Constants.ZOMBIE_GIF_HEIGHT);
         picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_HEIGHT);
-        picture.setLayoutX(Constants.width - picture.getFitHeight());
+        picture.setLayoutX(Constants.width);
     }
 
     @Override
@@ -27,5 +27,6 @@ public class OriginalZombie extends Zombie{
         nowPic = (nowPic + 1) % 22;
         picture.setImage(zombiepic[nowPic]);
         picture.setLayoutX(picture.getLayoutX() - Constants.TILE_WIDTH/(speed*20));
+        col = (int)(picture.getLayoutX() / Constants.TILE_WIDTH);
     }
 }
