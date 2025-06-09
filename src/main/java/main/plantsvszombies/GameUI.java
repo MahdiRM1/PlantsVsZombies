@@ -21,8 +21,8 @@ public class GameUI {
     private final GameLogic gameLogic;
     private final StackPane mainPane;
     private Plant selectedPlant;
-    AnchorPane pane = new AnchorPane();
-    Zombie z;
+    private AnchorPane pane = new AnchorPane();
+    private int time = 0;
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
@@ -31,12 +31,14 @@ public class GameUI {
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
         Random rdm = new Random();
-        z = new OriginalZombie(rdm.nextInt(5));
-        gameLogic.addZombie(z);
+        Zombie z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
         pane.getChildren().add(z.getPicture());
+//        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
+//        pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            time += 50;
             movement();
         }));
         tl.setCycleCount(2000);
@@ -95,16 +97,18 @@ public class GameUI {
     }
 
     public void movement(){
-        z.move();
+        for(Zombie z : gameLogic.getZombies()) z.move();
+        for(Bullet b : gameLogic.getBullets()) b.move();
 
-        ArrayList<Integer[]> temp = gameLogic.plantsAligned();
-        ArrayList<ImageView> images = new ArrayList<>();
-        for(Integer[] a : temp) {
-            ImageView imageView = new ImageView("file:Pictures/normalBullet.png");
-            imageView.setLayoutX(a[1]*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.5);
-            imageView.setLayoutY(Constants.height - (5-a[0])*Constants.TILE_HEIGHT);
-            images.add(imageView);
+        ArrayList<Integer[]> plantsAligned = gameLogic.plantsAligned();
+        for(Integer[] a : plantsAligned) {
+            Bullet b = ((PeaPlant)gameLogic.getPlant(a[0], a[1])).shoot(a[0], a[1], time);
+            if(b != null) {
+                gameLogic.addBullet(b);
+                pane.getChildren().addAll(b.getPicture());
+            }
         }
-        pane.getChildren().addAll(images);
+        for(ImageView bulletImage : gameLogic.checkBulletStrike()) pane.getChildren().remove(bulletImage);
+        for (ImageView image : gameLogic.checkDied()) pane.getChildren().remove(image);
     }
 }
