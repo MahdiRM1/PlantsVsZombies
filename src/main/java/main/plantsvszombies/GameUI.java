@@ -35,8 +35,8 @@ public class GameUI {
         Random rdm = new Random();
         Zombie z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
         pane.getChildren().add(z.getPicture());
-//        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
-//        pane.getChildren().add(z.getPicture());
+        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
+        pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
