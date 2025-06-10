@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -20,8 +21,9 @@ public class GameUI {
 
     private final GameLogic gameLogic;
     private final StackPane mainPane;
-    private Plant selectedPlant;
     private AnchorPane pane = new AnchorPane();
+    GridPane gPane = new GridPane();
+    private Plant selectedPlant;
     private int time = 0;
 
     public GameUI(Stage stage){
@@ -77,7 +79,6 @@ public class GameUI {
     }
 
     private GridPane map(){
-        GridPane gPane = new GridPane();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 Button btn = new Button();
@@ -97,7 +98,7 @@ public class GameUI {
     }
 
     public void movement(){
-        for(Zombie z : gameLogic.getZombies()) z.move();
+        for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
 
         ArrayList<Integer[]> plantsAligned = gameLogic.plantsAligned();
@@ -108,7 +109,10 @@ public class GameUI {
                 pane.getChildren().addAll(b.getPicture());
             }
         }
+        gameLogic.setState();
         for(ImageView bulletImage : gameLogic.checkBulletStrike()) pane.getChildren().remove(bulletImage);
-        for (ImageView image : gameLogic.checkDied()) pane.getChildren().remove(image);
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
+        for(Integer[] plantToRemove : gameLogic.plantsToRemove())
+            ((Button)gPane.getChildren().get(plantToRemove[0] * 9 + plantToRemove[1])).setGraphic(null);
     }
 }
