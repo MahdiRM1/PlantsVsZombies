@@ -36,7 +36,7 @@ public class GameLogic {
             }
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
-                    if(Math.abs(bullets.get(i).getPicture().getLayoutX() - bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
+                    if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
                         z.damage();
                         bulletsImage.add(bullets.get(i).getPicture());
                         bullets.remove(i);
@@ -48,24 +48,44 @@ public class GameLogic {
     }
 
 
-    public void checkCorrespondence(){
-        for(Zombie zombie: zombies) {
-            if(pottedPlants[zombie.getRow()][zombie.getCol()] != null) zombie.eatPlant();
+    private Plant checkCorrespondence(Zombie z){
+        try{
+            if (pottedPlants[z.getRow()][z.getCol()] != null) return pottedPlants[z.getRow()][z.getCol()];
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        return null;
+    }
+
+    public ArrayList<Integer[]> plantsToRemove() {
+        ArrayList<Integer[]> plantsToRemove = new ArrayList<>();
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
+                try{
+                    if (pottedPlants[row][col].getHp() <= 0) {
+                        pottedPlants[row][col] = null;
+                        plantsToRemove.add(new Integer[]{row, col});
+                    }
+                }catch (NullPointerException e) {}
+            }
+        }
+        return plantsToRemove;
+    }
+
+    public void setState(){
+        for(Zombie zombie : zombies){
+            if(zombie.getHp() <= 0) zombie.setState(ZombieState.DEAD);
+            else if(checkCorrespondence(zombie) != null) {
+                ZombieState state = ZombieState.EATING.withPlant(checkCorrespondence(zombie));
+                zombie.setState(state);
+            }
+            else zombie.setState(ZombieState.WALKING);
         }
     }
 
-    public ArrayList<ImageView> checkDied(){
-        ArrayList<ImageView> died = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
-                try {
-                    if(pottedPlants[i][j].getHp() <= 0) pottedPlants[i][j] = null;
-                } catch (NullPointerException e) {}
-            }
-        }
+    public ArrayList<Zombie> zombieToRemove(){
+        ArrayList<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
             if(zombies.get(i).getHp() <= 0) {
-                died.add(zombies.get(i).getPicture());
+                died.add(zombies.get(i));
                 zombies.remove(i);
             }
         }
@@ -83,7 +103,7 @@ public class GameLogic {
 
     private ArrayList<Integer> checkRow(int row, int col){
         ArrayList<Integer> plantsX = new ArrayList<>();
-        if(col == 9) col--;
+        if(col >= 9) col = 8;
         for (int i = 0; i <= col; i++) {
             if(pottedPlants[row][i] instanceof PeaPlant) plantsX.add(i);
         }

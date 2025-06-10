@@ -11,16 +11,15 @@ public class Bullet {
     public Bullet(int row, int col) {
         this.row = row;
         picture = new ImageView(new Image("file:Pictures/normalBullet.png"));
-        picture.setFitWidth(100);
-        picture.setFitHeight(50);
-        picture.setLayoutX(col*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.8);
-        picture.setLayoutY(Constants.height - (5-row)*Constants.TILE_HEIGHT);
+        picture.setFitWidth(Constants.BULLET_SIZE);
+        picture.setFitHeight(Constants.BULLET_SIZE);
+        picture.setLayoutX(col*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.3);
+        picture.setLayoutY(Constants.height - (5-row)*Constants.TILE_HEIGHT + Constants.TILE_HEIGHT / 10);
     }
 
     public void move(){
         if(picture != null) {
             picture.setLayoutX(picture.getLayoutX() + Constants.TILE_WIDTH / (10));
-//            if (picture.getLayoutX() > Constants.width - Constants.TILE_WIDTH) picture = null;
         }
     }
 
