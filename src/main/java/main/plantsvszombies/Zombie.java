@@ -3,7 +3,23 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-enum ZombieState{WALKING, DEAD, EATING}
+enum ZombieState{
+    WALKING,
+    DEAD,
+    EATING();
+
+    private Plant plant;
+
+    ZombieState withPlant(Plant plant){
+        ZombieState eating = ZombieState.EATING;
+        this.plant = plant;
+        return eating;
+    }
+
+    Plant getPlant(){
+        return plant;
+    }
+}
 
 public abstract class Zombie {
 
@@ -26,9 +42,9 @@ public abstract class Zombie {
         picture.setLayoutX(Constants.width);
     }
 
-    public void eatPlant(Plant plant){
+    public void eatPlant(Plant plant, Image[] images){
         plant.damage();
-        state = ZombieState.EATING;
+        changePicture(images);
     }
 
     public void damage(){
@@ -37,11 +53,19 @@ public abstract class Zombie {
 
     public abstract void action();
 
-    public void move(Image[] images){
+    private void changePicture(Image[] images){
         nowPic = (nowPic + 1) % 22;
         picture.setImage(images[nowPic]);
+    }
+
+    public void move(Image[] images){
+        changePicture(images);
         picture.setLayoutX(picture.getLayoutX() - Constants.TILE_WIDTH/(speed*20));
         col = (int)((picture.getLayoutX() + picture.getFitWidth() / 1.5) / Constants.TILE_WIDTH);
+    }
+
+    public void setState(ZombieState state) {
+        this.state = state;
     }
 
     public int getHp() {

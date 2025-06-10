@@ -6,10 +6,14 @@ import javafx.scene.image.ImageView;
 public class OriginalZombie extends Zombie{
 
     private static final Image[] walkZombie = new Image[22];
+    private static final Image[] eatPlant = new Image[22];
 
     static{
-        for (int i = 0; i < 22; i++)
-            walkZombie[i] = new Image("file:Pictures/normalZombie/Zombie_" + i + ".png");
+        for (int i = 0; i < 22; i++) {
+            walkZombie[i] = new Image("file:Pictures/normalZombie/ZombieWalk/Zombie_" + i + ".png");
+            eatPlant[i] = new Image("file:Pictures/normalZombie/ZombieAttack/ZombieAttack_" + i + ".png");
+        }
+
     }
 
     public OriginalZombie(int row){
@@ -22,6 +26,7 @@ public class OriginalZombie extends Zombie{
     public void action(){
         switch (state){
             case WALKING -> move(walkZombie);
+            case EATING -> eatPlant(state.getPlant(), eatPlant);
         }
     }
 }

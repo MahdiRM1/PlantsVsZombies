@@ -109,9 +109,10 @@ public class GameUI {
                 pane.getChildren().addAll(b.getPicture());
             }
         }
+        gameLogic.setState();
         for(ImageView bulletImage : gameLogic.checkBulletStrike()) pane.getChildren().remove(bulletImage);
-        for (ImageView image : gameLogic.checkDied()) pane.getChildren().remove(image);
-        for(Integer[] plantToRemove : gameLogic.checkCorrespondence())
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
+        for(Integer[] plantToRemove : gameLogic.plantsToRemove())
             ((Button)gPane.getChildren().get(plantToRemove[0] * 9 + plantToRemove[1])).setGraphic(null);
     }
 }
