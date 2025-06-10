@@ -28,12 +28,11 @@ public class GameLogic {
 
     public ArrayList<ImageView> checkBulletStrike(){
         ArrayList<ImageView> bulletsImage = new ArrayList<>();
-        outer:
         for(int i = 0; i < bullets.size(); i++){
             if (bullets.get(i).getPicture().getLayoutX() > Constants.width - bullets.get(i).getPicture().getFitWidth()) {
                 bulletsImage.add(bullets.get(i).getPicture());
                 bullets.remove(i);
-                continue outer;
+                continue;
             }
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
@@ -42,6 +41,7 @@ public class GameLogic {
                         z.damage();
                         bulletsImage.add(bullets.get(i).getPicture());
                         bullets.remove(i);
+                        break;
                     }
                 }
             }
