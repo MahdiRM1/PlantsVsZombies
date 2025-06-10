@@ -98,7 +98,7 @@ public class GameUI {
     }
 
     public void movement(){
-        for(Zombie z : gameLogic.getZombies()) z.move();
+        for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
 
         ArrayList<Integer[]> plantsAligned = gameLogic.plantsAligned();
