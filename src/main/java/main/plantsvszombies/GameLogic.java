@@ -1,8 +1,6 @@
 package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
-
-import javax.swing.plaf.IconUIResource;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -40,6 +38,7 @@ public class GameLogic {
                         z.damage();
                         bulletsImage.add(bullets.get(i).getPicture());
                         bullets.remove(i);
+                        break;
                     }
                 }
             }

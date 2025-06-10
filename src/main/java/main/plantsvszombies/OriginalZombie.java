@@ -1,7 +1,6 @@
 package main.plantsvszombies;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class OriginalZombie extends Zombie{
 
