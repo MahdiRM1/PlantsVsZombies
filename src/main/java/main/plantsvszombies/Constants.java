@@ -10,4 +10,6 @@ public final class Constants {
     public static final double ZOMBIE_PIC_HEIGHT = TILE_HEIGHT * 1.8;
     public static final double ZOMBIE_PIC_WEIGHT = TILE_WIDTH * 1.2;
     public static final double BULLET_SIZE = TILE_HEIGHT/3;
+    public static final double PLANT_CARD_HEIGHT = TILE_WIDTH;
+    public static final double PLANT_CARD_WIDTH = TILE_HEIGHT;
 }

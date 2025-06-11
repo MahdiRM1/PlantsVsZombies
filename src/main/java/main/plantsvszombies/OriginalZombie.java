@@ -9,8 +9,8 @@ public class OriginalZombie extends Zombie{
 
     static{
         for (int i = 0; i < 22; i++) {
-            walkZombie[i] = new Image("file:Pictures/normalZombie/ZombieWalk/Zombie_" + i + ".png");
-            eatPlant[i] = new Image("file:Pictures/normalZombie/ZombieAttack/ZombieAttack_" + i + ".png");
+            walkZombie[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieWalk/Zombie_" + i + ".png");
+            eatPlant[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieAttack/ZombieAttack_" + i + ".png");
         }
 
     }

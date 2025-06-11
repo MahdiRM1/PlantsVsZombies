@@ -58,7 +58,7 @@ public class Introduction {
     }
 
     private ImageView backGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/background.jpg"));
+        ImageView bg = new ImageView(new Image("file:Pictures/backGround/GameStartBackGround.jpg"));
         bg.setFitHeight(Constants.height);
         bg.setFitWidth(Constants.width);
         return bg;

@@ -9,7 +9,7 @@ public class PeaShooter extends PeaPlant{
        price = 100;
        recharge = 5;
        hp = 100;
-       gif = new ImageView(new Image("file:Pictures/peashooter.gif"));
+       gif = new ImageView(new Image("file:Pictures/platnsGifs/DayTime/peashooterGif.gif"));
        gif.setFitHeight(Constants.TILE_HEIGHT * 0.8);
        gif.setFitWidth(Constants.TILE_WIDTH * 0.8);
     }

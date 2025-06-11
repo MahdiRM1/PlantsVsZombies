@@ -10,7 +10,7 @@ public class Bullet {
 
     public Bullet(int row, int col) {
         this.row = row;
-        picture = new ImageView(new Image("file:Pictures/normalBullet.png"));
+        picture = new ImageView(new Image("file:Pictures/bullets/normalBullet.png"));
         picture.setFitWidth(Constants.BULLET_SIZE);
         picture.setFitHeight(Constants.BULLET_SIZE);
         picture.setLayoutX(col*Constants.TILE_WIDTH + Constants.TILE_WIDTH/1.3);
