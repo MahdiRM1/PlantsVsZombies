@@ -38,7 +38,7 @@ public abstract class Zombie {
         picture = new ImageView();
         picture.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_HEIGHT);
+        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_SIZE - Constants.width/24);
         picture.setLayoutX(Constants.width);
     }
 
@@ -60,8 +60,8 @@ public abstract class Zombie {
 
     public void move(Image[] images){
         changePicture(images);
-        picture.setLayoutX(picture.getLayoutX() - Constants.TILE_WIDTH/(speed*20));
-        col = (int)((picture.getLayoutX() + picture.getFitWidth() / 1.5) / Constants.TILE_WIDTH);
+        picture.setLayoutX(picture.getLayoutX() - Constants.TILE_SIZE/(speed*20));
+        col = (int)((picture.getLayoutX() + picture.getFitWidth() / 1.5 - Constants.height/2.62) / Constants.TILE_SIZE);
     }
 
     public void setState(ZombieState state) {
