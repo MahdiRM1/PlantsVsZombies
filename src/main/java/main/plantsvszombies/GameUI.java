@@ -19,7 +19,7 @@ public class GameUI {
 
     private final GameLogic gameLogic;
     private final StackPane mainPane;
-    private AnchorPane pane = new AnchorPane();
+    private final AnchorPane pane = new AnchorPane();
     GridPane gPane = new GridPane();
     private Plant selectedPlant;
     private int time = 0;
@@ -33,8 +33,8 @@ public class GameUI {
         Random rdm = new Random();
         Zombie z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
         pane.getChildren().add(z.getPicture());
-//        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
-//        pane.getChildren().add(z.getPicture());
+        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
+        pane.getChildren().add(z.getPicture());
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -50,30 +50,24 @@ public class GameUI {
 
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
-        Button peashoter = new Button();
+        Button peaShoter = new Button();
         ImageView image = new ImageView(new Image("file:Pictures/peashooterCard.png"));
         image.setFitWidth(Constants.TILE_HEIGHT);
         image.setFitHeight(Constants.TILE_WIDTH);
-        peashoter.setGraphic(image);
-        peashoter.setOnAction(event -> {
-            if(selectedPlant == null) selectedPlant = new PeaShooter();
-            else selectedPlant = null;
+        peaShoter.setGraphic(image);
+        peaShoter.setOnAction(event -> {
+            if(selectedPlant instanceof PeaShooter) selectedPlant = null;
+            else selectedPlant = new PeaShooter();
         });
-        cardBar.getChildren().add(peashoter);
-        for (int i = 2; i <= 10; i++) {
+        cardBar.getChildren().add(peaShoter);
+        for (int i = 2; i <= 6; i++) {
             Button btn = new Button("" + i);
             btn.setPrefSize(Constants.TILE_HEIGHT, Constants.TILE_WIDTH);
             cardBar.getChildren().add(btn);
         }
-        cardBar.setPadding(new Insets(5));
-        ScrollPane scrollPane = new ScrollPane(cardBar);
-        scrollPane.setPrefWidth(Constants.TILE_HEIGHT * 7);
-        scrollPane.setPrefHeight(Constants.TILE_WIDTH + 30);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        HBox topBar = new HBox(scrollPane);
-        topBar.setAlignment(Pos.CENTER_LEFT);
-        return topBar;
+//        cardBar.setPadding(new Insets(1));
+        cardBar.setAlignment(Pos.CENTER_LEFT);
+        return cardBar;
     }
 
     private GridPane map(){
