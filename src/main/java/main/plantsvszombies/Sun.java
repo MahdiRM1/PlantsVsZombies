@@ -46,14 +46,15 @@ public class Sun {
             maxY = Constants.height - Constants.width/24 - Constants.TILE_SIZE * 5 * Math.random();
         }
         else {
-            picture.setLayoutX(type.getCol() * Constants.TILE_SIZE + Constants.TILE_SIZE / 1.3 + Constants.height / 2.62);
-            picture.setLayoutY(Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.TILE_SIZE / 10 + Constants.width / 24);
+            picture.setLayoutX(type.getCol() * Constants.TILE_SIZE + 5 + Constants.height / 2.62);
+            picture.setLayoutY(Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.width / 24);
+            maxY = Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.TILE_SIZE / 3 + Constants.width / 24;
         }
     }
 
     public void moveSun(long time){
         if(picture.getLayoutY() < maxY) {
-            picture.setLayoutY(picture.getLayoutY() + 5);
+            picture.setLayoutY(picture.getLayoutY() + 3);
             timeCreated = time;
         }
     }
