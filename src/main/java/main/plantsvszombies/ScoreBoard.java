@@ -51,9 +51,7 @@ public class ScoreBoard {
     }
 
     private void fallenSun(long time){
-        for (Sun s : suns){
-            if(s.getType() == SunType.FALLEN) s.moveSun(time);
-        }
+        for (Sun s : suns) s.moveSun(time);
     }
 
     private void sunDrop(long time){
