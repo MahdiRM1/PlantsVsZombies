@@ -38,7 +38,7 @@ public abstract class Zombie {
         picture = new ImageView();
         picture.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_SIZE - Constants.width/24);
+        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_SIZE - Constants.height/12.8);
         picture.setLayoutX(Constants.width);
     }
 

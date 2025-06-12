@@ -8,7 +8,7 @@ public class SunFlower extends Plant{
     private long lastSunTime;
 
     public SunFlower(long time){
-        price = 100;
+        price = 50;
         recharge = 5;
         hp = 100;
         lastSunTime = time;

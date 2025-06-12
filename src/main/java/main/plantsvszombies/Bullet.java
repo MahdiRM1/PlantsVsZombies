@@ -15,7 +15,7 @@ public class Bullet {
         picture.setFitWidth(Constants.BULLET_SIZE);
         picture.setFitHeight(Constants.BULLET_SIZE);
         picture.setLayoutX(col*Constants.TILE_SIZE + Constants.TILE_SIZE/1.3 + Constants.height/2.62);
-        picture.setLayoutY(Constants.height - (6-row)*Constants.TILE_SIZE + Constants.TILE_SIZE / 10 + Constants.width/24);
+        picture.setLayoutY(Constants.height - (6-row)*Constants.TILE_SIZE + Constants.TILE_SIZE / 10 + Constants.height/12.8);
     }
 
     public void move(){

@@ -34,4 +34,8 @@ public abstract class Plant {
     public double getHp() {
         return hp;
     }
+
+    public int getPrice() {
+        return price;
+    }
 }
