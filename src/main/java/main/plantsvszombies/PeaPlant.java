@@ -4,8 +4,9 @@ public abstract class PeaPlant extends Plant{
 
     private long lastShoot;
 
-    public PeaPlant() {
-        lastShoot = -1000;
+    public PeaPlant(int row, int col, long timeCreated) {
+        super(row, col, timeCreated);
+        lastShoot = timeCreated;
     }
 
     public Bullet shoot(int row, int col, long time) {

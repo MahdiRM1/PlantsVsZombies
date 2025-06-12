@@ -19,7 +19,7 @@ public class ScoreBoard {
 
     public ScoreBoard(BorderPane pane){
         this.pane = pane;
-        score = 50;
+        score = 100;
         ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
         board.setFitWidth(Constants.height/1.1);
         board.setFitHeight(Constants.height/5.5);

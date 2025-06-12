@@ -7,11 +7,12 @@ public class SunFlower extends Plant{
 
     private long lastSunTime;
 
-    public SunFlower(long time){
+    public SunFlower(int row, int col, long timeCreated){
+        super(row, col, timeCreated);
         price = 50;
         recharge = 5;
         hp = 100;
-        lastSunTime = time;
+        lastSunTime = timeCreated;
         gif = new ImageView(new Image("file:Pictures/platnsGifs/DayTime/SunFlower.gif"));
         gif.setFitHeight(Constants.TILE_SIZE * 0.8);
         gif.setFitWidth(Constants.TILE_SIZE * 0.8);
