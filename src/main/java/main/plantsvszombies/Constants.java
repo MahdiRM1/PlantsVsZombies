@@ -11,4 +11,5 @@ public final class Constants {
     public static final double BULLET_SIZE = TILE_SIZE/3;
     public static final double PLANT_CARD_HEIGHT = TILE_SIZE + Constants.width/64;
     public static final double PLANT_CARD_WIDTH = TILE_SIZE - Constants.width/192;
+    public static final double SUN_SIZE = TILE_SIZE/1.2;
 }
