@@ -6,13 +6,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.Random;
@@ -24,10 +20,10 @@ public class GameUI {
     BorderPane bPane = new BorderPane();
     private final AnchorPane pane = new AnchorPane();
     GridPane gPane = new GridPane();
-    private Plant selectedPlant;
+    private String selectedPlant;
     private long time = 0;
     private int selectedButton = -1;
-    private ScoreBoard scoreBoard;
+    private final ScoreBoard scoreBoard;
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
@@ -48,7 +44,7 @@ public class GameUI {
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             time += 50;
-            movement();
+            updateGame();
         }));
         tl.setCycleCount(2000);
         tl.play();
@@ -56,6 +52,7 @@ public class GameUI {
         stage.setScene(scene);
         stage.show();
     }
+
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
         Button btn1 = getCardButton("PeaShooter", 0);
@@ -79,39 +76,18 @@ public class GameUI {
         image.setFitHeight(Constants.PLANT_CARD_HEIGHT);
         btn.setGraphic(image);
         btn.setStyle("-fx-background-color: transparent");
+        btn.setOnAction(event -> {
+            selectedPlant = plantName;
+            selectedButton = index;
+        });
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
         btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
         btn.setOnMouseExited(e -> {
-            if(selectedButton == index) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
+            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
             else btn.setStyle("-fx-background-color: transparent");
         });
-
-        setActionButton(btn, plantName, index);
-
         return btn;
-    }
-
-    private void setActionButton(Button btn, String plantName, int index){
-        Plant temp = null;
-        switch (plantName){
-            case "PeaShooter" -> temp = new PeaShooter();
-            case "SunFlower" -> temp = new SunFlower(time);
-        }
-        final Plant plant = temp;
-        btn.setOnAction(event -> {
-            if(selectedPlant != null && selectedPlant.getClass() == plant.getClass()) {
-                selectedPlant = null;
-                selectedButton = -1;
-            }
-            else {
-                switch (plantName) {
-                    case "PeaShooter" -> selectedPlant = new PeaShooter();
-                    case "SunFlower" -> selectedPlant = new SunFlower(time);
-                }
-                selectedButton = index;
-            }
-        });
-    }
+    }//in cartaye bazio meghdardehi mikone
 
     private GridPane map(){
         for (int row = 0; row < 5; row++) {
@@ -129,42 +105,69 @@ public class GameUI {
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
             if(selectedPlant != null) {
-                if(btn.getGraphic() == null && scoreBoard.getScore() >= selectedPlant.getPrice()) {
-                    gameLogic.setPlant(row, col, selectedPlant);
-                    btn.setGraphic(selectedPlant.getGif());
-                    scoreBoard.purchasePlant(selectedPlant.getPrice());
+                Plant plant = getPlant(row, col);
+                if(btn.getGraphic() == null && scoreBoard.getScore() >= plant.getPrice()) {
+                    gameLogic.setPlant(row, col, plant);
+                    btn.setGraphic(plant.getGif());
+                    scoreBoard.purchasePlant(plant.getPrice());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.6);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
                 ((HBox)bPane.getTop()).getChildren().get(selectedButton).setStyle("-fx-background-color: transparent;");
                 selectedPlant = null;
-            }
+            }else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
         });
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(140, 140, 140, 0.3);"));
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
         btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.3);"));
         return btn;
-    }
+    }//in faghat buttonaye mapo meghdardehi mikone
 
-    public void movement(){
+    private Plant getPlant(int row, int col){
+        switch (selectedPlant){
+            case "PeaShooter" -> {
+                return new PeaShooter(row, col, time);
+            }
+            case "SunFlower" -> {
+                return new SunFlower(row, col, time);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }//in vase new kardan moghe kashtane ke string migire plant mide
+
+    public void updateGame(){
+        characterActions();
+        garbageImages();
+        addObjectImages();
+    }//in hamon method movement bode ke chand ta tikash kardam fek mekonam behtar shode bashe
+
+    private void characterActions(){
         for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
+        gameLogic.setZombieState();
+        scoreBoard.sunHandler(time);
+    }
+
+    private void addObjectImages(){
         for(SunFlower sunFlower : gameLogic.sunFlowers()) {
             scoreBoard.addSun(sunFlower.givenSun(time));
         }
-        scoreBoard.sunHandler(time);
 
-        for(Integer[] a : gameLogic.plantsAligned()) {
-            Bullet b = ((PeaPlant)gameLogic.getPlant(a[0], a[1])).shoot(a[0], a[1], time);
+        for(PeaPlant shooter : gameLogic.plantsAligned()) {
+            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol(), time);
             if(b != null) {
                 gameLogic.addBullet(b);
                 pane.getChildren().addAll(b.getPicture());
             }
         }
-        gameLogic.setState();
-        for(ImageView bulletImage : gameLogic.checkBulletStrike()) pane.getChildren().remove(bulletImage);
+    }
+
+    private void garbageImages(){
+        for(Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for(Integer[] plantToRemove : gameLogic.plantsToRemove())
-            ((Button)gPane.getChildren().get(plantToRemove[0] * 9 + plantToRemove[1])).setGraphic(null);
+        for(Plant plantToRemove : gameLogic.plantsToRemove())
+            ((Button)gPane.getChildren().get(plantToRemove.getRow() * 9 + plantToRemove.getCol())).setGraphic(null);
     }
 }

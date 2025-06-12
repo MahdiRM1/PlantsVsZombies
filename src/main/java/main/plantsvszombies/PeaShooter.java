@@ -5,7 +5,8 @@ import javafx.scene.image.ImageView;
 
 public class PeaShooter extends PeaPlant{
 
-    public PeaShooter() {
+    public PeaShooter(int row, int col, long timeCreated) {
+        super(row, col, timeCreated);
        price = 100;
        recharge = 5;
        hp = 100;

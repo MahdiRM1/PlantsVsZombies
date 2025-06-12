@@ -14,24 +14,23 @@ public class GameLogic {
     public void setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) {
             pottedPlants[i][j] = plant;
-            plant.setCoordination(i, j);
         }
-    }//doroste
+    }
 
-    public Zombie addZombie(Zombie z){
+    public Zombie addZombie(Zombie z) {
         zombies.add(z);
         return z;
-    }//doroste
+    }
 
     public void addBullet(Bullet b){
         bullets.add(b);
     }
 
-    public ArrayList<ImageView> checkBulletStrike(){
-        ArrayList<ImageView> bulletsImage = new ArrayList<>();
+    public ArrayList<Bullet> checkBulletStrike(){
+        ArrayList<Bullet> bulletsImage = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
             if (bullets.get(i).getPicture().getLayoutX() > Constants.width - bullets.get(i).getPicture().getFitWidth()) {
-                bulletsImage.add(bullets.get(i).getPicture());
+                bulletsImage.add(bullets.get(i));
                 bullets.remove(i);
                 continue;
             }
@@ -39,7 +38,7 @@ public class GameLogic {
                 if(z.getRow() == bullets.get(i).getRow()){
                     if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
                         z.damage();
-                        bulletsImage.add(bullets.get(i).getPicture());
+                        bulletsImage.add(bullets.get(i));
                         bullets.remove(i);
                         break;
                     }
@@ -57,14 +56,14 @@ public class GameLogic {
         return null;
     }
 
-    public ArrayList<Integer[]> plantsToRemove() {
-        ArrayList<Integer[]> plantsToRemove = new ArrayList<>();
+    public ArrayList<Plant> plantsToRemove() {
+        ArrayList<Plant> plantsToRemove = new ArrayList<>();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
                     if (pottedPlants[row][col].getHp() <= 0) {
                         pottedPlants[row][col] = null;
-                        plantsToRemove.add(new Integer[]{row, col});
+                        plantsToRemove.add(pottedPlants[row][col]);
                     }
                 }catch (NullPointerException e) {}
             }
@@ -72,7 +71,7 @@ public class GameLogic {
         return plantsToRemove;
     }
 
-    public void setState(){
+    public void setZombieState(){
         for(Zombie zombie : zombies){
             if(zombie.getHp() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
@@ -98,23 +97,17 @@ public class GameLogic {
         return died;
     }
 
-    public ArrayList<Integer[]> plantsAligned() {
-        ArrayList<Integer[]> shooterCoordination = new ArrayList<>();
+    public ArrayList<PeaPlant> plantsAligned() {
+        ArrayList<PeaPlant> peaPlants = new ArrayList<>();
         for (Zombie z : zombies){
-            ArrayList<Integer> plantsAhead = checkRow(z.getRow(), z.getCol());
-            for(Integer integer : plantsAhead) shooterCoordination.add(new Integer[]{z.getRow(), integer});
+            for (int i = 0; i <= z.getCol(); i++) {
+                try {
+                    if(pottedPlants[z.getRow()][i] instanceof PeaPlant) peaPlants.add((PeaPlant) pottedPlants[z.getRow()][i]);
+                }catch (ArrayIndexOutOfBoundsException e){}
+            }
         }
-        return shooterCoordination;
-    }//doroste
-
-    private ArrayList<Integer> checkRow(int row, int col){
-        ArrayList<Integer> plantsX = new ArrayList<>();
-        if(col >= 9) col = 8;
-        for (int i = 0; i <= col; i++) {
-            if(pottedPlants[row][i] instanceof PeaPlant) plantsX.add(i);
-        }
-        return plantsX;
-    }//doroste
+        return peaPlants;
+    }
 
     public ArrayList<SunFlower> sunFlowers(){
         ArrayList<SunFlower> sunFlowers = new ArrayList<>();

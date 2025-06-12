@@ -3,12 +3,19 @@ package main.plantsvszombies;
 import javafx.scene.image.ImageView;
 
 public abstract class Plant {
+    protected final int row, col;
+    protected final long timeCreated;
     protected int price;
     protected int recharge;
     protected double hp;
     protected ImageView gif;
-    protected int row, col;
     double damageCaused = 0;
+
+    public Plant(int row, int col, long timeCreated){
+        this.row = row;
+        this.col = col;
+        this.timeCreated = timeCreated;
+    }
 
     public void damage(){
         damageCaused += 2.5;
@@ -22,11 +29,6 @@ public abstract class Plant {
         damageCaused = 0;
     }
 
-    public void setCoordination(int row, int col){
-        this.row = row;
-        this.col = col;
-    }
-
     public ImageView getGif() {
         return gif;
     }
@@ -37,5 +39,13 @@ public abstract class Plant {
 
     public int getPrice() {
         return price;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }
