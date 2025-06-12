@@ -3,8 +3,6 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.Random;
-
 enum SunType{
     FALLEN,
     STABLE();
@@ -43,12 +41,12 @@ public class Sun {
         if(type == SunType.FALLEN){
             picture.setLayoutX(Constants.height/2.62 + Constants.TILE_SIZE * 9 * Math.random());
             picture.setLayoutY(0);
-            maxY = Constants.height - Constants.width/24 - Constants.TILE_SIZE * 5 * Math.random();
+            maxY = Constants.height - Constants.height/12.8 - Constants.TILE_SIZE * 5 * Math.random();
         }
         else {
             picture.setLayoutX(type.getCol() * Constants.TILE_SIZE + 5 + Constants.height / 2.62);
-            picture.setLayoutY(Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.width / 24);
-            maxY = Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.TILE_SIZE / 3 + Constants.width / 24;
+            picture.setLayoutY(Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.height / 12.8);
+            maxY = Constants.height - (6 - type.getRow()) * Constants.TILE_SIZE + Constants.TILE_SIZE / 3 + Constants.height / 12.8;
         }
     }
 
