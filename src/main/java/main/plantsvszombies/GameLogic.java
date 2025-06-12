@@ -12,7 +12,10 @@ public class GameLogic {
     }
 
     public void setPlant(int i, int j, Plant plant){
-        if(pottedPlants[i][j] == null) pottedPlants[i][j] = plant;
+        if(pottedPlants[i][j] == null) {
+            pottedPlants[i][j] = plant;
+            plant.setCoordination(i, j);
+        }
     }//doroste
 
     public Zombie addZombie(Zombie z){
@@ -71,7 +74,11 @@ public class GameLogic {
 
     public void setState(){
         for(Zombie zombie : zombies){
-            if(zombie.getHp() <= 0) zombie.setState(ZombieState.DEAD);
+            if(zombie.getHp() <= 0) {
+                if(zombie.getState() == ZombieState.EATING)
+                    zombie.getState().getPlant().resetDamageCaused();
+                zombie.setState(ZombieState.DEAD);
+            }
             else if(checkCorrespondence(zombie) != null) {
                 ZombieState state = ZombieState.EATING.withPlant(checkCorrespondence(zombie));
                 zombie.setState(state);
@@ -83,7 +90,7 @@ public class GameLogic {
     public ArrayList<Zombie> zombieToRemove(){
         ArrayList<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
-            if(zombies.get(i).getHp() <= 0) {
+            if(zombies.get(i).getState() == ZombieState.DEAD) {
                 died.add(zombies.get(i));
                 zombies.remove(i);
             }
@@ -108,6 +115,16 @@ public class GameLogic {
         }
         return plantsX;
     }//doroste
+
+    public ArrayList<SunFlower> sunFlowers(){
+        ArrayList<SunFlower> sunFlowers = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                if(pottedPlants[i][j] instanceof SunFlower) sunFlowers.add((SunFlower) pottedPlants[i][j]);
+            }
+        }
+        return sunFlowers;
+    }
 
     public ArrayList<Zombie> getZombies() {
         return zombies;

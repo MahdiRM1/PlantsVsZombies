@@ -83,4 +83,8 @@ public abstract class Zombie {
     public int getCol() {
         return col;
     }
+
+    public ZombieState getState() {
+        return state;
+    }
 }

@@ -7,9 +7,24 @@ public abstract class Plant {
     protected int recharge;
     protected double hp;
     protected ImageView gif;
+    protected int row, col;
+    double damageCaused = 0;
 
     public void damage(){
-        hp -= 2.5;
+        damageCaused += 2.5;
+        if(damageCaused == 25) {
+            hp -= 25;
+            damageCaused = 0;
+        }
+    }
+
+    public void resetDamageCaused(){
+        damageCaused = 0;
+    }
+
+    public void setCoordination(int row, int col){
+        this.row = row;
+        this.col = col;
     }
 
     public ImageView getGif() {

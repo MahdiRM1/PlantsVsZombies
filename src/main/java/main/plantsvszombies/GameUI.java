@@ -11,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameUI {
@@ -22,8 +21,9 @@ public class GameUI {
     private final AnchorPane pane = new AnchorPane();
     GridPane gPane = new GridPane();
     private Plant selectedPlant;
-    private int time = 0;
+    private long time = 0;
     private int selectedButton = -1;
+    private ScoreBoard scoreBoard;
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
@@ -33,6 +33,7 @@ public class GameUI {
         bPane.getChildren().add(bg);
         bPane.setBottom(map());
         bPane.setTop(cardBar());
+        scoreBoard = new ScoreBoard(bPane);
         mainPane = new StackPane(bPane);
         Random rdm = new Random();
         Zombie z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
@@ -53,35 +54,10 @@ public class GameUI {
     }
     private HBox cardBar(){
         HBox cardBar = new HBox(5);
-        Button peaShooter = new Button();
-        peaShooter.setOpacity(30);
-        ImageView image = new ImageView(new Image("file:Pictures/plantPictures/dayTime/PeaShooterImage.jpg"));
-        image.setFitWidth(Constants.PLANT_CARD_WIDTH);
-        image.setFitHeight(Constants.PLANT_CARD_HEIGHT);
-        peaShooter.setGraphic(image);
-        peaShooter.setStyle("-fx-background-color: transparent");
-
-        peaShooter.setOnMouseEntered(event -> peaShooter.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-
-        peaShooter.setOnMouseClicked(event -> peaShooter.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-
-        peaShooter.setOnMouseExited(e -> {
-            if(selectedPlant instanceof PeaShooter) peaShooter.setStyle("-fx-background-color: rgb(62, 177, 235)");
-            else peaShooter.setStyle("-fx-background-color: transparent");
-        });
-
-        peaShooter.setOnAction(event -> {
-            if(selectedPlant instanceof PeaShooter) {
-                selectedPlant = null;
-                selectedButton = -1;
-            }
-            else {
-                selectedPlant = new PeaShooter();
-                selectedButton = 0;
-            }
-        });
-        cardBar.getChildren().add(peaShooter);
-        for (int i = 2; i <= 6; i++) {
+        Button btn1 = getCardButton("PeaShooter", 0);
+        Button btn2 = getCardButton("SunFlower", 1);
+        cardBar.getChildren().addAll(btn1, btn2);
+        for (int i = 3; i <= 6; i++) {
             Button btn = new Button("" + i);
             btn.setOpacity(0.3);
             btn.setPrefSize(Constants.PLANT_CARD_WIDTH, Constants.PLANT_CARD_HEIGHT);
@@ -90,6 +66,50 @@ public class GameUI {
         cardBar.setPadding(new Insets(35, 0, 0, 0));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
+    }
+
+    private Button getCardButton(String plantName, int index){
+        Button btn = new Button();
+        ImageView image = new ImageView(new Image("file:Pictures/plantPictures/dayTime/" + plantName + "Image.jpg"));
+        image.setFitWidth(Constants.PLANT_CARD_WIDTH);
+        image.setFitHeight(Constants.PLANT_CARD_HEIGHT);
+        btn.setGraphic(image);
+        btn.setStyle("-fx-background-color: transparent");
+
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
+
+        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
+
+        btn.setOnMouseExited(e -> {
+            if(selectedButton == index) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
+            else btn.setStyle("-fx-background-color: transparent");
+        });
+
+        setActionButton(btn, plantName, index);
+
+        return btn;
+    }
+
+    private void setActionButton(Button btn, String plantName, int index){
+        Plant temp = null;
+        switch (plantName){
+            case "PeaShooter" -> temp = new PeaShooter();
+            case "SunFlower" -> temp = new SunFlower(time);
+        }
+        final Plant plant = temp;
+        btn.setOnAction(event -> {
+            if(selectedPlant != null && selectedPlant.getClass() == plant.getClass()) {
+                selectedPlant = null;
+                selectedButton = -1;
+            }
+            else {
+                switch (plantName) {
+                    case "PeaShooter" -> selectedPlant = new PeaShooter();
+                    case "SunFlower" -> selectedPlant = new SunFlower(time);
+                }
+                selectedButton = index;
+            }
+        });
     }
 
     private GridPane map(){
@@ -103,8 +123,8 @@ public class GameUI {
                     if(selectedPlant != null) {
                         gameLogic.setPlant(Row, Col, selectedPlant);
                         if(btn.getGraphic() == null) btn.setGraphic(selectedPlant.getGif());
-                        selectedPlant = null;
                         ((HBox)bPane.getTop()).getChildren().get(selectedButton).setStyle("-fx-background-color: transparent;");
+                        selectedPlant = null;
                     }
                 });
 //                btn.setOpacity(0.3);
@@ -118,9 +138,12 @@ public class GameUI {
     public void movement(){
         for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
+        for(SunFlower sunFlower : gameLogic.sunFlowers()) {
+            scoreBoard.addSun(sunFlower.givenSun(time));
+        }
+        scoreBoard.sunHandler(time);
 
-        ArrayList<Integer[]> plantsAligned = gameLogic.plantsAligned();
-        for(Integer[] a : plantsAligned) {
+        for(Integer[] a : gameLogic.plantsAligned()) {
             Bullet b = ((PeaPlant)gameLogic.getPlant(a[0], a[1])).shoot(a[0], a[1], time);
             if(b != null) {
                 gameLogic.addBullet(b);
