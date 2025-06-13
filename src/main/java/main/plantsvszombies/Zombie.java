@@ -3,32 +3,17 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-enum ZombieState{
-    WALKING,
-    DEAD,
-    EATING();
-
-    private Plant plant;
-
-    ZombieState withPlant(Plant plant){
-        ZombieState eating = ZombieState.EATING;
-        this.plant = plant;
-        return eating;
-    }
-
-    Plant getPlant(){
-        return plant;
-    }
-}
+enum ZombieState{ WALKING, DEAD, EATING }
 
 public abstract class Zombie {
 
-    protected int hp;
+    protected int HP;
     protected int speed;
     protected ImageView picture;
     protected int row , col;
     private int nowPic;
     protected ZombieState state;
+    private Plant plantToEat;
 
 
     public Zombie(int row) {
@@ -39,13 +24,17 @@ public abstract class Zombie {
         Constants.setZombiePicture(picture, row);
     }
 
-    public void eatPlant(Plant plant, Image[] images){
-        plant.damage();
+    public void eatPlant(Image[] images){
+        plantToEat.damage();
         changePicture(images);
+        if(plantToEat.getHP() <= 0) {
+            plantToEat = null;
+            state = ZombieState.WALKING;
+        }
     }
 
     public void damage(){
-        hp -= 20;
+        HP -= 20;
     }
 
     public abstract void action();
@@ -61,12 +50,24 @@ public abstract class Zombie {
         col = Constants.getColumnZombie(picture);
     }
 
+    public void setPlantToEat(Plant plantToEat) {
+        this.plantToEat = plantToEat;
+    }
+
+    public Plant getPlant(){
+        return plantToEat;
+    }
+
+    public void resetPlantToEat(){
+        plantToEat = null;
+    }
+
     public void setState(ZombieState state) {
         this.state = state;
     }
 
-    public int getHp() {
-        return hp;
+    public int getHP() {
+        return HP;
     }
 
     public ImageView getPicture() {

@@ -52,7 +52,9 @@ public class GameUI {
         HBox cardBar = new HBox(5);
         Button btn1 = getCardButton("PeaShooter", 0);
         Button btn2 = getCardButton("SunFlower", 1);
-        cardBar.getChildren().addAll(btn1, btn2);
+        Button btn3 = getCardButton("WallNut", 2);
+        Button btn4 = getCardButton("TallNut", 3);
+        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4);
         cardBar.setPadding(new Insets(Constants.height/19, 0, 0, Constants.height/7.4));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
@@ -94,7 +96,8 @@ public class GameUI {
                 Plant plant = getPlant(row, col);
                 if(btn.getGraphic() == null && scoreBoard.getScore() >= plant.getPrice()) {
                     gameLogic.setPlant(row, col, plant);
-                    btn.setGraphic(plant.getGif());
+                    bPane.getChildren().add(plant.getGif());
+//                    btn.setGraphic(plant.getGif());
                     scoreBoard.purchasePlant(plant.getPrice());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.6);"));
                 }
@@ -116,6 +119,12 @@ public class GameUI {
             }
             case "SunFlower" -> {
                 return new SunFlower(row, col, time);
+            }
+            case "WallNut" -> {
+                return new WallNut(row, col, time);
+            }
+            case "TallNut" -> {
+                return new TallNut(row, col, time);
             }
             default -> {
                 return null;
@@ -153,7 +162,6 @@ public class GameUI {
     private void garbageImages(){
         for(Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for(Plant plantToRemove : gameLogic.plantsToRemove())
-            ((Button)gPane.getChildren().get(plantToRemove.getRow() * 9 + plantToRemove.getCol())).setGraphic(null);
+        for(Plant plantToRemove : gameLogic.plantsToRemove()) bPane.getChildren().remove(plantToRemove.getGif());
     }
 }

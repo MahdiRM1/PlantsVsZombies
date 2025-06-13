@@ -7,7 +7,7 @@ public abstract class Plant {
     protected final long timeCreated;
     protected int price;
     protected int recharge;
-    protected double hp;
+    protected double HP;
     protected ImageView gif;
     double damageCaused = 0;
 
@@ -20,7 +20,7 @@ public abstract class Plant {
     public void damage(){
         damageCaused += 2.5;
         if(damageCaused == 25) {
-            hp -= 25;
+            HP -= 25;
             damageCaused = 0;
         }
     }
@@ -33,8 +33,8 @@ public abstract class Plant {
         return gif;
     }
 
-    public double getHp() {
-        return hp;
+    public double getHP() {
+        return HP;
     }
 
     public int getPrice() {
