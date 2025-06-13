@@ -3,8 +3,6 @@ package main.plantsvszombies;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -21,7 +19,7 @@ public class Introduction {
 
     private BorderPane Pane(){
         BorderPane borderPane = new BorderPane();
-        borderPane.getChildren().addFirst(backGround());
+        borderPane.getChildren().addFirst(Constants.setIntroductionBackGround());
         VBox box = new VBox();
         box.getChildren().add(initializeBtn("Start Game"));
         box.setAlignment(Pos.CENTER);
@@ -29,8 +27,8 @@ public class Introduction {
         return borderPane;
     }
 
-    private Button initializeBtn(String str){
-        Button btn = new Button(str);
+    private Button initializeBtn(String buttonName){
+        Button btn = new Button(buttonName);
         btn.setStyle(
             "-fx-background-radius: 20; " +
             "-fx-min-width: 150px; " +
@@ -55,12 +53,5 @@ public class Introduction {
         );
         btn.setOnAction(event -> new GameUI(stage));
         return btn;
-    }
-
-    private ImageView backGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/GameStartBackGround.jpg"));
-        bg.setFitHeight(Constants.height);
-        bg.setFitWidth(Constants.width);
-        return bg;
     }
 }

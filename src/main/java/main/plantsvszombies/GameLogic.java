@@ -1,6 +1,5 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -125,9 +124,5 @@ public class GameLogic {
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
-    }
-
-    public Plant getPlant(int row, int col){
-        return pottedPlants[row][col];
     }
 }
