@@ -39,8 +39,8 @@ public final class Constants {
 
     public static ImageView setCard(String plantName){
         ImageView picture = new ImageView(new Image("file:Pictures/plantPictures/dayTime/" + plantName + "Image.jpg"));
-        picture.setFitWidth(Constants.PLANT_CARD_WIDTH);
-        picture.setFitHeight(Constants.PLANT_CARD_HEIGHT);
+        picture.setFitWidth(PLANT_CARD_WIDTH);
+        picture.setFitHeight(PLANT_CARD_HEIGHT);
         return picture;
     }
     
@@ -53,21 +53,29 @@ public final class Constants {
             picture.setLayoutY(0);
         }
         else {
-            picture.setLayoutX(type.getCol() * (TILE_SIZE + 5) + (height / 2.62));
-            picture.setLayoutY(height - ((6 - type.getRow()) * TILE_SIZE) + (height / 12.8));
+            picture.setLayoutX(type.getCol() * (TILE_SIZE + 5) + (height / 2.6));
+            picture.setLayoutY(height - ((6 - type.getRow()) * TILE_SIZE) + (height / 14));
         }
         return picture;
     }
 
     public static double sunMaxY(SunType type){
         if(type == SunType.FALLEN) return height - (height/12.8) - (TILE_SIZE * 5 * Math.random());
-        else return height - ((6 - type.getRow()) * 4 * TILE_SIZE / 3) + (height / 12.8);
+        else return height - ((6 - type.getRow()) * TILE_SIZE) + (height / 8);
     }
 
-    public static ImageView setPlantPicture(String plantName){
-        ImageView picture = new ImageView(new Image("file:Pictures/plantGifs/DayTime/" + plantName + ".gif"));
-        picture.setFitHeight(TILE_SIZE * 0.8);
+    public static ImageView setPlantPicture(String plantName, int row, int col){
+        ImageView picture = new ImageView(new Image("file:Pictures/plantsGifs/DayTime/" + plantName + ".gif"));
         picture.setFitWidth(TILE_SIZE * 0.8);
+        picture.setLayoutX((height / 2.5) + (col * TILE_SIZE));
+        if(plantName.equals("TallNut")) {
+            picture.setFitHeight(TILE_SIZE * 1.2);
+            picture.setLayoutY((height / 4.1) + ((row - 0.5) * TILE_SIZE));
+        }
+        else {
+            picture.setLayoutY((height / 4.3) + (row * TILE_SIZE));
+            picture.setFitHeight(TILE_SIZE * 0.8);
+        }
         return picture;
     }
 

@@ -17,7 +17,7 @@ public class OriginalZombie extends Zombie{
 
     public OriginalZombie(int row){
         super(row);
-        hp = 100;
+        HP = 100;
         speed = 4;
     }
 
@@ -25,7 +25,7 @@ public class OriginalZombie extends Zombie{
     public void action(){
         switch (state){
             case WALKING -> move(walkZombie);
-            case EATING -> eatPlant(state.getPlant(), eatPlant);
+            case EATING -> eatPlant(eatPlant);
         }
     }
 }

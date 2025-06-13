@@ -8,9 +8,9 @@ public class SunFlower extends Plant{
         super(row, col, timeCreated);
         price = 50;
         recharge = 5;
-        hp = 100;
+        HP = 100;
         lastSunTime = timeCreated;
-        gif = Constants.setPlantPicture("SunFlower");
+        gif = Constants.setPlantPicture("SunFlower", row, col);
     }
 
     public Sun givenSun(long time) {

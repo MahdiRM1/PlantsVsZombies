@@ -60,9 +60,9 @@ public class GameLogic {
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
-                    if (pottedPlants[row][col].getHp() <= 0) {
-                        pottedPlants[row][col] = null;
+                    if (pottedPlants[row][col].getHP() <= 0) {
                         plantsToRemove.add(pottedPlants[row][col]);
+                        pottedPlants[row][col] = null;
                     }
                 }catch (NullPointerException e) {}
             }
@@ -72,14 +72,15 @@ public class GameLogic {
 
     public void setZombieState(){
         for(Zombie zombie : zombies){
-            if(zombie.getHp() <= 0) {
+            Plant plant = checkCorrespondence(zombie);
+            if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
-                    zombie.getState().getPlant().resetDamageCaused();
+                    zombie.getPlant().resetDamageCaused();
                 zombie.setState(ZombieState.DEAD);
             }
-            else if(checkCorrespondence(zombie) != null) {
-                ZombieState state = ZombieState.EATING.withPlant(checkCorrespondence(zombie));
-                zombie.setState(state);
+            else if(plant != null) {
+                zombie.setState(ZombieState.EATING);
+                zombie.setPlantToEat(plant);
             }
             else zombie.setState(ZombieState.WALKING);
         }
