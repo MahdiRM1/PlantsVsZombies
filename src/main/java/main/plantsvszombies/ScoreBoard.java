@@ -2,7 +2,6 @@ package main.plantsvszombies;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -19,13 +18,9 @@ public class ScoreBoard {
 
     public ScoreBoard(BorderPane pane){
         this.pane = pane;
-        score = 100;
-        ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
-        board.setFitWidth(Constants.height/1.1);
-        board.setFitHeight(Constants.height/5.5);
-        board.setLayoutY(Constants.height/29.25);
+        score = 1000;
+        ImageView board = Constants.setScoreBoardPicture();
         pane.getChildren().addAll(board);
-
         scoreLabel = new Label(score + "");
         Font font = Font.font("Arial", FontWeight.BOLD, 40);
         scoreLabel.setFont(font);

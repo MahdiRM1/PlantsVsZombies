@@ -6,8 +6,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -27,10 +25,7 @@ public class GameUI {
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/backGroundDay.jpg"));
-        bg.setFitHeight(Constants.height);
-        bg.setFitWidth(Constants.width);
-        bPane.getChildren().add(bg);
+        bPane.getChildren().add(Constants.setDayBackGround());
         bPane.setBottom(map());
         scoreBoard = new ScoreBoard(bPane);
         bPane.setTop(cardBar());
@@ -58,12 +53,6 @@ public class GameUI {
         Button btn1 = getCardButton("PeaShooter", 0);
         Button btn2 = getCardButton("SunFlower", 1);
         cardBar.getChildren().addAll(btn1, btn2);
-//        for (int i = 3; i <= 6; i++) {
-//            Button btn = new Button("" + i);
-//            btn.setOpacity(0.3);
-//            btn.setPrefSize(Constants.PLANT_CARD_WIDTH, Constants.PLANT_CARD_HEIGHT);
-//            cardBar.getChildren().add(btn);
-//        }
         cardBar.setPadding(new Insets(Constants.height/19, 0, 0, Constants.height/7.4));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
@@ -71,10 +60,7 @@ public class GameUI {
 
     private Button getCardButton(String plantName, int index){
         Button btn = new Button();
-        ImageView image = new ImageView(new Image("file:Pictures/plantPictures/dayTime/" + plantName + "Image.jpg"));
-        image.setFitWidth(Constants.PLANT_CARD_WIDTH);
-        image.setFitHeight(Constants.PLANT_CARD_HEIGHT);
-        btn.setGraphic(image);
+        btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
             selectedPlant = plantName;

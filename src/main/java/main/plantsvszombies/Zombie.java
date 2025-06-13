@@ -36,10 +36,7 @@ public abstract class Zombie {
         col = 9;
         state = ZombieState.WALKING;
         picture = new ImageView();
-        picture.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
-        picture.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(Constants.height - picture.getFitHeight() - (4-row) * Constants.TILE_SIZE - Constants.height/12.8);
-        picture.setLayoutX(Constants.width);
+        Constants.setZombiePicture(picture, row);
     }
 
     public void eatPlant(Plant plant, Image[] images){
@@ -60,8 +57,8 @@ public abstract class Zombie {
 
     public void move(Image[] images){
         changePicture(images);
-        picture.setLayoutX(picture.getLayoutX() - Constants.TILE_SIZE/(speed*20));
-        col = (int)((picture.getLayoutX() + picture.getFitWidth() / 1.5 - Constants.height/2.62) / Constants.TILE_SIZE);
+        picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE/(speed*20)));
+        col = Constants.getColumnZombie(picture);
     }
 
     public void setState(ZombieState state) {
