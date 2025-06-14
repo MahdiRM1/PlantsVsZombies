@@ -2,26 +2,25 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-public class OriginalZombie extends Zombie{
+public class ConeheadZombie extends Zombie{
 
-
-    private static final int walkPictureNum = 22;
-    private static final int attackPictureNum = 21;
+    private static final int walkPictureNum = 21;
+    private static final int attackPictureNum = 11;
     private static final Image[] walkZombie = new Image[walkPictureNum];
     private static final Image[] eatPlant = new Image[attackPictureNum];
 
     static{
         for (int i = 0; i < walkPictureNum; i++)
-            walkZombie[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieWalk/Zombie_" + i + ".png");
+            walkZombie[i] = new Image("file:Pictures/ZombiePicture/ConeheadZombie/" +
+                    "ConeheadZombie/ConeheadZombie_" + i +".png");
         for (int i = 0; i < attackPictureNum; i++)
-            eatPlant[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieAttack/ZombieAttack_" + i + ".png");
-
-
+            eatPlant[i] = new Image("file:Pictures/ZombiePicture/ConeheadZombie/" +
+                    "ConeheadZombieAttack/ConeheadZombieAttack_" + i + ".png");
     }
 
-    public OriginalZombie(int row){
+    public ConeheadZombie(int row){
         super(row);
-        HP = 100;
+        HP = 140;
         speed = 4;
     }
 
