@@ -31,10 +31,14 @@ public class GameUI {
         bPane.setTop(cardBar());
         mainPane = new StackPane(bPane);
         Random rdm = new Random();
+
         Zombie z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
         pane.getChildren().add(z.getPicture());
-        z = gameLogic.addZombie(new OriginalZombie(rdm.nextInt(5)));
+        z = gameLogic.addZombie(new ConeheadZombie(rdm.nextInt(5)));
         pane.getChildren().add(z.getPicture());
+        z = gameLogic.addZombie(new BucketheadZombie(rdm.nextInt(5)));
+        pane.getChildren().add(z.getPicture());
+
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -54,7 +58,8 @@ public class GameUI {
         Button btn2 = getCardButton("SunFlower", 1);
         Button btn3 = getCardButton("WallNut", 2);
         Button btn4 = getCardButton("TallNut", 3);
-        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4);
+        Button btn5 = getCardButton("Repeater", 4);
+        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4, btn5);
         cardBar.setPadding(new Insets(Constants.height/19, 0, 0, Constants.height/7.4));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
@@ -125,6 +130,9 @@ public class GameUI {
             }
             case "TallNut" -> {
                 return new TallNut(row, col, time);
+            }
+            case "Repeater" -> {
+                return new Repeater(row, col, time);
             }
             default -> {
                 return null;

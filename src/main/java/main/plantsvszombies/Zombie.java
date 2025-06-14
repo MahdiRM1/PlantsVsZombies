@@ -40,7 +40,7 @@ public abstract class Zombie {
     public abstract void action();
 
     private void changePicture(Image[] images){
-        nowPic = (nowPic + 1) % 22;
+        nowPic = (nowPic + 1) % images.length;
         picture.setImage(images[nowPic]);
     }
 
@@ -56,10 +56,6 @@ public abstract class Zombie {
 
     public Plant getPlant(){
         return plantToEat;
-    }
-
-    public void resetPlantToEat(){
-        plantToEat = null;
     }
 
     public void setState(ZombieState state) {
