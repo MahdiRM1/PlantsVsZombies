@@ -79,8 +79,10 @@ public final class Constants {
         return picture;
     }
 
-    public static ImageView setBulletPicture(int row, int col){
-        ImageView picture = new ImageView(new Image("file:Pictures/bullets/normalBullet.png"));
+    public static ImageView setBulletPicture(int row, int col, boolean isIceBullet){
+        ImageView picture;
+        if(!isIceBullet) picture = new ImageView(new Image("file:Pictures/bullets/normalBullet.png"));
+        else picture = new ImageView(new Image("file:Pictures/bullets/iceBullet.png"));
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);

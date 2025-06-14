@@ -6,10 +6,12 @@ public class Bullet {
 
     private final int row;
     private final ImageView picture;
+    private final boolean iceBullet;
 
-    public Bullet(int row, int col) {
+    public Bullet(int row, int col, boolean isFreezeShot) {
         this.row = row;
-        picture = Constants.setBulletPicture(row, col);
+        picture = Constants.setBulletPicture(row, col, isFreezeShot);
+        iceBullet = isFreezeShot;
     }
 
     public void move(){
@@ -24,5 +26,9 @@ public class Bullet {
 
     public int getRow() {
         return row;
+    }
+
+    public boolean isIceBullet(){
+        return iceBullet;
     }
 }

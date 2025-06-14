@@ -11,6 +11,7 @@ public class Repeater extends PeaPlant{
         recharge = 5;
         HP = 100;
         gif = Constants.setPlantPicture("Repeater", row, col);
+        freezeShoot = false;
         firstShoot = timeCreated - 200;
         lastShoot = timeCreated;
     }
@@ -19,11 +20,11 @@ public class Repeater extends PeaPlant{
     public Bullet shoot(int row, int col, long time) {
         if(Math.abs(time - lastShoot) >= 1000 && Math.abs(time - firstShoot) >= 1200) {
             firstShoot = time;
-            return new Bullet(row, col);
+            return new Bullet(row, col, freezeShoot);
         }
         else if(Math.abs(time - firstShoot) >= 200 && Math.abs(time - lastShoot) >= 1200){
             lastShoot = time;
-            return new Bullet(row, col);
+            return new Bullet(row, col, freezeShoot);
         }
         return null;
     }

@@ -59,7 +59,8 @@ public class GameUI {
         Button btn3 = getCardButton("WallNut", 2);
         Button btn4 = getCardButton("TallNut", 3);
         Button btn5 = getCardButton("Repeater", 4);
-        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4, btn5);
+        Button btn6 = getCardButton("SnowPea", 5);
+        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4, btn5, btn6);
         cardBar.setPadding(new Insets(Constants.height/19, 0, 0, Constants.height/7.4));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
@@ -134,6 +135,9 @@ public class GameUI {
             case "Repeater" -> {
                 return new Repeater(row, col, time);
             }
+            case "SnowPea" -> {
+                return new SnowPea(row, col, time);
+            }
             default -> {
                 return null;
             }
@@ -147,7 +151,7 @@ public class GameUI {
     }//in hamon method movement bode ke chand ta tikash kardam fek mekonam behtar shode bashe
 
     private void characterActions(){
-        for(Zombie z : gameLogic.getZombies()) z.action();
+        for(Zombie z : gameLogic.getZombies()) z.action(time);
         for(Bullet b : gameLogic.getBullets()) b.move();
         gameLogic.setZombieState();
         scoreBoard.sunHandler(time);
@@ -168,7 +172,7 @@ public class GameUI {
     }
 
     private void garbageImages(){
-        for(Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
+        for(Bullet bullet : gameLogic.checkBulletStrike(time)) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
         for(Plant plantToRemove : gameLogic.plantsToRemove()) bPane.getChildren().remove(plantToRemove.getGif());
     }
