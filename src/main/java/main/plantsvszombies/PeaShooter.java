@@ -8,6 +8,7 @@ public class PeaShooter extends PeaPlant{
        recharge = 5;
        HP = 100;
        gif = Constants.setPlantPicture("Pea", row, col);
+       freezeShoot = false;
     }
 
 }

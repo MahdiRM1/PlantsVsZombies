@@ -25,7 +25,7 @@ public class GameLogic {
         bullets.add(b);
     }
 
-    public ArrayList<Bullet> checkBulletStrike(){
+    public ArrayList<Bullet> checkBulletStrike(long time){
         ArrayList<Bullet> bulletsImage = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
             if (bullets.get(i).getPicture().getLayoutX() > Constants.width - bullets.get(i).getPicture().getFitWidth()) {
@@ -36,7 +36,7 @@ public class GameLogic {
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
                     if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
-                        z.damage();
+                        z.damage(bullets.get(i).isIceBullet(), time);
                         bulletsImage.add(bullets.get(i));
                         bullets.remove(i);
                         break;
