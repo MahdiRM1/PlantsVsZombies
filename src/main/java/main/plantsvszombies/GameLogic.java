@@ -7,13 +7,12 @@ public class GameLogic {
     private final ArrayList<Zombie> zombies = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
 
-    public GameLogic(){
-    }
-
-    public void setPlant(int i, int j, Plant plant){
+    public boolean setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) {
             pottedPlants[i][j] = plant;
+            return true;
         }
+        return false;
     }
 
     public Zombie addZombie(Zombie z) {
@@ -26,10 +25,10 @@ public class GameLogic {
     }
 
     public ArrayList<Bullet> checkBulletStrike(long time){
-        ArrayList<Bullet> bulletsImage = new ArrayList<>();
+        ArrayList<Bullet> bulletToRemove = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
             if (bullets.get(i).getPicture().getLayoutX() > Constants.width - bullets.get(i).getPicture().getFitWidth()) {
-                bulletsImage.add(bullets.get(i));
+                bulletToRemove.add(bullets.get(i));
                 bullets.remove(i);
                 continue;
             }
@@ -37,14 +36,14 @@ public class GameLogic {
                 if(z.getRow() == bullets.get(i).getRow()){
                     if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
                         z.damage(bullets.get(i).isIceBullet(), time);
-                        bulletsImage.add(bullets.get(i));
+                        bulletToRemove.add(bullets.get(i));
                         bullets.remove(i);
                         break;
                     }
                 }
             }
         }
-        return bulletsImage;
+        return bulletToRemove;
     }
 
 
@@ -73,10 +72,13 @@ public class GameLogic {
     public void setZombieState(){
         for(Zombie zombie : zombies){
             Plant plant = checkCorrespondence(zombie);
-            if(zombie.getHP() <= 0) {
+            if(zombie.getState() == ZombieState.DEAD1);
+            else if (zombie.getState() == ZombieState.DEAD2);
+            else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
-                zombie.setState(ZombieState.DEAD);
+                zombie.setState(ZombieState.DEAD1);
+                zombie.resetNowPic();
             }
             else if(plant != null) {
                 zombie.setState(ZombieState.EATING);
@@ -89,7 +91,7 @@ public class GameLogic {
     public ArrayList<Zombie> zombieToRemove(){
         ArrayList<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
-            if(zombies.get(i).getState() == ZombieState.DEAD) {
+            if(zombies.get(i).getState() == ZombieState.DEAD2) {
                 died.add(zombies.get(i));
                 zombies.remove(i);
             }

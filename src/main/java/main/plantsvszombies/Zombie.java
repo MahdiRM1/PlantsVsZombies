@@ -3,25 +3,29 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-enum ZombieState{ WALKING, DEAD, EATING }
+enum ZombieState{ WALKING, DEAD1, DEAD2, EATING }
 
 public abstract class Zombie {
 
     protected int HP;
     protected int speed;
     protected ImageView picture;
-    protected int row , col;
-    private int nowPic;
+    protected final int row;
+    protected int col;
     protected ZombieState state;
-    private Plant plantToEat;
     protected long freezeTime;
-    protected int walkPictureNum;
-    protected int attackPictureNum;
-    protected Image[] walkZombie;
-    protected Image[] walkFrozenZombie;
-    protected Image[] attackZombie;
-    protected Image[] attackFrozenZombie;
+    private static int dieImagesNum = 14;
+    private static Image[] dieImages = new Image[dieImagesNum];
+    private static Image[] frozenDieImages = new Image[dieImagesNum];
+    private int nowPic;
+    private Plant plantToEat;
 
+    static {
+        for (int i = 0; i < dieImagesNum; i++) {
+            dieImages[i] = new Image("file:Pictures/ZombiePicture/ZombieDie/ZombieDie_" + i +".png");
+            frozenDieImages[i] = new Image("file:Pictures/ZombiePicture/FrozenZombieDie/ZombieDie_" + i + ".png");
+        }
+    }
 
     public Zombie(int row) {
         this.row = row;
@@ -43,14 +47,25 @@ public abstract class Zombie {
             switch (state) {
                 case WALKING -> walk(true);
                 case EATING -> eatPlant(true);
+                case DEAD1 -> dieAnimation(true);
             }
         }
         else{
             switch (state) {
                 case WALKING -> walk(false);
                 case EATING -> eatPlant(false);
+                case DEAD1 -> dieAnimation(false);
             }
         }
+    }
+
+    private void dieAnimation(boolean isFrozen){
+        if(nowPic >= dieImagesNum-1) {
+            state = ZombieState.DEAD2;
+            return;
+        }
+        Image[] images = (isFrozen) ? frozenDieImages : dieImages;
+        changePicture(images);
     }
 
     private void changePicture(Image[] images){
@@ -59,14 +74,16 @@ public abstract class Zombie {
     }
 
     public void walk(boolean isFrozen){
-        changePicture((isFrozen) ? walkFrozenZombie : walkZombie);
+        Image[] images = getWalkImage(isFrozen);
+        changePicture(images);
         picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE/(speed*20)));
         col = Constants.getColumnZombie(picture);
     }
 
     public void eatPlant(boolean isFrozen){
         plantToEat.damage();
-        changePicture((isFrozen) ? attackFrozenZombie : attackZombie);
+        Image[] images = getEatImage(isFrozen);
+        changePicture(images);
         if(plantToEat.getHP() <= 0) {
             plantToEat = null;
             state = ZombieState.WALKING;
@@ -77,12 +94,19 @@ public abstract class Zombie {
         this.plantToEat = plantToEat;
     }
 
+    protected abstract Image[] getWalkImage(boolean isFrozen);
+    protected abstract Image[] getEatImage(boolean isFrozen);
+
     public Plant getPlant(){
         return plantToEat;
     }
 
     public void setState(ZombieState state) {
         this.state = state;
+    }
+
+    public void resetNowPic(){
+        nowPic = 0;
     }
 
     public int getHP() {
