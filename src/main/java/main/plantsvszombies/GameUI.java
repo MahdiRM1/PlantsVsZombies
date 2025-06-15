@@ -53,7 +53,7 @@ public class GameUI {
     }
 
     private HBox cardBar(){
-        HBox cardBar = new HBox(5);
+        HBox cardBar = new HBox(0);
         Button btn1 = getCardButton("PeaShooter", 0);
         Button btn2 = getCardButton("SunFlower", 1);
         Button btn3 = getCardButton("WallNut", 2);
@@ -100,10 +100,8 @@ public class GameUI {
         btn.setOnAction(event -> {
             if(selectedPlant != null) {
                 Plant plant = getPlant(row, col);
-                if(btn.getGraphic() == null && scoreBoard.getScore() >= plant.getPrice()) {
-                    gameLogic.setPlant(row, col, plant);
+                if(scoreBoard.getScore() >= plant.getPrice() && gameLogic.setPlant(row, col, plant)) {
                     bPane.getChildren().add(plant.getGif());
-//                    btn.setGraphic(plant.getGif());
                     scoreBoard.purchasePlant(plant.getPrice());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.6);"));
                 }
@@ -145,8 +143,8 @@ public class GameUI {
     }//in vase new kardan moghe kashtane ke string migire plant mide
 
     public void updateGame(){
-        characterActions();
         garbageImages();
+        characterActions();
         addObjectImages();
     }//in hamon method movement bode ke chand ta tikash kardam fek mekonam behtar shode bashe
 

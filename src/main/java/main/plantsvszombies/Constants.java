@@ -12,7 +12,7 @@ public final class Constants {
     public static final double ZOMBIE_PIC_WEIGHT = height / 5;
     public static final double BULLET_SIZE = height / 21.5;
     public static final double PLANT_CARD_HEIGHT = height / 7.3;
-    public static final double PLANT_CARD_WIDTH = height / 13.5;
+    public static final double PLANT_CARD_WIDTH = height / 13;
     public static final double SUN_SIZE = height / 8.5;
 
     public static ImageView setScoreBoardPicture(){
