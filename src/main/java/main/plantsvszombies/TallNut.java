@@ -1,6 +1,6 @@
 package main.plantsvszombies;
 
-public class TallNut extends Nut{
+public class TallNut extends NutPlants {
 
     public TallNut(int row, int col, long timeCreated){
         super(row, col, timeCreated);

@@ -1,6 +1,6 @@
 package main.plantsvszombies;
 
-public class WallNut extends Nut{
+public class WallNut extends NutPlants {
 
     public WallNut(int row, int col, long timeCreated){
         super(row, col, timeCreated);
