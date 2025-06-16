@@ -54,12 +54,18 @@ public class GameLogic {
         return null;
     }
 
-    public ArrayList<Plant> plantsToRemove() {
+    public ArrayList<Plant> plantsToRemove(long time) {
         ArrayList<Plant> plantsToRemove = new ArrayList<>();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
-                    if (pottedPlants[row][col].getHP() <= 0) {
+                    if(pottedPlants[row][col] instanceof BombPlant){
+                        if(((BombPlant)pottedPlants[row][col]).boooooom(time, zombies)) {
+                            plantsToRemove.add(pottedPlants[row][col]);
+                            pottedPlants[row][col] = null;
+                        }
+                    }
+                    else if (pottedPlants[row][col].getHP() <= 0) {
                         plantsToRemove.add(pottedPlants[row][col]);
                         pottedPlants[row][col] = null;
                     }
@@ -72,13 +78,11 @@ public class GameLogic {
     public void setZombieState(){
         for(Zombie zombie : zombies){
             Plant plant = checkCorrespondence(zombie);
-            if(zombie.getState() == ZombieState.DEAD1);
-            else if (zombie.getState() == ZombieState.DEAD2);
+            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE);
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
-                zombie.setState(ZombieState.DEAD1);
-                zombie.resetNowPic();
+                zombie.setState(ZombieState.DIE);
             }
             else if(plant != null) {
                 zombie.setState(ZombieState.EATING);
@@ -91,7 +95,7 @@ public class GameLogic {
     public ArrayList<Zombie> zombieToRemove(){
         ArrayList<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
-            if(zombies.get(i).getState() == ZombieState.DEAD2) {
+            if(zombies.get(i).getState() == ZombieState.DEAD) {
                 died.add(zombies.get(i));
                 zombies.remove(i);
             }

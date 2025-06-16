@@ -1,9 +1,11 @@
 package main.plantsvszombies;
 
+import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
-enum ZombieState{ WALKING, DEAD1, DEAD2, EATING }
+enum ZombieState{ WALKING, EATING, BOOM_DIE, DIE, DEAD }
 
 public abstract class Zombie {
 
@@ -14,16 +16,14 @@ public abstract class Zombie {
     protected int col;
     protected ZombieState state;
     protected long freezeTime;
-    private static int dieImagesNum = 14;
-    private static Image[] dieImages = new Image[dieImagesNum];
-    private static Image[] frozenDieImages = new Image[dieImagesNum];
+    private static final int boomDiePictureNum = 27;
+    private static final Image[] boomDiePictures = new Image[boomDiePictureNum];
     private int nowPic;
     private Plant plantToEat;
 
     static {
-        for (int i = 0; i < dieImagesNum; i++) {
-            dieImages[i] = new Image("file:Pictures/ZombiePicture/ZombieDie/ZombieDie_" + i +".png");
-            frozenDieImages[i] = new Image("file:Pictures/ZombiePicture/FrozenZombieDie/ZombieDie_" + i + ".png");
+        for (int i = 0; i < boomDiePictureNum; i++) {
+            boomDiePictures[i] = new Image("file:Pictures/ZombiePicture/BoomDie/BoomDie_" + i + ".png");
         }
     }
 
@@ -42,29 +42,49 @@ public abstract class Zombie {
     }
 
     public void action(long time){
-        if(Math.abs(time - freezeTime) <= 5000){
+        if(state == ZombieState.BOOM_DIE) dieAnimation();
+        else if(Math.abs(time - freezeTime) <= 5000){
             if(time % 100 != 0) return;
+            picture.setEffect(iceEffect());
             switch (state) {
-                case WALKING -> walk(true);
-                case EATING -> eatPlant(true);
-                case DEAD1 -> dieAnimation(true);
+                case WALKING -> walk();
+                case EATING -> eatPlant();
+                case DIE -> dieAnimation();
             }
         }
         else{
+            picture.setEffect(null);
             switch (state) {
-                case WALKING -> walk(false);
-                case EATING -> eatPlant(false);
-                case DEAD1 -> dieAnimation(false);
+                case WALKING -> walk();
+                case EATING -> eatPlant();
+                case DIE -> dieAnimation();
             }
         }
     }
 
-    private void dieAnimation(boolean isFrozen){
-        if(nowPic >= dieImagesNum-1) {
-            state = ZombieState.DEAD2;
+    private Effect iceEffect(){
+        ColorAdjust blueTone = new ColorAdjust();
+        blueTone.setHue(0.6);
+        blueTone.setSaturation(0.3);
+        blueTone.setBrightness(0.2);
+        blueTone.setContrast(0.1);
+
+        DropShadow iceGlow = new DropShadow();
+        iceGlow.setColor(Color.CORNFLOWERBLUE);
+        iceGlow.setRadius(15);
+        iceGlow.setInput(blueTone);
+
+        return iceGlow;
+    }
+
+    private void dieAnimation(){
+        Image[] images;
+        if(state == ZombieState.DIE) images = getDieImage();
+        else images = boomDiePictures;
+        if(nowPic >= images.length - 1) {
+            state = ZombieState.DEAD;
             return;
         }
-        Image[] images = (isFrozen) ? frozenDieImages : dieImages;
         changePicture(images);
     }
 
@@ -73,17 +93,15 @@ public abstract class Zombie {
         picture.setImage(images[nowPic]);
     }
 
-    public void walk(boolean isFrozen){
-        Image[] images = getWalkImage(isFrozen);
-        changePicture(images);
+    public void walk(){
+        changePicture(getWalkImage());
         picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE/(speed*20)));
         col = Constants.getColumnZombie(picture);
     }
 
-    public void eatPlant(boolean isFrozen){
+    public void eatPlant(){
         plantToEat.damage();
-        Image[] images = getEatImage(isFrozen);
-        changePicture(images);
+        changePicture(getEatImage());
         if(plantToEat.getHP() <= 0) {
             plantToEat = null;
             state = ZombieState.WALKING;
@@ -94,18 +112,17 @@ public abstract class Zombie {
         this.plantToEat = plantToEat;
     }
 
-    protected abstract Image[] getWalkImage(boolean isFrozen);
-    protected abstract Image[] getEatImage(boolean isFrozen);
+    protected abstract Image[] getWalkImage();
+    protected abstract Image[] getEatImage();
+    protected abstract Image[] getDieImage();
 
     public Plant getPlant(){
         return plantToEat;
     }
 
     public void setState(ZombieState state) {
+        if(this.state == state) return;
         this.state = state;
-    }
-
-    public void resetNowPic(){
         nowPic = 0;
     }
 

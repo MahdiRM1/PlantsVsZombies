@@ -9,7 +9,7 @@ public class Repeater extends PeaPlant{
         super(row, col, timeCreated);
         price = 100;
         recharge = 5;
-        HP = 100;
+        HP = 200;
         gif = Constants.setPlantPicture("Repeater", row, col);
         freezeShoot = false;
         firstShoot = timeCreated - 200;
