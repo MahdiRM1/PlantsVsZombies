@@ -4,19 +4,18 @@ public class SunFlower extends Plant{
 
     private long lastSunTime;
 
-    public SunFlower(int row, int col, long timeCreated){
-        super(row, col, timeCreated);
+    public SunFlower(int row, int col){
+        super(row, col);
         price = 50;
         recharge = 5;
         HP = 100;
         lastSunTime = timeCreated;
-        gif = Constants.setPlantPicture("SunFlower", row, col);
     }
 
-    public Sun givenSun(long time) {
-        if(Math.abs(time - lastSunTime) >= 10000) {
-            lastSunTime = time;
-            return new Sun(time, SunType.STABLE.setCoordination(row, col));
+    public Sun givenSun() {
+        if(Math.abs(GlobalState.gameTime - lastSunTime) >= 10000) {
+            lastSunTime = GlobalState.gameTime;
+            return new Sun(SunType.STABLE.setCoordination(row, col));
         }
         return null;
     }

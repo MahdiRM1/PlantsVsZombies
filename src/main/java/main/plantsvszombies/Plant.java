@@ -11,10 +11,11 @@ public abstract class Plant {
     protected ImageView gif;
     double damageCaused = 0;
 
-    public Plant(int row, int col, long timeCreated){
+    public Plant(int row, int col){
         this.row = row;
         this.col = col;
-        this.timeCreated = timeCreated;
+        this.timeCreated = GlobalState.gameTime;
+        gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
     }
 
     public void damage(){

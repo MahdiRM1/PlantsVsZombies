@@ -24,7 +24,6 @@ public class GameUI {
     private final Pane pane = new Pane();
     GridPane gPane = new GridPane();
     private String selectedPlant;
-    private long time = 0;
     private int selectedButton = -1;
     private final ScoreBoard scoreBoard;
 
@@ -38,7 +37,7 @@ public class GameUI {
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            time += 50;
+            GlobalState.gameTime += 50;
             updateGame();
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
@@ -117,28 +116,28 @@ public class GameUI {
     private Plant getPlant(int row, int col){
         switch (selectedPlant){
             case "PeaShooter" -> {
-                return new PeaShooter(row, col, time);
+                return new PeaShooter(row, col);
             }
             case "SunFlower" -> {
-                return new SunFlower(row, col, time);
+                return new SunFlower(row, col);
             }
             case "WallNut" -> {
-                return new WallNut(row, col, time);
+                return new WallNut(row, col);
             }
             case "TallNut" -> {
-                return new TallNut(row, col, time);
+                return new TallNut(row, col);
             }
             case "Repeater" -> {
-                return new Repeater(row, col, time);
+                return new Repeater(row, col);
             }
             case "SnowPea" -> {
-                return new SnowPea(row, col, time);
+                return new SnowPea(row, col);
             }
             case "CherryBomb" -> {
-                return new CherryBomb(row, col, time);
+                return new CherryBomb(row, col);
             }
             case "Jalapeno" -> {
-                return new Jalapeno(row, col, time);
+                return new Jalapeno(row, col);
             }
             default -> {
                 return null;
@@ -155,33 +154,33 @@ public class GameUI {
 
     private void timeHandler(){
         Random rdm = new Random();
-        if(time <= 15000);
-        else if(time <= 50000){
+        if(GlobalState.gameTime <= 15000);
+        else if(GlobalState.gameTime <= 50000){
             System.out.println(1);
-            if(time % 5000 == 1000) zombieGetter(0, rdm.nextInt(5));
+            if(GlobalState.gameTime % 5000 == 1000) zombieGetter(0, rdm.nextInt(5));
         }
-        else if(time <= 70000){
+        else if(GlobalState.gameTime <= 70000){
             System.out.println(2);
-            if(time % 3000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
+            if(GlobalState.gameTime % 3000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
         }
-        else if(time < 80000){
+        else if(GlobalState.gameTime < 80000){
             System.out.println(3);
-            if(time % 3000 == 0 || time % 3000 == 200){
+            if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(2), i);
                 }
             }
         }
-        else if(time <= 120000){
+        else if(GlobalState.gameTime <= 120000){
             System.out.println(4);
-            if(time % 3000 == 0) {
+            if(GlobalState.gameTime % 3000 == 0) {
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
             }
         }
-        else if (time < 140000){
+        else if (GlobalState.gameTime < 140000){
             System.out.println(5);
-                if(time % 3000 == 0 || time % 3000 == 200){
+                if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(4), i);
                 }
@@ -214,19 +213,19 @@ public class GameUI {
     }
 
     private void characterActions(){
-        for(Zombie z : gameLogic.getZombies()) z.action(time);
+        for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
         gameLogic.setZombieState();
-        scoreBoard.sunHandler(time);
+        scoreBoard.sunHandler();
     }
 
     private void addObjectImages(){
         for(SunFlower sunFlower : gameLogic.sunFlowers()) {
-            scoreBoard.addSun(sunFlower.givenSun(time));
+            scoreBoard.addSun(sunFlower.givenSun());
         }
 
         for(PeaPlant shooter : gameLogic.plantsAligned()) {
-            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol(), time);
+            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol());
             if(b != null) {
                 gameLogic.addBullet(b);
                 pane.getChildren().addAll(b.getPicture());
@@ -235,8 +234,8 @@ public class GameUI {
     }
 
     private void garbageImages(){
-        for(Bullet bullet : gameLogic.checkBulletStrike(time)) pane.getChildren().remove(bullet.getPicture());
+        for(Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for(Plant plantToRemove : gameLogic.plantsToRemove(time)) bPane.getChildren().remove(plantToRemove.getGif());
+        for(Plant plantToRemove : gameLogic.plantsToRemove()) bPane.getChildren().remove(plantToRemove.getGif());
     }
 }

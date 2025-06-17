@@ -43,28 +43,28 @@ public class ScoreBoard {
         }
     }
 
-    public void sunHandler(long time){
-        sunDrop(time);
-        garbageSuns(time);
-        fallenSun(time);
+    public void sunHandler(){
+        sunDrop();
+        garbageSuns();
+        fallenSun();
     }
 
-    private void garbageSuns(long time){
+    private void garbageSuns(){
         for (int i = 0; i < suns.size(); i++) {
-            if(Math.abs(suns.get(i).getTimeCreated() - time) >= 5000) {
+            if(Math.abs(suns.get(i).getTimeCreated() - GlobalState.gameTime) >= 5000) {
                 pane.getChildren().remove(suns.get(i).getPicture());
                 suns.remove(i);
             }
         }
     }
 
-    private void fallenSun(long time){
-        for (Sun s : suns) s.moveSun(time);
+    private void fallenSun(){
+        for (Sun s : suns) s.moveSun();
     }
 
-    private void sunDrop(long time){
-        if(time % 10000 == 0){
-            Sun s = new Sun(time, SunType.FALLEN);
+    private void sunDrop(){
+        if(GlobalState.gameTime % 10000 == 0){
+            Sun s = new Sun(SunType.FALLEN);
             addSun(s);
         }
     }
