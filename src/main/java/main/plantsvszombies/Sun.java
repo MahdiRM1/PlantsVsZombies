@@ -31,17 +31,17 @@ public class Sun {
     private final SunType type;
     private final double maxY;
 
-    public Sun(long timeCreated, SunType type) {
-        this.timeCreated = timeCreated;
+    public Sun(SunType type) {
+        timeCreated = GlobalState.gameTime;
         this.type = type;
         picture = Constants.setSunPicture(type);
         maxY = Constants.sunMaxY(type);
     }
 
-    public void moveSun(long time){
+    public void moveSun(){
         if(picture.getLayoutY() < maxY) {
             picture.setLayoutY(picture.getLayoutY() + 3);
-            timeCreated = time;
+            timeCreated = GlobalState.gameTime;
         }
     }
 

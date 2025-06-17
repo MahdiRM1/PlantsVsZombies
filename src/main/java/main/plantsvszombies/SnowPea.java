@@ -7,12 +7,11 @@ import javafx.scene.paint.Color;
 
 public class SnowPea extends PeaPlant{
 
-    public SnowPea(int row, int col, long timeCreated) {
-        super(row, col, timeCreated);
+    public SnowPea(int row, int col) {
+        super(row, col);
         price = 175;
         recharge = 5;
         HP = 100;
-        gif = Constants.setPlantPicture("Pea", row, col);
         gif.setEffect(iceEffect());
         freezeShoot = true;
     }

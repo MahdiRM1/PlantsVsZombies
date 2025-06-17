@@ -5,19 +5,19 @@ public class Repeater extends PeaPlant{
     private long firstShoot;
     private long lastShoot;
 
-    public Repeater(int row, int col, long timeCreated) {
-        super(row, col, timeCreated);
+    public Repeater(int row, int col) {
+        super(row, col);
         price = 100;
         recharge = 5;
         HP = 200;
-        gif = Constants.setPlantPicture("Repeater", row, col);
         freezeShoot = false;
         firstShoot = timeCreated - 200;
         lastShoot = timeCreated;
     }
 
     @Override
-    public Bullet shoot(int row, int col, long time) {
+    public Bullet shoot(int row, int col) {
+        long time = GlobalState.gameTime;
         if(Math.abs(time - lastShoot) >= 1000 && Math.abs(time - firstShoot) >= 1200) {
             firstShoot = time;
             return new Bullet(row, col, freezeShoot);

@@ -36,15 +36,15 @@ public abstract class Zombie {
         freezeTime = -5000;
     }
 
-    public void damage(boolean isFreezing, long time){
-        if(isFreezing) freezeTime = time;
+    public void damage(boolean isFreezing){
+        if(isFreezing) freezeTime = GlobalState.gameTime;
         HP -= 20;
     }
 
-    public void action(long time){
+    public void action(){
         if(state == ZombieState.BOOM_DIE) dieAnimation();
-        else if(Math.abs(time - freezeTime) <= 5000){
-            if(time % 100 != 0) return;
+        else if(Math.abs(GlobalState.gameTime - freezeTime) <= 5000){
+            if(GlobalState.gameTime % 100 != 0) return;
             picture.setEffect(iceEffect());
             switch (state) {
                 case WALKING -> walk();

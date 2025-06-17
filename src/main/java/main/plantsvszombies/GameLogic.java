@@ -24,10 +24,10 @@ public class GameLogic {
         bullets.add(b);
     }
 
-    public ArrayList<Bullet> checkBulletStrike(long time){
+    public ArrayList<Bullet> checkBulletStrike(){
         ArrayList<Bullet> bulletToRemove = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
-            if (bullets.get(i).getPicture().getLayoutX() > Constants.width - bullets.get(i).getPicture().getFitWidth()) {
+            if (bullets.get(i).getPicture().getLayoutX() > Constants.width) {
                 bulletToRemove.add(bullets.get(i));
                 bullets.remove(i);
                 continue;
@@ -35,7 +35,7 @@ public class GameLogic {
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
                     if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
-                        z.damage(bullets.get(i).isIceBullet(), time);
+                        z.damage(bullets.get(i).isIceBullet());
                         bulletToRemove.add(bullets.get(i));
                         bullets.remove(i);
                         break;
@@ -54,14 +54,14 @@ public class GameLogic {
         return null;
     }
 
-    public ArrayList<Plant> plantsToRemove(long time) {
+    public ArrayList<Plant> plantsToRemove() {
         ArrayList<Plant> plantsToRemove = new ArrayList<>();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
-                    if(pottedPlants[row][col] instanceof BombPlant){
-                        if(((BombPlant)pottedPlants[row][col]).boooooom(time, zombies)) {
-                            plantsToRemove.add(pottedPlants[row][col]);
+                    if(pottedPlants[row][col] instanceof BombPlant bomb){
+                        if(bomb.boooooom(zombies)) {
+                            plantsToRemove.add(bomb);
                             pottedPlants[row][col] = null;
                         }
                     }
@@ -69,6 +69,7 @@ public class GameLogic {
                         plantsToRemove.add(pottedPlants[row][col]);
                         pottedPlants[row][col] = null;
                     }
+                    else if (pottedPlants[row][col] instanceof NutPlant nut) nut.updateState();
                 }catch (NullPointerException e) {}
             }
         }
@@ -78,7 +79,7 @@ public class GameLogic {
     public void setZombieState(){
         for(Zombie zombie : zombies){
             Plant plant = checkCorrespondence(zombie);
-            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE);
+            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE) continue;
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
@@ -106,9 +107,10 @@ public class GameLogic {
     public ArrayList<PeaPlant> plantsAligned() {
         ArrayList<PeaPlant> peaPlants = new ArrayList<>();
         for (Zombie z : zombies){
+            if(z.getCol() > 9) break;
             for (int i = 0; i <= z.getCol(); i++) {
                 try {
-                    if(pottedPlants[z.getRow()][i] instanceof PeaPlant) peaPlants.add((PeaPlant) pottedPlants[z.getRow()][i]);
+                    if(pottedPlants[z.getRow()][i] instanceof PeaPlant pea) peaPlants.add(pea);
                 }catch (ArrayIndexOutOfBoundsException e){}
             }
         }

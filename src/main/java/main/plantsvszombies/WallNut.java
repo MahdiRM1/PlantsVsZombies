@@ -1,12 +1,13 @@
 package main.plantsvszombies;
 
-public class WallNut extends NutPlants {
+public class WallNut extends NutPlant {
 
-    public WallNut(int row, int col, long timeCreated){
-        super(row, col, timeCreated);
+    public WallNut(int row, int col){
+        super(row, col);
         price = 50;
-        HP = 250;
+        HP = maxHP =250;
         recharge = 5;
-        gif = Constants.setPlantPicture("WallNut", row, col);
     }
+
+
 }

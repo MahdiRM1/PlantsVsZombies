@@ -1,13 +1,12 @@
 package main.plantsvszombies;
 
-public class TallNut extends NutPlants {
+public class TallNut extends NutPlant {
 
-    public TallNut(int row, int col, long timeCreated){
-        super(row, col, timeCreated);
+    public TallNut(int row, int col){
+        super(row, col);
         price = 150;
-        HP = 400;
+        HP = maxHP = 400;
         recharge = 5;
-        gif = Constants.setPlantPicture("TallNut", row, col);
     }
 
 }
