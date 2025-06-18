@@ -126,17 +126,19 @@ public class GameLogic {
         }
         return sunFlowers;
     }
+
     public boolean checkLose() {
-        for( Zombie zombie : zombies) {
+        for(Zombie zombie : zombies) {
             if(zombie.getCol()  < 0) {
                 return true;
             }
         }
         return false;
     }
+
     public boolean checkWin() {
         if(zombies.isEmpty() && GlobalState.gameTime >= 140000) return true;
-        return  false;
+        return false;
     }
 
     public ArrayList<Zombie> getZombies() {

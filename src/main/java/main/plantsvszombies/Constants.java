@@ -22,16 +22,9 @@ public final class Constants {
         return board;
     }
 
-    public static ImageView setIntroductionBackGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/GameStartBackGround.jpg"));
-        bg.setFitHeight(height);
-        bg.setFitWidth(width);
-        return bg;
-    }
-
-    public static ImageView setDayBackGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/backGroundDay.jpg"));
-        bg.setFitHeight(height);
+    public static ImageView setBackGround(String str){
+        ImageView bg = new ImageView(new Image("file:Pictures/backGround/" + str + ".jpg"));
+        bg.setFitHeight(height - 35);
         bg.setFitWidth(width);
         return bg;
     }

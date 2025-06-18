@@ -16,6 +16,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameUI {
@@ -30,9 +32,9 @@ public class GameUI {
     private String selectedPlant;
     private int selectedButton = -1;
 
-    public GameUI(Stage stage){
+    public GameUI(Stage stage, ArrayList<String> plants){
         gameLogic = new GameLogic();
-        initializeStackPane();
+        initializeStackPane(plants);
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GlobalState.gameTime += 50;
             updateGame();
@@ -44,11 +46,11 @@ public class GameUI {
         stage.show();
     }
 
-    private void initializeStackPane(){
-        bPane.getChildren().add(Constants.setDayBackGround());
+    private void initializeStackPane(ArrayList<String> plants){
+        bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
         bPane.setBottom(map());
         scoreBoard = new ScoreBoard(bPane);
-        bPane.setTop(cardBar());
+        bPane.setTop(cardBar(plants));
         zombieGetter(0, 2);
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(bPane);
@@ -56,17 +58,11 @@ public class GameUI {
         mainPane.getChildren().add(buttonsPane());
     }
 
-    private HBox cardBar(){
-        HBox cardBar = new HBox(5);
-        Button btn1 = getCardButton("PeaShooter", 0);
-        Button btn2 = getCardButton("SunFlower", 1);
-        Button btn3 = getCardButton("WallNut", 2);
-        Button btn4 = getCardButton("TallNut", 3);
-        Button btn5 = getCardButton("Repeater", 4);
-        Button btn6 = getCardButton("SnowPea", 5);
-        Button btn7 = getCardButton("CherryBomb", 5);
-        Button btn8 = getCardButton("Jalapeno", 5);
-        cardBar.getChildren().addAll(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
+    private HBox cardBar(ArrayList<String> plants){
+        HBox cardBar = new HBox(0);
+        for (int i = 0; i < 6; i++) {
+            cardBar.getChildren().add(getCardButton(plants.get(i), i));
+        }
         cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
@@ -126,18 +122,11 @@ public class GameUI {
         AnchorPane buttonsPane = new AnchorPane();
         buttonsPane.setPickOnBounds(false);
 
-        Button menu = new Button();
-        menu.setPrefSize(Constants.height/8, Constants.height/20);
-        menu.setOnAction(event -> {
+        ImageView menu = setButton("MenuBtn", Constants.height/5, Constants.height/16);
+        menu.setOnMouseClicked(event -> {
             tl.pause();
             menu();
         });
-
-        ImageView imageView = new ImageView(new Image("file:Pictures/ui/Button.png"));
-        imageView.setFitHeight(menu.getPrefHeight());
-        imageView.setFitWidth(menu.getPrefWidth());
-        menu.setGraphic(imageView);
-        menu.setStyle("-fx-background-color: transparent;");
 
         AnchorPane.setTopAnchor(menu, -5.0);
         AnchorPane.setRightAnchor(menu, 0.0);
@@ -150,46 +139,53 @@ public class GameUI {
     private void menu(){
         AnchorPane menuPane = new AnchorPane();
 
-        Label winLabel = new Label("Menu");
-        winLabel.setTextFill(Color.BLACK);
-        winLabel.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-        winLabel.setEffect(new DropShadow(10, Color.BLACK));
+        ImageView backToMenu = setButton("MainMenu", Constants.height/5, Constants.height/20);
+        backToMenu.setX(Constants.width/2 - Constants.height/10);
+        backToMenu.setY(Constants.height/1.85);
 
-        Button backToMenu = setButton("Back to menu", 350, 100, 30);
+        ImageView restart = setButton("Restart", Constants.height/5, Constants.height/20);
+        restart.setX(Constants.width/2 - Constants.height/10);
+        restart.setY(Constants.height/1.65);
 
-        Button nextLevel = setButton("Back To Game", 350, 100, 30);
-        nextLevel.setOnAction(event -> {
+        ImageView backToGame = setButton("BackToGame", Constants.height/1.85, Constants.height/6.5);
+        backToGame.setOnMouseClicked(event -> {
             tl.play();
             mainPane.getChildren().removeLast();
         });
+        backToGame.setX(Constants.width/2 - Constants.height/3.7);
+        backToGame.setY(Constants.height/1.44);
 
-        VBox winBox = new VBox(10);
-        winBox.getChildren().addAll(winLabel, backToMenu, nextLevel);
-        winBox.setAlignment(Pos.CENTER);
-        winBox.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
-        winBox.setPrefSize(Constants.width, Constants.height);
+        ImageView menuPic = new ImageView(new Image("file:Pictures/ui/menu.png"));
+        menuPic.setX(Constants.width/6);
+        menuPic.setFitWidth(Constants.width/1.5);
+        menuPic.setFitHeight(Constants.height - 35);
 
-        menuPane.getChildren().add(winBox);
+        menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
+        menuPane.getChildren().addAll(menuPic, backToMenu, restart, backToGame);
         mainPane.getChildren().add(menuPane);
     }
 
-    private Button setButton(String text, int width, int height, int fontSize){
-        Button btn = new Button(text);
-        btn.setStyle(String.format(
-            "-fx-background-radius: 20; " +
-            "-fx-min-width: %dpx; " +
-            "-fx-min-height: %dpx; " +
-            "-fx-background-color: linear-gradient(to bottom, rgb(41, 41, 41), rgb(0, 0, 0)); "  +
-            "-fx-text-fill: green; " +
-            "-fx-font-size: %dpx; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);" ,
-            width, height, fontSize
-        ));
-
-        btn.setOnMouseEntered(e -> btn.setStyle(btn.getStyle() + "-fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), rgb(41, 41, 41));"));
-        btn.setOnMouseExited(e -> btn.setStyle(btn.getStyle() + "-fx-background-color: linear-gradient(to bottom, rgb(41, 41, 41),rgb(0, 0, 0));"));
-
-        return btn;
+    private ImageView setButton(String text, double width, double height){
+        ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+        imageView.setOnMouseEntered(e -> {
+            double differentX = imageView.getFitWidth() * 1.1 - imageView.getFitWidth();
+            double differentY = imageView.getFitHeight() * 1.1 - imageView.getFitHeight();
+            imageView.setFitWidth(imageView.getFitWidth() * 1.1);
+            imageView.setFitHeight(imageView.getFitHeight() * 1.1);
+            imageView.setLayoutX(imageView.getLayoutX() - differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() - differentY/2);
+        });
+        imageView.setOnMouseExited(e -> {
+            double differentX = imageView.getFitWidth() - imageView.getFitWidth() / 1.1;
+            double differentY = imageView.getFitHeight() - imageView.getFitHeight() / 1.1;
+            imageView.setFitWidth(imageView.getFitWidth() / 1.1);
+            imageView.setFitHeight(imageView.getFitHeight() / 1.1);
+            imageView.setLayoutX(imageView.getLayoutX() + differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() + differentY/2);
+        });
+        return imageView;
     }
 
     private Plant getPlant(int row, int col) {
@@ -238,30 +234,33 @@ public class GameUI {
         else if(GlobalState.gameTime <= 50000){
             if(GlobalState.gameTime % 5000 == 1000) zombieGetter(0, rdm.nextInt(5));
         }
-        else if(GlobalState.gameTime <= 70000){
+        else if(GlobalState.gameTime < 70000){
             if(GlobalState.gameTime % 3000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
         }
         else if(GlobalState.gameTime < 80000){
+            if (GlobalState.gameTime == 70000) zombieGetter(4, rdm.nextInt(5));
             if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(2), i);
                 }
             }
         }
-        else if(GlobalState.gameTime <= 120000){
+        else if(GlobalState.gameTime < 130000){
             if(GlobalState.gameTime % 3000 == 0) {
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
             }
         }
-        else if (GlobalState.gameTime < 140000){
-                if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
-                for (int i = 0; i < 5; i++) {
-                    zombieGetter(rdm.nextInt(4), i);
+        else if (GlobalState.gameTime < 150000){
+            if(GlobalState.gameTime == 130000)zombieGetter(4, rdm.nextInt(5));
+            if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
+                    for (int i = 0; i < 5; i++) {
+                        zombieGetter(rdm.nextInt(4), i);
                 }
             }
         }
     }
+
     public void winOrLose() {
         if(gameLogic.checkLose()) {
             Label lose = new Label("You lost");
@@ -292,6 +291,7 @@ public class GameUI {
             case 1 -> addZombie(new ConeheadZombie(row));
             case 2 -> addZombie(new BucketheadZombie(row));
             case 3 -> addZombie(new Imp(row));
+            case 4 -> addZombie(new FlagZombie(row));
         }
     }
 
