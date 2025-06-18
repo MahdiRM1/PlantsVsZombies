@@ -12,14 +12,13 @@ public final class Constants {
     public static final double ZOMBIE_PIC_WEIGHT = height / 5;
     public static final double BULLET_SIZE = height / 21.5;
     public static final double PLANT_CARD_HEIGHT = height / 7.3;
-    public static final double PLANT_CARD_WIDTH = height / 13;
+    public static final double PLANT_CARD_WIDTH = height / 11;
     public static final double SUN_SIZE = height / 8.5;
 
     public static ImageView setScoreBoardPicture(){
         ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
-        board.setFitWidth(height/1.1);
-        board.setFitHeight(height/5.5);
-        board.setLayoutY(height/29.25);
+        board.setFitWidth(height);
+        board.setFitHeight(height/5);
         return board;
     }
 
@@ -43,7 +42,7 @@ public final class Constants {
         picture.setFitHeight(PLANT_CARD_HEIGHT);
         return picture;
     }
-    
+
     public static ImageView setSunPicture(SunType type){
         ImageView picture = new ImageView(new Image("file:Pictures/sun/sun.png"));
         picture.setFitWidth(SUN_SIZE);
@@ -98,9 +97,7 @@ public final class Constants {
     }
 
     public static int getColumnZombie(ImageView picture){
-
-//        return (int)(picture.getLayoutX() + ((picture.getFitWidth() / 1.5) - height/2.62) / TILE_SIZE);
-        double gridStartX = height / 2.5; // This should match your grid's starting X position
+        double gridStartX = height / 2.5;
         double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
         if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
         else return -1;

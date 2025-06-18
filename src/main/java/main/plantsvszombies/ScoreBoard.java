@@ -18,14 +18,14 @@ public class ScoreBoard {
 
     public ScoreBoard(BorderPane pane){
         this.pane = pane;
-        score = 100;
+        score = 1000;
         ImageView board = Constants.setScoreBoardPicture();
         pane.getChildren().addAll(board);
         scoreLabel = new Label(score + "");
         Font font = Font.font("Arial", FontWeight.BOLD, 40);
         scoreLabel.setFont(font);
         scoreLabel.setTextFill(Color.BLACK);
-        scoreLabel.setPadding(new Insets(-Constants.height/25,0,0,Constants.height/30));
+        scoreLabel.setPadding(new Insets(-Constants.height/30,0,0,Constants.height/14));
         pane.setLeft(scoreLabel);
     }
 

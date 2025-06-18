@@ -7,7 +7,7 @@ public class Repeater extends PeaPlant{
 
     public Repeater(int row, int col) {
         super(row, col);
-        price = 100;
+        price = 200;
         recharge = 5;
         HP = 200;
         freezeShoot = false;
