@@ -26,6 +26,7 @@ public class GameUI {
     private String selectedPlant;
     private int selectedButton = -1;
     private final ScoreBoard scoreBoard;
+    Timeline tl;
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
@@ -36,7 +37,7 @@ public class GameUI {
         mainPane = new StackPane(bPane);
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(pane);
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GlobalState.gameTime += 50;
             updateGame();
         }));
@@ -71,10 +72,10 @@ public class GameUI {
             selectedPlant = plantName;
             selectedButton = index;
         });
-        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(10, 145, 44);"));
+        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(10, 145, 44);"));
         btn.setOnMouseExited(e -> {
-            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
+            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(10, 145, 44)");
             else btn.setStyle("-fx-background-color: transparent");
         });
         return btn;
@@ -146,6 +147,7 @@ public class GameUI {
     }//in vase new kardan moghe kashtane ke string migire plant mide
 
     public void updateGame(){
+        winOrLose();
         garbageImages();
         characterActions();
         addObjectImages();
@@ -156,15 +158,12 @@ public class GameUI {
         Random rdm = new Random();
         if(GlobalState.gameTime <= 15000);
         else if(GlobalState.gameTime <= 50000){
-            System.out.println(1);
             if(GlobalState.gameTime % 5000 == 1000) zombieGetter(0, rdm.nextInt(5));
         }
         else if(GlobalState.gameTime <= 70000){
-            System.out.println(2);
             if(GlobalState.gameTime % 3000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
         }
         else if(GlobalState.gameTime < 80000){
-            System.out.println(3);
             if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(2), i);
@@ -172,30 +171,36 @@ public class GameUI {
             }
         }
         else if(GlobalState.gameTime <= 120000){
-            System.out.println(4);
             if(GlobalState.gameTime % 3000 == 0) {
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
                 zombieGetter(rdm.nextInt(3), rdm.nextInt(5));
             }
         }
         else if (GlobalState.gameTime < 140000){
-            System.out.println(5);
                 if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(4), i);
                 }
             }
         }
-        else {
-            if(gameLogic.getZombies().isEmpty()){
-                System.out.println(6);
-                Label win = new Label("You win");
-                win.setTextFill(Color.RED);
-                win.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-                win.setEffect(new DropShadow(10, Color.BLACK));
-                pane.getChildren().add(win);
-            }
+    }
+    public void winOrLose() {
+        if(gameLogic.checkLose()) {
+            Label lose = new Label("You lost");
+            lose.setTextFill(Color.RED);
+            lose.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+            lose.setEffect(new DropShadow(50, Color.BLACK));
+            pane.getChildren().add(lose);
+            tl.stop();
         }
+        if(gameLogic.checkWin()) {
+            Label win = new Label("You win");
+            win.setTextFill(Color.RED);
+            win.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+            win.setEffect(new DropShadow(10, Color.BLACK));
+            pane.getChildren().add(win);
+        }
+
     }
 
     private void addZombie(Zombie z){
