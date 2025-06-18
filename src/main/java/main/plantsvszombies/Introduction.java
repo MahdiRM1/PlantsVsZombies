@@ -119,12 +119,12 @@ public class Introduction {
         btn.setOnAction(event -> {
             if(selectedCards.contains(plantName)) {
                 selectedCards.remove(plantName);
-//                cardBar.getChildren().remove(btn);
+                cardBar.getChildren().remove(btn);
                 btn.setEffect(null);
             }
             else if(selectedCards.size() < 6) {
                 selectedCards.add(plantName);
-//                cardBar.getChildren().add(btn);
+                cardBar.getChildren().add(btn);
                 btn.setEffect(chooseCardEffect());
             }
             else btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
