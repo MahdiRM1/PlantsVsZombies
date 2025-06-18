@@ -3,7 +3,6 @@ package main.plantsvszombies;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,7 +22,7 @@ import java.util.Random;
 public class GameUI {
 
     private final GameLogic gameLogic;
-    private final StackPane mainPane = new StackPane();;
+    private final StackPane mainPane = new StackPane();
     private final BorderPane bPane = new BorderPane();
     private final Pane pane = new Pane();
     private final GridPane gPane = new GridPane();
@@ -31,10 +30,12 @@ public class GameUI {
     private final Timeline tl;
     private String selectedPlant;
     private int selectedButton = -1;
+    private final Stage stage;
 
-    public GameUI(Stage stage, ArrayList<String> plants){
+    public GameUI(Stage stage, HBox cardBar){
+        this.stage = stage;
         gameLogic = new GameLogic();
-        initializeStackPane(plants);
+        initializeStackPane(cardBar);
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GlobalState.gameTime += 50;
             updateGame();
@@ -46,11 +47,26 @@ public class GameUI {
         stage.show();
     }
 
-    private void initializeStackPane(ArrayList<String> plants){
+    public GameUI(Stage stage, ArrayList<String> plantsName){
+        this.stage = stage;
+        gameLogic = new GameLogic();
+        initializeStackPane(cardBar(plantsName));
+        tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            GlobalState.gameTime += 50;
+            updateGame();
+        }));
+        tl.setCycleCount(Timeline.INDEFINITE);
+        tl.play();
+        Scene scene = new Scene(mainPane, Constants.width, Constants.height - 35);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void initializeStackPane(HBox cardBar){
         bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
         bPane.setBottom(map());
         scoreBoard = new ScoreBoard(bPane);
-        bPane.setTop(cardBar(plants));
+        bPane.setTop(cardBar);
         zombieGetter(0, 2);
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(bPane);
@@ -64,7 +80,6 @@ public class GameUI {
             cardBar.getChildren().add(getCardButton(plants.get(i), i));
         }
         cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
-        cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
     }
 
@@ -140,10 +155,12 @@ public class GameUI {
         AnchorPane menuPane = new AnchorPane();
 
         ImageView backToMenu = setButton("MainMenu", Constants.height/5, Constants.height/20);
+        backToMenu.setOnMouseClicked(event -> new Introduction().firstPage(stage));
         backToMenu.setX(Constants.width/2 - Constants.height/10);
         backToMenu.setY(Constants.height/1.85);
 
         ImageView restart = setButton("Restart", Constants.height/5, Constants.height/20);
+        restart.setOnMouseClicked(event -> new GameUI(stage, (HBox) bPane.getTop()));
         restart.setX(Constants.width/2 - Constants.height/10);
         restart.setY(Constants.height/1.65);
 
