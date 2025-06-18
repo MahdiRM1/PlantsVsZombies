@@ -98,6 +98,12 @@ public final class Constants {
     }
 
     public static int getColumnZombie(ImageView picture){
-        return (int)((picture.getLayoutX() + (picture.getFitWidth() / 1.5) - height/2.62) / TILE_SIZE);
+
+//        return (int)(picture.getLayoutX() + ((picture.getFitWidth() / 1.5) - height/2.62) / TILE_SIZE);
+        double gridStartX = height / 2.5; // This should match your grid's starting X position
+        double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
+        if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
+        else return -1;
+
     }
 }
