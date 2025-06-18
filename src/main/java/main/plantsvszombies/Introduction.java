@@ -12,7 +12,7 @@ public class Introduction {
 
     public void show(Stage stage){
         this.stage = stage;
-        Scene scene = new Scene(Pane(), Constants.width, Constants.height);
+        Scene scene = new Scene(Pane(), Constants.width, Constants.height - 35);
         stage.setScene(scene);
         stage.show();
     }
@@ -27,17 +27,17 @@ public class Introduction {
         return borderPane;
     }
 
-    private Button initializeBtn(String buttonName){
-        Button btn = new Button(buttonName);
+    private Button initializeBtn(String str){
+        Button btn = new Button(str);
         btn.setStyle(
-            "-fx-background-radius: 20; " +
-            "-fx-min-width: 150px; " +
-            "-fx-min-height: 75px; " +
-            "-fx-background-color: rgb(206, 175, 0); "  +
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 50px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
+                "-fx-background-radius: 20; " +
+                        "-fx-min-width: 150px; " +
+                        "-fx-min-height: 75px; " +
+                        "-fx-background-color: rgb(206, 175, 0); "  +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 50px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
         );
         btn.setOnMouseEntered(event ->
                 btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(134, 114, 1); ")
@@ -49,7 +49,7 @@ public class Introduction {
                 btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(0, 0, 0); ")
         );
         btn.setOnMouseReleased(event ->
-                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(134, 114, 1); ")
+                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(62, 177, 235); ")
         );
         btn.setOnAction(event -> new GameUI(stage));
         return btn;

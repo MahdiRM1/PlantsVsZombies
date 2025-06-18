@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -19,37 +21,43 @@ import java.util.Random;
 public class GameUI {
 
     private final GameLogic gameLogic;
-    private final StackPane mainPane;
-    BorderPane bPane = new BorderPane();
+    private final StackPane mainPane = new StackPane();;
+    private final BorderPane bPane = new BorderPane();
     private final Pane pane = new Pane();
-    GridPane gPane = new GridPane();
+    private final GridPane gPane = new GridPane();
+    private ScoreBoard scoreBoard;
+    private final Timeline tl;
     private String selectedPlant;
     private int selectedButton = -1;
-    private final ScoreBoard scoreBoard;
-    Timeline tl;
 
     public GameUI(Stage stage){
         gameLogic = new GameLogic();
-        bPane.getChildren().add(Constants.setDayBackGround());
-        bPane.setBottom(map());
-        scoreBoard = new ScoreBoard(bPane);
-        bPane.setTop(cardBar());
-        mainPane = new StackPane(bPane);
-        pane.setMouseTransparent(true);
-        mainPane.getChildren().add(pane);
+        initializeStackPane();
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GlobalState.gameTime += 50;
             updateGame();
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-        Scene scene = new Scene(mainPane, Constants.width, Constants.height);
+        Scene scene = new Scene(mainPane, Constants.width, Constants.height - 35);
         stage.setScene(scene);
         stage.show();
     }
 
+    private void initializeStackPane(){
+        bPane.getChildren().add(Constants.setDayBackGround());
+        bPane.setBottom(map());
+        scoreBoard = new ScoreBoard(bPane);
+        bPane.setTop(cardBar());
+        zombieGetter(0, 2);
+        pane.setMouseTransparent(true);
+        mainPane.getChildren().add(bPane);
+        mainPane.getChildren().add(pane);
+        mainPane.getChildren().add(buttonsPane());
+    }
+
     private HBox cardBar(){
-        HBox cardBar = new HBox(0);
+        HBox cardBar = new HBox(5);
         Button btn1 = getCardButton("PeaShooter", 0);
         Button btn2 = getCardButton("SunFlower", 1);
         Button btn3 = getCardButton("WallNut", 2);
@@ -59,7 +67,7 @@ public class GameUI {
         Button btn7 = getCardButton("CherryBomb", 5);
         Button btn8 = getCardButton("Jalapeno", 5);
         cardBar.getChildren().addAll(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8);
-        cardBar.setPadding(new Insets(Constants.height/19, 0, 0, Constants.height/7.4));
+        cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
         cardBar.setAlignment(Pos.CENTER_LEFT);
         return cardBar;
     }
@@ -72,14 +80,14 @@ public class GameUI {
             selectedPlant = plantName;
             selectedButton = index;
         });
-        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(10, 145, 44);"));
-        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(10, 145, 44);"));
+        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
+        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
         btn.setOnMouseExited(e -> {
-            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(10, 145, 44)");
+            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
             else btn.setStyle("-fx-background-color: transparent");
         });
         return btn;
-    }//in cartaye bazio meghdardehi mikone
+    }
 
     private GridPane map(){
         for (int row = 0; row < 5; row++) {
@@ -87,7 +95,7 @@ public class GameUI {
                 gPane.add(mapButtons(row, col), col, row);
             }
         }
-        gPane.setPadding(new Insets(0,0,Constants.height/12.8,Constants.height/2.62));
+        gPane.setPadding(new Insets(0,0,Constants.height/20,Constants.height/2.6));
         return gPane;
     }
 
@@ -101,7 +109,7 @@ public class GameUI {
                 if(scoreBoard.getScore() >= plant.getPrice() && gameLogic.setPlant(row, col, plant)) {
                     bPane.getChildren().add(plant.getGif());
                     scoreBoard.purchasePlant(plant.getPrice());
-                    btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.6);"));
+                    btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
                 ((HBox)bPane.getTop()).getChildren().get(selectedButton).setStyle("-fx-background-color: transparent;");
@@ -112,10 +120,80 @@ public class GameUI {
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
         btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.3);"));
         return btn;
-    }//in faghat buttonaye mapo meghdardehi mikone
+    }
 
-    private Plant getPlant(int row, int col){
-        switch (selectedPlant){
+    private AnchorPane buttonsPane(){
+        AnchorPane buttonsPane = new AnchorPane();
+        buttonsPane.setPickOnBounds(false);
+
+        Button menu = new Button();
+        menu.setPrefSize(Constants.height/8, Constants.height/20);
+        menu.setOnAction(event -> {
+            tl.pause();
+            menu();
+        });
+
+        ImageView imageView = new ImageView(new Image("file:Pictures/ui/Button.png"));
+        imageView.setFitHeight(menu.getPrefHeight());
+        imageView.setFitWidth(menu.getPrefWidth());
+        menu.setGraphic(imageView);
+        menu.setStyle("-fx-background-color: transparent;");
+
+        AnchorPane.setTopAnchor(menu, -5.0);
+        AnchorPane.setRightAnchor(menu, 0.0);
+
+        buttonsPane.getChildren().add(menu);
+
+        return buttonsPane;
+    }
+
+    private void menu(){
+        AnchorPane menuPane = new AnchorPane();
+
+        Label winLabel = new Label("Menu");
+        winLabel.setTextFill(Color.BLACK);
+        winLabel.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+        winLabel.setEffect(new DropShadow(10, Color.BLACK));
+
+        Button backToMenu = setButton("Back to menu", 350, 100, 30);
+
+        Button nextLevel = setButton("Back To Game", 350, 100, 30);
+        nextLevel.setOnAction(event -> {
+            tl.play();
+            mainPane.getChildren().removeLast();
+        });
+
+        VBox winBox = new VBox(10);
+        winBox.getChildren().addAll(winLabel, backToMenu, nextLevel);
+        winBox.setAlignment(Pos.CENTER);
+        winBox.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
+        winBox.setPrefSize(Constants.width, Constants.height);
+
+        menuPane.getChildren().add(winBox);
+        mainPane.getChildren().add(menuPane);
+    }
+
+    private Button setButton(String text, int width, int height, int fontSize){
+        Button btn = new Button(text);
+        btn.setStyle(String.format(
+            "-fx-background-radius: 20; " +
+            "-fx-min-width: %dpx; " +
+            "-fx-min-height: %dpx; " +
+            "-fx-background-color: linear-gradient(to bottom, rgb(41, 41, 41), rgb(0, 0, 0)); "  +
+            "-fx-text-fill: green; " +
+            "-fx-font-size: %dpx; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);" ,
+            width, height, fontSize
+        ));
+
+        btn.setOnMouseEntered(e -> btn.setStyle(btn.getStyle() + "-fx-background-color: linear-gradient(to bottom, rgb(0, 0, 0), rgb(41, 41, 41));"));
+        btn.setOnMouseExited(e -> btn.setStyle(btn.getStyle() + "-fx-background-color: linear-gradient(to bottom, rgb(41, 41, 41),rgb(0, 0, 0));"));
+
+        return btn;
+    }
+
+    private Plant getPlant(int row, int col) {
+        switch (selectedPlant) {
             case "PeaShooter" -> {
                 return new PeaShooter(row, col);
             }
@@ -144,7 +222,7 @@ public class GameUI {
                 return null;
             }
         }
-    }//in vase new kardan moghe kashtane ke string migire plant mide
+    }
 
     public void updateGame(){
         winOrLose();
@@ -152,7 +230,7 @@ public class GameUI {
         characterActions();
         addObjectImages();
         timeHandler();
-    }//in hamon method movement bode ke chand ta tikash kardam fek mekonam behtar shode bashe
+    }
 
     private void timeHandler(){
         Random rdm = new Random();
