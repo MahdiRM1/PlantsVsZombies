@@ -62,10 +62,10 @@ public final class Constants {
         picture.setLayoutX((height / 2.5) + (col * TILE_SIZE));
         if(plantName.equals("TallNut")) {
             picture.setFitHeight(TILE_SIZE * 1.2);
-            picture.setLayoutY((height / 4.1) + ((row - 0.5) * TILE_SIZE));
+            picture.setLayoutY((height / 4.3) + ((row - 0.5) * 0.9 * TILE_SIZE));
         }
         else {
-            picture.setLayoutY((height / 4.3) + (row * TILE_SIZE));
+            picture.setLayoutY((height / 4.3) + ((row * 0.9) * TILE_SIZE));
             picture.setFitHeight(TILE_SIZE * 0.8);
         }
         return picture;
@@ -78,7 +78,7 @@ public final class Constants {
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        picture.setLayoutY(height - ((6-row)*TILE_SIZE) + (height/10.85));
+        picture.setLayoutY(height - ((5-row) * 0.9 * TILE_SIZE) - (height/8));
         return picture;
     }
 

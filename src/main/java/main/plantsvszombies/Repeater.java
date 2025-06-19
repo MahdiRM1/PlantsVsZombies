@@ -18,11 +18,11 @@ public class Repeater extends PeaPlant{
     @Override
     public Bullet shoot(int row, int col) {
         long time = GlobalState.gameTime;
-        if(Math.abs(time - lastShoot) >= 1000 && Math.abs(time - firstShoot) >= 1200) {
+        if(Math.abs(time - lastShoot) >= 1500 && Math.abs(time - firstShoot) >= 1700) {
             firstShoot = time;
             return new Bullet(row, col, freezeShoot);
         }
-        else if(Math.abs(time - firstShoot) >= 200 && Math.abs(time - lastShoot) >= 1200){
+        else if(Math.abs(time - firstShoot) >= 200 && Math.abs(time - lastShoot) >= 1700){
             lastShoot = time;
             return new Bullet(row, col, freezeShoot);
         }

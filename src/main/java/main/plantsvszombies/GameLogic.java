@@ -15,9 +15,8 @@ public class GameLogic {
         return false;
     }
 
-    public Zombie addZombie(Zombie z) {
+    public void addZombie(Zombie z) {
         zombies.add(z);
-        return z;
     }
 
     public void addBullet(Bullet b){
@@ -137,8 +136,7 @@ public class GameLogic {
     }
 
     public boolean checkWin() {
-        if(zombies.isEmpty() && GlobalState.gameTime >= 140000) return true;
-        return false;
+        return zombies.isEmpty() && GlobalState.gameTime >= 140000;
     }
 
     public ArrayList<Zombie> getZombies() {
