@@ -27,26 +27,26 @@ public class Introduction {
 
     public void chooseCardPage(){
         Pane pane = new Pane();
-        pane.getChildren().addFirst(Constants.setBackGround("plantSelection"));
+        pane.getChildren().addFirst(Constants.setBackGround("plantSelectionBG"));
 
         cardBar = new HBox(0);
         cardBar.setLayoutX(Constants.height/5.2);
         cardBar.setLayoutY(Constants.height/50);
 
-        HBox box1 = new HBox(50,
+        HBox box1 = new HBox(Constants.height/20,
                 getCardButton("PeaShooter"), getCardButton("SunFlower") ,
                 getCardButton("WallNut") ,getCardButton("TallNut")
         );
-        HBox box2 = new HBox(50,
+        HBox box2 = new HBox(Constants.height/20,
                 getCardButton("Repeater"), getCardButton("SnowPea"),
                 getCardButton("CherryBomb") ,getCardButton("Jalapeno")
         );
 
-        VBox vBox = new VBox(20);
-        vBox.getChildren().addAll(box1, box2);
-        vBox.setLayoutX(Constants.height/10);
-        vBox.setLayoutY(Constants.height/5);
-        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, vBox, startGameBtn());
+        box1.setLayoutX(Constants.height/7.5);
+        box2.setLayoutX(Constants.height/7.5);
+        box1.setLayoutY(Constants.height/4);
+        box2.setLayoutY(Constants.height/2.5);
+        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box1, box2, startGameBtn());
         for (int i = 0; i < 8; i++) pane.getChildren().add(addZombie());
         Scene scene = new Scene(pane, Constants.width, Constants.height - 35);
         stage.setScene(scene);
@@ -55,13 +55,13 @@ public class Introduction {
 
     private Button startGameBtn(){
         Button btn = new Button("Let's Rock");
-        btn.setPrefSize(Constants.height/3.2, Constants.height/16);
+        btn.setPrefSize(Constants.height/4.3, Constants.height/30);
         btn.setStyle(
-                "-fx-background-radius: 10; " +
-                "-fx-background-color: rgb(100, 50, 0);" +
-                "-fx-text-fill: green; " +
-                "-fx-font-size: 35px; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
+            "-fx-background-radius: 3; " +
+            "-fx-background-color: rgb(100, 50, 0);" +
+            "-fx-text-fill: green; " +
+            "-fx-font-size: 30px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
         );
         btn.setOnMouseEntered(event -> {
             if(selectedCards.size() != 6) btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(100, 0, 0);");
@@ -83,8 +83,8 @@ public class Introduction {
             }
             else btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(100, 50, 0);");
         });
-        btn.setLayoutX(Constants.width/5.9);
-        btn.setLayoutY(Constants.height/1.15);
+        btn.setLayoutX(Constants.width/5.65);
+        btn.setLayoutY(Constants.height/1.12);
         btn.setOnAction(event -> {
             if (selectedCards.size() == 6) new GameUI(stage, selectedCards);
         });
@@ -116,7 +116,9 @@ public class Introduction {
             if(selectedCards.contains(plantName)) {
                 selectedCards.remove(plantName);
                 for (int i = 0; i < cardBar.getChildren().size(); i++) {
-                    Image image = ((ImageView)((Button)cardBar.getChildren().get(i)).getGraphic()).getImage();
+                    Button checkBtn = (Button)cardBar.getChildren().get(i);
+                    ImageView imageView = (ImageView) checkBtn.getGraphic();
+                    Image image = imageView.getImage();
                     if(((ImageView) btn.getGraphic()).getImage().equals(image)) {
                         cardBar.getChildren().remove(i);
                         break;
@@ -135,17 +137,34 @@ public class Introduction {
             }
             else btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
         });
-        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: transparent;"));
+        btn.setOnMouseEntered(event -> {
+            ImageView imageView = (ImageView) btn.getGraphic();
+            double differentX = imageView.getFitWidth() * 1.05 - imageView.getFitWidth();
+            double differentY = imageView.getFitHeight() * 1.05 - imageView.getFitHeight();
+            imageView.setFitWidth(imageView.getFitWidth() * 1.05);
+            imageView.setFitHeight(imageView.getFitHeight() * 1.05);
+            imageView.setLayoutX(imageView.getLayoutX() - differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() - differentY/2);
+        });
+        btn.setOnMouseExited(event -> {
+            ImageView imageView = (ImageView) btn.getGraphic();
+            double differentX = imageView.getFitWidth() - imageView.getFitWidth() / 1.05;
+            double differentY = imageView.getFitHeight() - imageView.getFitHeight() / 1.05;
+            imageView.setFitWidth(imageView.getFitWidth() / 1.05);
+            imageView.setFitHeight(imageView.getFitHeight() / 1.05);
+            imageView.setLayoutX(imageView.getLayoutX() + differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() + differentY/2);
+            btn.setStyle("-fx-background-color: transparent;");
+        });
         return btn;
     }
 
-    private Effect chooseCardEffect(){
-        ColorAdjust choose = new ColorAdjust();
-        choose.setBrightness(-0.5);
-        choose.setContrast(-0.3);
-        return choose;
-    }
+//    private Effect chooseCardEffect(){
+//        ColorAdjust choose = new ColorAdjust();
+//        choose.setBrightness(-0.5);
+//        choose.setContrast(-0.3);
+//        return choose;
+//    }
 
     private BorderPane Pane(){
         BorderPane borderPane = new BorderPane();

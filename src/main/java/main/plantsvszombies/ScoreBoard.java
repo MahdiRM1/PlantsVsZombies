@@ -18,7 +18,7 @@ public class ScoreBoard {
 
     public ScoreBoard(BorderPane pane){
         this.pane = pane;
-        score = 1000;
+        score = 100;
         ImageView board = Constants.setScoreBoardPicture();
         pane.getChildren().addAll(board);
         scoreLabel = new Label(score + "");
