@@ -106,7 +106,7 @@ public class GameUI {
                 gPane.add(mapButtons(row, col), col, row);
             }
         }
-        gPane.setPadding(new Insets(0,0,Constants.height/20,Constants.height/2.6));
+        gPane.setPadding(new Insets(0,0,Constants.height/16,Constants.height/2.6));
         return gPane;
     }
 
@@ -117,9 +117,8 @@ public class GameUI {
         btn.setOnAction(event -> {
             if(selectedPlant != null) {
                 Plant plant = getPlant(row, col);
-                if(scoreBoard.getScore() >= plant.getPrice() && gameLogic.setPlant(row, col, plant)) {
+                if(scoreBoard.purchasePlant(plant.getPrice()) && gameLogic.setPlant(row, col, plant)) {
                     bPane.getChildren().add(plant.getGif());
-                    scoreBoard.purchasePlant(plant.getPrice());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));

@@ -111,21 +111,27 @@ public class Introduction {
     private Button getCardButton(String plantName){
         Button btn = new Button();
         btn.setGraphic(Constants.setCard(plantName));
-        btn.setPrefSize(btn.getPrefWidth() * 1.2, btn.getPrefHeight() * 1.2);
-        ImageView image = (ImageView)btn.getGraphic();
-        image.setFitHeight(image.getFitHeight() * 1.2);
-        image.setFitWidth(image.getFitWidth() * 1.2);
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
             if(selectedCards.contains(plantName)) {
                 selectedCards.remove(plantName);
-                cardBar.getChildren().remove(btn);
-                btn.setEffect(null);
+                for (int i = 0; i < cardBar.getChildren().size(); i++) {
+                    Image image = ((ImageView)((Button)cardBar.getChildren().get(i)).getGraphic()).getImage();
+                    if(((ImageView) btn.getGraphic()).getImage().equals(image)) {
+                        cardBar.getChildren().remove(i);
+                        break;
+                    }
+                }
             }
             else if(selectedCards.size() < 6) {
                 selectedCards.add(plantName);
-                cardBar.getChildren().add(btn);
-                btn.setEffect(chooseCardEffect());
+                Button btn2 = getCardButton(plantName);
+                Image image = ((ImageView)btn.getGraphic()).getImage();
+                ImageView imageView = new ImageView(image);
+                imageView.setFitWidth(Constants.PLANT_CARD_WIDTH);
+                imageView.setFitHeight(Constants.PLANT_CARD_HEIGHT);
+                btn2.setGraphic(imageView);
+                cardBar.getChildren().add(btn2);
             }
             else btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
         });
