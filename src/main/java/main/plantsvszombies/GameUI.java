@@ -88,8 +88,20 @@ public class GameUI {
         btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
-            selectedPlant = plantName;
-            selectedButton = index;
+            if(selectedButton > 0) {
+                HBox cardBar = (HBox) btn.getParent();
+                Button lastBtnSelected = ((Button)(cardBar).getChildren().get(selectedButton));
+                lastBtnSelected.setStyle("-fx-background-color: transparent");
+            }
+            if(!plantName.equals(selectedPlant)){
+                selectedPlant = plantName;
+                selectedButton = index;
+            }
+            else {
+                selectedPlant = null;
+                selectedButton = -1;
+                btn.setStyle("-fx-background-color: transparent");
+            }
         });
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
         btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
@@ -122,7 +134,9 @@ public class GameUI {
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-                ((HBox)bPane.getTop()).getChildren().get(selectedButton).setStyle("-fx-background-color: transparent;");
+                HBox cardBar = (HBox)bPane.getTop();
+                Button btnSelected = (Button) cardBar.getChildren().get(selectedButton);
+                btnSelected.setStyle("-fx-background-color: transparent;");
                 selectedPlant = null;
             }else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
         });
@@ -246,16 +260,16 @@ public class GameUI {
 
     private void timeHandler(){
         Random rdm = new Random();
-        if(GlobalState.gameTime <= 15000);
+        if(GlobalState.gameTime <= 20000);
         else if(GlobalState.gameTime <= 50000){
             if(GlobalState.gameTime % 5000 == 1000) zombieGetter(0, rdm.nextInt(5));
         }
         else if(GlobalState.gameTime < 70000){
-            if(GlobalState.gameTime % 3000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
+            if(GlobalState.gameTime % 4000 == 0) zombieGetter(rdm.nextInt(2), rdm.nextInt(5));
         }
         else if(GlobalState.gameTime < 80000){
             if (GlobalState.gameTime == 70000) zombieGetter(4, rdm.nextInt(5));
-            if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
+            if(GlobalState.gameTime % 4000 == 0 || GlobalState.gameTime % 4000 == 200){
                 for (int i = 0; i < 5; i++) {
                     zombieGetter(rdm.nextInt(2), i);
                 }
@@ -269,7 +283,7 @@ public class GameUI {
         }
         else if (GlobalState.gameTime < 150000){
             if(GlobalState.gameTime == 130000)zombieGetter(4, rdm.nextInt(5));
-            if(GlobalState.gameTime % 3000 == 0 || GlobalState.gameTime % 3000 == 200){
+            if(GlobalState.gameTime % 4000 == 0 || GlobalState.gameTime % 4000 == 200){
                     for (int i = 0; i < 5; i++) {
                         zombieGetter(rdm.nextInt(4), i);
                 }
