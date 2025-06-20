@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 public class Jalapeno extends BombPlant{
 
+    private static long lastSelection;
+    public static final int recharge = 15;
+
     public Jalapeno(int row, int col){
         super(row, col);
         price = 125;
         HP = 100;
-        recharge = 5;
     }
 
     @Override
@@ -20,5 +22,19 @@ public class Jalapeno extends BombPlant{
             }
         }
         return true;
+    }
+
+    @Override
+    public long getLastSelection() {
+        return lastSelection;
+    }
+
+    @Override
+    public void setLastSelection(long lastSelection) {
+        Jalapeno.lastSelection = lastSelection;
+    }
+
+    public static double rechargeCheck(){
+        return ((double)GlobalState.gameTime - lastSelection) / recharge * 1000;
     }
 }

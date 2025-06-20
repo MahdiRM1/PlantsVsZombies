@@ -7,13 +7,16 @@ import javafx.scene.paint.Color;
 
 public class SnowPea extends PeaPlant{
 
-    public SnowPea(int row, int col) {
+    private static long lastSelection;
+    public static final int recharge = 10;
+
+    public SnowPea(int row, int col){
         super(row, col);
         price = 175;
-        recharge = 5;
         HP = 100;
         gif.setEffect(iceEffect());
         freezeShoot = true;
+        lastSelection = GlobalState.gameTime;
     }
 
     private Effect iceEffect(){
@@ -31,4 +34,17 @@ public class SnowPea extends PeaPlant{
         return iceGlow;
     }
 
+    @Override
+    public long getLastSelection() {
+        return lastSelection;
+    }
+
+    @Override
+    public void setLastSelection(long lastSelection) {
+        SnowPea.lastSelection = lastSelection;
+    }
+
+    public static double rechargeCheck(){
+        return ((double)GlobalState.gameTime - lastSelection) / recharge * 1000;
+    }
 }
