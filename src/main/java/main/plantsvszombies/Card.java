@@ -44,7 +44,7 @@ public class Card {
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
             if(canChoose){
-                if (GameUI.selectedButton > 0) {
+                if (GameUI.selectedButton >= 0 && GameUI.selectedButton < 6) {
                     HBox cardBar = (HBox) btn.getParent();
                     Button lastBtnSelected = ((Button) cardBar.getChildren().get(GameUI.selectedButton));
                     lastBtnSelected.setStyle("-fx-background-color: transparent");
