@@ -26,29 +26,16 @@ public class GameUI {
     private final BorderPane bPane = new BorderPane();
     private final Pane pane = new Pane();
     private final GridPane gPane = new GridPane();
+    private final ArrayList<Card> cards = new ArrayList<>();
     private ScoreBoard scoreBoard;
     private final Timeline tl;
-    private String selectedPlant;
-    private int selectedButton = -1;
+    static int selectedButton = -1;
     private final Stage stage;
-
-    public GameUI(Stage stage, HBox cardBar){
-        this.stage = stage;
-        gameLogic = new GameLogic();
-        initializeStackPane(cardBar);
-        tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            GlobalState.gameTime += 50;
-            updateGame();
-        }));
-        tl.setCycleCount(Timeline.INDEFINITE);
-        tl.play();
-        Scene scene = new Scene(mainPane, Constants.width, Constants.height - 35);
-        stage.setScene(scene);
-        stage.show();
-    }
+    private final ArrayList<String> plantsName;
 
     public GameUI(Stage stage, ArrayList<String> plantsName){
         this.stage = stage;
+        this.plantsName = plantsName;
         gameLogic = new GameLogic();
         initializeStackPane(cardBar(plantsName));
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -77,39 +64,11 @@ public class GameUI {
     private HBox cardBar(ArrayList<String> plants){
         HBox cardBar = new HBox(0);
         for (int i = 0; i < 6; i++) {
-            cardBar.getChildren().add(getCardButton(plants.get(i), i));
+            cards.add(new Card(plants.get(i), i));
+            cardBar.getChildren().add(cards.get(i).getBtn());
         }
         cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
         return cardBar;
-    }
-
-    private Button getCardButton(String plantName, int index){
-        Button btn = new Button();
-        btn.setGraphic(Constants.setCard(plantName));
-        btn.setStyle("-fx-background-color: transparent");
-        btn.setOnAction(event -> {
-            if(selectedButton > 0) {
-                HBox cardBar = (HBox) btn.getParent();
-                Button lastBtnSelected = ((Button)(cardBar).getChildren().get(selectedButton));
-                lastBtnSelected.setStyle("-fx-background-color: transparent");
-            }
-            if(!plantName.equals(selectedPlant)){
-                selectedPlant = plantName;
-                selectedButton = index;
-            }
-            else {
-                selectedPlant = null;
-                selectedButton = -1;
-                btn.setStyle("-fx-background-color: transparent");
-            }
-        });
-        btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgb(62, 177, 235);"));
-        btn.setOnMouseExited(e -> {
-            if(plantName.equals(selectedPlant)) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
-            else btn.setStyle("-fx-background-color: transparent");
-        });
-        return btn;
     }
 
     private GridPane map(){
@@ -127,18 +86,20 @@ public class GameUI {
         btn.setPrefSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
-            if(selectedPlant != null) {
-                Plant plant = getPlant(row, col);
+            Plant plant = getPlant(row, col);
+            if(plant != null) {
                 if(scoreBoard.purchasePlant(plant.getPrice()) && gameLogic.setPlant(row, col, plant)) {
+                    cards.get(selectedButton).updateLastSelected();
                     bPane.getChildren().add(plant.getGif());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-                HBox cardBar = (HBox)bPane.getTop();
-                Button btnSelected = (Button) cardBar.getChildren().get(selectedButton);
-                btnSelected.setStyle("-fx-background-color: transparent;");
-                selectedPlant = null;
             }else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+            if (selectedButton > -1) {
+                Button btnSelected = cards.get(selectedButton).getBtn();
+                btnSelected.setStyle("-fx-background-color: transparent;");
+                selectedButton = -1;
+            }
         });
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(140, 140, 140, 0.3);"));
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
@@ -173,7 +134,7 @@ public class GameUI {
         backToMenu.setY(Constants.height/1.85);
 
         ImageView restart = setButton("Restart", Constants.height/5, Constants.height/20);
-        restart.setOnMouseClicked(event -> new GameUI(stage, (HBox) bPane.getTop()));
+        restart.setOnMouseClicked(event -> new GameUI(stage, plantsName));
         restart.setX(Constants.width/2 - Constants.height/10);
         restart.setY(Constants.height/1.65);
 
@@ -219,35 +180,37 @@ public class GameUI {
     }
 
     private Plant getPlant(int row, int col) {
-        switch (selectedPlant) {
+        if (selectedButton < 0) return null;
+        switch (plantsName.get(selectedButton)) {
             case "PeaShooter" -> {
-                return new PeaShooter(row, col);
+                if (PeaShooter.rechargeCheck() >= 1) return new PeaShooter(row, col);
             }
             case "SunFlower" -> {
-                return new SunFlower(row, col);
+                if(SunFlower.rechargeCheck() >= 1) return new SunFlower(row, col);
             }
             case "WallNut" -> {
-                return new WallNut(row, col);
+                if(WallNut.rechargeCheck() >= 1) return new WallNut(row, col);
             }
             case "TallNut" -> {
-                return new TallNut(row, col);
+                if(TallNut.rechargeCheck() >= 1) return new TallNut(row, col);
             }
             case "Repeater" -> {
-                return new Repeater(row, col);
+                if(Repeater.rechargeCheck() >= 1) return new Repeater(row, col);
             }
             case "SnowPea" -> {
-                return new SnowPea(row, col);
+                if(SnowPea.rechargeCheck() >= 1) return new SnowPea(row, col);
             }
             case "CherryBomb" -> {
-                return new CherryBomb(row, col);
+                if(CherryBomb.rechargeCheck() >= 1) return new CherryBomb(row, col);
             }
             case "Jalapeno" -> {
-                return new Jalapeno(row, col);
+                if(Jalapeno.rechargeCheck() >= 1) return new Jalapeno(row, col);
             }
-            default -> {
+            case null, default -> {
                 return null;
             }
         }
+        return null;
     }
 
     public void updateGame(){
@@ -255,7 +218,58 @@ public class GameUI {
         garbageImages();
         characterActions();
         addObjectImages();
+        rechargeCheck();
         timeHandler();
+    }
+
+    public void winOrLose() {
+        if(gameLogic.checkLose()) {
+            Label lose = new Label("You lost");
+            lose.setTextFill(Color.RED);
+            lose.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+            lose.setEffect(new DropShadow(50, Color.BLACK));
+            pane.getChildren().add(lose);
+            tl.stop();
+        }
+        if(gameLogic.checkWin()) {
+            Label win = new Label("You win");
+            win.setTextFill(Color.RED);
+            win.setFont(Font.font("Arial", FontWeight.BOLD, 100));
+            win.setEffect(new DropShadow(10, Color.BLACK));
+            pane.getChildren().add(win);
+        }
+
+    }
+
+    private void garbageImages(){
+        for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) bPane.getChildren().remove(plantToRemove.getGif());
+    }
+
+    private void characterActions(){
+        for(Zombie z : gameLogic.getZombies()) z.action();
+        for(Bullet b : gameLogic.getBullets()) b.move();
+        gameLogic.setZombieState();
+        scoreBoard.sunHandler();
+    }
+
+    private void addObjectImages(){
+        for(SunFlower sunFlower : gameLogic.sunFlowers()) {
+            scoreBoard.addSun(sunFlower.givenSun());
+        }
+
+        for(PeaPlant shooter : gameLogic.plantsAligned()) {
+            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol());
+            if(b != null) {
+                gameLogic.addBullet(b);
+                pane.getChildren().addAll(b.getPicture());
+            }
+        }
+    }
+
+    private void rechargeCheck(){
+        for(Card card : cards) card.rechargeCheck();
     }
 
     private void timeHandler(){
@@ -284,30 +298,11 @@ public class GameUI {
         else if (GlobalState.gameTime < 150000){
             if(GlobalState.gameTime == 130000)zombieGetter(4, rdm.nextInt(5));
             if(GlobalState.gameTime % 4000 == 0 || GlobalState.gameTime % 4000 == 200){
-                    for (int i = 0; i < 5; i++) {
-                        zombieGetter(rdm.nextInt(4), i);
+                for (int i = 0; i < 5; i++) {
+                    zombieGetter(rdm.nextInt(4), i);
                 }
             }
         }
-    }
-
-    public void winOrLose() {
-        if(gameLogic.checkLose()) {
-            Label lose = new Label("You lost");
-            lose.setTextFill(Color.RED);
-            lose.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-            lose.setEffect(new DropShadow(50, Color.BLACK));
-            pane.getChildren().add(lose);
-            tl.stop();
-        }
-        if(gameLogic.checkWin()) {
-            Label win = new Label("You win");
-            win.setTextFill(Color.RED);
-            win.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-            win.setEffect(new DropShadow(10, Color.BLACK));
-            pane.getChildren().add(win);
-        }
-
     }
 
     private void addZombie(Zombie z){
@@ -323,32 +318,5 @@ public class GameUI {
             case 3 -> addZombie(new Imp(row));
             case 4 -> addZombie(new FlagZombie(row));
         }
-    }
-
-    private void characterActions(){
-        for(Zombie z : gameLogic.getZombies()) z.action();
-        for(Bullet b : gameLogic.getBullets()) b.move();
-        gameLogic.setZombieState();
-        scoreBoard.sunHandler();
-    }
-
-    private void addObjectImages(){
-        for(SunFlower sunFlower : gameLogic.sunFlowers()) {
-            scoreBoard.addSun(sunFlower.givenSun());
-        }
-
-        for(PeaPlant shooter : gameLogic.plantsAligned()) {
-            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol());
-            if(b != null) {
-                gameLogic.addBullet(b);
-                pane.getChildren().addAll(b.getPicture());
-            }
-        }
-    }
-
-    private void garbageImages(){
-        for(Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
-        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for(Plant plantToRemove : gameLogic.plantsToRemove()) bPane.getChildren().remove(plantToRemove.getGif());
     }
 }
