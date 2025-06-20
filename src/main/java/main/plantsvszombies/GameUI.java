@@ -3,6 +3,8 @@ package main.plantsvszombies;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,6 +34,7 @@ public class GameUI {
     static int selectedButton = -1;
     private final Stage stage;
     private final ArrayList<String> plantsName;
+    Scene scene;
 
     public GameUI(Stage stage, ArrayList<String> plantsName){
         this.stage = stage;
@@ -44,7 +47,7 @@ public class GameUI {
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-        Scene scene = new Scene(mainPane, Constants.width, Constants.height - 35);
+        scene = new Scene(mainPane, Constants.width, Constants.height - 35);
         stage.setScene(scene);
         stage.show();
     }
@@ -94,8 +97,17 @@ public class GameUI {
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-            }else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-            if (selectedButton > -1) {
+            }else if (selectedButton == 6) {
+                if(gameLogic.getPlant()[row][col] != null){
+                    bPane.getChildren().remove(gameLogic.getPlant()[row][col].getGif());
+                    gameLogic.getPlant()[row][col] = null;
+                }
+                ((AnchorPane) mainPane.getChildren().getLast()).getChildren().add(shovel());
+                scene.setCursor(Cursor.DEFAULT);
+                selectedButton = -1;
+            }
+            else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+            if (selectedButton > -1 && selectedButton < 6) {
                 Button btnSelected = cards.get(selectedButton).getBtn();
                 btnSelected.setStyle("-fx-background-color: transparent;");
                 selectedButton = -1;
@@ -117,12 +129,42 @@ public class GameUI {
             menu();
         });
 
+        ImageView shovelBack = setButton("shovelBack", 100, 100);
+        ImageView shovel = shovel();
+        Cursor cursor = new ImageCursor(shovel.getImage());
+        shovelBack.setOnMouseClicked(event -> {
+            if (selectedButton != 6) {
+                scene.setCursor(cursor);
+                selectedButton = 6;
+                buttonsPane.getChildren().remove(shovel);
+            }
+            else {
+                scene.setCursor(Cursor.DEFAULT);
+                selectedButton = -1;
+                buttonsPane.getChildren().add(shovel);
+            }
+        });
+
+        AnchorPane.setTopAnchor(shovelBack, 0.0);
+        AnchorPane.setRightAnchor(shovelBack, 500.0);
+
         AnchorPane.setTopAnchor(menu, -5.0);
         AnchorPane.setRightAnchor(menu, 0.0);
 
-        buttonsPane.getChildren().add(menu);
+        buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
 
         return buttonsPane;
+    }
+
+    private ImageView shovel(){
+        ImageView shovel = setButton("shovel", 100, 100);
+
+        shovel.setMouseTransparent(true);
+
+        AnchorPane.setTopAnchor(shovel, 0.0);
+        AnchorPane.setRightAnchor(shovel, 500.0);
+
+        return shovel;
     }
 
     private void menu(){
@@ -180,7 +222,7 @@ public class GameUI {
     }
 
     private Plant getPlant(int row, int col) {
-        if (selectedButton < 0) return null;
+        if (selectedButton < 0 || selectedButton > 5) return null;
         switch (plantsName.get(selectedButton)) {
             case "PeaShooter" -> {
                 if (PeaShooter.rechargeCheck() >= 1) return new PeaShooter(row, col);

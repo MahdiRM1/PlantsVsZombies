@@ -126,6 +126,10 @@ public class GameLogic {
         return sunFlowers;
     }
 
+    public Plant[][] getPlant(){
+        return pottedPlants;
+    }
+
     public boolean checkLose() {
         for(Zombie zombie : zombies) {
             if(zombie.getCol()  < 0) {
