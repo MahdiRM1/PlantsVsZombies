@@ -3,9 +3,39 @@ package main.plantsvszombies;
 import java.util.ArrayList;
 
 public class GameLogic {
-    private final Plant[][] pottedPlants = new Plant[5][9];
+    private final Plant[][] pottedPlants;
     private final ArrayList<Zombie> zombies = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
+
+    public GameLogic(Plant[][] pottedPlants, ArrayList<ZombieData> zombieData){
+        this.pottedPlants = pottedPlants;
+        for (ZombieData data : zombieData) {
+            Zombie zombie = getZombie(data);
+            zombies.add(zombie);
+        }
+    }
+
+    public GameLogic(){
+        pottedPlants = new Plant[5][9];
+    }
+
+    private Zombie getZombie(ZombieData data){
+        switch (data.getType()){
+            case "OriginalZombie" -> {
+                return new OriginalZombie(data);
+            }
+            case "ConeheadZombie" -> {
+                return new ConeheadZombie(data);
+            }
+            case "BucketheadZombie" -> {
+                return new BucketheadZombie(data);
+            }
+            case "Imp" -> {
+                return new Imp(data);
+            }
+        }
+        return null;
+    }
 
     public boolean setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) {

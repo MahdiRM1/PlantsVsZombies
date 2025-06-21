@@ -10,14 +10,25 @@ public class Card {
 
     private final String plantName;
     private final int rechargeTime;
+    private final int index;
     private long lastSelected;
     private boolean canChoose;
     private final Button btn;
+
+    public Card(CardData data){
+        plantName = data.getPlantName();
+        lastSelected = data.getLastSelected();
+        rechargeTime = data.getRechargeTime();
+        index = data.getIndex();
+        btn = cardButton(index);
+        rechargeCheck();
+    }
 
     public Card(String plantName, int index){
         this.plantName = plantName;
         rechargeTime = rechargeTime();
         lastSelected = -rechargeTime;
+        this.index = index;
         canChoose = true;
         btn = cardButton(index);
     }
@@ -95,5 +106,21 @@ public class Card {
 
     public void updateLastSelected() {
         lastSelected = GlobalState.gameTime;
+    }
+
+    public String getPlantName() {
+        return plantName;
+    }
+
+    public int getRechargeTime() {
+        return rechargeTime;
+    }
+
+    public long getLastSelected() {
+        return lastSelected;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
