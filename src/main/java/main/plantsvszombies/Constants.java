@@ -92,7 +92,7 @@ public final class Constants {
     public static int getColumnZombie(ImageView picture){
         double gridStartX = height / 2.5;
         double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
-        if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
+        if(relativeX / TILE_SIZE > -ZOMBIE_PIC_WEIGHT) return (int)(relativeX / TILE_SIZE);
         else return -1;
 
     }
