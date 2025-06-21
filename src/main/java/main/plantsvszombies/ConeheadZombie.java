@@ -26,6 +26,12 @@ public class ConeheadZombie extends Zombie{
         }
     }
 
+    public ConeheadZombie (ZombieData data) {
+        super(data);
+        HP = 140;
+        speed = 5;
+    }
+
     public ConeheadZombie(int row){
         super(row);
         HP = 140;

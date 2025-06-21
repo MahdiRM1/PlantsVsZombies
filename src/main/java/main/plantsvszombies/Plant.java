@@ -8,7 +8,7 @@ public abstract class Plant {
     protected int price;
     protected double HP;
     protected ImageView gif;
-    double damageCaused = 0;
+    private double damageCaused = 0;
 
     public Plant(int row, int col){
         this.row = row;

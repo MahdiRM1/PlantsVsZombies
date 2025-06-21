@@ -16,11 +16,11 @@ public class ScoreBoard {
     private final Label scoreLabel;
     private final ArrayList<Sun> suns = new ArrayList<>();
 
-    public ScoreBoard(BorderPane pane){
+    public ScoreBoard(BorderPane pane, int score){
         this.pane = pane;
-        score = 100;
+        this.score = score;
         ImageView board = Constants.setScoreBoardPicture();
-        pane.getChildren().addAll(board);
+        pane.getChildren().add(1, board);
         scoreLabel = new Label(score + "");
         Font font = Font.font("Arial", FontWeight.BOLD, Constants.height/25.6);
         scoreLabel.setFont(font);
@@ -76,5 +76,9 @@ public class ScoreBoard {
             return true;
         }
         return false;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

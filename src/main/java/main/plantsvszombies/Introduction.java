@@ -7,6 +7,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,6 +25,17 @@ public class Introduction {
         Scene scene = new Scene(Pane(), Constants.width, Constants.height - 35);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void load(){
+        try (ObjectInputStream input = new ObjectInputStream(
+                new FileInputStream("savegame.dat"))) {
+            GameState state = (GameState) input.readObject();
+            new GameUI(stage, state);
+            System.out.println("game loaded");
+        }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void chooseCardPage(){
@@ -167,8 +182,12 @@ public class Introduction {
     private BorderPane Pane(){
         BorderPane borderPane = new BorderPane();
         borderPane.getChildren().addFirst(Constants.setBackGround("GameStartBackGround"));
-        VBox box = new VBox();
-        box.getChildren().add(initializeBtn("Start Game"));
+        VBox box = new VBox(10);
+        Button start = initializeBtn("Start Game");
+        start.setOnAction(event -> chooseCardPage());
+        Button load = initializeBtn("Load Game");
+        load.setOnAction(event -> load());
+        box.getChildren().addAll(start, load);
         box.setAlignment(Pos.CENTER);
         borderPane.setCenter(box);
         return borderPane;
@@ -198,7 +217,6 @@ public class Introduction {
         btn.setOnMouseReleased(event ->
                 btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(62, 177, 235); ")
         );
-        btn.setOnAction(event -> chooseCardPage());
         return btn;
     }
 }
