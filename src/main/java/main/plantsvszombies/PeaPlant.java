@@ -11,7 +11,7 @@ public abstract class PeaPlant extends Plant{
     }
 
     public Bullet shoot(int row, int col) {
-        if(Math.abs(GlobalState.gameTime - lastShoot) >= 1000) {
+        if(Math.abs(GlobalState.gameTime - lastShoot) >= 1500) {
             lastShoot = GlobalState.gameTime;
             return new Bullet(row, col, freezeShoot);
         }

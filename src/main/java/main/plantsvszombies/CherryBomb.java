@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 public class CherryBomb extends BombPlant{
 
+    private static long lastSelection;
+    public static final int recharge = 15;
+
     public CherryBomb(int row, int col){
         super(row, col);
         price = 150;
         HP = 100;
-        recharge = 5;
     }
 
     @Override
@@ -21,5 +23,19 @@ public class CherryBomb extends BombPlant{
             }
         }
         return true;
+    }
+
+    @Override
+    public long getLastSelection() {
+        return lastSelection;
+    }
+
+    @Override
+    public void setLastSelection(long lastSelection) {
+        CherryBomb.lastSelection = lastSelection;
+    }
+
+    public static double rechargeCheck(){
+        return ((double)GlobalState.gameTime - lastSelection) / recharge * 1000;
     }
 }
