@@ -126,10 +126,6 @@ public class GameLogic {
         return sunFlowers;
     }
 
-    public Plant[][] getPlant(){
-        return pottedPlants;
-    }
-
     public boolean checkLose() {
         for(Zombie zombie : zombies) {
             if(zombie.getCol()  < 0) {
@@ -143,11 +139,19 @@ public class GameLogic {
         return zombies.isEmpty() && GlobalState.gameTime >= 140000;
     }
 
+    public void removePlant(int row , int col) {
+        pottedPlants[row][col] = null;
+    }
+
     public ArrayList<Zombie> getZombies() {
         return zombies;
     }
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
+    }
+
+    public Plant[][] getPottedPlants() {
+        return pottedPlants;
     }
 }

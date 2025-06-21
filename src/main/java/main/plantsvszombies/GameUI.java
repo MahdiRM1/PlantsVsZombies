@@ -98,11 +98,8 @@ public class GameUI {
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
             }else if (selectedButton == 6) {
-                if(gameLogic.getPlant()[row][col] != null){
-                    bPane.getChildren().remove(gameLogic.getPlant()[row][col].getGif());
-                    gameLogic.getPlant()[row][col] = null;
-                }
-                ((AnchorPane) mainPane.getChildren().getLast()).getChildren().add(shovel());
+                useShovel(row, col);
+                ((Pane) mainPane.getChildren().getLast()).getChildren().add(shovelImage());
                 scene.setCursor(Cursor.DEFAULT);
                 selectedButton = -1;
             }
@@ -119,8 +116,8 @@ public class GameUI {
         return btn;
     }
 
-    private AnchorPane buttonsPane(){
-        AnchorPane buttonsPane = new AnchorPane();
+    private Pane buttonsPane(){
+        Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
 
         ImageView menu = setButton("MenuBtn", Constants.height/5, Constants.height/16);
@@ -130,7 +127,7 @@ public class GameUI {
         });
 
         ImageView shovelBack = setButton("shovelBack", 100, 100);
-        ImageView shovel = shovel();
+        ImageView shovel = shovelImage();
         Cursor cursor = new ImageCursor(shovel.getImage());
         shovelBack.setOnMouseClicked(event -> {
             if (selectedButton != 6) {
@@ -145,30 +142,32 @@ public class GameUI {
             }
         });
 
-        AnchorPane.setTopAnchor(shovelBack, 0.0);
-        AnchorPane.setRightAnchor(shovelBack, 500.0);
+        shovelBack.setLayoutX(shovelImage().getLayoutX());
 
-        AnchorPane.setTopAnchor(menu, -5.0);
-        AnchorPane.setRightAnchor(menu, 0.0);
+        menu.setLayoutX(Constants.width - menu.getFitWidth());
 
         buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
 
         return buttonsPane;
     }
 
-    private ImageView shovel(){
+    private ImageView shovelImage(){
         ImageView shovel = setButton("shovel", 100, 100);
 
         shovel.setMouseTransparent(true);
 
-        AnchorPane.setTopAnchor(shovel, 0.0);
-        AnchorPane.setRightAnchor(shovel, 500.0);
+        shovel.setLayoutX(Constants.width/2.1);
 
         return shovel;
     }
 
+    private void useShovel(int row, int col) {
+        bPane.getChildren().remove(gameLogic.getPottedPlants()[row][col].getGif());
+        gameLogic.removePlant(row, col);
+    }
+
     private void menu(){
-        AnchorPane menuPane = new AnchorPane();
+        Pane menuPane = new Pane();
 
         ImageView backToMenu = setButton("MainMenu", Constants.height/5, Constants.height/20);
         backToMenu.setOnMouseClicked(event -> new Introduction().firstPage(stage));

@@ -15,6 +15,7 @@ public abstract class Plant {
         this.col = col;
         this.timeCreated = GlobalState.gameTime;
         gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
+        gif.setMouseTransparent(true);
         setLastSelection(GlobalState.gameTime);
     }
 
