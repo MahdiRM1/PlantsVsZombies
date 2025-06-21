@@ -8,6 +8,7 @@ import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -99,6 +100,9 @@ public class GameUI {
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
             }else if (selectedButton == 6) {
                 useShovel(row, col);
+                Pane buttons = (Pane)mainPane.getChildren().getLast();
+                ImageView shovelBack = ((ImageView)buttons.getChildren().getLast());
+                shovelBack.setEffect(null);
                 ((Pane) mainPane.getChildren().getLast()).getChildren().add(shovelImage());
                 scene.setCursor(Cursor.DEFAULT);
                 selectedButton = -1;
@@ -126,23 +130,27 @@ public class GameUI {
             menu();
         });
 
-        ImageView shovelBack = setButton("shovelBack", 100, 100);
         ImageView shovel = shovelImage();
+        ImageView shovelBack = setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
         Cursor cursor = new ImageCursor(shovel.getImage());
         shovelBack.setOnMouseClicked(event -> {
             if (selectedButton != 6) {
                 scene.setCursor(cursor);
                 selectedButton = 6;
                 buttonsPane.getChildren().remove(shovel);
+                ColorAdjust choose = new ColorAdjust();
+                choose.setBrightness(-0.5);
+                shovelBack.setEffect(choose);
             }
             else {
                 scene.setCursor(Cursor.DEFAULT);
                 selectedButton = -1;
                 buttonsPane.getChildren().add(shovel);
+                shovelBack.setEffect(null);
             }
         });
 
-        shovelBack.setLayoutX(shovelImage().getLayoutX());
+        shovelBack.setLayoutX(shovel.getLayoutX());
 
         menu.setLayoutX(Constants.width - menu.getFitWidth());
 
@@ -152,7 +160,7 @@ public class GameUI {
     }
 
     private ImageView shovelImage(){
-        ImageView shovel = setButton("shovel", 100, 100);
+        ImageView shovel = setButton("shovel", Constants.height/10, Constants.height/10);
 
         shovel.setMouseTransparent(true);
 
