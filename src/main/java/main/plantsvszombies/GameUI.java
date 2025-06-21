@@ -222,7 +222,7 @@ public class GameUI {
     private void menu(){
         Pane menuPane = new Pane();
 
-        ImageView backToMenu = setButton("MainMenu", Constants.height/5, Constants.height/20);
+        ImageView backToMenu = setButton("MainMenuBtn", Constants.height/5, Constants.height/20);
         backToMenu.setOnMouseClicked(event -> {
             save();
             new Introduction().firstPage(stage);

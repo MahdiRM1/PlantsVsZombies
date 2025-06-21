@@ -179,44 +179,64 @@ public class Introduction {
 //        return choose;
 //    }
 
-    private BorderPane Pane(){
-        BorderPane borderPane = new BorderPane();
-        borderPane.getChildren().addFirst(Constants.setBackGround("GameStartBackGround"));
-        VBox box = new VBox(10);
-        Button start = initializeBtn("Start Game");
-        start.setOnAction(event -> chooseCardPage());
-        Button load = initializeBtn("Load Game");
-        load.setOnAction(event -> load());
-        box.getChildren().addAll(start, load);
-        box.setAlignment(Pos.CENTER);
-        borderPane.setCenter(box);
-        return borderPane;
+    private Pane Pane(){
+        Pane pane = new Pane();
+        pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
+        double firstX = Constants.width/1.97, firstY = Constants.height/8, diffY = Constants.height/5, diffX = Constants.height/100;
+        ImageView adventure = initializeImageViews("Adventure", Constants.height/1.4, Constants.height/4.2);
+        adventure.setOnMouseClicked(event -> chooseCardPage());
+        adventure.setLayoutX(firstX);
+        adventure.setLayoutY(firstY);
+
+        ImageView newGame = initializeImageViews("NewGame", Constants.height/1.45, Constants.height/4.35);
+        newGame.setOnMouseClicked(event -> chooseCardPage());
+        newGame.setLayoutX(firstX - 2);
+        newGame.setLayoutY(firstY + diffY);
+
+        ImageView loadGame = initializeImageViews("LoadGame", Constants.height/1.6, Constants.height/4.8);
+        loadGame.setOnMouseClicked(event -> load());
+        loadGame.setLayoutX(firstX + 1.5*diffX);
+        loadGame.setLayoutY(firstY + 1.85*diffY);
+
+        ImageView quit = initializeImageViews("Quit", Constants.height/4.5, Constants.height/6);
+        quit.setOnMouseClicked(event -> stage.close());
+        quit.setLayoutX(Constants.width / 1.14);
+        quit.setLayoutY(Constants.height / 1.405);
+
+        ImageView help = initializeImageViews("help", Constants.height/4.5, Constants.height/4);
+        help.setLayoutX(Constants.width / 1.28);
+        help.setLayoutY(Constants.height / 1.54);
+
+        ImageView options = initializeImageViews("option", Constants.height/3.5, Constants.height/5.4);
+        options.setLayoutX(Constants.width / 1.475);
+        options.setLayoutY(Constants.height / 1.47);
+        pane.getChildren().addAll(adventure, newGame, loadGame, quit, options, help);
+        return pane;
     }
 
-    private Button initializeBtn(String str){
-        Button btn = new Button(str);
-        btn.setStyle(
-            "-fx-background-radius: 20; " +
-            "-fx-min-width: 150px; " +
-            "-fx-min-height: 75px; " +
-            "-fx-background-color: rgb(206, 175, 0); "  +
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 50px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 1);"
-        );
-        btn.setOnMouseEntered(event ->
-                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(134, 114, 1); ")
-        );
-        btn.setOnMouseExited(event ->
-                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(206, 175, 0); ")
-        );
-        btn.setOnMousePressed(event ->
-                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(0, 0, 0); ")
-        );
-        btn.setOnMouseReleased(event ->
-                btn.setStyle(btn.getStyle() + "-fx-background-color: rgb(62, 177, 235); ")
-        );
-        return btn;
+    private ImageView initializeImageViews(String str, double width, double height){
+        Image image = new Image("file:Pictures/ui/" + str + ".png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+
+        imageView.setOnMouseEntered(event -> {
+            double differentX = imageView.getFitWidth() * 1.05 - imageView.getFitWidth();
+            double differentY = imageView.getFitHeight() * 1.05 - imageView.getFitHeight();
+            imageView.setFitWidth(imageView.getFitWidth() * 1.05);
+            imageView.setFitHeight(imageView.getFitHeight() * 1.05);
+            imageView.setLayoutX(imageView.getLayoutX() - differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() - differentY/2);
+        });
+
+        imageView.setOnMouseExited(event -> {
+            double differentX = imageView.getFitWidth() - imageView.getFitWidth() / 1.05;
+            double differentY = imageView.getFitHeight() - imageView.getFitHeight() / 1.05;
+            imageView.setFitWidth(imageView.getFitWidth() / 1.05);
+            imageView.setFitHeight(imageView.getFitHeight() / 1.05);
+            imageView.setLayoutX(imageView.getLayoutX() + differentX/2);
+            imageView.setLayoutY(imageView.getLayoutY() + differentY/2);
+        });
+        return imageView;
     }
 }
