@@ -12,27 +12,19 @@ public final class Constants {
     public static final double ZOMBIE_PIC_WEIGHT = height / 5;
     public static final double BULLET_SIZE = height / 21.5;
     public static final double PLANT_CARD_HEIGHT = height / 7.3;
-    public static final double PLANT_CARD_WIDTH = height / 13;
+    public static final double PLANT_CARD_WIDTH = height / 11;
     public static final double SUN_SIZE = height / 8.5;
 
     public static ImageView setScoreBoardPicture(){
         ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
-        board.setFitWidth(height/1.1);
-        board.setFitHeight(height/5.5);
-        board.setLayoutY(height/29.25);
+        board.setFitWidth(height);
+        board.setFitHeight(height/5);
         return board;
     }
 
-    public static ImageView setIntroductionBackGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/GameStartBackGround.jpg"));
-        bg.setFitHeight(height);
-        bg.setFitWidth(width);
-        return bg;
-    }
-
-    public static ImageView setDayBackGround(){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/backGroundDay.jpg"));
-        bg.setFitHeight(height);
+    public static ImageView setBackGround(String str){
+        ImageView bg = new ImageView(new Image("file:Pictures/backGround/" + str + ".jpg"));
+        bg.setFitHeight(height - 35);
         bg.setFitWidth(width);
         return bg;
     }
@@ -43,7 +35,7 @@ public final class Constants {
         picture.setFitHeight(PLANT_CARD_HEIGHT);
         return picture;
     }
-    
+
     public static ImageView setSunPicture(SunType type){
         ImageView picture = new ImageView(new Image("file:Pictures/sun/sun.png"));
         picture.setFitWidth(SUN_SIZE);
@@ -70,10 +62,10 @@ public final class Constants {
         picture.setLayoutX((height / 2.5) + (col * TILE_SIZE));
         if(plantName.equals("TallNut")) {
             picture.setFitHeight(TILE_SIZE * 1.2);
-            picture.setLayoutY((height / 4.1) + ((row - 0.5) * TILE_SIZE));
+            picture.setLayoutY((height / 4.3) + ((row - 0.5) * 0.9 * TILE_SIZE));
         }
         else {
-            picture.setLayoutY((height / 4.3) + (row * TILE_SIZE));
+            picture.setLayoutY((height / 4.3) + ((row * 0.9) * TILE_SIZE));
             picture.setFitHeight(TILE_SIZE * 0.8);
         }
         return picture;
@@ -86,7 +78,7 @@ public final class Constants {
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        picture.setLayoutY(height - ((6-row)*TILE_SIZE) + (height/10.85));
+        picture.setLayoutY(height - ((5-row) * 0.9 * TILE_SIZE) - (height/8));
         return picture;
     }
 
@@ -98,6 +90,10 @@ public final class Constants {
     }
 
     public static int getColumnZombie(ImageView picture){
-        return (int)((picture.getLayoutX() + (picture.getFitWidth() / 1.5) - height/2.62) / TILE_SIZE);
+        double gridStartX = height / 2.5;
+        double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
+        if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
+        else return -1;
+
     }
 }

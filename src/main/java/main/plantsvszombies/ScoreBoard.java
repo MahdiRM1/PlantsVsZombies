@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class ScoreBoard {
 
     private int score;
-    BorderPane pane;
-    Label scoreLabel;
+    private final BorderPane pane;
+    private final Label scoreLabel;
     private final ArrayList<Sun> suns = new ArrayList<>();
 
     public ScoreBoard(BorderPane pane){
@@ -22,10 +22,10 @@ public class ScoreBoard {
         ImageView board = Constants.setScoreBoardPicture();
         pane.getChildren().addAll(board);
         scoreLabel = new Label(score + "");
-        Font font = Font.font("Arial", FontWeight.BOLD, 40);
+        Font font = Font.font("Arial", FontWeight.BOLD, Constants.height/25.6);
         scoreLabel.setFont(font);
         scoreLabel.setTextFill(Color.BLACK);
-        scoreLabel.setPadding(new Insets(-Constants.height/25,0,0,Constants.height/30));
+        scoreLabel.setPadding(new Insets(-Constants.height/30,0,0,Constants.height/14));
         pane.setLeft(scoreLabel);
     }
 
@@ -69,12 +69,12 @@ public class ScoreBoard {
         }
     }
 
-    public void purchasePlant(int price) {
-        score -= price;
-        scoreLabel.setText(score + "");
-    }
-
-    public int getScore() {
-        return score;
+    public boolean purchasePlant(int price) {
+        if(score >= price){
+            score -= price;
+            scoreLabel.setText(score + "");
+            return true;
+        }
+        return false;
     }
 }

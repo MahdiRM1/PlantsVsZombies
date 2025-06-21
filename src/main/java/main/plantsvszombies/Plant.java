@@ -6,7 +6,6 @@ public abstract class Plant {
     protected final int row, col;
     protected final long timeCreated;
     protected int price;
-    protected int recharge;
     protected double HP;
     protected ImageView gif;
     double damageCaused = 0;
@@ -16,6 +15,8 @@ public abstract class Plant {
         this.col = col;
         this.timeCreated = GlobalState.gameTime;
         gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
+        gif.setMouseTransparent(true);
+        setLastSelection(GlobalState.gameTime);
     }
 
     public void damage(){
@@ -29,6 +30,9 @@ public abstract class Plant {
     public void resetDamageCaused(){
         damageCaused = 0;
     }
+
+    public abstract long getLastSelection();
+    public abstract void setLastSelection(long lastSelection);
 
     public ImageView getGif() {
         return gif;
