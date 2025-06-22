@@ -37,12 +37,12 @@ public class GameLogic {
         return null;
     }
 
-    public boolean setPlant(int i, int j, Plant plant){
-        if(pottedPlants[i][j] == null) {
-            pottedPlants[i][j] = plant;
-            return true;
-        }
-        return false;
+    public boolean isPlantable(int i, int j){
+        return pottedPlants[i][j] == null;
+    }
+
+    public void setPlant(int i, int j, Plant plant){
+        pottedPlants[i][j] = plant;
     }
 
     public void addZombie(Zombie z) {
@@ -108,7 +108,7 @@ public class GameLogic {
     public void setZombieState(){
         for(Zombie zombie : zombies){
             Plant plant = checkCorrespondence(zombie);
-            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE) continue;
+            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE);
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
