@@ -27,12 +27,22 @@ public abstract class Zombie {
         }
     }
 
-    public Zombie(int row) {
-        this.row = row;
-        col = 9;
-        state = ZombieState.WALKING;
+    public Zombie(ZombieData data) {
+        this.row = data.getRow();
         picture = new ImageView();
         Constants.setZombiePicture(picture, row);
+        picture.setLayoutX(data.getPicLayoutX());
+        col = Constants.getColumnZombie(picture);
+        state = ZombieState.WALKING;
+        freezeTime = -5000;
+    }
+
+    public Zombie(int row) {
+        this.row = row;
+        picture = new ImageView();
+        Constants.setZombiePicture(picture, row);
+        col = Constants.getColumnZombie(picture);
+        state = ZombieState.WALKING;
         freezeTime = -5000;
     }
 

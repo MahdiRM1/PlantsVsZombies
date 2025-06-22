@@ -23,6 +23,12 @@ public class OriginalZombie extends Zombie{
         }
     }
 
+    public OriginalZombie(ZombieData data){
+        super(data);
+        HP = 100;
+        speed = 5;
+    }
+
     public OriginalZombie(int row){
         super(row);
         HP = 100;
