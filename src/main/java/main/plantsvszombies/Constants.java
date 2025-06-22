@@ -85,14 +85,14 @@ public final class Constants {
     public static void setZombiePicture(ImageView picture, int row){
         picture.setFitWidth(ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(height - picture.getFitHeight() - ((4-row) * TILE_SIZE) - (height/12.8));
+        picture.setLayoutY(height - picture.getFitHeight() - ((4-row) * 0.9 * TILE_SIZE) - (height/9));
         picture.setLayoutX(width);
     }
 
     public static int getColumnZombie(ImageView picture){
         double gridStartX = height / 2.5;
         double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
-        if(relativeX / TILE_SIZE > -ZOMBIE_PIC_WEIGHT) return (int)(relativeX / TILE_SIZE);
+        if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
         else return -1;
 
     }
