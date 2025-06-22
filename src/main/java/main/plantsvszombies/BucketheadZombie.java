@@ -25,6 +25,12 @@ public class BucketheadZombie extends Zombie{
         }
     }
 
+    public BucketheadZombie(ZombieData data){
+        super(data);
+        HP = 200;
+        speed = 5;
+    }
+
     public BucketheadZombie(int row){
         super(row);
         HP = 200;

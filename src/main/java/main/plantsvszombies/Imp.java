@@ -25,6 +25,12 @@ public class Imp extends Zombie{
         }
     }
 
+    public Imp (ZombieData data) {
+        super(data);
+        HP = 50;
+        speed = 3;
+    }
+
     public Imp(int row){
         super(row);
         HP = 50;
