@@ -64,7 +64,7 @@ public class GameUI {
         gameLogic = new GameLogic();
         initializeStackPane(cardBar(plantsName));
         scoreBoard = new ScoreBoard(bPane, 100);
-        scoreBoard = new ScoreBoard(bPane, 100);
+        GlobalState.gameTime = 0;
         startGame();
     }
     //manages the start of the game
@@ -89,7 +89,6 @@ public class GameUI {
         bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
         bPane.setBottom(map());
         bPane.setTop(cardBar);
-        zombieGetter(0, 2);
         pane.setMouseTransparent(true);
         mainPane.getChildren().add(bPane);
         mainPane.getChildren().add(pane);
@@ -139,11 +138,17 @@ public class GameUI {
         Button btn = new Button();
         btn.setPrefSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
         btn.setStyle("-fx-background-color: transparent");
+
         btn.setOnAction(event -> {
             Plant plant = getPlant(row, col);
             if(plant != null) {
+<<<<<<< HEAD
                 //change the name of purchase plant: probably
                 if(scoreBoard.purchasePlant(plant.getPrice()) && gameLogic.setPlant(row, col, plant)) {
+=======
+                if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
+                    gameLogic.setPlant(row, col, plant);
+>>>>>>> 5f5dd381175d8f2abc224f2d17494cdf19fbc2a9
                     cards.get(selectedButton).updateLastSelected();
                     bPane.getChildren().add(plant.getGif());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
@@ -165,6 +170,7 @@ public class GameUI {
                 selectedButton = -1;
             }
         });
+
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(140, 140, 140, 0.3);"));
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
         btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.3);"));
@@ -231,37 +237,30 @@ public class GameUI {
     private void menu(){
         Pane menuPane = new Pane();
 
-        ImageView backToMenu = setButton("MainMenuBtn", Constants.height/5, Constants.height/20);
+        ImageView backToMenu = setButton("MainMenuBtn", Constants.height/5, Constants.height/18);
         backToMenu.setOnMouseClicked(event -> {
             save();
             new Introduction().firstPage(stage);
         });
-        backToMenu.setX(Constants.width/2 - Constants.height/10);
-        backToMenu.setY(Constants.height/1.85);
+        backToMenu.setLayoutX(Constants.width/2.7);
+        backToMenu.setLayoutY(Constants.height/1.62);
 
-        ImageView restart = setButton("Restart", Constants.height/5, Constants.height/20);
-        restart.setOnMouseClicked(event -> {
-            tl.stop();
-            new GameUI(stage, plantsName);
-        });
-        restart.setX(Constants.width/2 - Constants.height/10);
-        restart.setY(Constants.height/1.65);
-
-        ImageView backToGame = setButton("BackToGame", Constants.height/1.85, Constants.height/6.5);
+        ImageView backToGame = setButton("BackToGame", Constants.height/5, Constants.height/18);
         backToGame.setOnMouseClicked(event -> {
             tl.play();
             mainPane.getChildren().removeLast();
         });
-        backToGame.setX(Constants.width/2 - Constants.height/3.7);
-        backToGame.setY(Constants.height/1.44);
+        backToGame.setLayoutX(Constants.width/1.95);
+        backToGame.setLayoutY(Constants.height/1.62);
 
         ImageView menuPic = new ImageView(new Image("file:Pictures/ui/menu.png"));
-        menuPic.setX(Constants.width/6);
-        menuPic.setFitWidth(Constants.width/1.5);
-        menuPic.setFitHeight(Constants.height - 35);
+        menuPic.setLayoutX(Constants.width/3);
+        menuPic.setLayoutY(Constants.height/4.8);
+        menuPic.setFitWidth(Constants.width/3);
+        menuPic.setFitHeight(Constants.height/2);
 
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
-        menuPane.getChildren().addAll(menuPic, backToMenu, restart, backToGame);
+        menuPane.getChildren().addAll(menuPic, backToMenu, backToGame);
         mainPane.getChildren().add(menuPane);
     }
 
@@ -270,6 +269,7 @@ public class GameUI {
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
+
         imageView.setOnMouseEntered(e -> {
             double differentX = imageView.getFitWidth() * 1.1 - imageView.getFitWidth();
             double differentY = imageView.getFitHeight() * 1.1 - imageView.getFitHeight();
@@ -286,6 +286,7 @@ public class GameUI {
             imageView.setLayoutX(imageView.getLayoutX() + differentX/2);
             imageView.setLayoutY(imageView.getLayoutY() + differentY/2);
         });
+
         return imageView;
     }
 

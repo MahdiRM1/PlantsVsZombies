@@ -36,6 +36,7 @@ public class GameLogic {
         }
         return null;
     }
+<<<<<<< HEAD
     //form the plants matrix
     public boolean setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) {
@@ -43,6 +44,15 @@ public class GameLogic {
             return true;
         }
         return false;
+=======
+
+    public boolean isPlantable(int i, int j){
+        return pottedPlants[i][j] == null;
+    }
+
+    public void setPlant(int i, int j, Plant plant){
+        pottedPlants[i][j] = plant;
+>>>>>>> 5f5dd381175d8f2abc224f2d17494cdf19fbc2a9
     }
     //zombie arraylist to manage all zombies
     public void addZombie(Zombie z) {
@@ -108,8 +118,13 @@ public class GameLogic {
     //sets the state of zombies
     public void setZombieState(){
         for(Zombie zombie : zombies){
+<<<<<<< HEAD
             Plant plant = plantZombieCollision(zombie);
             if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE) continue;
+=======
+            Plant plant = checkCorrespondence(zombie);
+            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE);
+>>>>>>> 5f5dd381175d8f2abc224f2d17494cdf19fbc2a9
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
