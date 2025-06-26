@@ -40,6 +40,7 @@ public class GameUI {
     private final ArrayList<String> plantsName;
     private Scene scene;
 
+    // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state){
         this.stage = stage;
         gameLogic = new GameLogic(setPottedPlants(state.getPlants()), state.getZombies());
@@ -56,6 +57,7 @@ public class GameUI {
         startGame();
     }
 
+    //constructor: to start a new game
     public GameUI(Stage stage, ArrayList<String> plantsName){
         this.stage = stage;
         this.plantsName = plantsName;
@@ -65,7 +67,7 @@ public class GameUI {
         scoreBoard = new ScoreBoard(bPane, 100);
         startGame();
     }
-
+    //manages the start of the game
     public void startGame(){
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GlobalState.gameTime += 50;
@@ -81,6 +83,7 @@ public class GameUI {
         });
         stage.show();
     }
+
 
     private void initializeStackPane(HBox cardBar){
         bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
@@ -102,6 +105,7 @@ public class GameUI {
         }
     }
 
+    //generate card bar
     private HBox cardBar(ArrayList<String> plants){
         HBox cardBar = new HBox(0);
         for (int i = 0; i < 6; i++) {
@@ -120,7 +124,7 @@ public class GameUI {
             }
         }
     }
-
+    //generate game map
     private GridPane map(){
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
@@ -130,7 +134,7 @@ public class GameUI {
         gPane.setPadding(new Insets(0,0,Constants.height/16,Constants.height/2.6));
         return gPane;
     }
-
+    //generate mapButtons and control planting visuals
     private Button mapButtons(int row, int col){
         Button btn = new Button();
         btn.setPrefSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
@@ -138,6 +142,7 @@ public class GameUI {
         btn.setOnAction(event -> {
             Plant plant = getPlant(row, col);
             if(plant != null) {
+                //change the name of purchase plant: probably
                 if(scoreBoard.purchasePlant(plant.getPrice()) && gameLogic.setPlant(row, col, plant)) {
                     cards.get(selectedButton).updateLastSelected();
                     bPane.getChildren().add(plant.getGif());
@@ -166,6 +171,7 @@ public class GameUI {
         return btn;
     }
 
+    //control menu buttons
     private Pane buttonsPane(){
         Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
@@ -204,6 +210,7 @@ public class GameUI {
         return buttonsPane;
     }
 
+    //add shovel image
     private ImageView shovelImage(){
         ImageView shovel = setButton("shovel", Constants.height/10, Constants.height/10);
 
@@ -214,11 +221,13 @@ public class GameUI {
         return shovel;
     }
 
+    //manage shovel visuals
     private void useShovel(int row, int col) {
         bPane.getChildren().remove(gameLogic.getPottedPlants()[row][col].getGif());
         gameLogic.removePlant(row, col);
     }
 
+    //generate the menu pain
     private void menu(){
         Pane menuPane = new Pane();
 
@@ -256,6 +265,7 @@ public class GameUI {
         mainPane.getChildren().add(menuPane);
     }
 
+    //generate buttons -> visuals
     private ImageView setButton(String text, double width, double height){
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
         imageView.setFitHeight(height);
@@ -324,7 +334,7 @@ public class GameUI {
         rechargeCheck();
         timeHandler();
     }
-
+    //manages win or lose visuals
     public void winOrLose() {
         if(gameLogic.checkLose()) {
             Label lose = new Label("You lost");
@@ -343,7 +353,7 @@ public class GameUI {
         }
 
     }
-
+    //removes garbage images of striked bullets,dead zombies and eaten plants
     private void garbageImages(){
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
@@ -375,6 +385,7 @@ public class GameUI {
         for(Card card : cards) card.rechargeCheck();
     }
 
+    //controls the general timing of zombies entering and attack waves
     private void timeHandler(){
         Random rdm = new Random();
         if(GlobalState.gameTime <= 20000);
@@ -408,11 +419,13 @@ public class GameUI {
         }
     }
 
+    //add zombies to the pane
     private void addZombie(Zombie z){
         gameLogic.addZombie(z);
         pane.getChildren().add(z.getPicture());
     }
 
+    //determines what type of zombie to add
     private void zombieGetter(int z, int row){
         switch (z){
             case 0 -> addZombie(new OriginalZombie(row));
@@ -423,6 +436,7 @@ public class GameUI {
         }
     }
 
+    //saves the game
     public void save(){
         GameState state = new GameState(gameLogic, cards, scoreBoard.getScore());
 
@@ -435,6 +449,7 @@ public class GameUI {
         }
     }
 
+    //generates the plants matrix
     private Plant[][] setPottedPlants(ArrayList<PlantData> plantData){
         Plant[][] pottedPlants = new Plant[5][9];
         for (PlantData data : plantData){

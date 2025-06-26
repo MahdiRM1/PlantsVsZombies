@@ -14,12 +14,14 @@ public class Bullet {
         iceBullet = isFreezeShot;
     }
 
+    //manage bullet movement
     public void move(){
         if(picture != null) {
             picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (10));
         }
     }
 
+    //gettters
     public ImageView getPicture() {
         return picture;
     }

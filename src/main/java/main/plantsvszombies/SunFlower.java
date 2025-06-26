@@ -14,6 +14,7 @@ public class SunFlower extends Plant{
         lastSelection = GlobalState.gameTime;
     }
 
+    //manages time to produce sun by sun flowers
     public Sun givenSun() {
         if(Math.abs(GlobalState.gameTime - lastSunTime) >= 10000) {
             lastSunTime = GlobalState.gameTime;

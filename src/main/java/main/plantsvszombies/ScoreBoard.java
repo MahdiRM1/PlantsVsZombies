@@ -29,6 +29,7 @@ public class ScoreBoard {
         pane.setLeft(scoreLabel);
     }
 
+    //updates the scoreBoard for sun points
     public void addSun(Sun s){
         if(s != null) {
             ImageView image = s.getPicture();
@@ -49,6 +50,7 @@ public class ScoreBoard {
         fallenSun();
     }
 
+    //removes unclicked suns after time window is up
     private void garbageSuns(){
         for (int i = 0; i < suns.size(); i++) {
             if(Math.abs(suns.get(i).getTimeCreated() - GlobalState.gameTime) >= 5000) {
@@ -62,6 +64,7 @@ public class ScoreBoard {
         for (Sun s : suns) s.moveSun();
     }
 
+    //manage fallen sun movemnt
     private void sunDrop(){
         if(GlobalState.gameTime % 10000 == 0){
             Sun s = new Sun(SunType.FALLEN);
@@ -69,6 +72,7 @@ public class ScoreBoard {
         }
     }
 
+    //checks if a plant can be purchased
     public boolean purchasePlant(int price) {
         if(score >= price){
             score -= price;

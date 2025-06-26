@@ -1,25 +1,25 @@
 package main.plantsvszombies;
 
 import java.util.ArrayList;
-
 public class GameLogic {
     private final Plant[][] pottedPlants;
     private final ArrayList<Zombie> zombies = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
-
+// constructor: to load the previously saved game
     public GameLogic(Plant[][] pottedPlants, ArrayList<ZombieData> zombieData){
         this.pottedPlants = pottedPlants;
         for (ZombieData data : zombieData) {
-            Zombie zombie = getZombie(data);
+            Zombie zombie = zombieReload(data);
             zombies.add(zombie);
         }
     }
-
+//constructor: to start a new game
     public GameLogic(){
         pottedPlants = new Plant[5][9];
     }
 
-    private Zombie getZombie(ZombieData data){
+    //read zombies to reload a saved game
+    private Zombie zombieReload(ZombieData data){
         switch (data.getType()){
             case "OriginalZombie" -> {
                 return new OriginalZombie(data);
@@ -36,7 +36,7 @@ public class GameLogic {
         }
         return null;
     }
-
+    //form the plants matrix
     public boolean setPlant(int i, int j, Plant plant){
         if(pottedPlants[i][j] == null) {
             pottedPlants[i][j] = plant;
@@ -44,15 +44,16 @@ public class GameLogic {
         }
         return false;
     }
-
+    //zombie arraylist to manage all zombies
     public void addZombie(Zombie z) {
         zombies.add(z);
     }
-
+    //zombie arraylist to manage all bullets
     public void addBullet(Bullet b){
         bullets.add(b);
     }
 
+    //manages bullets and zombie collisions.
     public ArrayList<Bullet> checkBulletStrike(){
         ArrayList<Bullet> bulletToRemove = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
@@ -75,21 +76,21 @@ public class GameLogic {
         return bulletToRemove;
     }
 
-
-    private Plant checkCorrespondence(Zombie z){
+    //checks if a zombie has reached a plant
+    private Plant plantZombieCollision(Zombie z){
         try{
             if (pottedPlants[z.getRow()][z.getCol()] != null) return pottedPlants[z.getRow()][z.getCol()];
         } catch (ArrayIndexOutOfBoundsException e) {}
         return null;
     }
-
+    //finds and removes finished plants
     public ArrayList<Plant> plantsToRemove() {
         ArrayList<Plant> plantsToRemove = new ArrayList<>();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
                     if(pottedPlants[row][col] instanceof BombPlant bomb){
-                        if(bomb.boooooom(zombies)) {
+                        if(bomb.explosion(zombies)) {
                             plantsToRemove.add(bomb);
                             pottedPlants[row][col] = null;
                         }
@@ -104,10 +105,10 @@ public class GameLogic {
         }
         return plantsToRemove;
     }
-
+    //sets the state of zombies
     public void setZombieState(){
         for(Zombie zombie : zombies){
-            Plant plant = checkCorrespondence(zombie);
+            Plant plant = plantZombieCollision(zombie);
             if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE) continue;
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
@@ -121,7 +122,7 @@ public class GameLogic {
             else zombie.setState(ZombieState.WALKING);
         }
     }
-
+    //finds and removes dead zombies
     public ArrayList<Zombie> zombieToRemove(){
         ArrayList<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
@@ -145,7 +146,7 @@ public class GameLogic {
         }
         return peaPlants;
     }
-
+    //add sun flowers
     public ArrayList<SunFlower> sunFlowers(){
         ArrayList<SunFlower> sunFlowers = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -155,7 +156,7 @@ public class GameLogic {
         }
         return sunFlowers;
     }
-
+    //lose logic
     public boolean checkLose() {
         for(Zombie zombie : zombies) {
             if(zombie.getCol()  < 0) {
@@ -164,7 +165,7 @@ public class GameLogic {
         }
         return false;
     }
-
+    //win logic
     public boolean checkWin() {
         return zombies.isEmpty() && GlobalState.gameTime >= 140000;
     }
@@ -173,6 +174,7 @@ public class GameLogic {
         pottedPlants[row][col] = null;
     }
 
+    //getters
     public ArrayList<Zombie> getZombies() {
         return zombies;
     }
