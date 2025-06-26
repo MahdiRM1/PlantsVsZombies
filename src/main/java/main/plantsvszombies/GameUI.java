@@ -31,27 +31,21 @@ public class GameUI {
     private final StackPane mainPane = new StackPane();
     private final BorderPane bPane = new BorderPane();
     private final Pane pane = new Pane();
-    private final GridPane gPane = new GridPane();
     private final ArrayList<Card> cards = new ArrayList<>();
-    private ScoreBoard scoreBoard;
-    private Timeline tl;
-    static int selectedButton = -1;
+    private final ScoreBoard scoreBoard;
     private final Stage stage;
-    private final ArrayList<String> plantsName;
+    private Timeline tl;
     private Scene scene;
+    public static int selectedButton = -1;
 
     // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state){
         this.stage = stage;
         gameLogic = new GameLogic(setPottedPlants(state.getPlants()), state.getZombies());
-        plantsName = new ArrayList<>();
-        GlobalState.gameTime = state.getTime();
-        for (CardData data : state.getCards()) {
-            cards.add(new Card(data));
-            plantsName.add(data.getPlantName());
-        }
-        initializeStackPane(cardBar(plantsName));
+        for (CardData data : state.getCards()) cards.add(new Card(data));
+        initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(bPane, state.getScore());
+        GlobalState.gameTime = state.getTime();
         loadBPane();
         loadPane();
         startGame();
@@ -60,13 +54,14 @@ public class GameUI {
     //constructor: to start a new game
     public GameUI(Stage stage, ArrayList<String> plantsName){
         this.stage = stage;
-        this.plantsName = plantsName;
         gameLogic = new GameLogic();
-        initializeStackPane(cardBar(plantsName));
+        for (int i = 0; i < 6; i++)  cards.add(new Card(plantsName.get(i), i));
+        initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(bPane, 100);
         GlobalState.gameTime = 0;
         startGame();
     }
+
     //manages the start of the game
     public void startGame(){
         tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
@@ -95,6 +90,14 @@ public class GameUI {
         mainPane.getChildren().add(buttonsPane());
     }
 
+    //generate card bar
+    private HBox cardBar(){
+        HBox cardBar = new HBox(0);
+        for (int i = 0; i < 6; i++) cardBar.getChildren().add(cards.get(i).getBtn());
+        cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
+        return cardBar;
+    }
+
     private void loadBPane(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 9; j++) {
@@ -102,17 +105,6 @@ public class GameUI {
                 if(plant != null) bPane.getChildren().add(plant.getGif());
             }
         }
-    }
-
-    //generate card bar
-    private HBox cardBar(ArrayList<String> plants){
-        HBox cardBar = new HBox(0);
-        for (int i = 0; i < 6; i++) {
-            cards.add(new Card(plants.get(i), i));
-            cardBar.getChildren().add(cards.get(i).getBtn());
-        }
-        cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
-        return cardBar;
     }
 
     private void loadPane() {
@@ -123,8 +115,10 @@ public class GameUI {
             }
         }
     }
+
     //generate game map
     private GridPane map(){
+        GridPane gPane = new GridPane();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 gPane.add(mapButtons(row, col), col, row);
@@ -133,6 +127,7 @@ public class GameUI {
         gPane.setPadding(new Insets(0,0,Constants.height/16,Constants.height/2.6));
         return gPane;
     }
+
     //generate mapButtons and control planting visuals
     private Button mapButtons(int row, int col){
         Button btn = new Button();
@@ -142,24 +137,20 @@ public class GameUI {
         btn.setOnAction(event -> {
             Plant plant = getPlant(row, col);
             if(plant != null) {
-<<<<<<< HEAD
-                //change the name of purchase plant: probably
-                if(scoreBoard.purchasePlant(plant.getPrice()) && gameLogic.setPlant(row, col, plant)) {
-=======
                 if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
                     gameLogic.setPlant(row, col, plant);
->>>>>>> 5f5dd381175d8f2abc224f2d17494cdf19fbc2a9
                     cards.get(selectedButton).updateLastSelected();
                     bPane.getChildren().add(plant.getGif());
                     btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
                 }
                 else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
             }else if (selectedButton == 6) {
-                useShovel(row, col);
+                if(!gameLogic.isPlantable(row, col)) useShovel(row, col);
+                else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
                 Pane buttons = (Pane)mainPane.getChildren().getLast();
                 ImageView shovelBack = ((ImageView)buttons.getChildren().getLast());
                 shovelBack.setEffect(null);
-                ((Pane) mainPane.getChildren().getLast()).getChildren().add(shovelImage());
+                buttons.getChildren().add(shovelImage());
                 scene.setCursor(Cursor.DEFAULT);
                 selectedButton = -1;
             }
@@ -292,7 +283,7 @@ public class GameUI {
 
     private Plant getPlant(int row, int col){
         if (selectedButton < 0 || selectedButton > 5) return null;
-        return getPlant(row,col, plantsName.get(selectedButton));
+        return getPlant(row,col, cards.get(selectedButton).getPlantName());
     }
 
     private Plant getPlant(int row, int col, String selectedPlant) {
