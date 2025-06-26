@@ -45,7 +45,7 @@ public abstract class Zombie {
         state = ZombieState.WALKING;
         freezeTime = -5000;
     }
-
+//name change for boolean
     public void damage(boolean isFreezing){
         if(isFreezing) freezeTime = GlobalState.gameTime;
         HP -= 20;

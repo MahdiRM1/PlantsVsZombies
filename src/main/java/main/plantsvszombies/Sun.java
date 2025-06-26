@@ -38,6 +38,7 @@ public class Sun {
         maxY = Constants.sunMaxY(type);
     }
 
+    //manages fallen sun movements
     public void moveSun(){
         if(picture.getLayoutY() < maxY) {
             picture.setLayoutY(picture.getLayoutY() + 3);
@@ -45,6 +46,7 @@ public class Sun {
         }
     }
 
+    //getters
     public ImageView getPicture() {
         return picture;
     }

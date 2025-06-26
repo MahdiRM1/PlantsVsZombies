@@ -8,5 +8,6 @@ public abstract class BombPlant extends Plant{
         super(row, col);
     }
 
-    public abstract boolean boooooom(ArrayList<Zombie> zombies);
+    //manage explosion caused by bomb plants
+    public abstract boolean explosion(ArrayList<Zombie> zombies);
 }

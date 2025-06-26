@@ -18,6 +18,7 @@ public class GameState implements Serializable {
         time = GlobalState.gameTime;
     }
 
+    //saves plant data
     private void getPlants(Plant[][] pottedPlants){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 9; j++) {
@@ -29,6 +30,7 @@ public class GameState implements Serializable {
         }
     }
 
+    //saves zombie data
     private void getZombies(ArrayList<Zombie> zombies){
         for (Zombie z : zombies){
             ZombieData zombieData = new ZombieData(z);
@@ -36,6 +38,7 @@ public class GameState implements Serializable {
         }
     }
 
+    //saves card data
     private void getCards(ArrayList<Card> cards){
         for (Card c : cards){
             CardData cardData = new CardData(c);
@@ -43,6 +46,7 @@ public class GameState implements Serializable {
         }
     }
 
+    //getters
     public ArrayList<PlantData> getPlants() {
         return plants;
     }

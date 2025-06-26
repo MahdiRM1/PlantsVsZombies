@@ -19,6 +19,7 @@ public class SnowPea extends PeaPlant{
         lastSelection = GlobalState.gameTime;
     }
 
+    //effect to turn the snow bullets blue
     private Effect iceEffect(){
         ColorAdjust blueTone = new ColorAdjust();
         blueTone.setHue(0.6);

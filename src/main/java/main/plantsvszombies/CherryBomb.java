@@ -14,7 +14,7 @@ public class CherryBomb extends BombPlant{
     }
 
     @Override
-    public boolean boooooom(ArrayList<Zombie> zombies) {
+    public boolean explosion(ArrayList<Zombie> zombies) {
         if(Math.abs(GlobalState.gameTime - timeCreated) <= 1000) return false;
         for (Zombie z : zombies){
             if(z.getRow() >= row - 1 && z.getRow() <= row + 1

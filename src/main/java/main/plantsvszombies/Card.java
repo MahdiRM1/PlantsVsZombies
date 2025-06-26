@@ -33,6 +33,7 @@ public class Card {
         btn = cardButton(index);
     }
 
+    //recharge time of each plant
     public int rechargeTime(){
         int rechargePlant;
         switch (plantName) {
@@ -49,6 +50,7 @@ public class Card {
         return rechargePlant * 1000 ;
     }
 
+    //generate buttons for plant cards
     private Button cardButton(int index){
         Button btn = new Button();
         btn.setGraphic(Constants.setCard(plantName));
@@ -81,6 +83,7 @@ public class Card {
         return btn;
     }
 
+    //check recharge logic
     public void rechargeCheck(){
         double rechargeCheck = (double) (GlobalState.gameTime - lastSelected) / rechargeTime;
         ImageView imageView = (ImageView) btn.getGraphic();
@@ -94,20 +97,19 @@ public class Card {
         }
     }
 
+    //recharge visual effects
     private Effect rechargeCardEffect(double recharge){
         ColorAdjust choose = new ColorAdjust();
         choose.setBrightness(-1.0 + recharge);
         return choose;
     }
 
-    public Button getBtn() {
-        return btn;
-    }
 
     public void updateLastSelected() {
         lastSelected = GlobalState.gameTime;
     }
 
+    //getters
     public String getPlantName() {
         return plantName;
     }
@@ -122,5 +124,9 @@ public class Card {
 
     public int getIndex() {
         return index;
+    }
+
+    public Button getBtn() {
+        return btn;
     }
 }
