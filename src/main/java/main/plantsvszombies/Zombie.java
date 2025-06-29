@@ -5,8 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-enum ZombieState{ WALKING, EATING, BOOM_DIE, DIE, DEAD }
-
 public abstract class Zombie {
 
     protected int HP;
@@ -45,9 +43,10 @@ public abstract class Zombie {
         state = ZombieState.WALKING;
         freezeTime = -5000;
     }
+
 //name change for boolean
-    public void damage(boolean isFreezing){
-        if(isFreezing) freezeTime = GlobalState.gameTime;
+    public void damage(BulletType bulletType){
+        if(bulletType == BulletType.ICE_BULLET) freezeTime = GlobalState.gameTime;
         HP -= 20;
     }
 

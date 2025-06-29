@@ -2,28 +2,6 @@ package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
 
-enum SunType{
-    FALLEN,
-    STABLE();
-
-    private int row, col;
-
-    public SunType setCoordination(int row, int col){
-        SunType type = STABLE;
-        this.row = row;
-        this.col = col;
-        return type;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-}
-
 public class Sun {
 
     private final ImageView picture;

@@ -30,7 +30,7 @@ public final class Constants {
     }
 
     public static ImageView setCard(String plantName){
-        ImageView picture = new ImageView(new Image("file:Pictures/plantPictures/dayTime/" + plantName + "Image.jpg"));
+        ImageView picture = new ImageView(new Image("file:Pictures/plantPictures/" + plantName + "Image.jpg"));
         picture.setFitWidth(PLANT_CARD_WIDTH);
         picture.setFitHeight(PLANT_CARD_HEIGHT);
         return picture;
@@ -57,35 +57,34 @@ public final class Constants {
     }
 
     public static ImageView setPlantPicture(String plantName, int row, int col){
-        ImageView picture = new ImageView(new Image("file:Pictures/plantsGifs/DayTime/" + plantName + ".gif"));
+        ImageView picture = new ImageView(new Image("file:Pictures/plantsGifs/" + plantName + ".gif"));
         picture.setFitWidth(TILE_SIZE * 0.8);
         picture.setLayoutX((height / 2.5) + (col * TILE_SIZE));
         if(plantName.equals("TallNut")) {
             picture.setFitHeight(TILE_SIZE * 1.2);
-            picture.setLayoutY((height / 4.3) + ((row - 0.5) * 0.9 * TILE_SIZE));
+            picture.setLayoutY((height / 4.5) + ((row - 0.5) * TILE_SIZE));
         }
         else {
-            picture.setLayoutY((height / 4.3) + ((row * 0.9) * TILE_SIZE));
+            picture.setLayoutY((height / 4.5) + (row * TILE_SIZE));
             picture.setFitHeight(TILE_SIZE * 0.8);
         }
         return picture;
     }
 
-    public static ImageView setBulletPicture(int row, int col, boolean isIceBullet){
-        ImageView picture;
-        if(!isIceBullet) picture = new ImageView(new Image("file:Pictures/bullets/normalBullet.png"));
-        else picture = new ImageView(new Image("file:Pictures/bullets/iceBullet.png"));
+    public static ImageView setBulletPicture(int row, int col, BulletType bulletType){
+        ImageView picture = new ImageView(new Image("file:Pictures/bullets/" + bulletType.toString() + ".png"));
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        picture.setLayoutY(height - ((5-row) * 0.9 * TILE_SIZE) - (height/8));
+        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((5-row) * TILE_SIZE));
+        else picture.setLayoutY(height - ((5-row) * TILE_SIZE) - (height/15));
         return picture;
     }
 
     public static void setZombiePicture(ImageView picture, int row){
         picture.setFitWidth(ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(height - picture.getFitHeight() - ((4-row) * 0.9 * TILE_SIZE) - (height/9));
+        picture.setLayoutY(height - picture.getFitHeight() - ((4-row) * TILE_SIZE) - (height/10));
         picture.setLayoutX(width);
     }
 
