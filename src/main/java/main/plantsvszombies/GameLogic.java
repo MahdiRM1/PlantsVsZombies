@@ -5,6 +5,7 @@ public class GameLogic {
     private final Plant[][] pottedPlants;
     private final ArrayList<Zombie> zombies = new ArrayList<>();
     private final ArrayList<Bullet> bullets = new ArrayList<>();
+    CoffeeBean coffeeBean;
 // constructor: to load the previously saved game
     public GameLogic(Plant[][] pottedPlants, ArrayList<ZombieData> zombieData){
         this.pottedPlants = pottedPlants;
@@ -67,7 +68,7 @@ public class GameLogic {
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
                     if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
-                        z.damage(bullets.get(i).isIceBullet());
+                        z.damage(bullets.get(i).getType());
                         bulletToRemove.add(bullets.get(i));
                         bullets.remove(i);
                         break;
@@ -85,12 +86,14 @@ public class GameLogic {
         } catch (ArrayIndexOutOfBoundsException e) {}
         return null;
     }
+
     //finds and removes finished plants
     public ArrayList<Plant> plantsToRemove() {
         ArrayList<Plant> plantsToRemove = new ArrayList<>();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
+                    if(coffeeBean.action()) plantsToRemove.add(coffeeBean);
                     if(pottedPlants[row][col] instanceof BombPlant bomb){
                         if(bomb.explosion(zombies)) {
                             plantsToRemove.add(bomb);
@@ -107,6 +110,7 @@ public class GameLogic {
         }
         return plantsToRemove;
     }
+
     //sets the state of zombies
     public void setZombieState(){
         for(Zombie zombie : zombies){
@@ -124,6 +128,7 @@ public class GameLogic {
             else zombie.setState(ZombieState.WALKING);
         }
     }
+
     //finds and removes dead zombies
     public ArrayList<Zombie> zombieToRemove(){
         ArrayList<Zombie> died = new ArrayList<>();
@@ -138,17 +143,18 @@ public class GameLogic {
 
     public ArrayList<PeaPlant> plantsAligned() {
         ArrayList<PeaPlant> peaPlants = new ArrayList<>();
-        for (Zombie z : zombies){
-            if(z.getCol() > 9) break;
-            for (int i = 0; i <= z.getCol(); i++) {
-                try {
-                    if(pottedPlants[z.getRow()][i] instanceof PeaPlant pea) peaPlants.add(pea);
-                }catch (ArrayIndexOutOfBoundsException e){}
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 9; col++) {
+             try {
+                 if (pottedPlants[row][col] instanceof PeaPlant peaPlant)
+                     if (peaPlant.canShoot(zombies)) peaPlants.add(peaPlant);
+             }catch (NullPointerException e){}
             }
         }
         return peaPlants;
     }
-    //add sun flowers
+
+    //add sunFlowers
     public ArrayList<SunFlower> sunFlowers(){
         ArrayList<SunFlower> sunFlowers = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -158,6 +164,7 @@ public class GameLogic {
         }
         return sunFlowers;
     }
+
     //lose logic
     public boolean checkLose() {
         for(Zombie zombie : zombies) {
@@ -167,6 +174,7 @@ public class GameLogic {
         }
         return false;
     }
+
     //win logic
     public boolean checkWin() {
         return zombies.isEmpty() && GlobalState.gameTime >= 140000;

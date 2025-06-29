@@ -36,12 +36,14 @@ public class GameUI {
     private final Stage stage;
     private Timeline tl;
     private Scene scene;
+    private GameMode mode;
     public static int selectedButton = -1;
 
     // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state){
         this.stage = stage;
         gameLogic = new GameLogic(setPottedPlants(state.getPlants()), state.getZombies());
+        this.mode = state.getMode();
         for (CardData data : state.getCards()) cards.add(new Card(data));
         initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(bPane, state.getScore());
@@ -52,12 +54,13 @@ public class GameUI {
     }
 
     //constructor: to start a new game
-    public GameUI(Stage stage, ArrayList<String> plantsName){
+    public GameUI(Stage stage, ArrayList<String> plantsName, GameMode mode){
         this.stage = stage;
         gameLogic = new GameLogic();
+        this.mode = mode;
         for (int i = 0; i < 6; i++)  cards.add(new Card(plantsName.get(i), i));
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(bPane, 100);
+        scoreBoard = new ScoreBoard(bPane, 1000);
         GlobalState.gameTime = 0;
         startGame();
     }
@@ -81,7 +84,10 @@ public class GameUI {
 
 
     private void initializeStackPane(HBox cardBar){
-        bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
+        switch (mode){
+            case DAY -> bPane.getChildren().add(Constants.setBackGround("backGroundDay"));
+            case NIGHT -> bPane.getChildren().add(Constants.setBackGround("backGroundNight"));
+        }
         bPane.setBottom(map());
         bPane.setTop(cardBar);
         pane.setMouseTransparent(true);
@@ -137,7 +143,13 @@ public class GameUI {
         btn.setOnAction(event -> {
             Plant plant = getPlant(row, col);
             if(plant != null) {
-                if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
+                if(plant instanceof CoffeeBean coffeeBean){
+                    gameLogic.coffeeBean = coffeeBean;
+                    cards.get(selectedButton).updateLastSelected();
+                    bPane.getChildren().add(plant.getGif());
+                    btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
+                }
+                else if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
                     gameLogic.setPlant(row, col, plant);
                     cards.get(selectedButton).updateLastSelected();
                     bPane.getChildren().add(plant.getGif());
@@ -224,7 +236,7 @@ public class GameUI {
         gameLogic.removePlant(row, col);
     }
 
-    //generate the menu pain
+    //generate the menu pane
     private void menu(){
         Pane menuPane = new Pane();
 
@@ -312,6 +324,14 @@ public class GameUI {
             case "Jalapeno" -> {
                 return new Jalapeno(row, col);
             }
+            case "PuffShroom" -> {
+                return new PuffShroom(row, col, mode);
+            }
+            case "CoffeeBean" -> {
+                if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())
+                    return new CoffeeBean(row, col, shroom);
+                else return null;
+            }
             case null, default -> {
                 return null;
             }
@@ -345,7 +365,7 @@ public class GameUI {
         }
 
     }
-    //removes garbage images of striked bullets,dead zombies and eaten plants
+    //removes garbage images of struck bullets,dead zombies and eaten plants
     private void garbageImages(){
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
@@ -430,7 +450,7 @@ public class GameUI {
 
     //saves the game
     public void save(){
-        GameState state = new GameState(gameLogic, cards, scoreBoard.getScore());
+        GameState state = new GameState(gameLogic, cards, scoreBoard.getScore(), mode);
 
         try (ObjectOutputStream out = new ObjectOutputStream(
                 new FileOutputStream("savegame.dat"))) {

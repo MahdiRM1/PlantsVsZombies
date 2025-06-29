@@ -9,12 +9,14 @@ public class GameState implements Serializable {
     private ArrayList<CardData> cards = new ArrayList<>();
     private int score;
     private long time;
+    private GameMode mode;
 
-    public GameState(GameLogic logic, ArrayList<Card> cards, int score){
+    public GameState(GameLogic logic, ArrayList<Card> cards, int score, GameMode mode){
         getPlants(logic.getPottedPlants());
         getZombies(logic.getZombies());
         getCards(cards);
         this.score = score;
+        this.mode = mode;
         time = GlobalState.gameTime;
     }
 
@@ -65,5 +67,9 @@ public class GameState implements Serializable {
 
     public long getTime() {
         return time;
+    }
+
+    public GameMode getMode() {
+        return mode;
     }
 }

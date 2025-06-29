@@ -17,6 +17,7 @@ public class Introduction {
     private Stage stage;
     private final ArrayList<String> selectedCards = new ArrayList<>();
     private HBox cardBar;
+    private GameMode mode;
 
     public void firstPage(Stage stage){
         this.stage = stage;
@@ -38,7 +39,10 @@ public class Introduction {
 
     public void chooseCardPage(){
         Pane pane = new Pane();
-        pane.getChildren().addFirst(Constants.setBackGround("plantSelectionBG"));
+        switch (mode){
+            case DAY -> pane.getChildren().addFirst(Constants.setBackGround("plantSelectionDay"));
+            case NIGHT -> pane.getChildren().addFirst(Constants.setBackGround("plantSelectionNight"));
+        }
 
         cardBar = new HBox(0);
         cardBar.setLayoutX(Constants.height/5.2);
@@ -53,11 +57,17 @@ public class Introduction {
                 getCardButton("CherryBomb") ,getCardButton("Jalapeno")
         );
 
+        HBox box3 = new HBox(Constants.height/20,
+                getCardButton("PuffShroom"), getCardButton("CoffeeBean")
+        );
+
         box1.setLayoutX(Constants.height/7.5);
         box2.setLayoutX(Constants.height/7.5);
+        box3.setLayoutX(Constants.height/7.5);
         box1.setLayoutY(Constants.height/4);
         box2.setLayoutY(Constants.height/2.5);
-        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box1, box2, startGameBtn());
+        box3.setLayoutY(Constants.height/1.8);
+        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box1, box2, box3, startGameBtn());
         for (int i = 0; i < 8; i++) pane.getChildren().add(addZombie());
         Scene scene = new Scene(pane, Constants.width, Constants.height - 35);
         stage.setScene(scene);
@@ -97,7 +107,7 @@ public class Introduction {
         btn.setLayoutX(Constants.width/5.65);
         btn.setLayoutY(Constants.height/1.12);
         btn.setOnAction(event -> {
-            if (selectedCards.size() == 6) new GameUI(stage, selectedCards);
+            if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
         });
         return btn;
     }
@@ -175,12 +185,18 @@ public class Introduction {
         pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
         double firstX = Constants.width/1.97, firstY = Constants.height/8, diffY = Constants.height/5, diffX = Constants.height/100;
         ImageView adventure = initializeImageViews("Adventure", Constants.height/1.4, Constants.height/4.2);
-        adventure.setOnMouseClicked(event -> chooseCardPage());
+        adventure.setOnMouseClicked(event -> {
+            mode = GameMode.DAY;
+            chooseCardPage();
+        });
         adventure.setLayoutX(firstX);
         adventure.setLayoutY(firstY);
 
         ImageView newGame = initializeImageViews("NewGame", Constants.height/1.45, Constants.height/4.35);
-        newGame.setOnMouseClicked(event -> chooseCardPage());
+        newGame.setOnMouseClicked(event -> {
+            mode = GameMode.NIGHT;
+            chooseCardPage();
+        });
         newGame.setLayoutX(firstX - 2);
         newGame.setLayoutY(firstY + diffY);
 

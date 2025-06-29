@@ -16,7 +16,6 @@ public abstract class Plant {
         this.timeCreated = GlobalState.gameTime;
         gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
         gif.setMouseTransparent(true);
-        setLastSelection(GlobalState.gameTime);
     }
 
     public void damage(){
@@ -30,9 +29,6 @@ public abstract class Plant {
     public void resetDamageCaused(){
         damageCaused = 0;
     }
-
-    public abstract long getLastSelection();
-    public abstract void setLastSelection(long lastSelection);
 
     public ImageView getGif() {
         return gif;

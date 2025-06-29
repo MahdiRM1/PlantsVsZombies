@@ -2,16 +2,17 @@ package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
 
+
 public class Bullet {
 
     private final int row;
     private final ImageView picture;
-    private final boolean iceBullet;
+    private final BulletType type;
 
-    public Bullet(int row, int col, boolean isFreezeShot) {
+    public Bullet(int row, int col, BulletType type) {
         this.row = row;
-        picture = Constants.setBulletPicture(row, col, isFreezeShot);
-        iceBullet = isFreezeShot;
+        picture = Constants.setBulletPicture(row, col, type);
+        this.type = type;
     }
 
     //manage bullet movement
@@ -30,7 +31,7 @@ public class Bullet {
         return row;
     }
 
-    public boolean isIceBullet(){
-        return iceBullet;
+    public BulletType getType() {
+        return type;
     }
 }

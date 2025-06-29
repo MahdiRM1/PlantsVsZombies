@@ -2,8 +2,6 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-enum NutState{FULL_LIFE, HALF_LIFE, END_LIFE}
-
 public abstract class NutPlant extends Plant{
 
     private NutState state;
