@@ -73,6 +73,7 @@ public class GameUI {
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
+        zombieGetter(0, 2);
         scene = new Scene(mainPane, Constants.width, Constants.height - 35);
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
@@ -326,6 +327,11 @@ public class GameUI {
             }
             case "PuffShroom" -> {
                 return new PuffShroom(row, col, mode);
+            }
+            case "ScaredyShroom" -> {
+                return new ScaredyShroom(row, col, mode);
+            }case "IceShroom" -> {
+                return new IceShroom(row, col, mode);
             }
             case "CoffeeBean" -> {
                 if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())

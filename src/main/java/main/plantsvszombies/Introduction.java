@@ -58,7 +58,8 @@ public class Introduction {
         );
 
         HBox box3 = new HBox(Constants.height/20,
-                getCardButton("PuffShroom"), getCardButton("CoffeeBean")
+                getCardButton("PuffShroom"), getCardButton("CoffeeBean"),
+                getCardButton("ScaredyShroom"), getCardButton("IceShroom")
         );
 
         box1.setLayoutX(Constants.height/7.5);

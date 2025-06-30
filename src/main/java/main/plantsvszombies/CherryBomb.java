@@ -15,19 +15,8 @@ public class CherryBomb extends BombPlant{
     }
 
     @Override
-//    public boolean explosion(ArrayList<Zombie> zombies) {
-//        if(Math.abs(GlobalState.gameTime - timeCreated) <= 1000) return false;
-//        for (Zombie z : zombies){
-//            if(z.getRow() >= row - 1 && z.getRow() <= row + 1
-//            &&  z.getCol() >= col - 1 && z.getCol() <= col + 1) {
-//                z.setState(ZombieState.BOOM_DIE);
-//            }
-//        }
-//        return true;
-//    }
-
     public boolean explosion(ArrayList<Zombie> zombies) {
-        if(Math.abs(GlobalState.gameTime - timeCreated) == 800){
+        if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
             gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
             for (Zombie z : zombies){
                 if(z.getRow() >= row - 1 && z.getRow() <= row + 1
@@ -36,7 +25,7 @@ public class CherryBomb extends BombPlant{
                 }
             }
         }
-        else return Math.abs(GlobalState.gameTime - timeCreated) == 1700;
+        else return Math.abs(GlobalState.gameTime - timeCreated) == 2000;
         return false;
     }
 }

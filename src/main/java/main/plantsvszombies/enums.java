@@ -2,7 +2,7 @@ package main.plantsvszombies;
 
 enum GameMode{DAY, NIGHT}
 
-enum ZombieState{ WALKING, EATING, BOOM_DIE, DIE, DEAD }
+enum ZombieState{ WALKING, EATING, FREEZE, BOOM_DIE, DIE, DEAD }
 
 enum NutState{FULL_LIFE, HALF_LIFE, END_LIFE}
 

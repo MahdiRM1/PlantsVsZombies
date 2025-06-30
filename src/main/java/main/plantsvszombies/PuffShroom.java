@@ -8,17 +8,21 @@ public class PuffShroom extends PeaPlant implements Shroom{
 
     public static final int recharge = 10;
     private boolean isSleep;
+    private static final Image sleepImage;
+    private static final Image normalImage;
+
+    static {
+        sleepImage = new Image("file:Pictures/plantsGifs/PuffShroomSleep.gif");
+        normalImage = new Image("file:Pictures/plantsGifs/PuffShroom.gif");
+    }
 
     public PuffShroom(int row, int col, GameMode mode){
         super(row, col);
         price = 0;
         HP = 100;
         bulletType = BulletType.SHROOM_BULLET;
-        if(mode == GameMode.DAY) {
-            gif.setImage(new Image("file:Pictures/plantsGifs/PuffShroomSleep.gif"));
-            isSleep = true;
-        }
-        else isSleep = false;
+        isSleep = setIsSleep(mode);
+        gif.setImage((isSleep) ? sleepImage : normalImage);
     }
 
     @Override
@@ -32,7 +36,7 @@ public class PuffShroom extends PeaPlant implements Shroom{
     @Override
     public void wakeUp() {
         isSleep = false;
-        gif.setImage(new Image("file:Pictures/plantsGifs/PuffShroom.gif"));
+        gif.setImage(normalImage);
     }
 
     @Override

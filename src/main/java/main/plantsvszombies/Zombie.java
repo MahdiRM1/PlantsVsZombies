@@ -46,8 +46,12 @@ public abstract class Zombie {
 
 //name change for boolean
     public void damage(BulletType bulletType){
-        if(bulletType == BulletType.ICE_BULLET) freezeTime = GlobalState.gameTime;
+        if(bulletType == BulletType.ICE_BULLET) updateFreezeTime();
         HP -= 20;
+    }
+
+    public void updateFreezeTime(){
+        freezeTime = GlobalState.gameTime;
     }
 
     public void action(){
@@ -59,6 +63,12 @@ public abstract class Zombie {
                 case WALKING -> walk();
                 case EATING -> eatPlant();
                 case DIE -> dieAnimation();
+                case FREEZE -> {
+                    if (Math.abs(GlobalState.gameTime - freezeTime) == 5000) {
+                        freezeTime = GlobalState.gameTime;
+                        state = ZombieState.WALKING;
+                    }
+                }
             }
         }
         else{
