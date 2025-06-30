@@ -2,7 +2,7 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Jalapeno extends BombPlant{
 
@@ -15,7 +15,7 @@ public class Jalapeno extends BombPlant{
     }
 
     @Override
-    public boolean explosion(ArrayList<Zombie> zombies) {
+    public boolean explosion(List<Zombie> zombies) {
         if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
             gif.setImage(new Image("file:Pictures/plantsGifs/JalapenoAttack.gif"));
             gif.setFitWidth(Constants.TILE_SIZE * 9);

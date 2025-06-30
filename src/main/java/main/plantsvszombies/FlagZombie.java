@@ -23,6 +23,10 @@ public class FlagZombie extends OriginalZombie{
         }
     }
 
+    public FlagZombie(ZombieData data){
+        super(data);
+    }
+
     public  FlagZombie(int row){
         super(row);
     }

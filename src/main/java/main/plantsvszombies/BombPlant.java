@@ -1,6 +1,6 @@
 package main.plantsvszombies;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BombPlant extends Plant{
 
@@ -9,5 +9,5 @@ public abstract class BombPlant extends Plant{
     }
 
     //manage explosion caused by bomb plants
-    public abstract boolean explosion(ArrayList<Zombie> zombies);
+    public abstract boolean explosion(List<Zombie> zombies);
 }

@@ -1,6 +1,7 @@
 package main.plantsvszombies;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PeaPlant extends Plant{
 
@@ -12,7 +13,7 @@ public abstract class PeaPlant extends Plant{
         lastShoot = timeCreated;
     }
 
-    public boolean canShoot(ArrayList<Zombie> zombies){
+    public boolean canShoot(List<Zombie> zombies){
         for (Zombie z : zombies)
             if (row == z.getRow() && z.getCol() < 10) return true;
         return false;

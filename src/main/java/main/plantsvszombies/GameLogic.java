@@ -1,41 +1,35 @@
 package main.plantsvszombies;
 
 import java.util.ArrayList;
+import java.util.List;
+
 public class GameLogic {
     private final Plant[][] pottedPlants;
-    private final ArrayList<Zombie> zombies = new ArrayList<>();
-    private final ArrayList<Bullet> bullets = new ArrayList<>();
+    private final List<Zombie> zombies = new ArrayList<>();
+    private final List<Bullet> bullets = new ArrayList<>();
     CoffeeBean coffeeBean;
-// constructor: to load the previously saved game
-    public GameLogic(Plant[][] pottedPlants, ArrayList<ZombieData> zombieData){
+
+    //constructor: to load the previously saved game
+    public GameLogic(Plant[][] pottedPlants, List<ZombieData> zombieData){
         this.pottedPlants = pottedPlants;
-        for (ZombieData data : zombieData) {
-            Zombie zombie = zombieReload(data);
-            zombies.add(zombie);
-        }
+        for (ZombieData data : zombieData) zombies.add(zombieReload(data));
     }
-//constructor: to start a new game
+
+    //constructor: to start a new game
     public GameLogic(){
-        pottedPlants = new Plant[5][9];
+        pottedPlants = new Plant[Constants.ROWS][Constants.COLS];
     }
 
     //read zombies to reload a saved game
     private Zombie zombieReload(ZombieData data){
-        switch (data.getType()){
-            case "OriginalZombie" -> {
-                return new OriginalZombie(data);
-            }
-            case "ConeheadZombie" -> {
-                return new ConeheadZombie(data);
-            }
-            case "BucketheadZombie" -> {
-                return new BucketheadZombie(data);
-            }
-            case "Imp" -> {
-                return new Imp(data);
-            }
-        }
-        return null;
+        return switch (data.getType()){
+            case "OriginalZombie" -> new OriginalZombie(data);
+            case "ConeheadZombie" -> new ConeheadZombie(data);
+            case "BucketheadZombie" -> new BucketheadZombie(data);
+            case "Imp" -> new Imp(data);
+            case "FlagZombie" -> new FlagZombie(data);
+            default -> null;
+        };
     }
 
     public boolean isPlantable(int i, int j){
@@ -57,8 +51,8 @@ public class GameLogic {
     }
 
     //manages bullets and zombie collisions.
-    public ArrayList<Bullet> checkBulletStrike(){
-        ArrayList<Bullet> bulletToRemove = new ArrayList<>();
+    public List<Bullet> checkBulletStrike(){
+        List<Bullet> bulletToRemove = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
             if (bullets.get(i).getPicture().getLayoutX() > Constants.width) {
                 bulletToRemove.add(bullets.get(i));
@@ -71,7 +65,7 @@ public class GameLogic {
                             && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
                         z.damage(bullets.get(i).getType());
                         bulletToRemove.add(bullets.get(i));
-                        bullets.remove(i);
+                        bullets.remove(i--);
                         break;
                     }
                 }
@@ -81,24 +75,22 @@ public class GameLogic {
     }
 
     //finds and removes finished plants
-    public ArrayList<Plant> plantsToRemove() {
-        ArrayList<Plant> plantsToRemove = new ArrayList<>();
+    public List<Plant> plantsToRemove() {
+        List<Plant> plantsToRemove = new ArrayList<>();
         if (coffeeBean != null && coffeeBean.action()) plantsToRemove.add(coffeeBean);
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 9; col++) {
-                try{
-                    if(pottedPlants[row][col] instanceof BombPlant bomb){
-                        if(bomb.explosion(zombies)) {
-                            plantsToRemove.add(bomb);
-                            pottedPlants[row][col] = null;
-                        }
-                    }
-                    else if (pottedPlants[row][col].getHP() <= 0) {
-                        plantsToRemove.add(pottedPlants[row][col]);
-                        pottedPlants[row][col] = null;
-                    }
-                    else if (pottedPlants[row][col] instanceof NutPlant nut) nut.updateState();
-                }catch (NullPointerException e) {}
+        for (int row = 0; row < Constants.ROWS; row++) {
+            for (int col = 0; col < Constants.COLS; col++) {
+                Plant plant = pottedPlants[row][col];
+                if (plant == null) continue;
+                if(plant instanceof BombPlant bomb && bomb.explosion(zombies)){
+                    plantsToRemove.add(bomb);
+                    pottedPlants[row][col] = null;
+                }
+                else if (plant.getHP() <= 0) {
+                    plantsToRemove.add(plant);
+                    pottedPlants[row][col] = null;
+                }
+                else if (plant instanceof NutPlant nut) nut.updateState();
             }
         }
         return plantsToRemove;
@@ -106,42 +98,41 @@ public class GameLogic {
 
     //sets the state of zombies
     public void setZombieState(){
-        for(Zombie zombie : zombies){
+        for(Zombie zombie : zombies)
             zombie.updateState(pottedPlants);
-        }
     }
 
     //finds and removes dead zombies
-    public ArrayList<Zombie> zombieToRemove(){
-        ArrayList<Zombie> died = new ArrayList<>();
+    public List<Zombie> zombieToRemove(){
+        List<Zombie> died = new ArrayList<>();
         for (int i = 0; i < zombies.size(); i++) {
             if(zombies.get(i).getState() == ZombieState.DEAD) {
                 died.add(zombies.get(i));
-                zombies.remove(i);
+                zombies.remove(i--);
             }
         }
         return died;
     }
 
-    public ArrayList<PeaPlant> plantsAligned() {
-        ArrayList<PeaPlant> peaPlants = new ArrayList<>();
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 9; col++) {
-             try {
-                 if (pottedPlants[row][col] instanceof PeaPlant peaPlant)
-                     if (peaPlant.canShoot(zombies)) peaPlants.add(peaPlant);
-             }catch (NullPointerException e){}
+    public List<PeaPlant> plantsAligned() {
+        List<PeaPlant> peaPlants = new ArrayList<>();
+        for (int row = 0; row < Constants.ROWS; row++) {
+            for (int col = 0; col < Constants.COLS; col++) {
+                Plant plant = pottedPlants[row][col];
+                 if (plant instanceof PeaPlant peaPlant && peaPlant.canShoot(zombies))
+                     peaPlants.add(peaPlant);
             }
         }
         return peaPlants;
     }
 
     //add sunFlowers
-    public ArrayList<SunFlower> sunFlowers(){
-        ArrayList<SunFlower> sunFlowers = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
-                if(pottedPlants[i][j] instanceof SunFlower) sunFlowers.add((SunFlower) pottedPlants[i][j]);
+    public List<SunFlower> sunFlowers(){
+        List<SunFlower> sunFlowers = new ArrayList<>();
+        for (int i = 0; i < Constants.ROWS; i++) {
+            for (int j = 0; j < Constants.COLS; j++) {
+                if(pottedPlants[i][j] instanceof SunFlower sunFlower)
+                    sunFlowers.add(sunFlower);
             }
         }
         return sunFlowers;
@@ -167,11 +158,11 @@ public class GameLogic {
     }
 
     //getters
-    public ArrayList<Zombie> getZombies() {
+    public List<Zombie> getZombies() {
         return zombies;
     }
 
-    public ArrayList<Bullet> getBullets() {
+    public List<Bullet> getBullets() {
         return bullets;
     }
 

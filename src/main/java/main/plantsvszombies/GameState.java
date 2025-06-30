@@ -2,16 +2,17 @@ package main.plantsvszombies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameState implements Serializable {
-    private ArrayList<PlantData> plants = new ArrayList<>();
-    private ArrayList<ZombieData> zombies = new ArrayList<>();
-    private ArrayList<CardData> cards = new ArrayList<>();
-    private int score;
-    private long time;
-    private GameMode mode;
+    private final List<PlantData> plants = new ArrayList<>();
+    private final List<ZombieData> zombies = new ArrayList<>();
+    private final List<CardData> cards = new ArrayList<>();
+    private final int score;
+    private final long time;
+    private final GameMode mode;
 
-    public GameState(GameLogic logic, ArrayList<Card> cards, int score, GameMode mode){
+    public GameState(GameLogic logic, List<Card> cards, int score, GameMode mode){
         getPlants(logic.getPottedPlants());
         getZombies(logic.getZombies());
         getCards(cards);
@@ -33,7 +34,7 @@ public class GameState implements Serializable {
     }
 
     //saves zombie data
-    private void getZombies(ArrayList<Zombie> zombies){
+    private void getZombies(List<Zombie> zombies){
         for (Zombie z : zombies){
             ZombieData zombieData = new ZombieData(z);
             this.zombies.add(zombieData);
@@ -41,7 +42,7 @@ public class GameState implements Serializable {
     }
 
     //saves card data
-    private void getCards(ArrayList<Card> cards){
+    private void getCards(List<Card> cards){
         for (Card c : cards){
             CardData cardData = new CardData(c);
             this.cards.add(cardData);
@@ -49,15 +50,15 @@ public class GameState implements Serializable {
     }
 
     //getters
-    public ArrayList<PlantData> getPlants() {
+    public List<PlantData> getPlants() {
         return plants;
     }
 
-    public ArrayList<ZombieData> getZombies() {
+    public List<ZombieData> getZombies() {
         return zombies;
     }
 
-    public ArrayList<CardData> getCards() {
+    public List<CardData> getCards() {
         return cards;
     }
 

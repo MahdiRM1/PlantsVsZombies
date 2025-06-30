@@ -60,6 +60,7 @@ public abstract class Zombie {
             if(GlobalState.gameTime % 100 != 0) return;
             picture.setEffect(iceEffect());
             switch (state) {
+
                 case WALKING -> walk();
                 case EATING -> eatPlant();
                 case DIE -> dieAnimation();
@@ -69,6 +70,7 @@ public abstract class Zombie {
                         state = ZombieState.WALKING;
                     }
                 }
+
             }
         }
         else{
@@ -144,14 +146,18 @@ public abstract class Zombie {
     }
 
     public void updateState(Plant[][] pottedPlants){
-        Plant plant = plantCollision(pottedPlants);
-        if(state == ZombieState.DIE || state == ZombieState.DEAD || state == ZombieState.BOOM_DIE);
-        else if(HP <= 0) {
+
+        if(state == ZombieState.DIE || state == ZombieState.DEAD || state == ZombieState.BOOM_DIE) return;
+
+        if(HP <= 0) {
             if(state == ZombieState.EATING) plantToEat.resetDamageCaused();
             state = ZombieState.DIE;
             nowPic = 0;
+            return;
         }
-        else if(plant != null) {
+
+        Plant plant = plantCollision(pottedPlants);
+        if(plant != null) {
             state = ZombieState.EATING;
             plantToEat = plant;
         }

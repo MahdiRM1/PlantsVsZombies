@@ -2,7 +2,7 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class IceShroom extends BombPlant implements Shroom{
 
@@ -27,7 +27,7 @@ public class IceShroom extends BombPlant implements Shroom{
     }
 
     @Override
-    public boolean explosion(ArrayList<Zombie> zombies) {
+    public boolean explosion(List<Zombie> zombies) {
         if(isSleep){
             wakeUpTime = GlobalState.gameTime;
             return false;
