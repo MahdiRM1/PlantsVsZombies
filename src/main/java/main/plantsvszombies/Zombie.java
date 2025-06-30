@@ -64,7 +64,7 @@ public abstract class Zombie {
                 case EATING -> eatPlant();
                 case DIE -> dieAnimation();
                 case FREEZE -> {
-                    if (Math.abs(GlobalState.gameTime - freezeTime) == 5000) {
+                    if (Math.abs(GlobalState.gameTime - freezeTime) >= 4950) {
                         freezeTime = GlobalState.gameTime;
                         state = ZombieState.WALKING;
                     }
@@ -127,16 +127,38 @@ public abstract class Zombie {
         }
     }
 
-    public void setPlantToEat(Plant plantToEat) {
-        this.plantToEat = plantToEat;
-    }
-
     protected abstract Image[] getWalkImage();
     protected abstract Image[] getEatImage();
     protected abstract Image[] getDieImage();
 
     public Plant getPlant(){
         return plantToEat;
+    }
+
+    //checks if a zombie has reached a plant
+    private Plant plantCollision(Plant[][] pottedPlants){
+        try {
+            if (pottedPlants[row][col] != null) return pottedPlants[row][col];
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        return null;
+    }
+
+    public void updateState(Plant[][] pottedPlants){
+        Plant plant = plantCollision(pottedPlants);
+        if(state == ZombieState.DIE || state == ZombieState.DEAD || state == ZombieState.BOOM_DIE);
+        else if(HP <= 0) {
+            if(state == ZombieState.EATING) plantToEat.resetDamageCaused();
+            state = ZombieState.DIE;
+            nowPic = 0;
+        }
+        else if(plant != null) {
+            state = ZombieState.EATING;
+            plantToEat = plant;
+        }
+        else {
+            if (state != ZombieState.FREEZE)
+                state = ZombieState.WALKING;
+        }
     }
 
     public void setState(ZombieState state) {

@@ -67,7 +67,8 @@ public class GameLogic {
             }
             for (Zombie z : zombies){
                 if(z.getRow() == bullets.get(i).getRow()){
-                    if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20) {
+                    if(Math.abs(bullets.get(i).getPicture().getLayoutX() - 2 * bullets.get(i).getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20
+                            && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
                         z.damage(bullets.get(i).getType());
                         bulletToRemove.add(bullets.get(i));
                         bullets.remove(i);
@@ -77,14 +78,6 @@ public class GameLogic {
             }
         }
         return bulletToRemove;
-    }
-
-    //checks if a zombie has reached a plant
-    private Plant plantZombieCollision(Zombie z){
-        try{
-            if (pottedPlants[z.getRow()][z.getCol()] != null) return pottedPlants[z.getRow()][z.getCol()];
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        return null;
     }
 
     //finds and removes finished plants
@@ -114,21 +107,7 @@ public class GameLogic {
     //sets the state of zombies
     public void setZombieState(){
         for(Zombie zombie : zombies){
-            Plant plant = plantZombieCollision(zombie);
-            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD ||
-                    zombie.getState() == ZombieState.BOOM_DIE);
-            else if(zombie.getHP() <= 0) {
-                if(zombie.getState() == ZombieState.EATING)
-                    zombie.getPlant().resetDamageCaused();
-                zombie.setState(ZombieState.DIE);
-            }
-            else if(plant != null) {
-                zombie.setState(ZombieState.EATING);
-                zombie.setPlantToEat(plant);
-            }
-            else {
-                if (zombie.getState() != ZombieState.FREEZE)
-                    zombie.setState(ZombieState.WALKING);}
+            zombie.updateState(pottedPlants);
         }
     }
 

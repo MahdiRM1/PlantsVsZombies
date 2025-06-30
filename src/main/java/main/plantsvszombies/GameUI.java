@@ -332,6 +332,8 @@ public class GameUI {
                 return new ScaredyShroom(row, col, mode);
             }case "IceShroom" -> {
                 return new IceShroom(row, col, mode);
+            }case "DoomShroom" -> {
+                return new DoomShroom(row, col, mode);
             }
             case "CoffeeBean" -> {
                 if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())

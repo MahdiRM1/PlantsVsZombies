@@ -19,8 +19,7 @@ public class CherryBomb extends BombPlant{
         if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
             gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
             for (Zombie z : zombies){
-                if(z.getRow() >= row - 1 && z.getRow() <= row + 1
-                        &&  z.getCol() >= col - 1 && z.getCol() <= col + 1) {
+                if(Math.abs(z.getRow() - row) <= 1 &&  Math.abs(z.getCol() - col) <= 1) {
                     z.setState(ZombieState.BOOM_DIE);
                 }
             }

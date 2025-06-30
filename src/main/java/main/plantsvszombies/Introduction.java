@@ -61,14 +61,19 @@ public class Introduction {
                 getCardButton("PuffShroom"), getCardButton("CoffeeBean"),
                 getCardButton("ScaredyShroom"), getCardButton("IceShroom")
         );
+        HBox box4 = new HBox(Constants.height/20,
+                getCardButton("DoomShroom")
+        );
 
         box1.setLayoutX(Constants.height/7.5);
         box2.setLayoutX(Constants.height/7.5);
         box3.setLayoutX(Constants.height/7.5);
+        box4.setLayoutX(Constants.height/7.5);
         box1.setLayoutY(Constants.height/4);
         box2.setLayoutY(Constants.height/2.5);
         box3.setLayoutY(Constants.height/1.8);
-        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box1, box2, box3, startGameBtn());
+        box4.setLayoutY(Constants.height/1.4);
+        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box1, box2, box3, box4, startGameBtn());
         for (int i = 0; i < 8; i++) pane.getChildren().add(addZombie());
         Scene scene = new Scene(pane, Constants.width, Constants.height - 35);
         stage.setScene(scene);

@@ -76,7 +76,7 @@ public final class Constants {
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((5-row) * TILE_SIZE));
+        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((5-row) * TILE_SIZE)- (height/35));
         else picture.setLayoutY(height - ((5-row) * TILE_SIZE) - (height/15));
         return picture;
     }
