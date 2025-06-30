@@ -19,7 +19,7 @@ public class IceShroom extends BombPlant implements Shroom{
 
     public IceShroom(int row, int col, GameMode mode){
         super(row, col);
-        price = 125;
+        price = 75;
         HP = 100;
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);
