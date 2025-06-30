@@ -46,6 +46,8 @@ public class Card {
             case "CherryBomb" -> rechargePlant = CherryBomb.recharge;
             case "Jalapeno" -> rechargePlant = Jalapeno.recharge;
             case "PuffShroom" -> rechargePlant = PuffShroom.recharge;
+            case "ScaredyShroom" -> rechargePlant = ScaredyShroom.recharge;
+            case "IceShroom" -> rechargePlant = IceShroom.recharge;
             case "CoffeeBean" -> rechargePlant = CoffeeBean.recharge;
             default -> rechargePlant = 0;
         }

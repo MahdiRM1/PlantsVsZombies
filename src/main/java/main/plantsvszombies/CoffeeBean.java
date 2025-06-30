@@ -15,11 +15,12 @@ public class CoffeeBean extends Plant{
     }
 
     public boolean action(){
-        if (Math.abs(GlobalState.gameTime - timeCreated) == 1500) {
+        if (Math.abs(GlobalState.gameTime - timeCreated) == 1500)
             gif.setImage(new Image("file:Pictures/plantsGifs/CoffeeBeanEat.gif"));
+        else if (Math.abs(GlobalState.gameTime - timeCreated) == 2700){
             shroom.wakeUp();
+            return true;
         }
-        else if (Math.abs(GlobalState.gameTime - timeCreated) == 2700) return true;
         return false;
     }
 }

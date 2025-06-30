@@ -1,5 +1,7 @@
 package main.plantsvszombies;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 
 public class Jalapeno extends BombPlant{
@@ -14,12 +16,17 @@ public class Jalapeno extends BombPlant{
 
     @Override
     public boolean explosion(ArrayList<Zombie> zombies) {
-        if(Math.abs(GlobalState.gameTime - timeCreated) <= 1000) return false;
-        for (Zombie z : zombies){
-            if(z.getRow() == row) {
-                z.setState(ZombieState.BOOM_DIE);
+        if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
+            gif.setImage(new Image("file:Pictures/plantsGifs/JalapenoAttack.gif"));
+            gif.setFitWidth(Constants.TILE_SIZE * 9);
+            gif.setLayoutX(Constants.height/2.62);
+            for (Zombie z : zombies){
+                if(z.getRow() == row) {
+                    z.setState(ZombieState.BOOM_DIE);
+                }
             }
         }
-        return true;
+        else return Math.abs(GlobalState.gameTime - timeCreated) == 2200;
+        return false;
     }
 }

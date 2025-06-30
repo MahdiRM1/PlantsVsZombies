@@ -90,10 +90,10 @@ public class GameLogic {
     //finds and removes finished plants
     public ArrayList<Plant> plantsToRemove() {
         ArrayList<Plant> plantsToRemove = new ArrayList<>();
+        if (coffeeBean != null && coffeeBean.action()) plantsToRemove.add(coffeeBean);
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 9; col++) {
                 try{
-                    if(coffeeBean.action()) plantsToRemove.add(coffeeBean);
                     if(pottedPlants[row][col] instanceof BombPlant bomb){
                         if(bomb.explosion(zombies)) {
                             plantsToRemove.add(bomb);
@@ -115,7 +115,8 @@ public class GameLogic {
     public void setZombieState(){
         for(Zombie zombie : zombies){
             Plant plant = plantZombieCollision(zombie);
-            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD || zombie.getState() == ZombieState.BOOM_DIE);
+            if(zombie.getState() == ZombieState.DIE || zombie.getState() == ZombieState.DEAD ||
+                    zombie.getState() == ZombieState.BOOM_DIE);
             else if(zombie.getHP() <= 0) {
                 if(zombie.getState() == ZombieState.EATING)
                     zombie.getPlant().resetDamageCaused();
@@ -125,7 +126,9 @@ public class GameLogic {
                 zombie.setState(ZombieState.EATING);
                 zombie.setPlantToEat(plant);
             }
-            else zombie.setState(ZombieState.WALKING);
+            else {
+                if (zombie.getState() != ZombieState.FREEZE)
+                    zombie.setState(ZombieState.WALKING);}
         }
     }
 
