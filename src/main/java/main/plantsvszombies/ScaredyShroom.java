@@ -3,6 +3,7 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScaredyShroom extends PeaPlant implements Shroom{
 
@@ -28,7 +29,7 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
     }
 
     @Override
-    public boolean canShoot(ArrayList<Zombie> zombies){
+    public boolean canShoot(List<Zombie> zombies){
         if(!isSleep) {
             if (isScare(zombies)) return false;
             for (Zombie z : zombies)
@@ -37,7 +38,7 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
         return false;
     }
 
-    private boolean isScare(ArrayList<Zombie> zombies){
+    private boolean isScare(List<Zombie> zombies){
         for (Zombie z : zombies)
             if (Math.abs(z.getRow() - row) < 2 && Math.abs(z.getCol() - col) < 2) {
                 if(!gif.getImage().equals(scareImage)) gif.setImage(scareImage);

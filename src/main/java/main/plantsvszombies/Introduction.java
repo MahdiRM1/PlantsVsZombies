@@ -10,12 +10,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Introduction {
 
     private Stage stage;
-    private final ArrayList<String> selectedCards = new ArrayList<>();
+    private final List<String> selectedCards = new ArrayList<>();
     private HBox cardBar;
     private GameMode mode;
 

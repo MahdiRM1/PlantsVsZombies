@@ -14,6 +14,8 @@ public final class Constants {
     public static final double PLANT_CARD_HEIGHT = height / 7.3;
     public static final double PLANT_CARD_WIDTH = height / 11;
     public static final double SUN_SIZE = height / 8.5;
+    public static final int ROWS = 5;
+    public static final int COLS = 9;
 
     public static ImageView setScoreBoardPicture(){
         ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
@@ -41,7 +43,7 @@ public final class Constants {
         picture.setFitWidth(SUN_SIZE);
         picture.setFitHeight(SUN_SIZE);
         if(type == SunType.FALLEN){
-            picture.setLayoutX(height / 2.62 + TILE_SIZE * 9 * Math.random());
+            picture.setLayoutX(height / 2.62 + TILE_SIZE * COLS * Math.random());
             picture.setLayoutY(0);
         }
         else {
@@ -76,8 +78,8 @@ public final class Constants {
         picture.setFitWidth(BULLET_SIZE);
         picture.setFitHeight(BULLET_SIZE);
         picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((5-row) * TILE_SIZE)- (height/35));
-        else picture.setLayoutY(height - ((5-row) * TILE_SIZE) - (height/15));
+        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((ROWS-row) * TILE_SIZE)- (height/35));
+        else picture.setLayoutY(height - ((ROWS-row) * TILE_SIZE) - (height/15));
         return picture;
     }
 
