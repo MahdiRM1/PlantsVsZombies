@@ -158,6 +158,7 @@ public abstract class Zombie {
 
         Plant plant = plantCollision(pottedPlants);
         if(plant != null) {
+            if (plant instanceof DoomShroom ds && !ds.isSleep()) return;
             state = ZombieState.EATING;
             plantToEat = plant;
         }

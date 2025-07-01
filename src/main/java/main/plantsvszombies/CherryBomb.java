@@ -24,7 +24,6 @@ public class CherryBomb extends BombPlant{
                 }
             }
         }
-        else return Math.abs(GlobalState.gameTime - timeCreated) == 2000;
-        return false;
+        return Math.abs(GlobalState.gameTime - timeCreated) == 2000;
     }
 }

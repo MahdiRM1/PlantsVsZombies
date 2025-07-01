@@ -10,52 +10,65 @@ import javafx.scene.text.FontWeight;
 import java.util.ArrayList;
 
 public class ScoreBoard {
+    private static final int SUN_VALUE = 25;
+    private static final int SUN_LIFE_TIME = 7500;
 
     private int score;
     private final BorderPane pane;
-    private final Label scoreLabel;
+    private Label scoreLabel;
     private final ArrayList<Sun> suns = new ArrayList<>();
 
     public ScoreBoard(BorderPane pane, int score){
         this.pane = pane;
         this.score = score;
+        scoreLabel = createScoreLabel();
+        setScoreBoardOnPane();
+    }
+
+    private void setScoreBoardOnPane(){
         ImageView board = Constants.setScoreBoardPicture();
         pane.getChildren().add(1, board);
-        scoreLabel = new Label(score + "");
-        Font font = Font.font("Arial", FontWeight.BOLD, Constants.height/25.6);
-        scoreLabel.setFont(font);
-        scoreLabel.setTextFill(Color.BLACK);
-        scoreLabel.setPadding(new Insets(-Constants.height/30,0,0,Constants.height/14));
         pane.setLeft(scoreLabel);
     }
 
-    //updates the scoreBoard for sun points
-    public void addSun(Sun s){
-        if(s != null) {
-            ImageView image = s.getPicture();
-            image.setOnMouseClicked(event -> {
-                score += 25;
-                scoreLabel.setText(score + "");
-                pane.getChildren().remove(image);
-                suns.remove(s);
-            });
-            pane.getChildren().add(image);
-            suns.add(s);
-        }
+    private Label createScoreLabel(){
+        Label scoreLabel = new Label(score + "");
+        Font font = Font.font("Arial", FontWeight.BOLD, Constants.SCREEN_HEIGHT/25.6);
+        scoreLabel.setFont(font);
+        scoreLabel.setTextFill(Color.BLACK);
+        scoreLabel.setPadding(new Insets(-Constants.SCREEN_HEIGHT/30,0,0,Constants.SCREEN_WIDTH/26.3));
+        return scoreLabel;
     }
 
-    public void sunHandler(){
+    //updates the scoreBoard for sun points
+    public void addSun(Sun sun){
+        if(sun == null) return;
+
+        ImageView sunImage = sun.getPicture();
+        sunImage.setOnMouseClicked(event -> collectSun(sun));
+        pane.getChildren().add(sunImage);
+        suns.add(sun);
+    }
+
+    private void collectSun(Sun sun){
+        score += SUN_VALUE;
+        scoreLabel.setText(score + "");
+        pane.getChildren().remove(sun.getPicture());
+        suns.remove(sun);
+    }
+
+    public void handleSuns(){
         sunDrop();
-        garbageSuns();
+        cleanUpSuns();
         fallenSun();
     }
 
     //removes unclicked suns after time window is up
-    private void garbageSuns(){
-        for (int i = 0; i < suns.size(); i++) {
-            if(Math.abs(suns.get(i).getTimeCreated() - GlobalState.gameTime) >= 5000) {
-                pane.getChildren().remove(suns.get(i).getPicture());
-                suns.remove(i);
+    private void cleanUpSuns(){
+        for (Sun sun : suns) {
+            if (Math.abs(sun.getTimeCreated() - GlobalState.gameTime) >= SUN_LIFE_TIME) {
+                pane.getChildren().remove(sun.getPicture());
+                suns.remove(sun);
             }
         }
     }
@@ -64,7 +77,7 @@ public class ScoreBoard {
         for (Sun s : suns) s.moveSun();
     }
 
-    //manage fallen sun movemnt
+    //manage fallen sun movement
     private void sunDrop(){
         if(GlobalState.gameTime % 10000 == 0){
             Sun s = new Sun(SunType.FALLEN);
@@ -74,12 +87,11 @@ public class ScoreBoard {
 
     //checks if a plant can be purchased
     public boolean purchasePlant(int price) {
-        if(score >= price){
-            score -= price;
-            scoreLabel.setText(score + "");
-            return true;
-        }
-        return false;
+        if(score < price) return false;
+
+        score -= price;
+        scoreLabel.setText(score + "");
+        return true;
     }
 
     public int getScore() {

@@ -30,14 +30,14 @@ public class GameUI {
 
     private final GameLogic gameLogic;
     private final StackPane mainPane = new StackPane();
-    private final BorderPane bPane = new BorderPane();
+    private final BorderPane borderPane = new BorderPane();
     private final Pane pane = new Pane();
     private final List<Card> cards = new ArrayList<>();
     private final ScoreBoard scoreBoard;
     private final Stage stage;
     private Timeline tl;
     private Scene scene;
-    private GameMode mode;
+    private final GameMode mode;
     public static int selectedButton = -1;
 
     // constructor: to load the previously saved game
@@ -47,7 +47,7 @@ public class GameUI {
         this.mode = state.getMode();
         for (CardData data : state.getCards()) cards.add(new Card(data));
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(bPane, state.getScore());
+        scoreBoard = new ScoreBoard(borderPane, state.getScore());
         GlobalState.gameTime = state.getTime();
         loadPlants();
         loadZombies();
@@ -59,9 +59,9 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic();
         this.mode = mode;
-        for (int i = 0; i < 6; i++)  cards.add(new Card(plantsName.get(i), i));
+        for (int i = 0; i < plantsName.size(); i++)  cards.add(new Card(plantsName.get(i), i));
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(bPane, 1000);
+        scoreBoard = new ScoreBoard(borderPane, 1000);
         GlobalState.gameTime = 0;
         startGame();
     }
@@ -75,7 +75,7 @@ public class GameUI {
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
         spawnZombie(0, 2);
-        scene = new Scene(mainPane, Constants.width, Constants.height - 35);
+        scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
             save();
@@ -86,19 +86,19 @@ public class GameUI {
 
 
     private void initializeStackPane(HBox cardBar){
-        bPane.getChildren().add(Constants.setBackGround(
+        borderPane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "backGroundDay" : "backGroundNight"));
-        bPane.setTop(cardBar);
-        bPane.setBottom(map());
+        borderPane.setTop(cardBar);
+        borderPane.setBottom(map());
         pane.setMouseTransparent(true);
-        mainPane.getChildren().addAll(bPane, pane, buttonsPane());
+        mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
     }
 
     //generate card bar
     private HBox cardBar(){
         HBox cardBar = new HBox(0);
         for (Card card : cards) cardBar.getChildren().add(card.getBtn());
-        cardBar.setPadding(new Insets(Constants.height/50, 0, 0, Constants.height/5.2));
+        cardBar.setPadding(new Insets(Constants.CARD_BAR_Y, 0, 0, Constants.CARD_BAR_X));
         return cardBar;
     }
 
@@ -106,7 +106,7 @@ public class GameUI {
         for (int i = 0; i < Constants.ROWS; i++) {
             for (int j = 0; j < Constants.COLS; j++) {
                 Plant plant = gameLogic.getPottedPlants()[i][j];
-                if(plant != null) bPane.getChildren().add(plant.getGif());
+                if(plant != null) borderPane.getChildren().add(plant.getGif());
             }
         }
     }
@@ -128,7 +128,7 @@ public class GameUI {
                 grid.add(mapButtons(row, col), col, row);
             }
         }
-        grid.setPadding(new Insets(0, 0, Constants.height / 16, Constants.height / 2.6));
+        grid.setPadding(new Insets(0, 0, Constants.SCREEN_WIDTH / 30, Constants.SCREEN_HEIGHT / 2.6));
         return grid;
     }
 
@@ -147,10 +147,10 @@ public class GameUI {
 
     private void handleMapClick(int row, int col, Button btn){
         if (selectedButton < 0)
-            btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-        else if (selectedButton < 6)
+            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        else if (selectedButton < cards.size())
             handlePlanting(row, col, btn);
-        else if (selectedButton == 6) {
+        else if (selectedButton == cards.size()) {
              useShovel(row, col, btn);
         }
     }
@@ -169,9 +169,9 @@ public class GameUI {
 
         if (placed) {
             cards.get(selectedButton).updateLastSelected();
-            bPane.getChildren().add(plant.getGif());
-            btn.setOnMouseClicked(event1 -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
-        } else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+            borderPane.getChildren().add(plant.getGif());
+            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
+        } else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         cards.get(selectedButton).getBtn().setStyle("-fx-background-color: transparent;");
         selectedButton = -1;
@@ -179,12 +179,12 @@ public class GameUI {
 
     //manage shovel visuals
     private void useShovel(int row, int col, Button btn) {
-        if(!gameLogic.isPlantable(row, col)){
-            Plant plant = gameLogic.getPottedPlants()[row][col];
-            bPane.getChildren().remove(plant.getGif());
+        Plant plant = gameLogic.getPottedPlants()[row][col];
+        if(!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())){
+            borderPane.getChildren().remove(plant.getGif());
             gameLogic.removePlant(row, col);
         }
-        else btn.setOnMouseClicked(event2 -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         Pane buttons = (Pane)mainPane.getChildren().getLast();
         ImageView shovelBack = ((ImageView)buttons.getChildren().getLast());
@@ -199,7 +199,7 @@ public class GameUI {
         Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
 
-        ImageView menu = setButton("MenuBtn", Constants.height/5, Constants.height/16);
+        ImageView menu = setButton("MenuBtn", Constants.SCREEN_WIDTH/9.4, Constants.SCREEN_HEIGHT/16);
         menu.setOnMouseClicked(event -> {
             tl.pause();
             menu();
@@ -211,7 +211,7 @@ public class GameUI {
         shovelBack.setOnMouseClicked(event -> shovelButtonClick(shovel, shovelBack, cursor));
 
         shovelBack.setLayoutX(shovel.getLayoutX());
-        menu.setLayoutX(Constants.width - menu.getFitWidth());
+        menu.setLayoutX(Constants.SCREEN_WIDTH - menu.getFitWidth());
 
         buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
         return buttonsPane;
@@ -219,9 +219,9 @@ public class GameUI {
 
     private void shovelButtonClick(ImageView shovel, ImageView shovelBack, Cursor cursor){
         Pane buttonsPane = (Pane)(mainPane.getChildren().getLast());
-        if (selectedButton != 6) {
+        if (selectedButton != cards.size()) {
             scene.setCursor(cursor);
-            selectedButton = 6;
+            selectedButton = cards.size();
             buttonsPane.getChildren().removeLast();
             ColorAdjust choose = new ColorAdjust(); choose.setBrightness(-0.5);
             shovelBack.setEffect(choose);
@@ -236,9 +236,9 @@ public class GameUI {
 
     //add shovel image
     private ImageView shovelImage(){
-        ImageView shovel = setButton("shovel", Constants.height/10, Constants.height/10);
+        ImageView shovel = setButton("shovel", Constants.SCREEN_WIDTH/19, Constants.SCREEN_HEIGHT/10);
         shovel.setMouseTransparent(true);
-        shovel.setLayoutX(Constants.width/2.1);
+        shovel.setLayoutX(Constants.SCREEN_WIDTH/2.1);
         return shovel;
     }
 
@@ -247,27 +247,27 @@ public class GameUI {
         Pane menuPane = new Pane();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView backToMenu = setButton("MainMenuBtn", Constants.height/5, Constants.height/18);
-        backToMenu.setLayoutX(Constants.width/2.7);
-        backToMenu.setLayoutY(Constants.height/1.62);
+        ImageView backToMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH/9.4, Constants.SCREEN_HEIGHT/18);
+        backToMenu.setLayoutX(Constants.SCREEN_WIDTH/2.7);
+        backToMenu.setLayoutY(Constants.SCREEN_HEIGHT/1.62);
         backToMenu.setOnMouseClicked(event -> {
             save();
             new Introduction().firstPage(stage);
         });
 
-        ImageView backToGame = setButton("BackToGame", Constants.height/5, Constants.height/18);
-        backToGame.setLayoutX(Constants.width/1.95);
-        backToGame.setLayoutY(Constants.height/1.62);
+        ImageView backToGame = setButton("BackToGame", Constants.SCREEN_WIDTH/9.4, Constants.SCREEN_HEIGHT/18);
+        backToGame.setLayoutX(Constants.SCREEN_WIDTH/1.95);
+        backToGame.setLayoutY(Constants.SCREEN_HEIGHT/1.62);
         backToGame.setOnMouseClicked(event -> {
             tl.play();
             mainPane.getChildren().removeLast();
         });
 
         ImageView menuPic = new ImageView(new Image("file:Pictures/ui/menu.png"));
-        menuPic.setLayoutX(Constants.width/3);
-        menuPic.setLayoutY(Constants.height/4.8);
-        menuPic.setFitWidth(Constants.width/3);
-        menuPic.setFitHeight(Constants.height/2);
+        menuPic.setLayoutX(Constants.SCREEN_WIDTH/3);
+        menuPic.setLayoutY(Constants.SCREEN_HEIGHT/4.8);
+        menuPic.setFitWidth(Constants.SCREEN_WIDTH/3);
+        menuPic.setFitHeight(Constants.SCREEN_HEIGHT/2);
 
         menuPane.getChildren().addAll(menuPic, backToMenu, backToGame);
         mainPane.getChildren().add(menuPane);
@@ -276,20 +276,11 @@ public class GameUI {
     //generate buttons -> visuals
     private ImageView setButton(String text, double width, double height){
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
-        imageView.setFitHeight(height);
         imageView.setFitWidth(width);
-        imageView.setOnMouseEntered(e -> changeScaleImage(imageView, 1.1));
-        imageView.setOnMouseExited(e -> changeScaleImage(imageView, 1/1.1));
+        imageView.setFitHeight(height);
+        imageView.setOnMouseEntered(e -> Constants.changeScale(imageView, 1.1));
+        imageView.setOnMouseExited(e -> Constants.changeScale(imageView, 1/1.1));
         return imageView;
-    }
-
-    private void changeScaleImage(ImageView imageView, double resize){
-        double differentX = imageView.getFitWidth() * resize - imageView.getFitWidth();
-        double differentY = imageView.getFitHeight() * resize - imageView.getFitHeight();
-        imageView.setFitWidth(imageView.getFitWidth() * resize);
-        imageView.setFitHeight(imageView.getFitHeight() * resize);
-        imageView.setLayoutX(imageView.getLayoutX() - differentX/2);
-        imageView.setLayoutY(imageView.getLayoutY() - differentY/2);
     }
 
     private Plant getPlant(int row, int col){
@@ -354,14 +345,14 @@ public class GameUI {
         for (Zombie zombie : gameLogic.zombieToRemove())
             pane.getChildren().remove(zombie.getPicture());
         for (Plant plantToRemove : gameLogic.plantsToRemove())
-            bPane.getChildren().remove(plantToRemove.getGif());
+            borderPane.getChildren().remove(plantToRemove.getGif());
     }
 
     private void characterActions(){
         for(Zombie z : gameLogic.getZombies()) z.action();
         for(Bullet b : gameLogic.getBullets()) b.move();
         gameLogic.setZombieState();
-        scoreBoard.sunHandler();
+        scoreBoard.handleSuns();
     }
 
     private void addObjectImages(){

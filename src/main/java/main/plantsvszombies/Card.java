@@ -61,28 +61,29 @@ public class Card {
         btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
-            if(canChoose){
-                if (GameUI.selectedButton >= 0 && GameUI.selectedButton < 6) {
-                    HBox cardBar = (HBox) btn.getParent();
-                    Button lastBtnSelected = ((Button) cardBar.getChildren().get(GameUI.selectedButton));
-                    lastBtnSelected.setStyle("-fx-background-color: transparent");
-                }
-                if (GameUI.selectedButton != index) {
-                    GameUI.selectedButton = index;
-                } else {
-                    GameUI.selectedButton = -1;
-                    btn.setStyle("-fx-background-color: transparent");
-                }
+            if(!canChoose) return;
+
+            if (GameUI.selectedButton >= 0 && GameUI.selectedButton < 6) {
+                HBox cardBar = (HBox) btn.getParent();
+                Button lastBtnSelected = ((Button) cardBar.getChildren().get(GameUI.selectedButton));
+                lastBtnSelected.setStyle("-fx-background-color: transparent");
+            }
+
+            if (GameUI.selectedButton != index) {
+                GameUI.selectedButton = index;
+            } else {
+                GameUI.selectedButton = -1;
+                btn.setStyle("-fx-background-color: transparent");
             }
         });
         btn.setOnMouseEntered(event -> {
             if (canChoose) btn.setStyle("-fx-background-color: rgb(62, 177, 235);");
         });
         btn.setOnMouseClicked(event -> {
-            if (canChoose) btn.setStyle("-fx-background-color: rgb(62, 177, 235);");
+            if (canChoose) btn.setStyle("-fx-background-color: rgb(174, 255, 174);");
         });
         btn.setOnMouseExited(e -> {
-            if(GameUI.selectedButton == index) btn.setStyle("-fx-background-color: rgb(62, 177, 235)");
+            if(GameUI.selectedButton == index) btn.setStyle("-fx-background-color: rgb(174, 255, 174)");
             else btn.setStyle("-fx-background-color: transparent");
         });
         return btn;

@@ -2,7 +2,6 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PuffShroom extends PeaPlant implements Shroom{
@@ -28,10 +27,11 @@ public class PuffShroom extends PeaPlant implements Shroom{
 
     @Override
     public boolean canShoot(List<Zombie> zombies){
-        if(!isSleep)
-            for (Zombie z : zombies)
-                if (row == z.getRow() && z.getCol() - col < 4) return true;
-        return false;
+        if(isSleep) return false;
+
+        for (Zombie z : zombies)
+            if (row == z.getRow() && z.getCol() - col < 4) return true;
+        return true;
     }
 
     @Override

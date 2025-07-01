@@ -22,7 +22,7 @@ public class Bullet {
         }
     }
 
-    //gettters
+    //getters
     public ImageView getPicture() {
         return picture;
     }

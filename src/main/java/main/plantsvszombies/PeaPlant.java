@@ -1,6 +1,5 @@
 package main.plantsvszombies;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PeaPlant extends Plant{
