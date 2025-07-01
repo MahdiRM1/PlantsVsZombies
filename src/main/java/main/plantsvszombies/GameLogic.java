@@ -27,8 +27,7 @@ public class GameLogic {
             case "ConeheadZombie" -> new ConeheadZombie(data);
             case "BucketheadZombie" -> new BucketheadZombie(data);
             case "Imp" -> new Imp(data);
-            case "FlagZombie" -> new FlagZombie(data);
-            default -> null;
+            default -> new FlagZombie(data);
         };
     }
 
@@ -54,9 +53,9 @@ public class GameLogic {
     public List<Bullet> checkBulletStrike(){
         List<Bullet> bulletToRemove = new ArrayList<>();
         for(int i = 0; i < bullets.size(); i++){
-            if (bullets.get(i).getPicture().getLayoutX() > Constants.width) {
+            if (bullets.get(i).getPicture().getLayoutX() > Constants.SCREEN_WIDTH) {
                 bulletToRemove.add(bullets.get(i));
-                bullets.remove(i);
+                bullets.remove(i--);
                 continue;
             }
             for (Zombie z : zombies){
@@ -77,19 +76,27 @@ public class GameLogic {
     //finds and removes finished plants
     public List<Plant> plantsToRemove() {
         List<Plant> plantsToRemove = new ArrayList<>();
-        if (coffeeBean != null && coffeeBean.action()) plantsToRemove.add(coffeeBean);
+
+        if (coffeeBean != null && coffeeBean.action()) {
+            plantsToRemove.add(coffeeBean);
+            coffeeBean = null;
+        }
+
         for (int row = 0; row < Constants.ROWS; row++) {
             for (int col = 0; col < Constants.COLS; col++) {
                 Plant plant = pottedPlants[row][col];
                 if (plant == null) continue;
+
                 if(plant instanceof BombPlant bomb && bomb.explosion(zombies)){
                     plantsToRemove.add(bomb);
                     pottedPlants[row][col] = null;
                 }
+
                 else if (plant.getHP() <= 0) {
                     plantsToRemove.add(plant);
                     pottedPlants[row][col] = null;
                 }
+
                 else if (plant instanceof NutPlant nut) nut.updateState();
             }
         }
@@ -150,7 +157,7 @@ public class GameLogic {
 
     //win logic
     public boolean checkWin() {
-        return zombies.isEmpty() && GlobalState.gameTime >= 140000;
+        return zombies.isEmpty() && GlobalState.gameTime >= 140_000;
     }
 
     public void removePlant(int row , int col) {

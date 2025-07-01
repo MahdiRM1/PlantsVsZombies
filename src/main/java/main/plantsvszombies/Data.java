@@ -3,15 +3,17 @@ package main.plantsvszombies;
 import java.io.Serializable;
 
 class PlantData implements Serializable {
-    private String type;
-    private int row, col;
-    private double HP;
+    private final String type;
+    private final int row, col;
+    private final double HP;
+    private final boolean isSleep;
 
     public PlantData(Plant plant){
         type = plant.getClass().getSimpleName();
         row = plant.getRow();
         col = plant.getCol();
         HP = plant.getHP();
+        isSleep = !(plant instanceof Shroom s) || s.isSleep();
     }
 
     public String getType() {
@@ -29,13 +31,17 @@ class PlantData implements Serializable {
     public double getHP() {
         return HP;
     }
+
+    public boolean isSleep() {
+        return isSleep;
+    }
 }
 
 class ZombieData implements Serializable {
-    private String type;
-    private int row;
-    private double picLayoutX;
-    private int HP;
+    private final String type;
+    private final int row;
+    private final double picLayoutX;
+    private final int HP;
 
     public ZombieData(Zombie zombie){
         type = zombie.getClass().getSimpleName();
@@ -62,10 +68,10 @@ class ZombieData implements Serializable {
 }
 
 class CardData implements Serializable {
-    private String plantName;
-    private int rechargeTime;
-    private long lastSelected;
-    private int index;
+    private final String plantName;
+    private final int rechargeTime;
+    private final long lastSelected;
+    private final int index;
 
     public CardData(Card card){
         plantName = card.getPlantName();

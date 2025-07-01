@@ -1,100 +1,120 @@
 package main.plantsvszombies;
 
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Screen;
 
 public final class Constants {
-    public static final double width = Screen.getPrimary().getVisualBounds().getWidth();
-    public static final double height = Screen.getPrimary().getVisualBounds().getHeight();
-    public static final double TILE_SIZE = height / 7.1;
-    public static final double ZOMBIE_PIC_HEIGHT = height / 4;
-    public static final double ZOMBIE_PIC_WEIGHT = height / 5;
-    public static final double BULLET_SIZE = height / 21.5;
-    public static final double PLANT_CARD_HEIGHT = height / 7.3;
-    public static final double PLANT_CARD_WIDTH = height / 11;
-    public static final double SUN_SIZE = height / 8.5;
+    public static final double SCREEN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
+    public static final double SCREEN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
+
+    public static final double TILE_SIZE = SCREEN_HEIGHT / 7.1;
+    public static final double ZOMBIE_PIC_HEIGHT = SCREEN_HEIGHT / 4;
+    public static final double ZOMBIE_PIC_WEIGHT = SCREEN_WIDTH / 9.4;
+    public static final double BULLET_SIZE = SCREEN_HEIGHT / 21.5;
+    public static final double PLANT_CARD_HEIGHT = SCREEN_HEIGHT / 7.3;
+    public static final double PLANT_CARD_WIDTH = SCREEN_WIDTH / 20.6;
+    public static final double SUN_SIZE = SCREEN_HEIGHT / 8.5;
+
     public static final int ROWS = 5;
     public static final int COLS = 9;
 
+    public static final double BOARD_X = SCREEN_WIDTH / 4.6;
+    public static final double BOARD_Y = SCREEN_HEIGHT / 4.5;
+    public static final double CARD_BAR_X = SCREEN_WIDTH / 9.75;
+    public static final double CARD_BAR_Y = SCREEN_HEIGHT / 50;
+
     public static ImageView setScoreBoardPicture(){
-        ImageView board = new ImageView(new Image("file:Pictures/ScoreBoard/ChooserBackground.png"));
-        board.setFitWidth(height);
-        board.setFitHeight(height/5);
-        return board;
+        return createImageView("Pictures/ScoreBoard/ChooserBackground.png",
+                SCREEN_WIDTH/1.87, SCREEN_HEIGHT/5);
     }
 
     public static ImageView setBackGround(String str){
-        ImageView bg = new ImageView(new Image("file:Pictures/backGround/" + str + ".jpg"));
-        bg.setFitHeight(height - 35);
-        bg.setFitWidth(width);
-        return bg;
+        return createImageView("Pictures/backGround/" + str + ".jpg",
+                SCREEN_WIDTH, SCREEN_HEIGHT - 35);
     }
 
     public static ImageView setCard(String plantName){
-        ImageView picture = new ImageView(new Image("file:Pictures/plantPictures/" + plantName + "Image.jpg"));
-        picture.setFitWidth(PLANT_CARD_WIDTH);
-        picture.setFitHeight(PLANT_CARD_HEIGHT);
-        return picture;
+        return createImageView("Pictures/plantPictures/" + plantName + "Image.jpg",
+                PLANT_CARD_WIDTH, PLANT_CARD_HEIGHT);
     }
 
     public static ImageView setSunPicture(SunType type){
-        ImageView picture = new ImageView(new Image("file:Pictures/sun/sun.png"));
-        picture.setFitWidth(SUN_SIZE);
-        picture.setFitHeight(SUN_SIZE);
+        ImageView sun = createImageView("Pictures/sun/sun.png",
+                SUN_SIZE, SUN_SIZE);
         if(type == SunType.FALLEN){
-            picture.setLayoutX(height / 2.62 + TILE_SIZE * COLS * Math.random());
-            picture.setLayoutY(0);
+            sun.setLayoutX(BOARD_X + TILE_SIZE * COLS * Math.random());
+            sun.setLayoutY(0);
+        } else {
+            sun.setLayoutX(type.getCol() * (TILE_SIZE + 5) + BOARD_X);
+            sun.setLayoutY(BOARD_Y + (type.getRow() * TILE_SIZE));
         }
-        else {
-            picture.setLayoutX(type.getCol() * (TILE_SIZE + 5) + (height / 2.6));
-            picture.setLayoutY(height - ((6 - type.getRow()) * TILE_SIZE) + (height / 14));
-        }
-        return picture;
+        return sun;
     }
 
     public static double sunMaxY(SunType type){
-        if(type == SunType.FALLEN) return height - (height/12.8) - (TILE_SIZE * 5 * Math.random());
-        else return height - ((6 - type.getRow()) * TILE_SIZE) + (height / 8);
+        return (type == SunType.FALLEN) ?
+                BOARD_Y + (TILE_SIZE * 5 * Math.random()) :
+                BOARD_Y + (type.getRow() * TILE_SIZE) + (SCREEN_HEIGHT / 12);
     }
 
     public static ImageView setPlantPicture(String plantName, int row, int col){
-        ImageView picture = new ImageView(new Image("file:Pictures/plantsGifs/" + plantName + ".gif"));
-        picture.setFitWidth(TILE_SIZE * 0.8);
-        picture.setLayoutX((height / 2.5) + (col * TILE_SIZE));
-        if(plantName.equals("TallNut")) {
-            picture.setFitHeight(TILE_SIZE * 1.2);
-            picture.setLayoutY((height / 4.5) + ((row - 0.5) * TILE_SIZE));
-        }
-        else {
-            picture.setLayoutY((height / 4.5) + (row * TILE_SIZE));
-            picture.setFitHeight(TILE_SIZE * 0.8);
-        }
-        return picture;
+        ImageView plant = createImageView("Pictures/plantsGifs/" + plantName + ".gif",
+                TILE_SIZE * 0.8,
+                plantName.equals("TallNut") ? TILE_SIZE * 1.2 : TILE_SIZE * 0.8);
+        plant.setLayoutX(BOARD_X + (col * TILE_SIZE));
+        plant.setLayoutY(plantName.equals("TallNut") ?
+                (BOARD_Y) + ((row - 0.5) * TILE_SIZE) :
+                (BOARD_Y) + (row * TILE_SIZE));
+        return plant;
     }
 
     public static ImageView setBulletPicture(int row, int col, BulletType bulletType){
-        ImageView picture = new ImageView(new Image("file:Pictures/bullets/" + bulletType.toString() + ".png"));
-        picture.setFitWidth(BULLET_SIZE);
-        picture.setFitHeight(BULLET_SIZE);
-        picture.setLayoutX((col*TILE_SIZE) + height/2.1);
-        if (bulletType == BulletType.SHROOM_BULLET) picture.setLayoutY(height - ((ROWS-row) * TILE_SIZE)- (height/35));
-        else picture.setLayoutY(height - ((ROWS-row) * TILE_SIZE) - (height/15));
-        return picture;
+        ImageView bullet = createImageView("Pictures/bullets/" + bulletType.toString() + ".png",
+                BULLET_SIZE, BULLET_SIZE);
+        bullet.setLayoutX((col*TILE_SIZE) + SCREEN_WIDTH/3.94);
+        bullet.setLayoutY(bulletType == BulletType.SHROOM_BULLET ?
+                BOARD_Y + ((row + 0.3) * TILE_SIZE) :
+                BOARD_Y + ((row + 0.1) * TILE_SIZE));
+        return bullet;
     }
 
     public static void setZombiePicture(ImageView picture, int row){
         picture.setFitWidth(ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(ZOMBIE_PIC_HEIGHT);
-        picture.setLayoutY(height - picture.getFitHeight() - ((4-row) * TILE_SIZE) - (height/10));
-        picture.setLayoutX(width);
+        picture.setLayoutY(SCREEN_HEIGHT - picture.getFitHeight() - ((4-row) * TILE_SIZE) - (SCREEN_HEIGHT/10));
+        picture.setLayoutX(SCREEN_WIDTH);
     }
 
     public static int getColumnZombie(ImageView picture){
-        double gridStartX = height / 2.5;
-        double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - gridStartX;
-        if(relativeX / TILE_SIZE > 0) return (int)(relativeX / TILE_SIZE);
-        else return -1;
+        double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.5 - BOARD_X;
+        return relativeX > - ZOMBIE_PIC_WEIGHT/4 ? (int)(relativeX / TILE_SIZE) : -1;
+    }
 
+    private static ImageView createImageView(String path, double width, double height){
+        ImageView imageView = new ImageView(new Image("file:" + path));
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        return imageView;
+    }
+
+    public static void changeScale(Node node, double resize){
+        double currentWidth = node.getBoundsInLocal().getWidth();
+        double currentHeight = node.getBoundsInLocal().getHeight();
+
+        double newWidth = currentWidth * resize;
+        double newHeight = currentHeight * resize;
+
+        if (node instanceof Button btn) {
+            btn.setPrefSize(newWidth, newHeight);
+        } else if (node instanceof ImageView imgView) {
+            imgView.setFitWidth(newWidth);
+            imgView.setFitHeight(newHeight);
+        }
+
+        node.setLayoutX(node.getLayoutX() - (newWidth - currentWidth) / 2);
+        node.setLayoutY(node.getLayoutY() - (newHeight - currentHeight) / 2);
     }
 }

@@ -19,7 +19,7 @@ public class Jalapeno extends BombPlant{
         if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
             gif.setImage(new Image("file:Pictures/plantsGifs/JalapenoAttack.gif"));
             gif.setFitWidth(Constants.TILE_SIZE * 9);
-            gif.setLayoutX(Constants.height/2.62);
+            gif.setLayoutX(Constants.SCREEN_WIDTH/4.9);
             for (Zombie z : zombies){
                 if(z.getRow() == row) {
                     z.setState(ZombieState.BOOM_DIE);
