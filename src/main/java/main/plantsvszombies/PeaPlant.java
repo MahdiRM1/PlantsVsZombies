@@ -14,7 +14,9 @@ public abstract class PeaPlant extends Plant{
 
     public boolean canShoot(List<Zombie> zombies){
         for (Zombie z : zombies)
-            if (row == z.getRow() && z.getCol() < 10) return true;
+            if (row == z.getRow() && z.getCol() < 10)
+                if(z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE)
+                    return true;
         return false;
     }
 
