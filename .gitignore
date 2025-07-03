@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+savegame.dat
+.venv/
+.mvn/
+.git/
