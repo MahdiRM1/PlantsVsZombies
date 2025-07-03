@@ -13,7 +13,7 @@ public final class Constants {
     public static final double TILE_SIZE = SCREEN_HEIGHT / 7.1;
     public static final double ZOMBIE_PIC_HEIGHT = SCREEN_HEIGHT / 4;
     public static final double ZOMBIE_PIC_WEIGHT = SCREEN_WIDTH / 9.4;
-    public static final double BULLET_SIZE = SCREEN_HEIGHT / 21.5;
+    public static final double BULLET_SIZE = SCREEN_HEIGHT / 24.5;
     public static final double PLANT_CARD_HEIGHT = SCREEN_HEIGHT / 7.3;
     public static final double PLANT_CARD_WIDTH = SCREEN_WIDTH / 20.6;
     public static final double SUN_SIZE = SCREEN_HEIGHT / 8.5;
@@ -74,10 +74,10 @@ public final class Constants {
     public static ImageView setBulletPicture(int row, int col, BulletType bulletType){
         ImageView bullet = createImageView("Pictures/bullets/" + bulletType.toString() + ".png",
                 BULLET_SIZE, BULLET_SIZE);
-        bullet.setLayoutX((col*TILE_SIZE) + SCREEN_WIDTH/3.94);
+        bullet.setLayoutX((col*TILE_SIZE) + SCREEN_WIDTH/3.93);
         bullet.setLayoutY(bulletType == BulletType.SHROOM_BULLET ?
                 BOARD_Y + ((row + 0.3) * TILE_SIZE) :
-                BOARD_Y + ((row + 0.1) * TILE_SIZE));
+                BOARD_Y + ((row + 0.15) * TILE_SIZE));
         return bullet;
     }
 

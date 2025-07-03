@@ -32,8 +32,11 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
     public boolean canShoot(List<Zombie> zombies){
         if(!isSleep) {
             if (isScare(zombies)) return false;
+
             for (Zombie z : zombies)
-                if (row == z.getRow()) return true;
+                if (row == z.getRow() && z.getCol() < 10)
+                    if(z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE)
+                        return true;
         }
         return false;
     }
