@@ -8,6 +8,6 @@ public class PeaShooter extends PeaPlant{
        super(row, col);
        price = 100;
        HP = 100;
-       bulletType = BulletType.NORMAL_BULLET;;
+       bulletType = BulletType.NORMAL_BULLET;
     }
 }

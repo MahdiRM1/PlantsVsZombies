@@ -74,7 +74,7 @@ public class GameUI {
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-        spawnZombie(0, 2);
+//        spawnZombie(0, 2);
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
@@ -377,7 +377,7 @@ public class GameUI {
         Random rdm = new Random();
         long gameTime = GlobalState.gameTime;
 
-        if(gameTime <= 20000) return;
+//        if(gameTime <= 20000) return;
 
         if(gameTime <= 50000){
             if(gameTime % 5000 == 1000)

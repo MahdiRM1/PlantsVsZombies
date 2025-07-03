@@ -33,14 +33,14 @@ public class DoomShroom extends BombPlant implements Shroom{
             return false;
         }
         if(Math.abs(GlobalState.gameTime - wakeUpTime) == 1000){
-            gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
+            gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
             for (Zombie z : zombies){
                 if(Math.abs(z.getRow() - row) <= 2 &&  Math.abs(z.getCol() - col) <= 2) {
                     z.setState(ZombieState.BOOM_DIE);
                 }
             }
         }
-        else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2300) {
+        else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2000) {
             gif.setImage(new Image("file:Pictures/plantsGifs/DayHole1.png"));
         }
         else return Math.abs(GlobalState.gameTime - wakeUpTime) == 20000;
