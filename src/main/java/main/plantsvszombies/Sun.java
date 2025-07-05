@@ -19,7 +19,7 @@ public class Sun {
     //manages fallen sun movements
     public void moveSun(){
         if(picture.getLayoutY() < maxY) {
-            picture.setLayoutY(picture.getLayoutY() + 3);
+            picture.setLayoutY(picture.getLayoutY() + Constants.TILE_SIZE/100);
             timeCreated = GlobalState.gameTime;
         }
     }

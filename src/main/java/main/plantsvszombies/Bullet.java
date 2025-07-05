@@ -18,7 +18,7 @@ public class Bullet {
     //manage bullet movement
     public void move(){
         if(picture != null) {
-            picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (10));
+            picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (25));
         }
     }
 

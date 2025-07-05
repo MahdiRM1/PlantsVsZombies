@@ -14,16 +14,12 @@ public abstract class Zombie {
     protected int col;
     protected ZombieState state;
     protected long freezeTime;
-    private static final int boomDiePictureNum = 27;
-    private static final Image[] boomDiePictures = new Image[boomDiePictureNum];
+    private static final int boomDiePictureNum = 32;
+    private static final Image[] boomDiePictures;
     private int nowPic;
     private Plant plantToEat;
 
-    static {
-        for (int i = 0; i < boomDiePictureNum; i++) {
-            boomDiePictures[i] = new Image("file:Pictures/ZombiePicture/BoomDie/BoomDie_" + i + ".png");
-        }
-    }
+    static {boomDiePictures = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", boomDiePictureNum);}
 
     public Zombie(ZombieData data) {
         this.row = data.getRow();
@@ -32,6 +28,7 @@ public abstract class Zombie {
         picture.setLayoutX(data.getPicLayoutX());
         col = Constants.getColumnZombie(picture);
         state = ZombieState.WALKING;
+        HP = data.getHP();
         freezeTime = -5000;
     }
 
@@ -55,12 +52,13 @@ public abstract class Zombie {
     }
 
     public void action(){
+        if(GlobalState.gameTime % 40 != 0) return;
+
         if(state == ZombieState.BOOM_DIE) dieAnimation();
         else if(Math.abs(GlobalState.gameTime - freezeTime) <= 5000){
-            if(GlobalState.gameTime % 100 != 0) return;
+            if(GlobalState.gameTime % 80 != 0) return;
             picture.setEffect(iceEffect());
             switch (state) {
-
                 case WALKING -> walk();
                 case EATING -> eatPlant();
                 case DIE -> dieAnimation();
@@ -70,9 +68,9 @@ public abstract class Zombie {
                         state = ZombieState.WALKING;
                     }
                 }
-
             }
         }
+
         else{
             picture.setEffect(null);
             switch (state) {
@@ -101,7 +99,10 @@ public abstract class Zombie {
     private void dieAnimation(){
         Image[] images;
         if(state == ZombieState.DIE) images = getDieImage();
-        else images = boomDiePictures;
+        else {
+            if (GlobalState.gameTime % 40 != 0) return;
+            images = boomDiePictures;
+        }
         if(nowPic >= images.length - 1) {
             state = ZombieState.DEAD;
             return;
@@ -116,7 +117,7 @@ public abstract class Zombie {
 
     public void walk(){
         changePicture(getWalkImage());
-        picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE/(speed*20)));
+        picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE/(speed*1000.0/40)));
         col = Constants.getColumnZombie(picture);
     }
 

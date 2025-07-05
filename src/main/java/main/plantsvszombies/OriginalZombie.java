@@ -4,23 +4,17 @@ import javafx.scene.image.Image;
 
 public class OriginalZombie extends Zombie{
 
-    private final static int walkPictureNum = 22;
-    private final static int attackPictureNum = 21;
-    private final static int dieImagesNum = 14;
-    private final static Image[] walkZombie = new Image[walkPictureNum];
-    private final static Image[] attackZombie = new Image[attackPictureNum];
-    private final static Image[] dieImages = new Image[dieImagesNum];
+    private final static int walkPictureNum = 47;
+    private final static int attackPictureNum = 40;
+    private final static int diePicturesNum = 39;
+    private final static Image[] walkZombie;
+    private final static Image[] attackZombie;
+    private final static Image[] dieZombie;
 
     static{
-        for (int i = 0; i < walkPictureNum; i++) {
-            walkZombie[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieWalk/Zombie_" + i + ".png");
-        }
-        for (int i = 0; i < attackPictureNum; i++) {
-            attackZombie[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieAttack/ZombieAttack_" + i + ".png");
-        }
-        for (int i = 0; i < dieImagesNum; i++) {
-            dieImages[i] = new Image("file:Pictures/ZombiePicture/originalZombie/ZombieDie/ZombieDie_" + i +".png");
-        }
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Zombie/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieAttack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePicturesNum);
     }
 
     public OriginalZombie(ZombieData data){
@@ -47,7 +41,7 @@ public class OriginalZombie extends Zombie{
 
     @Override
     protected Image[] getDieImage(){
-        return dieImages;
+        return dieZombie;
     }
 
 }

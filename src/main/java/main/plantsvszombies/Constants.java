@@ -93,6 +93,13 @@ public final class Constants {
         return relativeX > - ZOMBIE_PIC_WEIGHT/4 ? (int)(relativeX / TILE_SIZE) : -1;
     }
 
+    public static Image[] getArrayImage(String path, int max){
+        Image[] images = new Image[max];
+        for (int i = 0; i < max; i++)
+            images[i] = new Image("file:" + path + i + ".png");
+        return images;
+    }
+
     private static ImageView createImageView(String path, double width, double height){
         ImageView imageView = new ImageView(new Image("file:" + path));
         imageView.setFitWidth(width);

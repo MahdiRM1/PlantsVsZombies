@@ -29,11 +29,12 @@ public class PuffShroom extends PeaPlant implements Shroom{
     public boolean canShoot(List<Zombie> zombies){
         if(isSleep) return false;
 
+        updateFrame();
         for (Zombie z : zombies)
-            if (row == z.getRow() && z.getCol() - col < 4 && z.getCol() < 10)
+            if (row == z.getRow() && z.getCol() - col <= 4 && z.getCol() < 10 && z.getCol() >= col)
                 if(z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE)
                     return true;
-        return true;
+        return false;
     }
 
     @Override

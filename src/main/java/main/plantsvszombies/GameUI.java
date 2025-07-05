@@ -45,9 +45,12 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic(setPottedPlants(state.getPlants()), state.getZombies());
         this.mode = state.getMode();
-        for (CardData data : state.getCards()) cards.add(new Card(data));
+        for (CardData data : state.getCards()) {
+            getPlant(-1, -1, data.getPlantName());
+            cards.add(new Card(data));
+        }
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, state.getScore());
+        scoreBoard = new ScoreBoard(borderPane, state.getScore(), mode);
         GlobalState.gameTime = state.getTime();
         loadPlants();
         loadZombies();
@@ -59,22 +62,24 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic();
         this.mode = mode;
-        for (int i = 0; i < plantsName.size(); i++)  cards.add(new Card(plantsName.get(i), i));
+        for (int i = 0; i < plantsName.size(); i++) {
+            getPlant(-1, -1, plantsName.get(i));
+            cards.add(new Card(plantsName.get(i), i));
+        }
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, 1000);
+        scoreBoard = new ScoreBoard(borderPane, 1000, mode);
         GlobalState.gameTime = 0;
         startGame();
     }
 
     //manages the start of the game
     public void startGame(){
-        tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            GlobalState.gameTime += 50;
+        tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
+            GlobalState.gameTime += 20;
             updateGame();
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-//        spawnZombie(0, 2);
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
@@ -421,7 +426,7 @@ public class GameUI {
         switch (z){
             case 0 -> zombie = new OriginalZombie(row);
             case 1 -> zombie = new ConeheadZombie(row);
-            case 2 -> zombie = new BucketheadZombie(row);
+            case 2 -> zombie = new ScreenDoorZombie(row);
             case 3 -> zombie = new Imp(row);
             default -> zombie = new FlagZombie(row);
         }
