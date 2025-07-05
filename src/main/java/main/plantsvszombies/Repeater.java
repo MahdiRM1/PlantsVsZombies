@@ -4,7 +4,6 @@ public class Repeater extends PeaPlant{
 
     public static final int recharge = 10;
     private long firstShoot;
-    private long lastShoot;
 
 
     public Repeater(int row, int col){
@@ -12,8 +11,11 @@ public class Repeater extends PeaPlant{
         price = 200;
         HP = 100;
         bulletType = BulletType.NORMAL_BULLET;
-        firstShoot = timeCreated - 350;
-        lastShoot = timeCreated - 150;
+    }
+
+    @Override
+    public void resetShootTime(){
+        lastShoot = GlobalState.gameTime - 400;
     }
 
     @Override
