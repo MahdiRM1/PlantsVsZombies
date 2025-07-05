@@ -7,10 +7,10 @@ import java.util.List;
 public abstract class PeaPlant extends Plant{
 
     protected BulletType bulletType;
-    private long lastShoot;
+    protected long lastShoot;
     private Image shootGif;
     private  Image normalGif;
-    private final String shootStr = "file:Pictures/plantsGifs/" + this.getClass().getSimpleName() + "_shoot.gif";
+    private final String shootStr = "file:Pictures/plantsGifs/" + this.getClass().getSimpleName() + "-shoot.gif";
     private final String normalStr = "file:Pictures/plantsGifs/" + this.getClass().getSimpleName() + ".gif";
 
     {
@@ -20,7 +20,7 @@ public abstract class PeaPlant extends Plant{
 
     public PeaPlant(int row, int col) {
         super(row, col);
-        lastShoot = timeCreated - 350;
+        resetShootTime();
     }
 
     public boolean canShoot(List<Zombie> zombies){
@@ -37,8 +37,12 @@ public abstract class PeaPlant extends Plant{
             normalGif = new Image(normalStr);
             gif.setImage(normalGif);
         }
-        lastShoot = GlobalState.gameTime - 400;
+        resetShootTime();
         return false;
+    }
+
+    public void resetShootTime(){
+        lastShoot = GlobalState.gameTime - 200;
     }
 
     public Bullet shoot(int row, int col) {
