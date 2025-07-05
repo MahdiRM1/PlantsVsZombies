@@ -4,26 +4,17 @@ import javafx.scene.image.Image;
 
 public class ConeheadZombie extends Zombie{
 
-    private final static int walkPictureNum = 21;
-    private final static int attackPictureNum = 11;
-    private final static int dieImagesNum = 14;
-    private final static Image[] walkZombie = new Image[walkPictureNum];
-    private final static Image[] attackZombie = new Image[attackPictureNum];
-    private final static Image[] dieImages = new Image[dieImagesNum];
+    private final static int walkPictureNum = 47;
+    private final static int attackPictureNum = 40;
+    private final static int diePictureNum = 39;
+    private final static Image[] walkZombie;
+    private final static Image[] attackZombie;
+    private final static Image[] dieZombie;
 
-    static{
-        for (int i = 0; i < walkPictureNum; i++) {
-            walkZombie[i] = new Image("file:Pictures/ZombiePicture/ConeheadZombie/" +
-                    "ZombieWalk/ConeheadZombie_" + i + ".png");
-        }
-        for (int i = 0; i < attackPictureNum; i++) {
-            attackZombie[i] = new Image("file:Pictures/ZombiePicture/ConeheadZombie/" +
-                    "ZombieAttack/ConeheadZombieAttack_" + i + ".png");
-        }
-        for (int i = 0; i < dieImagesNum; i++) {
-            dieImages[i] = new Image("file:Pictures/ZombiePicture/ConeheadZombie" +
-                    "/ZombieDie/ZombieDie_" + i +".png");
-        }
+    static {
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Zombie/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/ZombieAttack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePictureNum);
     }
 
     public ConeheadZombie (ZombieData data) {
@@ -50,7 +41,7 @@ public class ConeheadZombie extends Zombie{
 
     @Override
     protected Image[] getDieImage(){
-        return dieImages;
+        return dieZombie;
     }
 
 }

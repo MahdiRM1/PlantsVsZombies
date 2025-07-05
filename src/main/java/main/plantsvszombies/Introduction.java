@@ -114,7 +114,7 @@ public class Introduction {
 
     private ImageView createZombie(){
         Random rdm = new Random();
-        String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "BucketheadZombie", "Imp"};
+        String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "Imp"};
         String chosen = zombieTypes[rdm.nextInt(4)];
 
         ImageView image = new ImageView(new Image("file:Pictures/ZombieGif/" + chosen + ".gif"));

@@ -25,7 +25,7 @@ public class GameLogic {
         return switch (data.getType()){
             case "OriginalZombie" -> new OriginalZombie(data);
             case "ConeheadZombie" -> new ConeheadZombie(data);
-            case "BucketheadZombie" -> new BucketheadZombie(data);
+            case "ScreenDoorZombie" -> new ScreenDoorZombie(data);
             case "Imp" -> new Imp(data);
             default -> new FlagZombie(data);
         };

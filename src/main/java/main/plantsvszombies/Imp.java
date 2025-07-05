@@ -6,23 +6,15 @@ public class Imp extends Zombie{
 
     private final static int walkPictureNum = 33;
     private final static int attackPictureNum = 27;
-    private final static int dieImagesNum = 22;
-    private final static Image[] walkZombie = new Image[walkPictureNum];
-    private final static Image[] attackZombie = new Image[attackPictureNum];
-    private final static Image[] dieImages = new Image[dieImagesNum];
+    private final static int diePicturesNum = 22;
+    private final static Image[] walkZombie;
+    private final static Image[] attackZombie;
+    private final static Image[] dieZombie;
 
-    static {
-        for (int i = 0; i < walkPictureNum; i++) {
-            walkZombie[i] = new Image("file:Pictures/ZombiePicture/Imp/" +
-                    "ZombieWalk/" + i + ".png");
-        }
-        for (int i = 0; i < attackPictureNum; i++) {
-            attackZombie[i] = new Image("file:Pictures/ZombiePicture/Imp/" +
-                    "ZombieAttack/" + i + ".png");
-        }
-        for (int i = 0; i < dieImagesNum; i++) {
-            dieImages[i] = new Image("file:Pictures/ZombiePicture/Imp/ZombieDie/" + i +".png");
-        }
+    static{
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Zombie/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/ZombieAttack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/ZombieDie/frame_", diePicturesNum);
     }
 
     public Imp (ZombieData data) {
@@ -49,6 +41,6 @@ public class Imp extends Zombie{
 
     @Override
     protected Image[] getDieImage(){
-        return dieImages;
+        return dieZombie;
     }
 }

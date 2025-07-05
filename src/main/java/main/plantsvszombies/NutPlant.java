@@ -21,12 +21,12 @@ public abstract class NutPlant extends Plant{
     }
 
     private void setHalfLife(){
-        gif.setImage(new Image("file:Pictures/plantsGifs/DayTime/" + this.getClass().getSimpleName() + "_HalfLife.gif"));
+        gif.setImage(new Image("file:Pictures/plantsGifs/" + this.getClass().getSimpleName() + "_HalfLife.gif"));
         state = NutState.HALF_LIFE;
     }
 
     private void setEndLife(){
-        gif.setImage(new Image("file:Pictures/plantsGifs/DayTime/" + this.getClass().getSimpleName() + "_EndLife.gif"));
+        gif.setImage(new Image("file:Pictures/plantsGifs/" + this.getClass().getSimpleName() + "_EndLife.gif"));
         state = NutState.END_LIFE;
     }
 }

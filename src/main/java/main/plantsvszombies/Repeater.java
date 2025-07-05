@@ -1,9 +1,19 @@
 package main.plantsvszombies;
 
+import javafx.scene.image.Image;
+
 public class Repeater extends PeaPlant{
 
     public static final int recharge = 10;
-    private long firstShoot;
+    private static final int normalImageNum = 60;
+    private static final int shootImageNum = 70;
+    private static final Image[] shootImage;
+    private static final Image[] normalImage;
+
+    static {
+        normalImage = Constants.getArrayImage("Pictures/plantsGifs/Repeater/normal/frame_", normalImageNum);
+        shootImage = Constants.getArrayImage("Pictures/plantsGifs/Repeater/shoot/frame_", shootImageNum);
+    }
 
 
     public Repeater(int row, int col){
@@ -14,21 +24,17 @@ public class Repeater extends PeaPlant{
     }
 
     @Override
-    public void resetShootTime(){
-        lastShoot = GlobalState.gameTime - 400;
-    }
-
-    @Override
     public Bullet shoot(int row, int col) {
-        long time = GlobalState.gameTime;
-        if(Math.abs(time - lastShoot) >= 1200 && Math.abs(time - firstShoot) >= 1400) {
-            firstShoot = time;
-            return new Bullet(row, col, bulletType);
-        }
-        else if(Math.abs(time - firstShoot) >= 200 && Math.abs(time - lastShoot) >= 1400){
-            lastShoot = time;
+        if (GlobalState.gameTime % 20 != 0) return null;
+        if(nowPic == 30 || nowPic == 40) {
+            lastShoot = GlobalState.gameTime;
             return new Bullet(row, col, bulletType);
         }
         return null;
+    }
+
+    @Override
+    protected Image[] getImage(boolean isShooting) {
+        return isShooting ? shootImage : normalImage;
     }
 }

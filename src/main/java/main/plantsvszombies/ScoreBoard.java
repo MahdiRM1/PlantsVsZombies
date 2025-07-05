@@ -17,11 +17,13 @@ public class ScoreBoard {
     private final BorderPane pane;
     private final Label scoreLabel;
     private final ArrayList<Sun> suns = new ArrayList<>();
+    private final GameMode mode;
 
-    public ScoreBoard(BorderPane pane, int score) {
+    public ScoreBoard(BorderPane pane, int score, GameMode mode) {
         this.pane = pane;
         this.score = score;
         scoreLabel = createScoreLabel();
+        this.mode = mode;
         setScoreBoardOnPane();
     }
 
@@ -42,8 +44,7 @@ public class ScoreBoard {
 
     // updates the scoreBoard for sun points
     public void addSun(Sun sun) {
-        if (sun == null)
-            return;
+        if (sun == null) return;
 
         ImageView sunImage = sun.getPicture();
         sunImage.setOnMouseClicked(event -> collectSun(sun));
@@ -75,13 +76,12 @@ public class ScoreBoard {
     }
 
     private void fallenSun() {
-        for (Sun s : suns)
-            s.moveSun();
+        for (Sun s : suns) s.moveSun();
     }
 
     // manage fallen sun movement
     private void sunDrop() {
-        if (GlobalState.gameTime % 10000 == 0) {
+        if (GlobalState.gameTime % 10000 == 0 && mode == GameMode.DAY) {
             Sun s = new Sun(SunType.FALLEN);
             addSun(s);
         }
