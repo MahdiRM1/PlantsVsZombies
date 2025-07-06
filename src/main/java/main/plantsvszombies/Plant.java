@@ -9,6 +9,7 @@ public abstract class Plant {
     protected double HP;
     protected ImageView gif;
     private double damageCaused = 0;
+    protected int rechargeTime;
 
     public Plant(int row, int col){
         this.row = row;
@@ -48,5 +49,9 @@ public abstract class Plant {
 
     public int getCol() {
         return col;
+    }
+
+    public int getRechargeTime(){
+        return rechargeTime;
     }
 }

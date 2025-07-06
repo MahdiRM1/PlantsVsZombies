@@ -6,7 +6,6 @@ import java.util.List;
 
 public class PuffShroom extends PeaPlant implements Shroom{
 
-    public static final int recharge = 10;
     private boolean isSleep;
     private static final Image sleepImage;
     private static final Image normalImage;
@@ -20,6 +19,7 @@ public class PuffShroom extends PeaPlant implements Shroom{
         super(row, col);
         price = 0;
         HP = 100;
+        rechargeTime = 10;
         bulletType = BulletType.SHROOM_BULLET;
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);

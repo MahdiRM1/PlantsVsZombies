@@ -35,24 +35,10 @@ public class Card {
 
     //recharge time of each plant
     public int rechargeTime(){
-        int rechargePlant;
-        switch (plantName) {
-            case "PeaShooter" -> rechargePlant = PeaShooter.recharge;
-            case "SunFlower" -> rechargePlant = SunFlower.recharge;
-            case "WallNut" -> rechargePlant = WallNut.recharge;
-            case "TallNut" -> rechargePlant = TallNut.recharge;
-            case "Repeater" -> rechargePlant = Repeater.recharge;
-            case "SnowPea" -> rechargePlant = SnowPea.recharge;
-            case "CherryBomb" -> rechargePlant = CherryBomb.recharge;
-            case "Jalapeno" -> rechargePlant = Jalapeno.recharge;
-            case "PuffShroom" -> rechargePlant = PuffShroom.recharge;
-            case "ScaredyShroom" -> rechargePlant = ScaredyShroom.recharge;
-            case "IceShroom" -> rechargePlant = IceShroom.recharge;
-            case "DoomShroom" -> rechargePlant = DoomShroom.recharge;
-            case "CoffeeBean" -> rechargePlant = CoffeeBean.recharge;
-            default -> rechargePlant = 0;
-        }
-        return rechargePlant * 1000 ;
+        Plant plant;
+        if (plantName.equals("CoffeeBean")) plant = new CoffeeBean(0, 0, null);
+        else plant = Constants.getPlant(0, 0, plantName, null);
+        return plant.getRechargeTime() * 1000 ;
     }
 
     //generate buttons for plant cards

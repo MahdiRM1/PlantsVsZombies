@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 
 public class Repeater extends PeaPlant{
 
-    public static final int recharge = 10;
     private static final int normalImageNum = 60;
     private static final int shootImageNum = 70;
     private static final Image[] shootImage;
@@ -20,6 +19,7 @@ public class Repeater extends PeaPlant{
         super(row, col);
         price = 200;
         HP = 100;
+        rechargeTime = 10;
         bulletType = BulletType.NORMAL_BULLET;
     }
 

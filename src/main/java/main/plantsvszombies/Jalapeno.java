@@ -6,12 +6,11 @@ import java.util.List;
 
 public class Jalapeno extends BombPlant{
 
-    public static final int recharge = 15;
-
     public Jalapeno(int row, int col){
         super(row, col);
         price = 125;
         HP = 100;
+        rechargeTime = 15;
     }
 
     @Override

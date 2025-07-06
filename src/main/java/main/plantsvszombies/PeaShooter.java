@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 
 public class PeaShooter extends PeaPlant{
 
-    public static final int recharge = 10;
     private static final int imageNum = 60;
     private static final Image[] shootImage;
     private static final Image[] normalImage;
@@ -18,6 +17,7 @@ public class PeaShooter extends PeaPlant{
        super(row, col);
        price = 100;
        HP = 100;
+       rechargeTime = 10;
        bulletType = BulletType.NORMAL_BULLET;
     }
 

@@ -2,13 +2,13 @@ package main.plantsvszombies;
 
 public class SunFlower extends Plant{
 
-    public static final int recharge = 10;
     private long lastSunTime;
 
     public SunFlower(int row, int col){
         super(row, col);
         price = 50;
         HP = 100;
+        rechargeTime = 10;
         lastSunTime = timeCreated;
     }
 

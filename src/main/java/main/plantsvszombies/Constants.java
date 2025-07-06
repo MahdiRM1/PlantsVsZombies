@@ -57,7 +57,7 @@ public final class Constants {
     public static double sunMaxY(SunType type){
         return (type == SunType.FALLEN) ?
                 BOARD_Y + (TILE_SIZE * 5 * Math.random()) :
-                BOARD_Y + (type.getRow() * TILE_SIZE) + (SCREEN_HEIGHT / 12);
+                BOARD_Y + (type.getRow() * TILE_SIZE) + (SCREEN_HEIGHT / 20);
     }
 
     public static ImageView setPlantPicture(String plantName, int row, int col){
@@ -76,7 +76,7 @@ public final class Constants {
                 BULLET_SIZE, BULLET_SIZE);
         bullet.setLayoutX((col*TILE_SIZE) + SCREEN_WIDTH/3.93);
         bullet.setLayoutY(bulletType == BulletType.SHROOM_BULLET ?
-                BOARD_Y + ((row + 0.3) * TILE_SIZE) :
+                BOARD_Y + ((row + 0.35) * TILE_SIZE) :
                 BOARD_Y + ((row + 0.15) * TILE_SIZE));
         return bullet;
     }
@@ -123,5 +123,23 @@ public final class Constants {
 
         node.setLayoutX(node.getLayoutX() - (newWidth - currentWidth) / 2);
         node.setLayoutY(node.getLayoutY() - (newHeight - currentHeight) / 2);
+    }
+
+    public static Plant getPlant(int row, int col, String selectedPlant, GameMode mode) {
+        switch (selectedPlant) {
+            case "PeaShooter" -> { return new PeaShooter(row, col); }
+            case "SunFlower" -> { return new SunFlower(row, col); }
+            case "WallNut" -> { return new WallNut(row, col); }
+            case "TallNut" -> { return new TallNut(row, col); }
+            case "Repeater" -> { return new Repeater(row, col); }
+            case "SnowPea" -> { return new SnowPea(row, col); }
+            case "CherryBomb" -> { return new CherryBomb(row, col); }
+            case "Jalapeno" -> { return new Jalapeno(row, col); }
+            case "PuffShroom" -> { return new PuffShroom(row, col, mode); }
+            case "ScaredyShroom" -> { return new ScaredyShroom(row, col, mode); }
+            case "IceShroom" -> { return new IceShroom(row, col, mode); }
+            case "DoomShroom" -> { return new DoomShroom(row, col, mode); }
+        }
+        return null;
     }
 }
