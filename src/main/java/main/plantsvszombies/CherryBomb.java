@@ -6,12 +6,11 @@ import java.util.List;
 
 public class CherryBomb extends BombPlant{
 
-    public static final int recharge = 15;
-
     public CherryBomb(int row, int col){
         super(row, col);
         price = 150;
         HP = 100;
+        rechargeTime = 15;
     }
 
     @Override

@@ -4,13 +4,13 @@ import javafx.scene.image.Image;
 
 public class CoffeeBean extends Plant{
 
-    public static final int recharge = 10;
-    private Shroom shroom;
+    private final Shroom shroom;
 
     public CoffeeBean(int row, int col, Shroom shroom){
         super(row, col);
         price = 75;
         HP = 100;
+        rechargeTime = 10;
         this.shroom = shroom;
     }
 

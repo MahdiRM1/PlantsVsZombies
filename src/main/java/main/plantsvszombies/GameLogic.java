@@ -10,14 +10,23 @@ public class GameLogic {
     CoffeeBean coffeeBean;
 
     //constructor: to load the previously saved game
-    public GameLogic(Plant[][] pottedPlants, List<ZombieData> zombieData){
-        this.pottedPlants = pottedPlants;
-        for (ZombieData data : zombieData) zombies.add(zombieReload(data));
+    public GameLogic(GameState state){
+        pottedPlants = loadPlants(state.getPlants(), state.getMode());
+        for (ZombieData data : state.getZombies()) zombies.add(zombieReload(data));
     }
 
     //constructor: to start a new game
     public GameLogic(){
         pottedPlants = new Plant[Constants.ROWS][Constants.COLS];
+    }
+
+    //generates the plants matrix
+    private Plant[][] loadPlants(List<PlantData> plantData, GameMode mode){
+        Plant[][] pottedPlants = new Plant[Constants.ROWS][Constants.COLS];
+        for (PlantData data : plantData){
+            pottedPlants[data.getRow()][data.getCol()] = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), mode);
+        }
+        return pottedPlants;
     }
 
     //read zombies to reload a saved game
@@ -157,7 +166,7 @@ public class GameLogic {
 
     //win logic
     public boolean checkWin() {
-        return zombies.isEmpty() && GlobalState.gameTime >= 140_000;
+        return zombies.isEmpty() && GlobalState.gameTime >= 150_000;
     }
 
     public void removePlant(int row , int col) {

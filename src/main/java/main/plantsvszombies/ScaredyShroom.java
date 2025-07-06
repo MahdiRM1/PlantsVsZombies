@@ -2,12 +2,10 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScaredyShroom extends PeaPlant implements Shroom{
 
-    public static final int recharge = 10;
     private boolean isSleep;
     private static final Image scareImage;
     private static final Image sleepImage;
@@ -23,6 +21,7 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
         super(row, col);
         price = 25;
         HP = 100;
+        rechargeTime = 10;
         bulletType = BulletType.SHROOM_BULLET;
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);

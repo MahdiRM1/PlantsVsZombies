@@ -6,7 +6,6 @@ import java.util.List;
 
 public class IceShroom extends BombPlant implements Shroom{
 
-    public static final int recharge = 15;
     private long wakeUpTime;
     private boolean isSleep;
     private static final Image sleepImage;
@@ -21,6 +20,7 @@ public class IceShroom extends BombPlant implements Shroom{
         super(row, col);
         price = 75;
         HP = 100;
+        rechargeTime = 15;
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;

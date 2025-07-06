@@ -15,13 +15,15 @@ import java.util.Random;
 
 public class Introduction {
 
-    private Stage stage;
+    private final Stage stage;
     private final List<String> selectedCards = new ArrayList<>();
     private HBox cardBar;
-    private GameMode mode;
 
-    public void firstPage(Stage stage){
+    public Introduction(Stage stage){
         this.stage = stage;
+    }
+
+    public void firstPage(){
         Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.show();
@@ -37,7 +39,7 @@ public class Introduction {
         }
     }
 
-    public void PlantSelectionPage(){
+    public void plantSelectionPage(GameMode mode){
         Pane pane = new Pane();
         pane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
@@ -73,7 +75,7 @@ public class Introduction {
         positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT/1.4);
 
         pane.getChildren().addAll(Constants.setScoreBoardPicture(),
-                cardBar, box1, box2, box3, box4, startGameBtn());
+                cardBar, box1, box2, box3, box4, startGameBtn(mode));
         for (int i = 0; i < 8; i++) pane.getChildren().add(createZombie());
         Scene scene = new Scene(pane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
@@ -85,7 +87,7 @@ public class Introduction {
         box.setLayoutY(y);
     }
 
-    private ImageView startGameBtn(){
+    private ImageView startGameBtn(GameMode mode){
         Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
         Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
         ImageView start = new ImageView(letsRock1);
@@ -164,18 +166,12 @@ public class Introduction {
         ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH/2.6, Constants.SCREEN_HEIGHT/4.2);
         adventure.setLayoutX(Constants.SCREEN_WIDTH / 1.97);
             adventure.setLayoutY(Constants.SCREEN_HEIGHT / 8);
-        adventure.setOnMouseClicked(event -> {
-            mode = GameMode.DAY;
-            PlantSelectionPage();
-        });
+        adventure.setOnMouseClicked(event -> plantSelectionPage(GameMode.DAY));
 
             ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/4.35);
         newGame.setLayoutX(Constants.SCREEN_WIDTH/1.98);
         newGame.setLayoutY(Constants.SCREEN_HEIGHT/3.1);
-        newGame.setOnMouseClicked(event -> {
-            mode = GameMode.NIGHT;
-            PlantSelectionPage();
-        });
+        newGame.setOnMouseClicked(event -> plantSelectionPage(GameMode.NIGHT));
 
         ImageView loadGame = menuItem("LoadGame", Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/4.8);
         loadGame.setLayoutX(Constants.SCREEN_WIDTH / 1.94);

@@ -19,9 +19,14 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -35,18 +40,18 @@ public class GameUI {
     private final List<Card> cards = new ArrayList<>();
     private final ScoreBoard scoreBoard;
     private final Stage stage;
+    private final GameMode mode;
     private Timeline tl;
     private Scene scene;
-    private final GameMode mode;
     public static int selectedButton = -1;
 
     // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state){
         this.stage = stage;
-        gameLogic = new GameLogic(setPottedPlants(state.getPlants()), state.getZombies());
+        gameLogic = new GameLogic(state);
         this.mode = state.getMode();
         for (CardData data : state.getCards()) {
-            getPlant(-1, -1, data.getPlantName());
+            Constants.getPlant(0, 0, data.getPlantName(), mode);
             cards.add(new Card(data));
         }
         initializeStackPane(cardBar());
@@ -63,7 +68,7 @@ public class GameUI {
         gameLogic = new GameLogic();
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) {
-            getPlant(-1, -1, plantsName.get(i));
+            Constants.getPlant(0, 0, plantsName.get(i), mode);
             cards.add(new Card(plantsName.get(i), i));
         }
         initializeStackPane(cardBar());
@@ -82,10 +87,7 @@ public class GameUI {
         tl.play();
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
-        stage.setOnCloseRequest(e -> {
-            save();
-            Platform.exit();
-        });
+        stage.setOnCloseRequest(e -> save());
         stage.show();
     }
 
@@ -257,7 +259,7 @@ public class GameUI {
         backToMenu.setLayoutY(Constants.SCREEN_HEIGHT/1.62);
         backToMenu.setOnMouseClicked(event -> {
             save();
-            new Introduction().firstPage(stage);
+            new Introduction(stage).firstPage();
         });
 
         ImageView backToGame = setButton("BackToGame", Constants.SCREEN_WIDTH/9.4, Constants.SCREEN_HEIGHT/18);
@@ -290,29 +292,11 @@ public class GameUI {
 
     private Plant getPlant(int row, int col){
         if (selectedButton < 0 || selectedButton >= cards.size()) return null;
-        return getPlant(row,col, cards.get(selectedButton).getPlantName());
-    }
-
-    private Plant getPlant(int row, int col, String selectedPlant) {
-        switch (selectedPlant) {
-            case "PeaShooter" -> { return new PeaShooter(row, col); }
-            case "SunFlower" -> { return new SunFlower(row, col); }
-            case "WallNut" -> { return new WallNut(row, col); }
-            case "TallNut" -> { return new TallNut(row, col); }
-            case "Repeater" -> { return new Repeater(row, col); }
-            case "SnowPea" -> { return new SnowPea(row, col); }
-            case "CherryBomb" -> { return new CherryBomb(row, col); }
-            case "Jalapeno" -> { return new Jalapeno(row, col); }
-            case "PuffShroom" -> { return new PuffShroom(row, col, mode); }
-            case "ScaredyShroom" -> { return new ScaredyShroom(row, col, mode); }
-            case "IceShroom" -> { return new IceShroom(row, col, mode); }
-            case "DoomShroom" -> { return new DoomShroom(row, col, mode); }
-            case "CoffeeBean" -> {
-                if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())
-                    return new CoffeeBean(row, col, shroom);
-            }
-        }
-        return null;
+        String plantName = cards.get(selectedButton).getPlantName();
+        if (plantName.equals("CoffeeBean"))
+            if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())
+                 return new CoffeeBean(row, col, shroom);
+        return Constants.getPlant(row,col, plantName, mode);
     }
 
     public void updateGame(){
@@ -326,21 +310,8 @@ public class GameUI {
 
     //manages win or lose visuals
     public void winOrLose() {
-        if(gameLogic.checkLose()) {
-            Label lose = new Label("You lost");
-            lose.setTextFill(Color.RED);
-            lose.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-            lose.setEffect(new DropShadow(50, Color.BLACK));
-            pane.getChildren().add(lose);
-            tl.stop();
-        }
-        if(gameLogic.checkWin()) {
-            Label win = new Label("You win");
-            win.setTextFill(Color.RED);
-            win.setFont(Font.font("Arial", FontWeight.BOLD, 100));
-            win.setEffect(new DropShadow(10, Color.BLACK));
-            pane.getChildren().add(win);
-        }
+        if(gameLogic.checkLose()) finishGame("lose");
+        else if(gameLogic.checkWin()) finishGame("win");
     }
 
     //removes garbage images of struck bullets,dead zombies and eaten plants
@@ -444,16 +415,58 @@ public class GameUI {
             out.writeObject(state);
             System.out.println("Game saved");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("cant save");
         }
     }
 
-    //generates the plants matrix
-    private Plant[][] setPottedPlants(List<PlantData> plantData){
-        Plant[][] pottedPlants = new Plant[Constants.ROWS][Constants.COLS];
-        for (PlantData data : plantData){
-            pottedPlants[data.getRow()][data.getCol()] = getPlant(data.getRow(), data.getCol(), data.getType());
+    private void finishGame(String str){
+        tl.stop();
+        Pane finishPane = new Pane();
+        finishPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
+
+        ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
+        restart.setLayoutX(Constants.SCREEN_WIDTH/1.9);
+        restart.setLayoutY(Constants.SCREEN_HEIGHT/1.3);
+        restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage(mode));
+
+        ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
+        mainMenu.setLayoutX(Constants.SCREEN_WIDTH/3.8);
+        mainMenu.setLayoutY(Constants.SCREEN_HEIGHT/1.3);
+        mainMenu.setOnMouseClicked(event -> {
+            deleteSaveData();
+            new Introduction(stage).firstPage();
+        });
+
+        stage.setOnCloseRequest(event -> deleteSaveData());
+        if (str.equals("lose")){
+            ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
+            loseImage.setLayoutX(Constants.SCREEN_WIDTH / 4);
+            loseImage.setLayoutY(Constants.SCREEN_HEIGHT / 6);
+            loseImage.setFitWidth(Constants.SCREEN_WIDTH / 2);
+            loseImage.setFitHeight(Constants.SCREEN_HEIGHT / 1.8);
+            finishPane.getChildren().add(loseImage);
         }
-        return pottedPlants;
+        else{
+            Label win = new Label("You win");
+            win.setTextFill(Color.GREEN);
+            win.setFont(Font.font("Arial", FontWeight.BOLD, 200));
+            win.setEffect(new DropShadow(50, Color.BLACK));
+            win.setLayoutX(Constants.SCREEN_WIDTH / 3.3);
+            win.setLayoutY(Constants.SCREEN_HEIGHT / 3);
+            finishPane.getChildren().add(win);
+        }
+
+        finishPane.getChildren().addAll(restart, mainMenu);
+        mainPane.getChildren().add(finishPane);
+    }
+
+    private void deleteSaveData(){
+        Path path = Paths.get("savegame.dat");
+        try {
+            Files.delete(path);
+            System.out.println("save data deleted");
+        } catch (IOException e) {
+            System.out.println("cant delete save data");
+        }
     }
 }
