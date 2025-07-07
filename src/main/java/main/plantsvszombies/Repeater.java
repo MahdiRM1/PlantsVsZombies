@@ -24,7 +24,7 @@ public class Repeater extends PeaPlant{
     }
 
     @Override
-    public Bullet shoot(int row, int col) {
+    public Bullet action() {
         if (GlobalState.gameTime % 20 != 0) return null;
         if(nowPic == 30 || nowPic == 40) {
             lastShoot = GlobalState.gameTime;

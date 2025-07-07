@@ -24,27 +24,33 @@ public class DoomShroom extends BombPlant implements Shroom{
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;
+        explosionTime = 1000;
+        endOfAction = 20000;
     }
 
     @Override
-    public boolean explosion(List<Zombie> zombies) {
+    public boolean actionHappens(List<Zombie> zombies) {
         if(isSleep){
             wakeUpTime = GlobalState.gameTime;
             return false;
         }
-        if(Math.abs(GlobalState.gameTime - wakeUpTime) == 1000){
-            gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
-            for (Zombie z : zombies){
-                if(Math.abs(z.getRow() - row) <= 2 &&  Math.abs(z.getCol() - col) <= 2) {
-                    z.setState(ZombieState.BOOM_DIE);
-                }
-            }
-        }
-        else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2000) {
+        if(Math.abs(GlobalState.gameTime - wakeUpTime) == explosionTime) return true;
+
+        if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2000) {
             gif.setImage(new Image("file:Pictures/plantsGifs/DayHole1.png"));
         }
-        else return Math.abs(GlobalState.gameTime - wakeUpTime) == 20000;
+        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == endOfAction) HP = 0;
         return false;
+    }
+
+    @Override
+    public void action(List<Zombie> zombies){
+        gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
+        for (Zombie z : zombies){
+            if(Math.abs(z.getRow() - row) <= 2 &&  Math.abs(z.getCol() - col) <= 2) {
+                z.setState(ZombieState.BOOM_DIE);
+            }
+        }
     }
 
     @Override

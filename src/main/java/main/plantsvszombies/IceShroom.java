@@ -3,6 +3,7 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 
 import java.util.List;
+import java.util.Objects;
 
 public class IceShroom extends BombPlant implements Shroom{
 
@@ -24,22 +25,28 @@ public class IceShroom extends BombPlant implements Shroom{
         isSleep = setIsSleep(mode);
         gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;
+        explosionTime = 1500;
     }
 
     @Override
-    public boolean explosion(List<Zombie> zombies) {
+    public boolean actionHappens(List<Zombie> zombies) {
         if(isSleep){
             wakeUpTime = GlobalState.gameTime;
             return false;
         }
-        if(Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500){
-            for (Zombie z : zombies){
-                z.setState(ZombieState.FREEZE);
-                z.updateFreezeTime();
-            }
+        if(Math.abs(GlobalState.gameTime - wakeUpTime) >= explosionTime) {
+            HP = 0;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void action(List<Zombie> zombies){
+        for (Zombie z : zombies){
+            z.setState(ZombieState.FREEZE);
+            z.updateFreezeTime();
+        }
     }
 
     @Override
