@@ -2,6 +2,8 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
+import java.util.List;
+
 public class CoffeeBean extends Plant{
 
     private final Shroom shroom;
@@ -14,13 +16,19 @@ public class CoffeeBean extends Plant{
         this.shroom = shroom;
     }
 
-    public boolean action(){
+    @Override
+    public boolean actionHappens(List<Zombie> zombies){
         if (Math.abs(GlobalState.gameTime - timeCreated) == 1500)
             gif.setImage(new Image("file:Pictures/plantsGifs/CoffeeBeanEat.gif"));
         else if (Math.abs(GlobalState.gameTime - timeCreated) == 2700){
-            shroom.wakeUp();
+            HP = 0;
+//            shroom.wakeUp();
             return true;
         }
         return false;
+    }
+
+    public void action(){
+        shroom.wakeUp();
     }
 }

@@ -1,7 +1,10 @@
 package main.plantsvszombies;
 
+import javafx.scene.layout.Pane;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class GameLogic {
     private final List<Plant> plants = new ArrayList<>();
@@ -54,8 +57,11 @@ public class GameLogic {
         zombies.add(z);
     }
     //bullet arraylist to manage all bullets
-    public void addBullet(Bullet b){
-        bullets.add(b);
+    public void addBullet(Bullet bullet, Pane pane){
+        if (bullet == null) return;
+
+        bullets.add(bullet);
+        pane.getChildren().addAll(bullet.getPicture());
     }
 
     //manages bullets and zombie collisions.
@@ -85,12 +91,8 @@ public class GameLogic {
     public List<Plant> plantsToRemove() {
         List<Plant> toRemove = new ArrayList<>();
 
-        for (Plant plant : plants) {
-            if(plant instanceof BombPlant bomb && bomb.explosion(zombies)) toRemove.add(bomb);
-            else if (plant instanceof CoffeeBean coffeeBean && coffeeBean.action()) toRemove.add(coffeeBean);
-            else if (plant.getHP() <= 0) toRemove.add(plant);
-            else if (plant instanceof NutPlant nut) nut.updateState();
-        }
+        for (Plant plant : plants)
+            if (plant.getHP() <= 0) toRemove.add(plant);
 
         plants.removeAll(toRemove);
         return toRemove;
@@ -112,22 +114,11 @@ public class GameLogic {
         return died;
     }
 
-    public List<PeaPlant> plantsAligned() {
-        List<PeaPlant> peaPlants = new ArrayList<>();
-        for (Plant plant : plants) {
-            if (plant instanceof PeaPlant peaPlant && peaPlant.canShoot(zombies))
-                peaPlants.add(peaPlant);
-        }
-        return peaPlants;
-    }
-
-    //add sunFlowers
-    public List<SunFlower> sunFlowers(){
-        List<SunFlower> sunFlowers = new ArrayList<>();
+    public List<Plant> plantsAction(){
+        List<Plant> actions = new ArrayList<>();//gomesh nakoni
         for (Plant plant : plants)
-            if(plant instanceof SunFlower sunFlower)
-                sunFlowers.add(sunFlower);
-        return sunFlowers;
+            if (plant.actionHappens(zombies)) actions.add(plant);
+        return actions;
     }
 
     public void updateGame(){

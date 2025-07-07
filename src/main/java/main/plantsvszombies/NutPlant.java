@@ -2,6 +2,8 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
+import java.util.List;
+
 public abstract class NutPlant extends Plant{
 
     private NutState state;
@@ -12,12 +14,14 @@ public abstract class NutPlant extends Plant{
         state = NutState.FULL_LIFE;
     }
 
-    public void updateState() {
+    @Override
+    public boolean actionHappens(List<Zombie> zombies) {
         if (HP < maxHP / 4 && state == NutState.HALF_LIFE) {
             setEndLife();
         } else if (HP < maxHP / 1.5 && state == NutState.FULL_LIFE) {
             setHalfLife();
         }
+        return false;
     }
 
     private void setHalfLife(){

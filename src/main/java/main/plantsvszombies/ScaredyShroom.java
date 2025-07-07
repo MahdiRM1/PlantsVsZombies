@@ -28,7 +28,7 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
     }
 
     @Override
-    public boolean canShoot(List<Zombie> zombies){
+    public boolean actionHappens(List<Zombie> zombies){
         if(isSleep || isScare(zombies)) return false;
 
         updateFrame();

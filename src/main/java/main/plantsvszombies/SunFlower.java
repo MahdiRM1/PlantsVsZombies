@@ -1,5 +1,7 @@
 package main.plantsvszombies;
 
+import java.util.List;
+
 public class SunFlower extends Plant{
 
     private long lastSunTime;
@@ -11,13 +13,13 @@ public class SunFlower extends Plant{
         rechargeTime = 10;
         lastSunTime = timeCreated;
     }
+    @Override
+    public boolean actionHappens(List<Zombie> zombies){
+        return Math.abs(GlobalState.gameTime - lastSunTime) >= 10000;
+    }
 
-    //manages time to produce sun by sunFlowers
-    public Sun givenSun() {
-        if(Math.abs(GlobalState.gameTime - lastSunTime) >= 10000) {
-            lastSunTime = GlobalState.gameTime;
-            return new Sun(SunType.STABLE.setCoordination(row, col));
-        }
-        return null;
+    public Sun action(){
+        lastSunTime = GlobalState.gameTime;
+        return new Sun(SunType.STABLE.setCoordination(row, col));
     }
 }

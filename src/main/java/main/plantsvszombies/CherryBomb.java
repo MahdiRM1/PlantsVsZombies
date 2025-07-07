@@ -11,18 +11,16 @@ public class CherryBomb extends BombPlant{
         price = 150;
         HP = 100;
         rechargeTime = 15;
+        explosionTime = 700;
+        endOfAction = 2000;
     }
 
     @Override
-    public boolean explosion(List<Zombie> zombies) {
-        if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
-            gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
-            for (Zombie z : zombies){
-                if(Math.abs(z.getRow() - row) <= 1 &&  Math.abs(z.getCol() - col) <= 1) {
-                    z.setState(ZombieState.BOOM_DIE);
-                }
-            }
+    public void action(List<Zombie> zombies){
+        gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
+        for (Zombie z : zombies){
+            if(Math.abs(z.getRow() - row) <= 1 &&  Math.abs(z.getCol() - col) <= 1)
+                z.setState(ZombieState.BOOM_DIE);
         }
-        return Math.abs(GlobalState.gameTime - timeCreated) == 2000;
     }
 }

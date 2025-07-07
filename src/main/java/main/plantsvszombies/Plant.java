@@ -2,6 +2,9 @@ package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
 
+import java.util.List;
+import java.util.Objects;
+
 public abstract class Plant {
     protected final int row, col;
     protected final long timeCreated;
@@ -26,6 +29,10 @@ public abstract class Plant {
             damageCaused = 0;
         }
     }
+
+    public abstract boolean actionHappens(List<Zombie> zombies);
+
+//    public abstract Objects action(List<Zombie> zombies);
 
     public void resetDamageCaused(){
         damageCaused = 0;

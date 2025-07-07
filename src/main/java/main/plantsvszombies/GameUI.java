@@ -158,8 +158,10 @@ public class GameUI {
 
     private void handlePlanting(int row, int col, Button btn){
         Plant plant = getPlant(row, col);
+        boolean canPlanting = plant instanceof CoffeeBean ||
+                (gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice()));
 
-        if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
+        if(canPlanting) {
             gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
             borderPane.getChildren().add(plant.getGif());
@@ -281,9 +283,10 @@ public class GameUI {
         if (selectedButton < 0 || selectedButton >= cards.size()) return null;
         String plantName = cards.get(selectedButton).getPlantName();
         if (plantName.equals("CoffeeBean"))
-            if(getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
+            if(gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
                  return new CoffeeBean(row, col, shroom);
-        return Constants.getPlant(row,col, plantName, mode);
+            else return null;
+        return Constants.getPlant(row,  col, plantName, mode);
     }
 
     public void updateGame(){
@@ -303,12 +306,9 @@ public class GameUI {
 
     //removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages(){
-        for (Bullet bullet : gameLogic.checkBulletStrike())
-            pane.getChildren().remove(bullet.getPicture());
-        for (Zombie zombie : gameLogic.zombieToRemove())
-            pane.getChildren().remove(zombie.getPicture());
-        for (Plant plantToRemove : gameLogic.plantsToRemove())
-            borderPane.getChildren().remove(plantToRemove.getGif());
+        for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().remove(plantToRemove.getGif());
     }
 
     private void logicUpdates(){
@@ -317,15 +317,12 @@ public class GameUI {
     }
 
     private void addObjectImages(){
-        for(SunFlower sunFlower : gameLogic.sunFlowers())
-            scoreBoard.addSun(sunFlower.givenSun());
-
-        for(PeaPlant shooter : gameLogic.plantsAligned()) {
-            Bullet b = shooter.shoot(shooter.getRow(), shooter.getCol());
-            if(b != null) {
-                gameLogic.addBullet(b);
-                pane.getChildren().addAll(b.getPicture());
-            }
+        List<Plant> actions = gameLogic.plantsAction();//gomesh nakoni
+        for (Plant plant : actions){
+            if (plant instanceof PeaPlant peaPlant) gameLogic.addBullet(peaPlant.action(), pane);
+            else if (plant instanceof SunFlower sunFlower) scoreBoard.addSun(sunFlower.action());
+            else if (plant instanceof BombPlant bomb) bomb.action(gameLogic.getZombies());
+            else if (plant instanceof CoffeeBean coffeeBean) coffeeBean.action();
         }
     }
 

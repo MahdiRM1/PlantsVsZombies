@@ -16,7 +16,8 @@ public abstract class PeaPlant extends Plant{
         updateFrame();
     }
 
-    public boolean canShoot(List<Zombie> zombies){
+    @Override
+    public boolean actionHappens(List<Zombie> zombies){
         boolean nowShooting = false;
         for (Zombie z : zombies)
             if (row == z.getRow() && z.getCol() < 10 && z.getCol() >= col &&
@@ -40,7 +41,7 @@ public abstract class PeaPlant extends Plant{
         gif.setImage(frame[nowPic]);
     }
 
-    public Bullet shoot(int row, int col) {
+    public Bullet action() {
         if (GlobalState.gameTime % 20 != 0) return null;
 
         if(nowPic == 30) {
