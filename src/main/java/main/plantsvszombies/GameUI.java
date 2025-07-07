@@ -70,7 +70,7 @@ public class GameUI {
             cards.add(new Card(plantsName.get(i), i));
         }
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, 1000, mode);
+        scoreBoard = new ScoreBoard(borderPane, 50, mode);
         GlobalState.gameTime = 0;
         startGame();
     }
@@ -158,16 +158,21 @@ public class GameUI {
 
     private void handlePlanting(int row, int col, Button btn){
         Plant plant = getPlant(row, col);
-        boolean canPlanting = plant instanceof CoffeeBean ||
-                (gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice()));
+        boolean placed = false;
 
-        if(canPlanting) {
+        if(plant instanceof CoffeeBean)
+            if(!gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice()))
+                placed = true;
+
+        if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) placed = true;
+        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+
+        if (placed) {
             gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
             borderPane.getChildren().add(plant.getGif());
             btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
         }
-        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         cards.get(selectedButton).getBtn().setStyle("-fx-background-color: transparent;");
         selectedButton = -1;
