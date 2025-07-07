@@ -71,6 +71,7 @@ public class ScoreBoard {
             if (Math.abs(sun.getTimeCreated() - GlobalState.gameTime) >= SUN_LIFE_TIME) {
                 pane.getChildren().remove(sun.getPicture());
                 suns.remove(sun);
+                break;
             }
         }
     }

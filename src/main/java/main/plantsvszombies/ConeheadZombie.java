@@ -12,9 +12,9 @@ public class ConeheadZombie extends Zombie{
     private final static Image[] dieZombie;
 
     static {
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Zombie/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/ZombieAttack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePictureNum);
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Walk/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Attack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", diePictureNum);
     }
 
     public ConeheadZombie (ZombieData data) {

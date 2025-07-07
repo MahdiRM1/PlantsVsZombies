@@ -116,8 +116,8 @@ public class Introduction {
 
     private ImageView createZombie(){
         Random rdm = new Random();
-        String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "Imp"};
-        String chosen = zombieTypes[rdm.nextInt(4)];
+        String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "Imp"};
+        String chosen = zombieTypes[rdm.nextInt(5)];
 
         ImageView image = new ImageView(new Image("file:Pictures/ZombieGif/" + chosen + ".gif"));
         image.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);

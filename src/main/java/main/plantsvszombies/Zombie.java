@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 public abstract class Zombie {
 
     protected int HP;
@@ -41,7 +43,7 @@ public abstract class Zombie {
         freezeTime = -5000;
     }
 
-//name change for boolean
+    //name change for boolean
     public void damage(BulletType bulletType){
         if(bulletType == BulletType.ICE_BULLET) updateFreezeTime();
         HP -= 20;
@@ -139,14 +141,13 @@ public abstract class Zombie {
     }
 
     //checks if a zombie has reached a plant
-    private Plant plantCollision(Plant[][] pottedPlants){
-        try {
-            if (pottedPlants[row][col] != null) return pottedPlants[row][col];
-        } catch (ArrayIndexOutOfBoundsException e) {}
+    private Plant plantCollision(List<Plant> plants){
+        for (Plant plant : plants)
+            if (plant.getRow() == row && plant.getCol() == col) return plant;
         return null;
     }
 
-    public void updateState(Plant[][] pottedPlants){
+    public void updateState(List<Plant> plants){
 
         if(state == ZombieState.DIE || state == ZombieState.DEAD || state == ZombieState.BOOM_DIE) return;
 
@@ -157,7 +158,7 @@ public abstract class Zombie {
             return;
         }
 
-        Plant plant = plantCollision(pottedPlants);
+        Plant plant = plantCollision(plants);
         if(plant != null) {
             if (plant instanceof DoomShroom ds && !ds.isSleep()) return;
             state = ZombieState.EATING;
