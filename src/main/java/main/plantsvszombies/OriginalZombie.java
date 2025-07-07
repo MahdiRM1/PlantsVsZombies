@@ -12,9 +12,9 @@ public class OriginalZombie extends Zombie{
     private final static Image[] dieZombie;
 
     static{
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Zombie/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieAttack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePicturesNum);
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Walk/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Attack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", diePicturesNum);
     }
 
     public OriginalZombie(ZombieData data){

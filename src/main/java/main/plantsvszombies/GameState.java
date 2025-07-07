@@ -22,14 +22,10 @@ public class GameState implements Serializable {
     }
 
     //saves plant data
-    private void getPlants(Plant[][] pottedPlants){
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (pottedPlants[i][j] != null) {
-                    PlantData plantData = new PlantData(pottedPlants[i][j]);
-                    plants.add(plantData);
-                }
-            }
+    private void getPlants(List<Plant> pottedPlants){
+        for (Plant plant : pottedPlants) {
+            PlantData plantData = new PlantData(plant);
+            plants.add(plantData);
         }
     }
 

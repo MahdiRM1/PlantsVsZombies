@@ -12,9 +12,9 @@ public class ScreenDoorZombie extends Zombie{
     private final static Image[] dieZombie;
 
     static {
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Zombie/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/ZombieAttack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePictureNum);
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", diePictureNum);
     }
 
     public ScreenDoorZombie(ZombieData data){

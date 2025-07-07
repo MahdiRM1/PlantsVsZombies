@@ -12,9 +12,9 @@ public class FlagZombie extends OriginalZombie{
     private final static Image[] dieZombie;
 
     static{
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/FlagZombie/Zombie/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/FlagZombie/ZombieAttack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/ZombieDie/frame_", diePicturesNum);
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/FlagZombie/Walk/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/FlagZombie/Attack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", diePicturesNum);
     }
 
     public FlagZombie(ZombieData data){

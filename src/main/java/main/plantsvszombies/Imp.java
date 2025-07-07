@@ -12,9 +12,9 @@ public class Imp extends Zombie{
     private final static Image[] dieZombie;
 
     static{
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Zombie/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/ZombieAttack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/ZombieDie/frame_", diePicturesNum);
+        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Walk/frame_", walkPictureNum);
+        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Attack/frame_", attackPictureNum);
+        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Die/frame_", diePicturesNum);
     }
 
     public Imp (ZombieData data) {

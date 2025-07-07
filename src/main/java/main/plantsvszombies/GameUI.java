@@ -2,7 +2,6 @@ package main.plantsvszombies;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -20,7 +19,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -110,12 +108,8 @@ public class GameUI {
     }
 
     private void loadPlants(){
-        for (int i = 0; i < Constants.ROWS; i++) {
-            for (int j = 0; j < Constants.COLS; j++) {
-                Plant plant = gameLogic.getPottedPlants()[i][j];
-                if(plant != null) borderPane.getChildren().add(plant.getGif());
-            }
-        }
+        for (Plant plant : gameLogic.getPottedPlants())
+            borderPane.getChildren().add(plant.getGif());
     }
 
     private void loadZombies() {
@@ -164,21 +158,14 @@ public class GameUI {
 
     private void handlePlanting(int row, int col, Button btn){
         Plant plant = getPlant(row, col);
-        boolean placed = false;
 
-        if(plant instanceof CoffeeBean coffeeBean && scoreBoard.purchasePlant(plant.getPrice())){
-            gameLogic.coffeeBean = coffeeBean;
-            placed = true;
-        } else if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
-            gameLogic.setPlant(row, col, plant);
-            placed = true;
-        }
-
-        if (placed) {
+        if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
+            gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
             borderPane.getChildren().add(plant.getGif());
             btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
-        } else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        }
+        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         cards.get(selectedButton).getBtn().setStyle("-fx-background-color: transparent;");
         selectedButton = -1;
@@ -186,7 +173,7 @@ public class GameUI {
 
     //manage shovel visuals
     private void useShovel(int row, int col, Button btn) {
-        Plant plant = gameLogic.getPottedPlants()[row][col];
+        Plant plant = gameLogic.getPlant(row, col);
         if(!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())){
             borderPane.getChildren().remove(plant.getGif());
             gameLogic.removePlant(row, col);
@@ -294,7 +281,7 @@ public class GameUI {
         if (selectedButton < 0 || selectedButton >= cards.size()) return null;
         String plantName = cards.get(selectedButton).getPlantName();
         if (plantName.equals("CoffeeBean"))
-            if(gameLogic.getPottedPlants()[row][col] instanceof Shroom shroom && shroom.isSleep())
+            if(getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
                  return new CoffeeBean(row, col, shroom);
         return Constants.getPlant(row,col, plantName, mode);
     }
@@ -302,9 +289,9 @@ public class GameUI {
     public void updateGame(){
         winOrLose();
         cleanUpImages();
-        characterActions();
         addObjectImages();
         rechargeCheck();
+        logicUpdates();
         timeHandler();
     }
 
@@ -324,10 +311,8 @@ public class GameUI {
             borderPane.getChildren().remove(plantToRemove.getGif());
     }
 
-    private void characterActions(){
-        for(Zombie z : gameLogic.getZombies()) z.action();
-        for(Bullet b : gameLogic.getBullets()) b.move();
-        gameLogic.setZombieState();
+    private void logicUpdates(){
+        gameLogic.updateGame();
         scoreBoard.handleSuns();
     }
 
@@ -355,37 +340,37 @@ public class GameUI {
 
 //        if(gameTime <= 20000) return;
 
-        if(gameTime <= 50000){
+        if(gameTime <= 50_000){
             if(gameTime % 5000 == 1000)
                 spawnZombie(0, rdm.nextInt(5));
         }
 
-        else if(gameTime < 70000){
+        else if(gameTime < 70_000){
             if(gameTime % 4000 == 0)
                 spawnZombie(rdm.nextInt(2), rdm.nextInt(5));
         }
 
-        else if(gameTime < 80000){
-            if (gameTime == 70000)
-                spawnZombie(4, rdm.nextInt(5));
+        else if(gameTime < 80_000){
+            if (gameTime == 70_000)
+                spawnZombie(5, rdm.nextInt(5));
             if(gameTime % 4000 == 0 || gameTime % 4000 == 200){
                 for (int i = 0; i < 5; i++)
                     spawnZombie(rdm.nextInt(2), i);
             }
         }
 
-        else if(gameTime < 130000){
+        else if(gameTime < 130_000){
             if(gameTime % 3000 == 0) {
-                spawnZombie(rdm.nextInt(3), rdm.nextInt(5));
-                spawnZombie(rdm.nextInt(3), rdm.nextInt(5));
+                spawnZombie(rdm.nextInt(4), rdm.nextInt(5));
+                spawnZombie(rdm.nextInt(4), rdm.nextInt(5));
             }
         }
 
-        else if (gameTime < 150000){
-            if(gameTime == 130000)spawnZombie(4, rdm.nextInt(5));
+        else if (gameTime < 150_000){
+            if(gameTime == 130_000)spawnZombie(5, rdm.nextInt(5));
             if(gameTime % 4000 == 0 || gameTime % 4000 == 200){
                 for (int i = 0; i < 5; i++) {
-                    spawnZombie(rdm.nextInt(4), i);
+                    spawnZombie(rdm.nextInt(5), i);
                 }
             }
         }
@@ -393,14 +378,14 @@ public class GameUI {
 
     //determines what type of zombie to add
     private void spawnZombie(int z, int row){
-        Zombie zombie;
-        switch (z){
-            case 0 -> zombie = new OriginalZombie(row);
-            case 1 -> zombie = new ConeheadZombie(row);
-            case 2 -> zombie = new ScreenDoorZombie(row);
-            case 3 -> zombie = new Imp(row);
-            default -> zombie = new FlagZombie(row);
-        }
+        Zombie zombie = switch (z){
+            case 0 -> new OriginalZombie(row);
+            case 1 -> new ConeheadZombie(row);
+            case 2 -> new ScreenDoorZombie(row);
+            case 3 -> new BucketheadZombie(row);
+            case 4 -> new Imp(row);
+            default -> new FlagZombie(row);
+        };
 
         gameLogic.addZombie(zombie);
         pane.getChildren().add(zombie.getPicture());
