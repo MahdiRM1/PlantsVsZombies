@@ -7,6 +7,12 @@ import java.util.List;
 public class GraveBuster extends Plant{
 
     private final Grave grave;
+    private static final Image[] images;
+    private static final int imagesNum = 28;
+
+    static {
+        images = Constants.getArrayImage("Pictures/plantsGifs/GraveBuster/frame_", imagesNum);
+    }
 
     public GraveBuster(int row, int col, Grave grave){
         super(row, col);
@@ -20,6 +26,7 @@ public class GraveBuster extends Plant{
 
     @Override
     public boolean actionHappens(List<Zombie> zombies){
+        updateFrame();
         if (Math.abs(GlobalState.gameTime - timeCreated) < 2000)
             gif.setLayoutY(gif.getLayoutY() + Constants.TILE_SIZE/200);
         else if (Math.abs(GlobalState.gameTime - timeCreated) == 2000) {
@@ -31,5 +38,10 @@ public class GraveBuster extends Plant{
 
     public Grave action(){
         return grave;
+    }
+
+    @Override
+    protected Image[] getImage(){
+        return images;
     }
 }
