@@ -21,6 +21,7 @@ public class Repeater extends PeaPlant{
         HP = 100;
         rechargeTime = 10;
         bulletType = BulletType.NORMAL_BULLET;
+        frameUpdateTime = 20;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class Repeater extends PeaPlant{
     }
 
     @Override
-    protected Image[] getImage(boolean isShooting) {
+    protected Image[] getImage() {
         return isShooting ? shootImage : normalImage;
     }
 }
