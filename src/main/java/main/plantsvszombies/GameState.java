@@ -8,6 +8,7 @@ public class GameState implements Serializable {
     private final List<PlantData> plants = new ArrayList<>();
     private final List<ZombieData> zombies = new ArrayList<>();
     private final List<CardData> cards = new ArrayList<>();
+    private final List<GraveData> graves = new ArrayList<>();
     private final int score;
     private final long time;
     private final GameMode mode;
@@ -16,6 +17,7 @@ public class GameState implements Serializable {
         getPlants(logic.getPottedPlants());
         getZombies(logic.getZombies());
         getCards(cards);
+        getGraves(logic.getGraves());
         this.score = score;
         this.mode = mode;
         time = GlobalState.gameTime;
@@ -45,6 +47,13 @@ public class GameState implements Serializable {
         }
     }
 
+    private void getGraves(List<Grave> graves){
+        for (Grave grave : graves){
+            GraveData data = new GraveData(grave);
+            this.graves.add(data);
+        }
+    }
+
     //getters
     public List<PlantData> getPlants() {
         return plants;
@@ -56,6 +65,10 @@ public class GameState implements Serializable {
 
     public List<CardData> getCards() {
         return cards;
+    }
+
+    public List<GraveData> getGraves() {
+        return graves;
     }
 
     public int getScore() {

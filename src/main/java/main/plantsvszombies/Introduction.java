@@ -70,7 +70,7 @@ public class Introduction {
         positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT/1.8);
 
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom")
+                getCardButton("DoomShroom"), getCardButton("GraveBuster")
         );
         positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT/1.4);
 

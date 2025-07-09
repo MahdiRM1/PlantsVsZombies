@@ -68,7 +68,17 @@ public final class Constants {
         plant.setLayoutY(plantName.equals("TallNut") ?
                 (BOARD_Y) + ((row - 0.5) * TILE_SIZE) :
                 (BOARD_Y) + (row * TILE_SIZE));
+        plant.setMouseTransparent(true);
         return plant;
+    }
+
+    public static ImageView setGravePicture(int row, int col, int i){
+        ImageView grave = createImageView("Pictures/graves/" + i + ".png",
+                TILE_SIZE * 0.8, TILE_SIZE * 0.8);
+        grave.setLayoutX(BOARD_X + (col * TILE_SIZE));
+        grave.setLayoutY(BOARD_Y + (row * TILE_SIZE));
+        grave.setMouseTransparent(true);
+        return grave;
     }
 
     public static ImageView setBulletPicture(int row, int col, BulletType bulletType){
