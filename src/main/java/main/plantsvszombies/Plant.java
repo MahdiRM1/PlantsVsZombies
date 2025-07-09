@@ -3,7 +3,6 @@ package main.plantsvszombies;
 import javafx.scene.image.ImageView;
 
 import java.util.List;
-import java.util.Objects;
 
 public abstract class Plant {
     protected final int row, col;
@@ -19,7 +18,6 @@ public abstract class Plant {
         this.col = col;
         this.timeCreated = GlobalState.gameTime;
         gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
-        gif.setMouseTransparent(true);
     }
 
     public void damage(){
@@ -32,7 +30,9 @@ public abstract class Plant {
 
     public abstract boolean actionHappens(List<Zombie> zombies);
 
-//    public abstract Objects action(List<Zombie> zombies);
+    public void setHP(double HP){
+        this.HP = HP;
+    }
 
     public void resetDamageCaused(){
         damageCaused = 0;
