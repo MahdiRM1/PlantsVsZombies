@@ -48,12 +48,10 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic(state);
         this.mode = state.getMode();
-        for (CardData data : state.getCards()) {
-            Constants.getPlant(0, 0, data.getPlantName(), mode);
-            cards.add(new Card(data));
-        }
+        for (CardData data : state.getCards()) cards.add(new Card(data));
         initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(borderPane, state.getScore(), mode);
+        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
         GlobalState.gameTime = state.getTime();
         loadPlants();
         loadZombies();
@@ -63,14 +61,12 @@ public class GameUI {
     //constructor: to start a new game
     public GameUI(Stage stage, List<String> plantsName, GameMode mode){
         this.stage = stage;
-        gameLogic = new GameLogic();
+        gameLogic = new GameLogic(mode);
         this.mode = mode;
-        for (int i = 0; i < plantsName.size(); i++) {
-            Constants.getPlant(0, 0, plantsName.get(i), mode);
-            cards.add(new Card(plantsName.get(i), i));
-        }
+        for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
         initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, 50, mode);
+        scoreBoard = new ScoreBoard(borderPane, 1000, mode);
+        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
         GlobalState.gameTime = 0;
         startGame();
     }
@@ -160,7 +156,7 @@ public class GameUI {
         Plant plant = getPlant(row, col);
         boolean placed = false;
 
-        if(plant instanceof CoffeeBean)
+        if(plant instanceof CoffeeBean || plant instanceof GraveBuster)
             if(!gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice()))
                 placed = true;
 
@@ -286,12 +282,24 @@ public class GameUI {
 
     private Plant getPlant(int row, int col){
         if (selectedButton < 0 || selectedButton >= cards.size()) return null;
+
         String plantName = cards.get(selectedButton).getPlantName();
-        if (plantName.equals("CoffeeBean"))
-            if(gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
-                 return new CoffeeBean(row, col, shroom);
-            else return null;
+        if (plantName.equals("CoffeeBean")) return getCoffeeBean(row, col);
+        if (plantName.equals("GraveBuster")) return getGraveBuster(row, col);
         return Constants.getPlant(row,  col, plantName, mode);
+    }
+
+    private CoffeeBean getCoffeeBean(int row, int col){
+        if(gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
+            return new CoffeeBean(row, col, shroom);
+        else return null;
+    }
+
+    private GraveBuster getGraveBuster(int row, int col){
+        for (Grave grave : gameLogic.getGraves())
+            if (grave.getRow() == row && grave.getCol() == col)
+                return new GraveBuster(row, col, grave);
+        return null;
     }
 
     public void updateGame(){
@@ -328,6 +336,7 @@ public class GameUI {
             else if (plant instanceof SunFlower sunFlower) scoreBoard.addSun(sunFlower.action());
             else if (plant instanceof BombPlant bomb) bomb.action(gameLogic.getZombies());
             else if (plant instanceof CoffeeBean coffeeBean) coffeeBean.action();
+            else if (plant instanceof GraveBuster graveBuster) gameLogic.removeGrave(graveBuster.action(), borderPane);
         }
     }
 

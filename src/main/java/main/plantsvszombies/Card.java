@@ -37,6 +37,7 @@ public class Card {
     public int rechargeTime(){
         Plant plant;
         if (plantName.equals("CoffeeBean")) plant = new CoffeeBean(0, 0, null);
+        else if (plantName.equals("GraveBuster")) plant = new GraveBuster(0, 0, null);
         else plant = Constants.getPlant(0, 0, plantName, null);
         return plant.getRechargeTime() * 1000 ;
     }
