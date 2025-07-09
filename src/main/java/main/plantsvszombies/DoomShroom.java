@@ -25,7 +25,7 @@ public class DoomShroom extends BombPlant implements Shroom{
         gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;
         explosionTime = 1000;
-        endOfAction = 20000;
+        endOfAction = 22000;
     }
 
     @Override
@@ -37,7 +37,14 @@ public class DoomShroom extends BombPlant implements Shroom{
         if(Math.abs(GlobalState.gameTime - wakeUpTime) == explosionTime) return true;
 
         if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2000) {
-            gif.setImage(new Image("file:Pictures/plantsGifs/DayHole1.png"));
+            if(timeCreated != wakeUpTime) gif.setImage(new Image("file:Pictures/plantsGifs/DayHole1.png"));
+            else gif.setImage(new Image("file:Pictures/plantsGifs/NightHole1.png"));
+            gif.setLayoutY(gif.getLayoutY() + gif.getFitHeight()/4);
+            Constants.changeScale(gif, 0.5);
+        }
+        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == 12000){
+            if(timeCreated != wakeUpTime) gif.setImage(new Image("file:Pictures/plantsGifs/DayHole2.png"));
+            else gif.setImage(new Image("file:Pictures/plantsGifs/NightHole2.png"));
         }
         else if(Math.abs(GlobalState.gameTime - wakeUpTime) == endOfAction) HP = 0;
         return false;
@@ -46,6 +53,8 @@ public class DoomShroom extends BombPlant implements Shroom{
     @Override
     public void action(List<Zombie> zombies){
         gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
+        Constants.changeScale(gif, 2);
+        gif.setLayoutY(gif.getLayoutY() - gif.getFitHeight()/4);
         for (Zombie z : zombies){
             if(Math.abs(z.getRow() - row) <= 2 &&  Math.abs(z.getCol() - col) <= 2) {
                 z.setState(ZombieState.BOOM_DIE);

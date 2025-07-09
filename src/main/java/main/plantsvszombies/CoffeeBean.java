@@ -22,7 +22,6 @@ public class CoffeeBean extends Plant{
             gif.setImage(new Image("file:Pictures/plantsGifs/CoffeeBeanEat.gif"));
         else if (Math.abs(GlobalState.gameTime - timeCreated) == 2700){
             HP = 0;
-//            shroom.wakeUp();
             return true;
         }
         return false;

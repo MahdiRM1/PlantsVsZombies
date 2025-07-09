@@ -18,6 +18,7 @@ public class CherryBomb extends BombPlant{
     @Override
     public void action(List<Zombie> zombies){
         gif.setImage(new Image("file:Pictures/plantsGifs/Boom.gif"));
+        Constants.changeScale(gif, 2.5);
         for (Zombie z : zombies){
             if(Math.abs(z.getRow() - row) <= 1 &&  Math.abs(z.getCol() - col) <= 1)
                 z.setState(ZombieState.BOOM_DIE);
