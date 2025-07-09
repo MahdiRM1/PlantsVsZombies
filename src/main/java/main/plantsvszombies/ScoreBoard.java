@@ -47,7 +47,7 @@ public class ScoreBoard {
         if (sun == null) return;
 
         ImageView sunImage = sun.getPicture();
-        sunImage.setOnMouseClicked(event -> collectSun(sun));
+        sunImage.setOnMouseClicked(event -> sun.setType(SunType.COLLECTED));
         pane.getChildren().add(sunImage);
         suns.add(sun);
     }
@@ -55,8 +55,7 @@ public class ScoreBoard {
     private void collectSun(Sun sun) {
         score += SUN_VALUE;
         scoreLabel.setText(score + "");
-        pane.getChildren().remove(sun.getPicture());
-        suns.remove(sun);
+        removeSunFromPane(sun);
     }
 
     public void handleSuns() {
@@ -69,11 +68,19 @@ public class ScoreBoard {
     private void cleanUpSuns() {
         for (Sun sun : suns) {
             if (Math.abs(sun.getTimeCreated() - GlobalState.gameTime) >= SUN_LIFE_TIME) {
-                pane.getChildren().remove(sun.getPicture());
-                suns.remove(sun);
+                removeSunFromPane(sun);
+                break;
+            }
+            if (Math.abs(sun.getPicture().getLayoutX() - Constants.SCREEN_WIDTH / 40) < 5){
+                collectSun(sun);
                 break;
             }
         }
+    }
+
+    private void removeSunFromPane(Sun sun){
+        pane.getChildren().remove(sun.getPicture());
+        suns.remove(sun);
     }
 
     private void fallenSun() {
@@ -83,7 +90,7 @@ public class ScoreBoard {
     // manage fallen sun movement
     private void sunDrop() {
         if (GlobalState.gameTime % 10000 == 0 && mode == GameMode.DAY) {
-            Sun s = new Sun(SunType.FALLEN);
+            Sun s = new Sun(SunType.BASE_FALLEN);
             addSun(s);
         }
     }

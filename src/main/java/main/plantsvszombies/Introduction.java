@@ -40,7 +40,12 @@ public class Introduction {
         }
     }
 
-    public void plantSelectionPage(){
+    public void plantSelectionPage(GameMode mode){
+        this.mode = mode;
+        plantSelectionPage();
+    }
+
+    private void plantSelectionPage(){
         Pane pane = new Pane();
         pane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
