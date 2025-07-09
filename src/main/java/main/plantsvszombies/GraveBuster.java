@@ -14,7 +14,7 @@ public class GraveBuster extends Plant{
         HP = 100;
         rechargeTime = 10;
         this.grave = grave;
-        Constants.changeScale(gif, 1.5);
+        Constants.changeScale(gif, 1.3);
         gif.setLayoutY(gif.getLayoutY() - Constants.TILE_SIZE/2);
     }
 

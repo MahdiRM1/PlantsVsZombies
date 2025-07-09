@@ -423,7 +423,7 @@ public class GameUI {
         ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
         restart.setLayoutX(Constants.SCREEN_WIDTH/1.9);
         restart.setLayoutY(Constants.SCREEN_HEIGHT/1.3);
-        restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage(mode));
+        restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage());
 
         ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
         mainMenu.setLayoutX(Constants.SCREEN_WIDTH/3.8);
