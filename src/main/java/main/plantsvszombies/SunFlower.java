@@ -20,6 +20,6 @@ public class SunFlower extends Plant{
 
     public Sun action(){
         lastSunTime = GlobalState.gameTime;
-        return new Sun(SunType.STABLE.setCoordination(row, col));
+        return new Sun(SunType.RISEN.setCoordination(row, col));
     }
 }

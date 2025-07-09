@@ -23,8 +23,8 @@ public class ConeheadZombie extends Zombie{
         speed = 5;
     }
 
-    public ConeheadZombie(int row){
-        super(row);
+    public ConeheadZombie(int row, int col){
+        super(row, col);
         HP = 140;
         speed = 5;
     }

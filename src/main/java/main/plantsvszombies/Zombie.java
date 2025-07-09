@@ -26,7 +26,7 @@ public abstract class Zombie {
     public Zombie(ZombieData data) {
         this.row = data.getRow();
         picture = new ImageView();
-        Constants.setZombiePicture(picture, row);
+        Constants.setZombiePicture(picture, row, col);
         picture.setLayoutX(data.getPicLayoutX());
         col = Constants.getColumnZombie(picture);
         state = ZombieState.WALKING;
@@ -34,10 +34,11 @@ public abstract class Zombie {
         freezeTime = -5000;
     }
 
-    public Zombie(int row) {
+    public Zombie(int row, int col){
         this.row = row;
+        this.col = col;
         picture = new ImageView();
-        Constants.setZombiePicture(picture, row);
+        Constants.setZombiePicture(picture, row, col);
         col = Constants.getColumnZombie(picture);
         state = ZombieState.WALKING;
         freezeTime = -5000;

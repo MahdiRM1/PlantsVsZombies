@@ -66,6 +66,7 @@ public class GameUI {
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
         initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(borderPane, 1000, mode);
+//        scoreBoard = new ScoreBoard(borderPane, mode == GameMode.DAY ? 50 : 100, mode);
         for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
         GlobalState.gameTime = 0;
         startGame();
@@ -157,10 +158,9 @@ public class GameUI {
         boolean placed = false;
 
         if(plant instanceof CoffeeBean || plant instanceof GraveBuster)
-            if(!gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice()))
-                placed = true;
+            if(scoreBoard.purchasePlant(plant.getPrice())) placed = true;
 
-        if(gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) placed = true;
+        if(plant != null && gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) placed = true;
         else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         if (placed) {
@@ -347,55 +347,50 @@ public class GameUI {
     //controls the general timing of zombies entering and attack waves
     private void timeHandler(){
         Random rdm = new Random();
-        long gameTime = GlobalState.gameTime;
+        if(GlobalState.gameTime <= 20000) return;
+        if(GlobalState.gameTime <= 40_000) handleZombie(5000, 1000, 1, rdm);
+        else if(GlobalState.gameTime < 60_000) handleZombie(4000, 0, 2, rdm);
+        else if(GlobalState.gameTime < 70_000) return;
+        else if(GlobalState.gameTime < 80_000) Attack(rdm, 4, 1);
+        else if(GlobalState.gameTime < 130_000) {
+            handleZombie(3000, 0, 4, rdm);
+            handleZombie(3000, 0, 4, rdm);
+        }
+        else if (GlobalState.gameTime < 140_000) return;
+        else if (GlobalState.gameTime < 155_000) Attack(rdm, 5, 2);
+    }
 
-//        if(gameTime <= 20000) return;
+    private void handleZombie(long base, long mode, int zombieTypes, Random rdm){
+        if(GlobalState.gameTime % base == mode)
+            spawnZombie(rdm.nextInt(zombieTypes), rdm.nextInt(5));
+    }
 
-        if(gameTime <= 50_000){
-            if(gameTime % 5000 == 1000)
-                spawnZombie(0, rdm.nextInt(5));
+    private void Attack(Random rdm, int zombieTypes, int attackType){
+        if (GlobalState.gameTime == (long)attackType * 70_000){
+            spawnZombie(5, rdm.nextInt(5));
+            if (attackType > 1)
+                for (Grave grave : gameLogic.getGraves())
+                    spawnZombie(rdm.nextInt(4), grave.getRow(), grave.getCol());
         }
 
-        else if(gameTime < 70_000){
-            if(gameTime % 4000 == 0)
-                spawnZombie(rdm.nextInt(2), rdm.nextInt(5));
-        }
+        else if(GlobalState.gameTime % 4000 == 0 || GlobalState.gameTime % 4000 == 200)
+            for (int i = 0; i < 5; i++)
+                spawnZombie(rdm.nextInt(zombieTypes), i);
+    }
 
-        else if(gameTime < 80_000){
-            if (gameTime == 70_000)
-                spawnZombie(5, rdm.nextInt(5));
-            if(gameTime % 4000 == 0 || gameTime % 4000 == 200){
-                for (int i = 0; i < 5; i++)
-                    spawnZombie(rdm.nextInt(2), i);
-            }
-        }
-
-        else if(gameTime < 130_000){
-            if(gameTime % 3000 == 0) {
-                spawnZombie(rdm.nextInt(4), rdm.nextInt(5));
-                spawnZombie(rdm.nextInt(4), rdm.nextInt(5));
-            }
-        }
-
-        else if (gameTime < 150_000){
-            if(gameTime == 130_000)spawnZombie(5, rdm.nextInt(5));
-            if(gameTime % 4000 == 0 || gameTime % 4000 == 200){
-                for (int i = 0; i < 5; i++) {
-                    spawnZombie(rdm.nextInt(5), i);
-                }
-            }
-        }
+    private void spawnZombie(int z, int row){
+        spawnZombie(z, row, 10);
     }
 
     //determines what type of zombie to add
-    private void spawnZombie(int z, int row){
+    private void spawnZombie(int z, int row, int col){
         Zombie zombie = switch (z){
-            case 0 -> new OriginalZombie(row);
-            case 1 -> new ConeheadZombie(row);
-            case 2 -> new ScreenDoorZombie(row);
-            case 3 -> new BucketheadZombie(row);
-            case 4 -> new Imp(row);
-            default -> new FlagZombie(row);
+            case 0 -> new OriginalZombie(row, col);
+            case 1 -> new ConeheadZombie(row, col);
+            case 2 -> new ScreenDoorZombie(row, col);
+            case 3 -> new BucketheadZombie(row, col);
+            case 4 -> new Imp(row, col);
+            default -> new FlagZombie(row, col);
         };
 
         gameLogic.addZombie(zombie);
@@ -423,7 +418,7 @@ public class GameUI {
         ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
         restart.setLayoutX(Constants.SCREEN_WIDTH/1.9);
         restart.setLayoutY(Constants.SCREEN_HEIGHT/1.3);
-        restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage());
+        restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage(mode));
 
         ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH/5, Constants.SCREEN_HEIGHT/12);
         mainMenu.setLayoutX(Constants.SCREEN_WIDTH/3.8);
