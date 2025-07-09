@@ -8,7 +8,7 @@ public abstract class PeaPlant extends Plant{
 
     protected BulletType bulletType;
     protected long lastShoot;
-    private boolean isShooting;
+    protected boolean isShooting;
     protected int nowPic;
 
     public PeaPlant(int row, int col) {
@@ -30,17 +30,6 @@ public abstract class PeaPlant extends Plant{
         return isShooting = nowShooting;
     }
 
-    protected void updateFrame(){
-        Image[] frame = getImage(isShooting);
-        nowPic++;
-        if (frame == null) {
-            nowPic %= 60;
-            return;
-        }
-        nowPic %= frame.length;
-        gif.setImage(frame[nowPic]);
-    }
-
     public Bullet action() {
         if (GlobalState.gameTime % 20 != 0) return null;
 
@@ -50,8 +39,4 @@ public abstract class PeaPlant extends Plant{
         }
         return null;
     }
-
-    protected Image[] getImage(boolean isShooting){
-        return null;
-    };
 }

@@ -6,14 +6,20 @@ import java.util.List;
 
 public class DoomShroom extends BombPlant implements Shroom{
 
-    private boolean isSleep;
     private long wakeUpTime;
-    private  final Image sleepImage;
-    private final Image normalImage;
+    private boolean isSleep;
+    private static final int imagesNum = 22;
+    private static final int sleepImagesNum = 25;
+    private static final int doomImagesNum = 10;
+    private static final Image[] sleepImages;
+    private static final Image[] normalImages;
+    private static final Image[] doomImages;
+    private boolean finishAnimation;
 
-    {
-        sleepImage = new Image("file:Pictures/plantsGifs/DoomShroomSleep.gif");
-        normalImage = new Image("file:Pictures/plantsGifs/DoomShroom.gif");
+    static {
+        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", sleepImagesNum);
+        normalImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", imagesNum);
+        doomImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", doomImagesNum);
     }
 
     public DoomShroom(int row, int col, GameMode mode){
@@ -22,31 +28,38 @@ public class DoomShroom extends BombPlant implements Shroom{
         HP = 100;
         rechargeTime = 15;
         isSleep = setIsSleep(mode);
-        gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;
-        explosionTime = 1000;
-        endOfAction = 22000;
+        finishAnimation = false;
     }
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         if(isSleep){
+            updateFrame();
             wakeUpTime = GlobalState.gameTime;
             return false;
         }
-        if(Math.abs(GlobalState.gameTime - wakeUpTime) == explosionTime) return true;
 
-        if (Math.abs(GlobalState.gameTime - wakeUpTime) == 2000) {
-            if(timeCreated != wakeUpTime) gif.setImage(new Image("file:Pictures/plantsGifs/DayHole1.png"));
-            else gif.setImage(new Image("file:Pictures/plantsGifs/NightHole1.png"));
-            gif.setLayoutY(gif.getLayoutY() + gif.getFitHeight()/4);
-            Constants.changeScale(gif, 0.5);
+        if(!finishAnimation) {
+            updateFrame();
+            if (!isExploded && nowPic >= getImage().length - 1) {
+                nowPic = 0;
+                frameUpdateTime = 80;
+                return isExploded = true;
+            } else if (nowPic >= getImage().length - 1) {
+                finishAnimation = true;
+                String str = timeCreated != wakeUpTime ? "Day" : "Night";
+                gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom/" + str + "Hole1.png"));
+                gif.setLayoutY(gif.getLayoutY() + gif.getFitHeight() / 4);
+                Constants.changeScale(gif, 0.5);
+            }
         }
+
         else if(Math.abs(GlobalState.gameTime - wakeUpTime) == 12000){
-            if(timeCreated != wakeUpTime) gif.setImage(new Image("file:Pictures/plantsGifs/DayHole2.png"));
-            else gif.setImage(new Image("file:Pictures/plantsGifs/NightHole2.png"));
+            String time = timeCreated != wakeUpTime ? "Day" : "Night";
+            gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom/" + time + "Hole2.png"));
         }
-        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == endOfAction) HP = 0;
+        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) HP = 0;
         return false;
     }
 
@@ -65,11 +78,17 @@ public class DoomShroom extends BombPlant implements Shroom{
     @Override
     public void wakeUp() {
         isSleep = false;
-        gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom.gif"));
     }
 
     @Override
     public boolean isSleep(){
         return isSleep;
+    }
+
+    @Override
+    protected Image[] getImage() {
+        if (isSleep) return sleepImages;
+        if (isExploded) return doomImages;
+        return normalImages;
     }
 }
