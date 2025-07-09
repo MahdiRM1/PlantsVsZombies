@@ -18,11 +18,12 @@ public class SnowPea extends PeaPlant{
         price = 175;
         HP = 100;
         rechargeTime = 10;
-        bulletType = BulletType.ICE_BULLET;;
+        bulletType = BulletType.ICE_BULLET;
+        frameUpdateTime = 20;
     }
 
     @Override
-    protected Image[] getImage(boolean isShooting) {
+    protected Image[] getImage() {
         return isShooting ? shootImage : normalImage;
     }
 }
