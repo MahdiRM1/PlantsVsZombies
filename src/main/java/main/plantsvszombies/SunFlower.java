@@ -21,6 +21,7 @@ public class SunFlower extends Plant{
         lastSunTime = timeCreated;
         frameUpdateTime = 20;
     }
+
     @Override
     public boolean actionHappens(List<Zombie> zombies){
         updateFrame();

@@ -33,7 +33,7 @@ public abstract class PeaPlant extends Plant{
     public Bullet action() {
         if (GlobalState.gameTime % 20 != 0) return null;
 
-        if(nowPic == 30) {
+        if(nowPic == 30 || Math.abs(lastShoot - GlobalState.gameTime) >= 1200) {
             lastShoot = GlobalState.gameTime;
             return new Bullet(row, col, bulletType);
         }
