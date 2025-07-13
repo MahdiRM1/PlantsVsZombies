@@ -44,7 +44,7 @@ public final class Constants {
     public static ImageView setSunPicture(SunType type){
         ImageView sun = createImageView("Pictures/sun/sun.png",
                 SUN_SIZE, SUN_SIZE);
-        if(type == SunType.FALLEN){
+        if(type == SunType.BASE_FALLEN){
             sun.setLayoutX(BOARD_X + TILE_SIZE * COLS * Math.random());
             sun.setLayoutY(0);
         } else {
@@ -55,7 +55,7 @@ public final class Constants {
     }
 
     public static double sunMaxY(SunType type){
-        return (type == SunType.FALLEN) ?
+        return (type == SunType.BASE_FALLEN) ?
                 BOARD_Y + (TILE_SIZE * 5 * Math.random()) :
                 BOARD_Y + (type.getRow() * TILE_SIZE) + (SCREEN_HEIGHT / 20);
     }
@@ -68,7 +68,17 @@ public final class Constants {
         plant.setLayoutY(plantName.equals("TallNut") ?
                 (BOARD_Y) + ((row - 0.5) * TILE_SIZE) :
                 (BOARD_Y) + (row * TILE_SIZE));
+        plant.setMouseTransparent(true);
         return plant;
+    }
+
+    public static ImageView setGravePicture(int row, int col, int i){
+        ImageView grave = createImageView("Pictures/graves/" + i + ".png",
+                TILE_SIZE * 0.8, TILE_SIZE * 0.8);
+        grave.setLayoutX(BOARD_X + (col * TILE_SIZE));
+        grave.setLayoutY(BOARD_Y + (row * TILE_SIZE));
+        grave.setMouseTransparent(true);
+        return grave;
     }
 
     public static ImageView setBulletPicture(int row, int col, BulletType bulletType){
@@ -81,11 +91,11 @@ public final class Constants {
         return bullet;
     }
 
-    public static void setZombiePicture(ImageView picture, int row){
+    public static void setZombiePicture(ImageView picture, int row, int col){
         picture.setFitWidth(ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(ZOMBIE_PIC_HEIGHT);
         picture.setLayoutY(SCREEN_HEIGHT - picture.getFitHeight() - ((4-row) * TILE_SIZE) - (SCREEN_HEIGHT/10));
-        picture.setLayoutX(SCREEN_WIDTH);
+        picture.setLayoutX(BOARD_X + (col - 0.5) * TILE_SIZE);
     }
 
     public static int getColumnZombie(ImageView picture){

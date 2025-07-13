@@ -9,12 +9,13 @@ public class IceShroom extends BombPlant implements Shroom{
 
     private long wakeUpTime;
     private boolean isSleep;
-    private static final Image sleepImage;
-    private static final Image normalImage;
+    private static final int imagesNum = 17;
+    private static final Image[] sleepImages;
+    private static final Image[] normalImages;
 
     static {
-        sleepImage = new Image("file:Pictures/plantsGifs/IceShroomSleep.gif");
-        normalImage = new Image("file:Pictures/plantsGifs/IceShroom.gif");
+        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/sleep/frame_", imagesNum);
+        normalImages = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/normal/frame_", imagesNum);
     }
 
     public IceShroom(int row, int col, GameMode mode){
@@ -23,20 +24,15 @@ public class IceShroom extends BombPlant implements Shroom{
         HP = 100;
         rechargeTime = 15;
         isSleep = setIsSleep(mode);
-        gif.setImage((isSleep) ? sleepImage : normalImage);
         wakeUpTime = timeCreated;
-        explosionTime = 1500;
     }
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if(isSleep){
-            wakeUpTime = GlobalState.gameTime;
-            return false;
-        }
-        if(Math.abs(GlobalState.gameTime - wakeUpTime) >= explosionTime) {
-            HP = 0;
-            return true;
+        updateFrame();
+        if(!isExploded && nowPic >= getImage().length - 1) {
+            nowPic = 0;
+            return isExploded = true;
         }
         return false;
     }
@@ -52,11 +48,17 @@ public class IceShroom extends BombPlant implements Shroom{
     @Override
     public void wakeUp() {
         isSleep = false;
-        gif.setImage(normalImage);
     }
 
     @Override
     public boolean isSleep(){
         return isSleep;
     }
+
+    @Override
+    protected Image[] getImage() {
+        if (isSleep) return sleepImages;
+        return normalImages;
+    }
+
 }

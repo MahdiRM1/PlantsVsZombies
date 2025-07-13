@@ -17,6 +17,7 @@ public class Introduction {
 
     private final Stage stage;
     private final List<String> selectedCards = new ArrayList<>();
+    private GameMode mode;
     private HBox cardBar;
 
     public Introduction(Stage stage){
@@ -40,6 +41,11 @@ public class Introduction {
     }
 
     public void plantSelectionPage(GameMode mode){
+        this.mode = mode;
+        plantSelectionPage();
+    }
+
+    private void plantSelectionPage(){
         Pane pane = new Pane();
         pane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
@@ -70,12 +76,12 @@ public class Introduction {
         positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT/1.8);
 
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom")
+                getCardButton("DoomShroom"), getCardButton("GraveBuster")
         );
         positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT/1.4);
 
         pane.getChildren().addAll(Constants.setScoreBoardPicture(),
-                cardBar, box1, box2, box3, box4, startGameBtn(mode));
+                cardBar, box1, box2, box3, box4, startGameBtn());
         for (int i = 0; i < 8; i++) pane.getChildren().add(createZombie());
         Scene scene = new Scene(pane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
@@ -87,7 +93,7 @@ public class Introduction {
         box.setLayoutY(y);
     }
 
-    private ImageView startGameBtn(GameMode mode){
+    private ImageView startGameBtn(){
         Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
         Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
         ImageView start = new ImageView(letsRock1);
@@ -141,6 +147,11 @@ public class Introduction {
                                 .equals(((ImageView) btn.getGraphic()).getImage()));//image on clicked btn
             }
             else if(selectedCards.size() < 6) {
+                if ((plantName.equals("CoffeeBean") && mode == GameMode.NIGHT) ||
+                    (plantName.equals("GraveBuster") && mode == GameMode.DAY)) {
+                    btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
+                    return;
+                }
                 selectedCards.add(plantName);
                 Button btn2 = getCardButton(plantName);
                 ImageView imageView = new ImageView(((ImageView)btn.getGraphic()).getImage());
@@ -166,12 +177,18 @@ public class Introduction {
         ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH/2.6, Constants.SCREEN_HEIGHT/4.2);
         adventure.setLayoutX(Constants.SCREEN_WIDTH / 1.97);
             adventure.setLayoutY(Constants.SCREEN_HEIGHT / 8);
-        adventure.setOnMouseClicked(event -> plantSelectionPage(GameMode.DAY));
+        adventure.setOnMouseClicked(event -> {
+            mode = GameMode.DAY;
+            plantSelectionPage();
+        });
 
             ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/4.35);
         newGame.setLayoutX(Constants.SCREEN_WIDTH/1.98);
         newGame.setLayoutY(Constants.SCREEN_HEIGHT/3.1);
-        newGame.setOnMouseClicked(event -> plantSelectionPage(GameMode.NIGHT));
+        newGame.setOnMouseClicked(event -> {
+            mode = GameMode.NIGHT;
+            plantSelectionPage();
+        });
 
         ImageView loadGame = menuItem("LoadGame", Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/4.8);
         loadGame.setLayoutX(Constants.SCREEN_WIDTH / 1.94);

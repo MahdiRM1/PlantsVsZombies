@@ -9,13 +9,16 @@ enum NutState{FULL_LIFE, HALF_LIFE, END_LIFE}
 enum BulletType{NORMAL_BULLET, ICE_BULLET, SHROOM_BULLET}
 
 enum SunType{
-    FALLEN,
-    STABLE();
-
+    BASE_FALLEN,
+    FLOWER_FALLEN,
+    RISEN(),
+    COLLECTED;
+//    STABLE();
+//
     private int row, col;
 
     public SunType setCoordination(int row, int col){
-        SunType type = STABLE;
+        SunType type = RISEN;
         this.row = row;
         this.col = col;
         return type;
