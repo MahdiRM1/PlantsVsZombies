@@ -42,6 +42,7 @@ public class GameUI {
     private Timeline tl;
     private Scene scene;
     public static int selectedButton = -1;
+    private Fog fog;
 
     // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state){
@@ -96,6 +97,7 @@ public class GameUI {
         borderPane.setTop(cardBar);
         borderPane.setBottom(map());
         pane.setMouseTransparent(true);
+        if(mode == GameMode.NIGHT) this.fog = new Fog(pane);
         mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
     }
 
@@ -454,6 +456,17 @@ public class GameUI {
             System.out.println("save data deleted");
         } catch (IOException e) {
             System.out.println("cant delete save data");
+        }
+    }
+
+    public Fog getFog() {
+        return fog;
+    }
+
+    public void clearFogArea(int row, int col) {
+        if (fog != null) {
+            // Clear fog logic
+            fog.clearFogAt(row, col);
         }
     }
 }
