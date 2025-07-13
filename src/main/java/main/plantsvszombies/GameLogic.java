@@ -4,26 +4,40 @@ import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Random;
 
 public class GameLogic {
     private final List<Plant> plants = new ArrayList<>();
     private final List<Zombie> zombies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Grave> graves = new ArrayList<>();
 
     //constructor: to load the previously saved game
     public GameLogic(GameState state){
-        loadPlants(state);
+        loadPlants(state.getPlants(), state.getMode());
         loadZombies(state.getZombies());
+        loadGraves(state.getGraves());
     }
 
     //constructor: to start a new game
-    public GameLogic(){}
+    public GameLogic(GameMode mode){
+        if (mode == GameMode.NIGHT) makeGraves();
+    }
+
+    //generates graves for night
+    private void makeGraves(){
+        Random rdm = new Random();
+        int graveNum = rdm.nextInt(5) + 2;
+        for (int i = 0; i < graveNum; i++) {
+            graves.add(new Grave());
+        }
+    }
 
     //generates the plants list to reload a saved game
-    private void loadPlants(GameState state){
-        for (PlantData data : state.getPlants()){
-            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), state.getMode());
+    private void loadPlants(List<PlantData> plantDataList, GameMode mode){
+        for (PlantData data : plantDataList){
+            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), mode);
+            plant.setHP(data.getHP());
             plants.add(plant);
         }
     }
@@ -43,7 +57,17 @@ public class GameLogic {
         }
     }
 
+    //generates the graves list to reload a saved game
+    private void loadGraves(List<GraveData> graveDataList){
+        for (GraveData data : graveDataList){
+            Grave grave = new Grave(data);
+            graves.add(grave);
+        }
+    }
+
     public boolean isPlantable(int row, int col){
+        for (Grave grave : graves)
+            if (grave.getRow() == row && grave.getCol() == col) return false;
         return getPlant(row, col) == null;
     }
 
@@ -56,6 +80,7 @@ public class GameLogic {
     public void addZombie(Zombie z) {
         zombies.add(z);
     }
+
     //bullet arraylist to manage all bullets
     public void addBullet(Bullet bullet, Pane pane){
         if (bullet == null) return;
@@ -146,6 +171,11 @@ public class GameLogic {
         plants.remove(getPlant(row, col));
     }
 
+    public void removeGrave(Grave grave, Pane pane){
+        pane.getChildren().remove(grave.getPicture());
+        graves.remove(grave);
+    }
+
     //getters
     public Plant getPlant(int row, int col){
         for (Plant plant : plants)
@@ -159,5 +189,9 @@ public class GameLogic {
 
     public List<Plant> getPottedPlants() {
         return plants;
+    }
+
+    public List<Grave> getGraves() {
+        return graves;
     }
 }

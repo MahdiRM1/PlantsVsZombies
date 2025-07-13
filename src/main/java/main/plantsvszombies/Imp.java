@@ -23,8 +23,8 @@ public class Imp extends Zombie{
         speed = 3;
     }
 
-    public Imp(int row){
-        super(row);
+    public Imp(int row, int col){
+        super(row, col);
         HP = 50;
         speed = 3;
     }

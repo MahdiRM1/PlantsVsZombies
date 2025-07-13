@@ -1,24 +1,24 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
 public abstract class BombPlant extends Plant{
 
-    protected int explosionTime;
-    protected int endOfAction;
+    protected boolean isExploded;
 
     public BombPlant(int row, int col){
         super(row, col);
+        isExploded = false;
     }
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if(Math.abs(GlobalState.gameTime - timeCreated) == 700){
-            return true;
+        updateFrame();
+        if(!isExploded && nowPic >= getImage().length - 1) {
+            nowPic = 0;
+            return isExploded = true;
         }
-        if(Math.abs(GlobalState.gameTime - timeCreated) == 2000) HP = 0;
+        if(isExploded && nowPic >= getImage().length - 1) HP = 0;
         return false;
     }
 

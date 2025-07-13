@@ -21,8 +21,8 @@ public class FlagZombie extends OriginalZombie{
         super(data);
     }
 
-    public  FlagZombie(int row){
-        super(row);
+    public  FlagZombie(int row, int col){
+        super(row, col);
     }
 
     @Override

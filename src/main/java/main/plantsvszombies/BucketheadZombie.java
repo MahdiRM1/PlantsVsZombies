@@ -22,9 +22,9 @@ public class BucketheadZombie extends Zombie{
         speed = 5;
     }
 
-    public BucketheadZombie(int row){
-        super(row);
-        HP = 200;
+    public BucketheadZombie(int row, int col){
+        super(row, col);
+        HP = 240;
         speed = 5;
     }
 

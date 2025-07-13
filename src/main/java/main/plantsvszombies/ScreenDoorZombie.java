@@ -22,10 +22,15 @@ public class ScreenDoorZombie extends Zombie{
         speed = 5;
     }
 
-    public ScreenDoorZombie(int row){
-        super(row);
+    public ScreenDoorZombie(int row, int col){
+        super(row, col);
         HP = 200;
         speed = 5;
+    }
+
+    @Override
+    public void damage(BulletType bulletType){
+        HP -= 20;
     }
 
     @Override

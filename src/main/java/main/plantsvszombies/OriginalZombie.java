@@ -23,8 +23,8 @@ public class OriginalZombie extends Zombie{
         speed = 5;
     }
 
-    public OriginalZombie(int row){
-        super(row);
+    public OriginalZombie(int row, int col){
+        super(row, col);
         HP = 100;
         speed = 5;
     }
