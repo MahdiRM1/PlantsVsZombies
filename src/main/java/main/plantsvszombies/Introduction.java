@@ -76,7 +76,8 @@ public class Introduction {
         positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT/1.8);
 
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom"), getCardButton("GraveBuster")
+                getCardButton("DoomShroom"), getCardButton("GraveBuster") ,
+                getCardButton("Plantern") , getCardButton("Blover")
         );
         positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT/1.4);
 
@@ -148,7 +149,8 @@ public class Introduction {
             }
             else if(selectedCards.size() < 6) {
                 if ((plantName.equals("CoffeeBean") && mode == GameMode.NIGHT) ||
-                    (plantName.equals("GraveBuster") && mode == GameMode.DAY)) {
+                    (plantName.equals("GraveBuster") && mode == GameMode.DAY) ||
+                    (plantName.equals("Plantern") && mode == GameMode.DAY)) {
                     btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
                     return;
                 }
