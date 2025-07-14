@@ -15,7 +15,7 @@ public class Sun {
         this.type = type;
         picture = Constants.setSunPicture(type);
         maxY = Constants.sunMaxY(type);
-        minY = maxY - Constants.TILE_SIZE;
+        minY = maxY - 1.2 * Constants.TILE_SIZE;
     }
 
     //manages fallen sun movements

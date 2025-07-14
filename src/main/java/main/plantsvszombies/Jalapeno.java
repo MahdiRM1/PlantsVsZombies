@@ -6,13 +6,13 @@ import java.util.List;
 
 public class Jalapeno extends BombPlant{
 
-    private static final Image[] images;
-    private static final Image[] boomImages;
-    private static final int imagesNum = 13;
+    private static final Image[] NORMAL_FRAMES;
+    private static final Image[] EXPLOSION_FRAMES;
+    private static final int FRAME_COUNT = 13;
 
     static {
-        images = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/normal/frame_", imagesNum);
-        boomImages = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/attack/frame_", imagesNum);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/normal/frame_", FRAME_COUNT);
+        EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/attack/frame_", FRAME_COUNT);
     }
 
     public Jalapeno(int row, int col){
@@ -24,12 +24,12 @@ public class Jalapeno extends BombPlant{
 
     @Override
     protected Image[] getImage() {
-        return isExploded ? boomImages : images;
+        return isExploded ? EXPLOSION_FRAMES : NORMAL_FRAMES;
     }
 
     @Override
     public void action(List<Zombie> zombies){
-        gif.setImage(boomImages[0]);
+        gif.setImage(EXPLOSION_FRAMES[0]);
         gif.setFitWidth(Constants.TILE_SIZE * 9);
         gif.setLayoutX(Constants.SCREEN_WIDTH/4.9);
         for (Zombie z : zombies){

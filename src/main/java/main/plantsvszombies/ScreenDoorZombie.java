@@ -4,17 +4,17 @@ import javafx.scene.image.Image;
 
 public class ScreenDoorZombie extends Zombie{
 
-    private final static int walkPictureNum = 47;
-    private final static int attackPictureNum = 40;
-    private final static int diePictureNum = 39;
-    private final static Image[] walkZombie;
-    private final static Image[] attackZombie;
-    private final static Image[] dieZombie;
+    private final static int WALK_FRAME_COUNT = 47;
+    private final static int ATTACK_FRAME_COUNT = 40;
+    private final static int DIE_FRAME_COUNT = 39;
+    private final static Image[] WALK_FRAMES;
+    private final static Image[] ATTACK_FRAMES;
+    private final static Image[] DIE_FRAMES;
 
     static {
-        walkZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", walkPictureNum);
-        attackZombie = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", attackPictureNum);
-        dieZombie = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", diePictureNum);
+        WALK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", DIE_FRAME_COUNT);
     }
 
     public ScreenDoorZombie(ZombieData data){
@@ -35,17 +35,17 @@ public class ScreenDoorZombie extends Zombie{
 
     @Override
     protected Image[] getWalkImage() {
-        return walkZombie;
+        return WALK_FRAMES;
     }
 
     @Override
     protected Image[] getEatImage() {
-        return attackZombie;
+        return ATTACK_FRAMES;
     }
 
     @Override
     protected Image[] getDieImage(){
-        return dieZombie;
+        return DIE_FRAMES;
     }
 
 }

@@ -1,7 +1,5 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
 public abstract class PeaPlant extends Plant{
@@ -9,7 +7,6 @@ public abstract class PeaPlant extends Plant{
     protected BulletType bulletType;
     protected long lastShoot;
     protected boolean isShooting;
-    protected int nowPic;
 
     public PeaPlant(int row, int col) {
         super(row, col);
@@ -31,12 +28,13 @@ public abstract class PeaPlant extends Plant{
     }
 
     public Bullet action() {
-        if (GlobalState.gameTime % 20 != 0) return null;
-
-        if(nowPic == 30 || Math.abs(lastShoot - GlobalState.gameTime) >= 1200) {
-            lastShoot = GlobalState.gameTime;
-            return new Bullet(row, col, bulletType);
-        }
+        if (this instanceof Shroom && Math.abs(lastShoot - GlobalState.gameTime) >= 1200) return shoot();
+        else if (nowPic == 30) return shoot();
         return null;
+    }
+
+    protected Bullet shoot(){
+        lastShoot = GlobalState.gameTime;
+        return new Bullet(row, col, bulletType);
     }
 }

@@ -9,16 +9,16 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
     private boolean isSleep;
     private boolean isScare;
 
-    private static final int scareImagesNum = 12;
-    private static final int imagesNum = 16;
-    private static final Image[] scareImages;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
+    private static final int SCARE_FRAME_COUNT = 12;
+    private static final int FRAME_COUNT = 16;
+    private static final Image[] SCARE_FRAMES;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
 
     static {
-        scareImages = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/cry/frame_", scareImagesNum);
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/sleep/frame_", imagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/normal/frame_", imagesNum);
+        SCARE_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/cry/frame_", SCARE_FRAME_COUNT);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/normal/frame_", FRAME_COUNT);
     }
 
     public ScaredyShroom(int row, int col, GameMode mode){
@@ -44,9 +44,9 @@ public class ScaredyShroom extends PeaPlant implements Shroom{
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        if (isScare) return scareImages;
-        return normalImages;
+        if (isSleep) return SLEEP_FRAMES;
+        if (isScare) return SCARE_FRAMES;
+        return NORMAL_FRAMES;
     }
 
     private boolean isScare(List<Zombie> zombies){

@@ -8,14 +8,14 @@ public class CoffeeBean extends Plant{
 
     private boolean isEaten;
     private final Shroom shroom;
-    private static final Image[] images;
-    private static final Image[] eatImages;
-    private static final int imagesNum = 9;
-    private static final int eatImagesNum = 14;
+    private static final Image[] NORMAL_FRAMES;
+    private static final Image[] EAT_FRAMES;
+    private static final int NORMAL_FRAMES_COUNT = 9;
+    private static final int EAT_FRAMES_COUNT = 14;
 
     static {
-        images = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/normal/frame_", imagesNum);
-        eatImages = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/eat/frame_", eatImagesNum);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
+        EAT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
     }
 
     public CoffeeBean(int row, int col, Shroom shroom){
@@ -43,8 +43,8 @@ public class CoffeeBean extends Plant{
 
     @Override
     protected Image[] getImage() {
-        if (isEaten) return eatImages;
-        return images;
+        if (isEaten) return EAT_FRAMES;
+        return NORMAL_FRAMES;
     }
 
     public void action(){

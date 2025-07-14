@@ -7,13 +7,13 @@ import java.util.List;
 public class PuffShroom extends PeaPlant implements Shroom{
 
     private boolean isSleep;
-    private static final int imagesNum = 17;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
+    private static final int FRAME_COUNT = 17;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
 
     static {
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/sleep/frame_", imagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/normal/frame_", imagesNum);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/normal/frame_", FRAME_COUNT);
     }
 
     public PuffShroom(int row, int col, GameMode mode){
@@ -39,8 +39,8 @@ public class PuffShroom extends PeaPlant implements Shroom{
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        return normalImages;
+        if (isSleep) return SLEEP_FRAMES;
+        return NORMAL_FRAMES;
     }
 
     @Override
