@@ -31,9 +31,7 @@ public class GameLogic {
     private void makeGraves() {
         Random rdm = new Random();
         int graveNum = rdm.nextInt(5) + 2;
-        for (int i = 0; i < graveNum; i++) {
-            graves.add(new Grave());
-        }
+        for (int i = 0; i < graveNum; i++) graves.add(new Grave());
     }
 
     //generates the plants list to reload a saved game
@@ -49,18 +47,12 @@ public class GameLogic {
     private void loadZombies(List<ZombieData> zombieDataList) {
         for (ZombieData data : zombieDataList) {
             Zombie zombie = switch (data.getType()) {
-                case "OriginalZombie" ->
-                    new OriginalZombie(data);
-                case "ConeheadZombie" ->
-                    new ConeheadZombie(data);
-                case "ScreenDoorZombie" ->
-                    new ScreenDoorZombie(data);
-                case "BucketheadZombie" ->
-                    new BucketheadZombie(data);
-                case "Imp" ->
-                    new Imp(data);
-                default ->
-                    new FlagZombie(data);
+                case "OriginalZombie" -> new OriginalZombie(data);
+                case "ConeheadZombie" -> new ConeheadZombie(data);
+                case "ScreenDoorZombie" -> new ScreenDoorZombie(data);
+                case "BucketheadZombie" -> new BucketheadZombie(data);
+                case "Imp" -> new Imp(data);
+                default -> new FlagZombie(data);
             };
             zombies.add(zombie);
         }
@@ -68,18 +60,14 @@ public class GameLogic {
 
     //generates the graves list to reload a saved game
     private void loadGraves(List<GraveData> graveDataList) {
-        for (GraveData data : graveDataList) {
-            Grave grave = new Grave(data);
-            graves.add(grave);
-        }
+        for (GraveData data : graveDataList) graves.add(new Grave(data));
     }
 
     public boolean isPlantable(int row, int col) {
         for (Grave grave : graves) {
-            if (grave.getRow() == row && grave.getCol() == col) {
-                return false;
-            }
+            if (grave.getRow() == row && grave.getCol() == col) return false;
         }
+
         return getPlant(row, col) == null;
     }
 
@@ -95,9 +83,7 @@ public class GameLogic {
 
     //bullet arraylist to manage all bullets
     public void addBullet(Bullet bullet, Pane pane) {
-        if (bullet == null) {
-            return;
-        }
+        if (bullet == null) return;
 
         bullets.add(bullet);
         pane.getChildren().addAll(bullet.getPicture());
@@ -131,9 +117,7 @@ public class GameLogic {
         List<Plant> toRemove = new ArrayList<>();
 
         for (Plant plant : plants) {
-            if (plant.getHP() <= 0) {
-                toRemove.add(plant);
-            }
+            if (plant.getHP() <= 0) toRemove.add(plant);
         }
 
         plants.removeAll(toRemove);
@@ -142,18 +126,14 @@ public class GameLogic {
 
     //sets the state of zombies
     public void setZombieState() {
-        for (Zombie zombie : zombies) {
-            zombie.updateState(plants);
-        }
+        for (Zombie zombie : zombies) zombie.updateState(plants);
     }
 
     //finds and removes dead zombies
     public List<Zombie> zombieToRemove() {
         List<Zombie> died = new ArrayList<>();
         for (Zombie zombie : zombies) {
-            if (zombie.getState() == ZombieState.DEAD) {
-                died.add(zombie);
-            }
+            if (zombie.getState() == ZombieState.DEAD) died.add(zombie);
         }
 
         zombies.removeAll(died);
@@ -163,29 +143,21 @@ public class GameLogic {
     public List<Plant> plantsAction() {
         List<Plant> actions = new ArrayList<>();//gomesh nakoni
         for (Plant plant : plants) {
-            if (plant.actionHappens(zombies)) {
-                actions.add(plant);
-            }
+            if (plant.actionHappens(zombies)) actions.add(plant);
         }
         return actions;
     }
 
     public void updateGame() {
-        for (Zombie z : zombies) {
-            z.action();
-        }
-        for (Bullet b : bullets) {
-            b.move();
-        }
+        for (Zombie z : zombies) z.action();
+        for (Bullet b : bullets) b.move();
         setZombieState();
     }
 
     //lose logic
     public boolean checkLose() {
         for (Zombie zombie : zombies) {
-            if (zombie.getCol() < 0) {
-                return true;
-            }
+            if (zombie.getCol() < 0) return true;
         }
         return false;
     }
@@ -207,9 +179,7 @@ public class GameLogic {
     //getters
     public Plant getPlant(int row, int col) {
         for (Plant plant : plants) {
-            if (plant.getRow() == row && plant.getCol() == col) {
-                return plant;
-            }
+            if (plant.getRow() == row && plant.getCol() == col) return plant;
         }
         return null;
     }

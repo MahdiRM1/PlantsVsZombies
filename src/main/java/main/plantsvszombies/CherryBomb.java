@@ -32,10 +32,7 @@ public class CherryBomb extends BombPlant {
     public void action(List<Zombie> zombies) {
         gif.setImage(EXPLOSION_FRAMES[0]);
         Constants.changeScale(gif, 2.5);
-        for (Zombie z : zombies) {
-            if (Math.abs(z.getRow() - row) <= 1 && Math.abs(z.getCol() - col) <= 1) {
-                z.setState(ZombieState.BOOM_DIE);
-            }
-        }
+        for (Zombie z : zombies)
+            if (Math.abs(z.getRow() - row) <= 1 && Math.abs(z.getCol() - col) <= 1) z.setState(ZombieState.BOOM_DIE);
     }
 }

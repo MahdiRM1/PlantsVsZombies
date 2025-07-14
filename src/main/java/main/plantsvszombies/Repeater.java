@@ -25,10 +25,7 @@ public class Repeater extends PeaPlant {
 
     @Override
     public Bullet action() {
-        if (nowPic == 30 || nowPic == 40) {
-            return shoot();
-        }
-        return null;
+        return (nowPic == 30 || nowPic == 40) ? shoot() : null;
     }
 
     @Override

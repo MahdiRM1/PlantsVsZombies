@@ -46,9 +46,7 @@ public class ScoreBoard {
 
     // updates the scoreBoard for sun points
     public void addSun(Sun sun) {
-        if (sun == null) {
-            return;
-        }
+        if (sun == null) return;
 
         ImageView sunImage = sun.getPicture();
         sunImage.setOnMouseClicked(event -> sun.setType(SunType.COLLECTED));
@@ -88,9 +86,7 @@ public class ScoreBoard {
     }
 
     private void fallenSun() {
-        for (Sun s : suns) {
-            s.moveSun();
-        }
+        for (Sun s : suns) s.moveSun();
     }
 
     // manage fallen sun movement
@@ -103,9 +99,7 @@ public class ScoreBoard {
 
     // checks if a plant can be purchased
     public boolean purchasePlant(int price) {
-        if (score < price) {
-            return false;
-        }
+        if (score < price) return false;
 
         score -= price;
         scoreLabel.setText(score + "");

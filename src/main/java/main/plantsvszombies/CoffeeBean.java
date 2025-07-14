@@ -42,10 +42,7 @@ public class CoffeeBean extends Plant {
 
     @Override
     protected Image[] getImage() {
-        if (isEaten) {
-            return EAT_FRAMES;
-        }
-        return NORMAL_FRAMES;
+        return isEaten ? EAT_FRAMES : NORMAL_FRAMES;
     }
 
     public void action() {

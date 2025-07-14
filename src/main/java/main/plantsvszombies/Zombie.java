@@ -43,7 +43,6 @@ public abstract class Zombie {
         this.col = col;
         picture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
-        col = Constants.getColumnZombie(picture);
         state = ZombieState.WALKING;
         freezeTime = -5000;
     }

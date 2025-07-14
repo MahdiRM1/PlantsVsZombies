@@ -39,9 +39,8 @@ public class ScaredyShroom extends PeaPlant implements Shroom {
 
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() < 10 && z.getCol() >= col) {
-                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
+                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE)
                     return true;
-                }
             }
         }
         return false;
@@ -49,20 +48,12 @@ public class ScaredyShroom extends PeaPlant implements Shroom {
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) {
-            return SLEEP_FRAMES;
-        }
-        if (isScare) {
-            return SCARE_FRAMES;
-        }
-        return NORMAL_FRAMES;
+        return isSleep ? SLEEP_FRAMES : isScare ? SCARE_FRAMES : NORMAL_FRAMES;
     }
 
     private boolean isScare(List<Zombie> zombies) {
         for (Zombie z : zombies) {
-            if (Math.abs(z.getRow() - row) < 2 && Math.abs(z.getCol() - col) < 2) {
-                return isScare = true;
-            }
+            if (Math.abs(z.getRow() - row) < 2 && Math.abs(z.getCol() - col) < 2) return isScare = true;
         }
         return isScare = false;
     }

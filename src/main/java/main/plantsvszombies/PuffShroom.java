@@ -28,15 +28,11 @@ public class PuffShroom extends PeaPlant implements Shroom {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (isSleep) {
-            return false;
-        }
+        if (isSleep) return false;
 
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() - col <= 4 && z.getCol() < 10 && z.getCol() >= col) {
-                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
-                    return true;
-                }
+                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) return true;
             }
         }
         return false;
@@ -44,10 +40,7 @@ public class PuffShroom extends PeaPlant implements Shroom {
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) {
-            return SLEEP_FRAMES;
-        }
-        return NORMAL_FRAMES;
+        return isSleep ? SLEEP_FRAMES : NORMAL_FRAMES;
     }
 
     @Override

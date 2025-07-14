@@ -45,37 +45,28 @@ public class Fog {
     }
 
     public void clearFog(int centerRow, int centerCol) {
-        for (int r = centerRow - 1; r <= centerRow + 1; r++) {
-            for (int c = centerCol - 1; c <= centerCol + 1; c++) {
+        for (int r = centerRow - 1; r <= centerRow + 1; r++)
+            for (int c = centerCol - 1; c <= centerCol + 1; c++)
                 clearFogAt(r, c);
-            }
-        }
     }
 
     public void clearFog() {
-        for (int row = 0; row < Constants.ROWS; row++) {
-            for (int col = fogLength; col < Constants.COLS + 1; col++) {
+        for (int row = 0; row < Constants.ROWS; row++)
+            for (int col = fogLength; col < Constants.COLS + 1; col++)
                 clearFogAt(row, col);
-            }
-        }
     }
 
     public void clearFogAt(int row, int col) {
-        if (row >= 0 && row < Constants.ROWS && col >= 0 && col < Constants.COLS + 1 && fogTiles[row][col] != null) {
+        if (row >= 0 && row < Constants.ROWS && col >= 0 && col < Constants.COLS + 1 && fogTiles[row][col] != null)
             invisibleRect(fogTiles[row][col]);
-        }
     }
 
     public void updateFog() {
-        if (Math.abs(GlobalState.gameTime - bloverTime) <= 10000) {
-            return;
-        }
+        if (Math.abs(GlobalState.gameTime - bloverTime) <= 10000) return;
 
-        for (int row = 0; row < Constants.ROWS; row++) {
-            for (int col = fogLength; col < Constants.COLS + 1; col++) {
+        for (int row = 0; row < Constants.ROWS; row++)
+            for (int col = fogLength; col < Constants.COLS + 1; col++)
                 visibleRect(fogTiles[row][col]);
-            }
-        }
     }
 
     public void setBloverTime(long time) {

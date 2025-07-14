@@ -27,9 +27,9 @@ public class GraveBuster extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (Math.abs(GlobalState.gameTime - timeCreated) < 2000) {
+        if (Math.abs(GlobalState.gameTime - timeCreated) < 2000)
             gif.setLayoutY(gif.getLayoutY() + Constants.TILE_SIZE / 200);
-        } else if (Math.abs(GlobalState.gameTime - timeCreated) == 2000) {
+        else if (Math.abs(GlobalState.gameTime - timeCreated) == 2000) {
             HP = 0;
             return true;
         }

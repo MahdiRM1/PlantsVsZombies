@@ -33,9 +33,7 @@ public class Jalapeno extends BombPlant {
         gif.setFitWidth(Constants.TILE_SIZE * 9);
         gif.setLayoutX(Constants.SCREEN_WIDTH / 4.9);
         for (Zombie z : zombies) {
-            if (z.getRow() == row) {
-                z.setState(ZombieState.BOOM_DIE);
-            }
+            if (z.getRow() == row) z.setState(ZombieState.BOOM_DIE);
         }
     }
 }

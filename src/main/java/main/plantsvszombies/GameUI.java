@@ -53,14 +53,10 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic(state);
         this.mode = state.getMode();
-        for (CardData data : state.getCards()) {
-            cards.add(new Card(data));
-        }
+        for (CardData data : state.getCards()) cards.add(new Card(data));
         initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(borderPane, state.getScore(), mode);
-        for (Grave grave : gameLogic.getGraves()) {
-            borderPane.getChildren().add(grave.getPicture());
-        }
+        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
         GlobalState.gameTime = state.getTime();
         loadPlants();
         loadZombies();
@@ -72,15 +68,11 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic(mode);
         this.mode = mode;
-        for (int i = 0; i < plantsName.size(); i++) {
-            cards.add(new Card(plantsName.get(i), i));
-        }
+        for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
         initializeStackPane(cardBar());
         scoreBoard = new ScoreBoard(borderPane, 1000, mode);
 //        scoreBoard = new ScoreBoard(borderPane, mode == GameMode.DAY ? 50 : 100, mode);
-        for (Grave grave : gameLogic.getGraves()) {
-            borderPane.getChildren().add(grave.getPicture());
-        }
+        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
         GlobalState.gameTime = 0;
         startGame();
     }
@@ -107,45 +99,33 @@ public class GameUI {
         pane.setMouseTransparent(true);
         Pane fogGrid = new Pane();
         fogGrid.setMouseTransparent(true);
-        if (mode == GameMode.NIGHT) {
-            this.fog = new Fog(fogGrid);
-        }
+        if (mode == GameMode.NIGHT) fog = new Fog(fogGrid);
         mainPane.getChildren().addAll(borderPane, pane, fogGrid, buttonsPane());
     }
 
     //generate card bar
     private HBox cardBar() {
         HBox cardBar = new HBox(0);
-        for (Card card : cards) {
-            cardBar.getChildren().add(card.getBtn());
-        }
+        for (Card card : cards) cardBar.getChildren().add(card.getBtn());
         cardBar.setPadding(new Insets(Constants.CARD_BAR_Y, 0, 0, Constants.CARD_BAR_X));
         return cardBar;
     }
 
     private void loadPlants() {
-        for (Plant plant : gameLogic.getPottedPlants()) {
-            borderPane.getChildren().add(plant.getGif());
-        }
+        for (Plant plant : gameLogic.getPottedPlants()) borderPane.getChildren().add(plant.getGif());
     }
 
     private void loadZombies() {
-        for (Zombie z : gameLogic.getZombies()) {
-            ImageView zombieImage = z.getPicture();
-            if (!pane.getChildren().contains(zombieImage)) {
-                pane.getChildren().add(zombieImage);
-            }
-        }
+        for (Zombie z : gameLogic.getZombies()) pane.getChildren().add(z.getPicture());
     }
 
     //generate game map
     private GridPane map() {
         GridPane grid = new GridPane();
-        for (int row = 0; row < Constants.ROWS; row++) {
-            for (int col = 0; col < Constants.COLS; col++) {
+        for (int row = 0; row < Constants.ROWS; row++)
+            for (int col = 0; col < Constants.COLS; col++)
                 grid.add(mapButtons(row, col), col, row);
-            }
-        }
+
         grid.setPadding(new Insets(0, 0, Constants.SCREEN_WIDTH / 30, Constants.SCREEN_HEIGHT / 2.6));
         return grid;
     }
@@ -164,13 +144,9 @@ public class GameUI {
     }
 
     private void handleMapClick(int row, int col, Button btn) {
-        if (selectedButton < 0) {
-            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-        } else if (selectedButton < cards.size()) {
-            handlePlanting(row, col, btn);
-        } else if (selectedButton == cards.size()) {
-            useShovel(row, col, btn);
-        }
+        if (selectedButton < 0) btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        else if (selectedButton < cards.size()) handlePlanting(row, col, btn);
+        else useShovel(row, col, btn);
     }
 
     private void handlePlanting(int row, int col, Button btn) {
@@ -178,16 +154,11 @@ public class GameUI {
         boolean placed = false;
 
         if (plant instanceof CoffeeBean || plant instanceof GraveBuster) {
-            if (scoreBoard.purchasePlant(plant.getPrice())) {
-                placed = true;
-            }
+            if (scoreBoard.purchasePlant(plant.getPrice())) placed = true;
         }
 
-        if (plant != null && gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) {
-            placed = true;
-        } else {
-            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
-        }
+        if (plant != null && gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) placed = true;
+        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         if (placed) {
             gameLogic.setPlant(plant);
@@ -206,9 +177,8 @@ public class GameUI {
         if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())) {
             borderPane.getChildren().remove(plant.getGif());
             gameLogic.removePlant(row, col);
-        } else {
-            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
         }
+        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
 
         Pane buttons = (Pane) mainPane.getChildren().getLast();
         ImageView shovelBack = ((ImageView) buttons.getChildren().getLast());
@@ -308,33 +278,25 @@ public class GameUI {
     }
 
     private Plant getPlant(int row, int col) {
-        if (selectedButton < 0 || selectedButton >= cards.size()) {
-            return null;
-        }
+        if (selectedButton < 0 || selectedButton >= cards.size()) return null;
 
         String plantName = cards.get(selectedButton).getPlantName();
-        if (plantName.equals("CoffeeBean")) {
-            return getCoffeeBean(row, col);
-        }
-        if (plantName.equals("GraveBuster")) {
-            return getGraveBuster(row, col);
-        }
-        return Constants.getPlant(row, col, plantName, mode);
+        return switch (plantName){
+            case "CoffeeBean" -> getCoffeeBean(row, col);
+            case "GraveBuster" -> getGraveBuster(row, col);
+            default -> Constants.getPlant(row, col, plantName, mode);
+        };
     }
 
     private CoffeeBean getCoffeeBean(int row, int col) {
-        if (gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep()) {
+        if (gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
             return new CoffeeBean(row, col, shroom);
-        } else {
-            return null;
-        }
+        else return null;
     }
 
     private GraveBuster getGraveBuster(int row, int col) {
         for (Grave grave : gameLogic.getGraves()) {
-            if (grave.getRow() == row && grave.getCol() == col) {
-                return new GraveBuster(row, col, grave);
-            }
+            if (grave.getRow() == row && grave.getCol() == col) return new GraveBuster(row, col, grave);
         }
         return null;
     }
@@ -346,29 +308,19 @@ public class GameUI {
         logicUpdates();
         plantActions();
         timeHandler();
-//        setVisibility();
     }
 
     //manages win or lose visuals
     public void winOrLose() {
-        if (gameLogic.checkLose()) {
-            finishGame("lose");
-        } else if (gameLogic.checkWin()) {
-            finishGame("win");
-        }
+        if (gameLogic.checkLose()) finishGame("lose");
+        else if (gameLogic.checkWin()) finishGame("win");
     }
 
     //removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages() {
-        for (Bullet bullet : gameLogic.checkBulletStrike()) {
-            pane.getChildren().remove(bullet.getPicture());
-        }
-        for (Zombie zombie : gameLogic.zombieToRemove()) {
-            pane.getChildren().remove(zombie.getPicture());
-        }
-        for (Plant plantToRemove : gameLogic.plantsToRemove()) {
-            borderPane.getChildren().remove(plantToRemove.getGif());
-        }
+        for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().removeAll(plantToRemove.getGif());
     }
 
     private void logicUpdates() {
@@ -388,43 +340,34 @@ public class GameUI {
                 case GraveBuster graveBuster -> gameLogic.removeGrave(graveBuster.action(), borderPane);
                 case Plantern plantern -> plantern.action(fog);
                 case Blover blover -> blover.action(fog);
-                default -> { continue; }
+                default -> {}
             }
         }
     }
 
     private void rechargeCheck() {
-        for (Card card : cards) {
-            card.rechargeCheck();
-        }
+        for (Card card : cards) card.rechargeCheck();
     }
 
     //controls the general timing of zombies entering and attack waves
     private void timeHandler() {
         Random rdm = new Random();
 //        if (GlobalState.gameTime <= 20000) return;
-        if (GlobalState.gameTime <= 40_000) {
-            handleZombie(5000, 1000, 1, rdm);
-        } else if (GlobalState.gameTime < 60_000) {
-            handleZombie(4000, 0, 2, rdm);
-        } else if (GlobalState.gameTime < 70_000) {
-            return;
-        } else if (GlobalState.gameTime < 80_000) {
-            Attack(rdm, 4, 1);
-        } else if (GlobalState.gameTime < 130_000) {
+        if (GlobalState.gameTime <= 40_000) handleZombie(5000, 1000, 1, rdm);
+        else if (GlobalState.gameTime < 60_000) handleZombie(4000, 0, 2, rdm);
+        else if (GlobalState.gameTime < 70_000) return;
+        else if (GlobalState.gameTime < 80_000) Attack(rdm, 4, 1);
+        else if (GlobalState.gameTime < 130_000) {
             handleZombie(3000, 0, 4, rdm);
             handleZombie(3000, 0, 4, rdm);
-        } else if (GlobalState.gameTime < 140_000) {
-            return;
-        } else if (GlobalState.gameTime < 155_000) {
-            Attack(rdm, 5, 2);
         }
+        else if (GlobalState.gameTime < 140_000) return;
+        else if (GlobalState.gameTime < 155_000) Attack(rdm, 5, 2);
     }
 
     private void handleZombie(long base, long mode, int zombieTypes, Random rdm) {
-        if (GlobalState.gameTime % base == mode) {
+        if (GlobalState.gameTime % base == mode)
             spawnZombie(rdm.nextInt(zombieTypes), rdm.nextInt(5));
-        }
     }
 
     private void Attack(Random rdm, int zombieTypes, int attackType) {
@@ -449,18 +392,12 @@ public class GameUI {
     //determines what type of zombie to add
     private void spawnZombie(int z, int row, int col) {
         Zombie zombie = switch (z) {
-            case 0 ->
-                new OriginalZombie(row, col);
-            case 1 ->
-                new ConeheadZombie(row, col);
-            case 2 ->
-                new ScreenDoorZombie(row, col);
-            case 3 ->
-                new BucketheadZombie(row, col);
-            case 4 ->
-                new Imp(row, col);
-            default ->
-                new FlagZombie(row, col);
+            case 0 -> new OriginalZombie(row, col);
+            case 1 -> new ConeheadZombie(row, col);
+            case 2 -> new ScreenDoorZombie(row, col);
+            case 3 -> new BucketheadZombie(row, col);
+            case 4 -> new Imp(row, col);
+            default -> new FlagZombie(row, col);
         };
 
         gameLogic.addZombie(zombie);
