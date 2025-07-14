@@ -94,8 +94,9 @@ public class GameUI {
         borderPane.setTop(cardBar);
         borderPane.setBottom(map());
         pane.setMouseTransparent(true);
-        if (mode == GameMode.NIGHT) this.fog = new Fog(pane);
-        mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
+        Pane fogGrid = new Pane();
+        if (mode == GameMode.NIGHT) this.fog = new Fog(fogGrid);
+        mainPane.getChildren().addAll(borderPane, pane, fogGrid, buttonsPane());
     }
 
     //generate card bar
@@ -168,7 +169,6 @@ public class GameUI {
 
         if (placed) {
             gameLogic.setPlant(plant);
-            plant.planted(this);
             cards.get(selectedButton).updateLastSelected();
             borderPane.getChildren().add(plant.getGif());
             btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
@@ -308,11 +308,11 @@ public class GameUI {
     public void updateGame() {
         winOrLose();
         cleanUpImages();
-        addObjectImages();
         rechargeCheck();
         logicUpdates();
+        addObjectImages();
         timeHandler();
-        setVisibility();
+//        setVisibility();
     }
 
     //manages win or lose visuals
@@ -330,6 +330,7 @@ public class GameUI {
 
     private void logicUpdates() {
         gameLogic.updateGame();
+        fog.updateFog();
         scoreBoard.handleSuns();
     }
 
@@ -341,7 +342,8 @@ public class GameUI {
             else if (plant instanceof BombPlant bomb) bomb.action(gameLogic.getZombies());
             else if (plant instanceof CoffeeBean coffeeBean) coffeeBean.action();
             else if (plant instanceof GraveBuster graveBuster) gameLogic.removeGrave(graveBuster.action(), borderPane);
-            else if (plant instanceof Plantern plantern) plantern.action(this);
+            else if (plant instanceof Plantern plantern) plantern.action(fog);
+            else if (plant instanceof Blover blover) blover.action(fog);
         }
     }
 
@@ -352,7 +354,7 @@ public class GameUI {
     //controls the general timing of zombies entering and attack waves
     private void timeHandler() {
         Random rdm = new Random();
-        if (GlobalState.gameTime <= 20000) return;
+//        if (GlobalState.gameTime <= 20000) return;
         if (GlobalState.gameTime <= 40_000) handleZombie(5000, 1000, 1, rdm);
         else if (GlobalState.gameTime < 60_000) handleZombie(4000, 0, 2, rdm);
         else if (GlobalState.gameTime < 70_000) return;
@@ -395,15 +397,6 @@ public class GameUI {
             default -> new FlagZombie(row, col);
         };
 
-        if (mode == GameMode.NIGHT) {
-            boolean hidden = col >= fog.getFogLength();
-            zombie.getPicture().setVisible(!hidden);
-
-            zombie.getPicture().layoutXProperty().addListener((obs, oldVal, newVal) -> {
-                double fogBoundary = Constants.BOARD_X + (fog.getFogLength() * Constants.TILE_SIZE);
-                zombie.getPicture().setVisible(newVal.doubleValue() < fogBoundary);
-            });
-        }
         gameLogic.addZombie(zombie);
         pane.getChildren().add(zombie.getPicture());
     }
@@ -469,21 +462,5 @@ public class GameUI {
         } catch (IOException e) {
             System.out.println("cant delete save data");
         }
-    }
-
-    private void setVisibility() {
-        for(Zombie zombie : gameLogic.getZombies()) {
-            if(!fog.getHasFog(zombie.getRow(), zombie.getCol()))
-                zombie.getPicture().setVisible(true);
-            else zombie.getPicture().setVisible(false);
-        }
-    }
-
-    public Fog getFog() {
-        return fog;
-    }
-
-    public GameLogic getGameLogic() {
-        return gameLogic;
     }
 }
