@@ -106,9 +106,7 @@ public final class Constants {
 
     public static Image[] getArrayImage(String path, int max) {
         Image[] images = new Image[max];
-        for (int i = 0; i < max; i++) {
-            images[i] = new Image("file:" + path + i + ".png");
-        }
+        for (int i = 0; i < max; i++) images[i] = new Image("file:" + path + i + ".png");
         return images;
     }
 
@@ -138,51 +136,22 @@ public final class Constants {
     }
 
     public static Plant getPlant(int row, int col, String selectedPlant, GameMode mode) {
-        switch (selectedPlant) {
-            case "PeaShooter" -> {
-                return new PeaShooter(row, col);
-            }
-            case "SunFlower" -> {
-                return new SunFlower(row, col);
-            }
-            case "WallNut" -> {
-                return new WallNut(row, col);
-            }
-            case "TallNut" -> {
-                return new TallNut(row, col);
-            }
-            case "Repeater" -> {
-                return new Repeater(row, col);
-            }
-            case "SnowPea" -> {
-                return new SnowPea(row, col);
-            }
-            case "CherryBomb" -> {
-                return new CherryBomb(row, col);
-            }
-            case "Jalapeno" -> {
-                return new Jalapeno(row, col);
-            }
-            case "PuffShroom" -> {
-                return new PuffShroom(row, col, mode);
-            }
-            case "ScaredyShroom" -> {
-                return new ScaredyShroom(row, col, mode);
-            }
-            case "IceShroom" -> {
-                return new IceShroom(row, col, mode);
-            }
-            case "DoomShroom" -> {
-                return new DoomShroom(row, col, mode);
-            }
-            case "Plantern" -> {
-                return new Plantern(row, col);
-            }
-            case "Blover" -> {
-                return new Blover(row, col);
-            }
-
-        }
-        return null;
+        return switch (selectedPlant) {
+            case "PeaShooter" -> new PeaShooter(row, col);
+            case "SunFlower" -> new SunFlower(row, col);
+            case "WallNut" -> new WallNut(row, col);
+            case "TallNut" -> new TallNut(row, col);
+            case "Repeater" -> new Repeater(row, col);
+            case "SnowPea" -> new SnowPea(row, col);
+            case "CherryBomb" -> new CherryBomb(row, col);
+            case "Jalapeno" -> new Jalapeno(row, col);
+            case "PuffShroom" -> new PuffShroom(row, col, mode);
+            case "ScaredyShroom" -> new ScaredyShroom(row, col, mode);
+            case "IceShroom" -> new IceShroom(row, col, mode);
+            case "DoomShroom" -> new DoomShroom(row, col, mode);
+            case "Plantern" -> new Plantern(row, col);
+            case "Blover" -> new Blover(row, col);
+            default -> null;
+        };
     }
 }

@@ -29,9 +29,8 @@ public class IceShroom extends BombPlant implements Shroom {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (isSleep) {
-            wakeUpTime = GlobalState.gameTime;
-        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500) {
+        if (isSleep) wakeUpTime = GlobalState.gameTime;
+        else if (Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500) {
             HP = 0;
             return isExploded = true;
         }

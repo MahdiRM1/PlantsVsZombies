@@ -2,7 +2,7 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-public class FlagZombie extends OriginalZombie{
+public class FlagZombie extends Zombie{
 
     private final static int WALK_FRAME_COUNT = 47;
     private final static int ATTACK_FRAME_COUNT = 40;
@@ -19,10 +19,14 @@ public class FlagZombie extends OriginalZombie{
 
     public FlagZombie(ZombieData data){
         super(data);
+        speed = 5;
+        HP = 100;
     }
 
-    public  FlagZombie(int row, int col){
+    public FlagZombie(int row, int col){
         super(row, col);
+        speed = 5;
+        HP = 100;
     }
 
     @Override

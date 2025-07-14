@@ -108,25 +108,19 @@ public class Introduction {
         start.setLayoutY(Constants.SCREEN_HEIGHT / 1.122);
 
         start.setOnMouseEntered(event -> {
-            if (selectedCards.size() != 6) {
-                return;
-            }
+            if (selectedCards.size() != 6) return;
 
             start.setImage(letsRock2);
             Constants.changeScale(start, 1.05);
         });
         start.setOnMouseExited(event -> {
-            if (selectedCards.size() != 6) {
-                return;
-            }
+            if (selectedCards.size() != 6) return;
 
             start.setImage(letsRock1);
             Constants.changeScale(start, 1 / 1.05);
         });
         start.setOnMouseClicked(event -> {
-            if (selectedCards.size() == 6) {
-                new GameUI(stage, selectedCards, mode);
-            }
+            if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
         });
         return start;
     }
@@ -169,9 +163,8 @@ public class Introduction {
                 imageView.setFitHeight(Constants.PLANT_CARD_HEIGHT);
                 btn2.setGraphic(imageView);
                 cardBar.getChildren().add(btn2);
-            } else {
-                btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
             }
+            else btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
         });
         btn.setOnMouseEntered(event -> Constants.changeScale(btn.getGraphic(), 1.05));
         btn.setOnMouseExited(event -> {

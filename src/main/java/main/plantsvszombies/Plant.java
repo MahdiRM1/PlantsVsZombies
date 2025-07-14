@@ -34,9 +34,7 @@ public abstract class Plant {
     }
 
     protected void updateFrame() {
-        if (GlobalState.gameTime % frameUpdateTime != 0) {
-            return;
-        }
+        if (GlobalState.gameTime % frameUpdateTime != 0) return;
 
         Image[] frame = getImage();
         nowPic++;

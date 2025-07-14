@@ -10,7 +10,6 @@ public abstract class PeaPlant extends Plant {
 
     public PeaPlant(int row, int col) {
         super(row, col);
-        updateFrame();
     }
 
     @Override
@@ -19,9 +18,7 @@ public abstract class PeaPlant extends Plant {
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() < 10 && z.getCol() >= col
                     && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE && z.getState() != ZombieState.DEAD) {
-                if (!isShooting) {
-                    nowPic = 0;
-                }
+                if (!isShooting) nowPic = 0;
                 nowShooting = true;
                 break;
             }
@@ -31,11 +28,8 @@ public abstract class PeaPlant extends Plant {
     }
 
     public Bullet action() {
-        if (this instanceof Shroom && Math.abs(lastShoot - GlobalState.gameTime) >= 1200) {
-            return shoot();
-        } else if (nowPic == 30) {
-            return shoot();
-        }
+        if (this instanceof Shroom && Math.abs(lastShoot - GlobalState.gameTime) >= 1200) return shoot();
+        else if (nowPic == 30) return shoot();
         return null;
     }
 
