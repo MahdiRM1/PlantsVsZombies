@@ -42,9 +42,6 @@ public abstract class Plant {
     }
 
     public abstract boolean actionHappens(List<Zombie> zombies);
-    public void planted(GameUI gameui) {
-
-    }
 
     protected abstract Image[] getImage();
 

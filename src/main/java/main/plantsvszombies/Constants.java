@@ -149,8 +149,8 @@ public final class Constants {
             case "ScaredyShroom" -> { return new ScaredyShroom(row, col, mode); }
             case "IceShroom" -> { return new IceShroom(row, col, mode); }
             case "DoomShroom" -> { return new DoomShroom(row, col, mode);}
-            case "Plantern" -> {return new Plantern(row, col, mode);}
-            case "Blover" -> {return new Blover(row, col, mode);}
+            case "Plantern" -> {return new Plantern(row, col);}
+            case "Blover" -> {return new Blover(row, col);}
 
         }
         return null;
