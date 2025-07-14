@@ -1,11 +1,12 @@
 package main.plantsvszombies;
 
 interface Shroom {
+
     default boolean setIsSleep(GameMode mode) {
-        if(mode == GameMode.DAY) return true;
-        return false;
+        return mode == GameMode.DAY;
     }
 
     void wakeUp();
+
     boolean isSleep();
 }

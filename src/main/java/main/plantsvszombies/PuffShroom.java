@@ -1,22 +1,22 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
-public class PuffShroom extends PeaPlant implements Shroom{
+import javafx.scene.image.Image;
+
+public class PuffShroom extends PeaPlant implements Shroom {
 
     private boolean isSleep;
-    private static final int imagesNum = 17;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
+    private static final int FRAME_COUNT = 17;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
 
     static {
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/sleep/frame_", imagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/normal/frame_", imagesNum);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PuffShroom/normal/frame_", FRAME_COUNT);
     }
 
-    public PuffShroom(int row, int col, GameMode mode){
+    public PuffShroom(int row, int col, GameMode mode) {
         super(row, col);
         price = 0;
         HP = 100;
@@ -26,21 +26,28 @@ public class PuffShroom extends PeaPlant implements Shroom{
     }
 
     @Override
-    public boolean actionHappens(List<Zombie> zombies){
+    public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if(isSleep) return false;
+        if (isSleep) {
+            return false;
+        }
 
-        for (Zombie z : zombies)
-            if (row == z.getRow() && z.getCol() - col <= 4 && z.getCol() < 10 && z.getCol() >= col)
-                if(z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE)
+        for (Zombie z : zombies) {
+            if (row == z.getRow() && z.getCol() - col <= 4 && z.getCol() < 10 && z.getCol() >= col) {
+                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
                     return true;
+                }
+            }
+        }
         return false;
     }
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        return normalImages;
+        if (isSleep) {
+            return SLEEP_FRAMES;
+        }
+        return NORMAL_FRAMES;
     }
 
     @Override
@@ -49,7 +56,7 @@ public class PuffShroom extends PeaPlant implements Shroom{
     }
 
     @Override
-    public boolean isSleep(){
+    public boolean isSleep() {
         return isSleep;
     }
 }

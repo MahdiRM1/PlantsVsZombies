@@ -1,5 +1,7 @@
 package main.plantsvszombies;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -7,9 +9,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.util.ArrayList;
 
 public class ScoreBoard {
+
     private static final int SUN_VALUE = 25;
     private static final int SUN_LIFE_TIME = 7500;
 
@@ -44,7 +46,9 @@ public class ScoreBoard {
 
     // updates the scoreBoard for sun points
     public void addSun(Sun sun) {
-        if (sun == null) return;
+        if (sun == null) {
+            return;
+        }
 
         ImageView sunImage = sun.getPicture();
         sunImage.setOnMouseClicked(event -> sun.setType(SunType.COLLECTED));
@@ -71,20 +75,22 @@ public class ScoreBoard {
                 removeSunFromPane(sun);
                 break;
             }
-            if (Math.abs(sun.getPicture().getLayoutX() - Constants.SCREEN_WIDTH / 40) < 5){
+            if (Math.abs(sun.getPicture().getLayoutX() - Constants.SCREEN_WIDTH / 40) < 5) {
                 collectSun(sun);
                 break;
             }
         }
     }
 
-    private void removeSunFromPane(Sun sun){
+    private void removeSunFromPane(Sun sun) {
         pane.getChildren().remove(sun.getPicture());
         suns.remove(sun);
     }
 
     private void fallenSun() {
-        for (Sun s : suns) s.moveSun();
+        for (Sun s : suns) {
+            s.moveSun();
+        }
     }
 
     // manage fallen sun movement
@@ -97,8 +103,9 @@ public class ScoreBoard {
 
     // checks if a plant can be purchased
     public boolean purchasePlant(int price) {
-        if (score < price)
+        if (score < price) {
             return false;
+        }
 
         score -= price;
         scoreLabel.setText(score + "");

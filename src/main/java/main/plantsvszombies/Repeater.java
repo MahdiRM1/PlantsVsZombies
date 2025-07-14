@@ -2,20 +2,19 @@ package main.plantsvszombies;
 
 import javafx.scene.image.Image;
 
-public class Repeater extends PeaPlant{
+public class Repeater extends PeaPlant {
 
-    private static final int normalImageNum = 60;
-    private static final int shootImageNum = 70;
-    private static final Image[] shootImage;
-    private static final Image[] normalImage;
+    private static final int NORMAL_FRAME_COUNT = 60;
+    private static final int SHOOT_FRAME_COUNT = 70;
+    private static final Image[] SHOOT_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
 
     static {
-        normalImage = Constants.getArrayImage("Pictures/plantsGifs/Repeater/normal/frame_", normalImageNum);
-        shootImage = Constants.getArrayImage("Pictures/plantsGifs/Repeater/shoot/frame_", shootImageNum);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Repeater/normal/frame_", NORMAL_FRAME_COUNT);
+        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Repeater/shoot/frame_", SHOOT_FRAME_COUNT);
     }
 
-
-    public Repeater(int row, int col){
+    public Repeater(int row, int col) {
         super(row, col);
         price = 200;
         HP = 100;
@@ -26,16 +25,14 @@ public class Repeater extends PeaPlant{
 
     @Override
     public Bullet action() {
-        if (GlobalState.gameTime % 20 != 0) return null;
-        if(nowPic == 30 || nowPic == 40) {
-            lastShoot = GlobalState.gameTime;
-            return new Bullet(row, col, bulletType);
+        if (nowPic == 30 || nowPic == 40) {
+            return shoot();
         }
         return null;
     }
 
     @Override
     protected Image[] getImage() {
-        return isShooting ? shootImage : normalImage;
+        return isShooting ? SHOOT_FRAMES : NORMAL_FRAMES;
     }
 }

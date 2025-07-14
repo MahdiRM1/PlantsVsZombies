@@ -1,15 +1,13 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
-public abstract class NutPlant extends Plant{
+public abstract class NutPlant extends Plant {
 
     protected NutState state;
     protected double maxHP;
 
-    public NutPlant(int row, int col){
+    public NutPlant(int row, int col) {
         super(row, col);
         state = NutState.FULL_LIFE;
     }

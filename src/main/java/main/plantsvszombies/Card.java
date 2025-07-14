@@ -15,7 +15,7 @@ public class Card {
     private boolean canChoose;
     private final Button btn;
 
-    public Card(CardData data){
+    public Card(CardData data) {
         plantName = data.getPlantName();
         lastSelected = data.getLastSelected();
         rechargeTime = data.getRechargeTime();
@@ -24,9 +24,9 @@ public class Card {
         rechargeCheck();
     }
 
-    public Card(String plantName, int index){
+    public Card(String plantName, int index) {
         this.plantName = plantName;
-        rechargeTime = rechargeTime();
+        rechargeTime = findRechargeTime();
         lastSelected = -rechargeTime;
         this.index = index;
         canChoose = true;
@@ -34,21 +34,24 @@ public class Card {
     }
 
     //recharge time of each plant
-    public int rechargeTime(){
-        Plant plant;
-        if (plantName.equals("CoffeeBean")) plant = new CoffeeBean(0, 0, null);
-        else if (plantName.equals("GraveBuster")) plant = new GraveBuster(0, 0, null);
-        else plant = Constants.getPlant(0, 0, plantName, null);
-        return plant.getRechargeTime() * 1000 ;
+    private int findRechargeTime() {
+        Plant plant = switch (plantName){
+            case "CoffeeBean" -> new CoffeeBean(0, 0, null);
+            case "GraveBuster" -> new GraveBuster(0, 0, null);
+            default -> Constants.getPlant(0, 0, plantName, null);
+        };
+        return plant.getRechargeTime() * 1000;
     }
 
     //generate buttons for plant cards
-    private Button cardButton(int index){
+    private Button cardButton(int index) {
         Button btn = new Button();
         btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
-            if(!canChoose) return;
+            if (!canChoose) {
+                return;
+            }
 
             if (GameUI.selectedButton >= 0 && GameUI.selectedButton < 6) {
                 HBox cardBar = (HBox) btn.getParent();
@@ -64,39 +67,44 @@ public class Card {
             }
         });
         btn.setOnMouseEntered(event -> {
-            if (canChoose) btn.setStyle("-fx-background-color: rgb(62, 177, 235);");
+            if (canChoose) {
+                btn.setStyle("-fx-background-color: rgb(62, 177, 235);");
+            }
         });
         btn.setOnMouseClicked(event -> {
-            if (canChoose) btn.setStyle("-fx-background-color: rgb(174, 255, 174);");
+            if (canChoose) {
+                btn.setStyle("-fx-background-color: rgb(174, 255, 174);");
+            }
         });
         btn.setOnMouseExited(e -> {
-            if(GameUI.selectedButton == index) btn.setStyle("-fx-background-color: rgb(174, 255, 174)");
-            else btn.setStyle("-fx-background-color: transparent");
+            if (GameUI.selectedButton == index) {
+                btn.setStyle("-fx-background-color: rgb(174, 255, 174)");
+            } else {
+                btn.setStyle("-fx-background-color: transparent");
+            }
         });
         return btn;
     }
 
     //check recharge logic
-    public void rechargeCheck(){
+    public void rechargeCheck() {
         double rechargeCheck = (double) (GlobalState.gameTime - lastSelected) / rechargeTime;
         ImageView imageView = (ImageView) btn.getGraphic();
         if (rechargeCheck >= 1) {
             imageView.setEffect(null);
             canChoose = true;
-        }
-        else {
+        } else {
             imageView.setEffect(rechargeCardEffect(rechargeCheck));
             canChoose = false;
         }
     }
 
     //recharge visual effects
-    private Effect rechargeCardEffect(double recharge){
+    private Effect rechargeCardEffect(double recharge) {
         ColorAdjust choose = new ColorAdjust();
         choose.setBrightness(-1.0 + recharge);
         return choose;
     }
-
 
     public void updateLastSelected() {
         lastSelected = GlobalState.gameTime;

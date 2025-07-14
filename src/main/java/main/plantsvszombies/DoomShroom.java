@@ -1,28 +1,28 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
-public class DoomShroom extends BombPlant implements Shroom{
+import javafx.scene.image.Image;
+
+public class DoomShroom extends BombPlant implements Shroom {
 
     private long wakeUpTime;
     private boolean isSleep;
-    private static final int imagesNum = 22;
-    private static final int sleepImagesNum = 25;
-    private static final int doomImagesNum = 10;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
-    private static final Image[] doomImages;
     private boolean finishAnimation;
+    private static final int NORMAL_FRAME_COUNT = 22;
+    private static final int SLEEP_FRAME_COUNT = 25;
+    private static final int DOOM_FRAME_COUNT = 10;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
+    private static final Image[] DOOM_FRAMES;
 
     static {
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", sleepImagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", imagesNum);
-        doomImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", doomImagesNum);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
+        DOOM_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
     }
 
-    public DoomShroom(int row, int col, GameMode mode){
+    public DoomShroom(int row, int col, GameMode mode) {
         super(row, col);
         price = 125;
         HP = 100;
@@ -34,13 +34,13 @@ public class DoomShroom extends BombPlant implements Shroom{
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if(isSleep){
+        if (isSleep) {
             updateFrame();
             wakeUpTime = GlobalState.gameTime;
             return false;
         }
 
-        if(!finishAnimation) {
+        if (!finishAnimation) {
             updateFrame();
             if (!isExploded && nowPic >= getImage().length - 1) {
                 nowPic = 0;
@@ -53,23 +53,22 @@ public class DoomShroom extends BombPlant implements Shroom{
                 gif.setLayoutY(gif.getLayoutY() + gif.getFitHeight() / 4);
                 Constants.changeScale(gif, 0.5);
             }
-        }
-
-        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == 12000){
+        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
             gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom/" + time + "Hole2.png"));
+        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) {
+            HP = 0;
         }
-        else if(Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) HP = 0;
         return false;
     }
 
     @Override
-    public void action(List<Zombie> zombies){
+    public void action(List<Zombie> zombies) {
         gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
         Constants.changeScale(gif, 2);
-        gif.setLayoutY(gif.getLayoutY() - gif.getFitHeight()/4);
-        for (Zombie z : zombies){
-            if(Math.abs(z.getRow() - row) <= 2 &&  Math.abs(z.getCol() - col) <= 2) {
+        gif.setLayoutY(gif.getLayoutY() - gif.getFitHeight() / 4);
+        for (Zombie z : zombies) {
+            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2) {
                 z.setState(ZombieState.BOOM_DIE);
             }
         }
@@ -81,14 +80,18 @@ public class DoomShroom extends BombPlant implements Shroom{
     }
 
     @Override
-    public boolean isSleep(){
+    public boolean isSleep() {
         return isSleep;
     }
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        if (isExploded) return doomImages;
-        return normalImages;
+        if (isSleep) {
+            return SLEEP_FRAMES;
+        }
+        if (isExploded) {
+            return DOOM_FRAMES;
+        }
+        return NORMAL_FRAMES;
     }
 }

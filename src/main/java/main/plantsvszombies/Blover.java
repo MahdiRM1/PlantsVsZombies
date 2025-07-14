@@ -1,19 +1,16 @@
 package main.plantsvszombies;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.image.Image;
-import javafx.util.Duration;
-
 import java.util.List;
 
-public class Blover extends Plant{
+import javafx.scene.image.Image;
 
-    private static final int imagesNum = 59;
-    private static final Image[] normalImages;
+public class Blover extends Plant {
+
+    private static final int FRAME_COUNT = 59;
+    private static final Image[] FRAMES;
 
     static {
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/Blover/normal/frame_", imagesNum);
+        FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Blover/normal/frame_", FRAME_COUNT);
     }
 
     public Blover(int row, int col) {
@@ -26,7 +23,7 @@ public class Blover extends Plant{
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        return nowPic == normalImages.length-1;
+        return nowPic == FRAMES.length - 1;
     }
 
     public void action(Fog fog) {
@@ -37,6 +34,6 @@ public class Blover extends Plant{
 
     @Override
     protected Image[] getImage() {
-        return normalImages;
+        return FRAMES;
     }
 }

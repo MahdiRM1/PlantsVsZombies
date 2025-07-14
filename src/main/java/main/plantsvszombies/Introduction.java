@@ -1,17 +1,19 @@
 package main.plantsvszombies;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class Introduction {
 
@@ -20,32 +22,32 @@ public class Introduction {
     private GameMode mode;
     private HBox cardBar;
 
-    public Introduction(Stage stage){
+    public Introduction(Stage stage) {
         this.stage = stage;
     }
 
-    public void firstPage(){
+    public void firstPage() {
         Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.show();
     }
 
-    private void load(){
+    private void load() {
         try (ObjectInputStream input = new ObjectInputStream(new FileInputStream("savegame.dat"))) {
             GameState state = (GameState) input.readObject();
             new GameUI(stage, state);
             System.out.println("game loaded");
-        }catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void plantSelectionPage(GameMode mode){
+    public void plantSelectionPage(GameMode mode) {
         this.mode = mode;
         plantSelectionPage();
     }
 
-    private void plantSelectionPage(){
+    private void plantSelectionPage() {
         Pane pane = new Pane();
         pane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
@@ -58,32 +60,34 @@ public class Introduction {
         double layoutX = Constants.SCREEN_WIDTH / 14;
 
         HBox box1 = new HBox(cardSpacing,
-                getCardButton("PeaShooter"), getCardButton("SunFlower") ,
-                getCardButton("WallNut") ,getCardButton("TallNut")
+                getCardButton("PeaShooter"), getCardButton("SunFlower"),
+                getCardButton("WallNut"), getCardButton("TallNut")
         );
-        positionHBox(box1, layoutX, Constants.SCREEN_HEIGHT/4);
+        positionHBox(box1, layoutX, Constants.SCREEN_HEIGHT / 4);
 
         HBox box2 = new HBox(cardSpacing,
                 getCardButton("Repeater"), getCardButton("SnowPea"),
-                getCardButton("CherryBomb") ,getCardButton("Jalapeno")
+                getCardButton("CherryBomb"), getCardButton("Jalapeno")
         );
-        positionHBox(box2, layoutX, Constants.SCREEN_HEIGHT/2.5);
+        positionHBox(box2, layoutX, Constants.SCREEN_HEIGHT / 2.5);
 
         HBox box3 = new HBox(cardSpacing,
                 getCardButton("PuffShroom"), getCardButton("CoffeeBean"),
                 getCardButton("ScaredyShroom"), getCardButton("IceShroom")
         );
-        positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT/1.8);
+        positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT / 1.8);
 
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom"), getCardButton("GraveBuster") ,
-                getCardButton("Plantern") , getCardButton("Blover")
+                getCardButton("DoomShroom"), getCardButton("GraveBuster"),
+                getCardButton("Plantern"), getCardButton("Blover")
         );
-        positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT/1.4);
+        positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT / 1.4);
 
         pane.getChildren().addAll(Constants.setScoreBoardPicture(),
                 cardBar, box1, box2, box3, box4, startGameBtn());
-        for (int i = 0; i < 8; i++) pane.getChildren().add(createZombie());
+        for (int i = 0; i < 8; i++) {
+            pane.getChildren().add(createZombie());
+        }
         Scene scene = new Scene(pane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.show();
@@ -94,34 +98,40 @@ public class Introduction {
         box.setLayoutY(y);
     }
 
-    private ImageView startGameBtn(){
+    private ImageView startGameBtn() {
         Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
         Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
         ImageView start = new ImageView(letsRock1);
-        start.setFitWidth(Constants.SCREEN_WIDTH/7.5);
-        start.setFitHeight(Constants.SCREEN_HEIGHT/16);
-        start.setLayoutX(Constants.SCREEN_WIDTH/5.65);
-        start.setLayoutY(Constants.SCREEN_HEIGHT/1.122);
+        start.setFitWidth(Constants.SCREEN_WIDTH / 7.5);
+        start.setFitHeight(Constants.SCREEN_HEIGHT / 16);
+        start.setLayoutX(Constants.SCREEN_WIDTH / 5.65);
+        start.setLayoutY(Constants.SCREEN_HEIGHT / 1.122);
 
         start.setOnMouseEntered(event -> {
-            if (selectedCards.size() != 6) return;
+            if (selectedCards.size() != 6) {
+                return;
+            }
 
             start.setImage(letsRock2);
             Constants.changeScale(start, 1.05);
         });
         start.setOnMouseExited(event -> {
-            if (selectedCards.size() != 6) return;
+            if (selectedCards.size() != 6) {
+                return;
+            }
 
             start.setImage(letsRock1);
-            Constants.changeScale(start, 1/1.05);
+            Constants.changeScale(start, 1 / 1.05);
         });
         start.setOnMouseClicked(event -> {
-            if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
+            if (selectedCards.size() == 6) {
+                new GameUI(stage, selectedCards, mode);
+            }
         });
         return start;
     }
 
-    private ImageView createZombie(){
+    private ImageView createZombie() {
         Random rdm = new Random();
         String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "Imp"};
         String chosen = zombieTypes[rdm.nextInt(5)];
@@ -129,84 +139,83 @@ public class Introduction {
         ImageView image = new ImageView(new Image("file:Pictures/ZombieGif/" + chosen + ".gif"));
         image.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
         image.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
-        image.setLayoutX(Constants.SCREEN_WIDTH/1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH/3));
-        image.setLayoutY(rdm.nextDouble(Constants.SCREEN_HEIGHT/1.5));
+        image.setLayoutX(Constants.SCREEN_WIDTH / 1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH / 3));
+        image.setLayoutY(rdm.nextDouble(Constants.SCREEN_HEIGHT / 1.5));
         return image;
     }
 
-
-    private Button getCardButton(String plantName){
+    private Button getCardButton(String plantName) {
         Button btn = new Button();
         btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
 
         btn.setOnAction(event -> {
-            if(selectedCards.contains(plantName)) {
+            if (selectedCards.contains(plantName)) {
                 selectedCards.remove(plantName);
-                cardBar.getChildren().removeIf(node ->
-                        ((ImageView) ((Button) node).getGraphic()).getImage()//image on button in cardBar
+                cardBar.getChildren().removeIf(node
+                        -> ((ImageView) ((Button) node).getGraphic()).getImage()//image on button in cardBar
                                 .equals(((ImageView) btn.getGraphic()).getImage()));//image on clicked btn
-            }
-            else if(selectedCards.size() < 6) {
-                if ((plantName.equals("CoffeeBean") && mode == GameMode.NIGHT) ||
-                    (plantName.equals("GraveBuster") && mode == GameMode.DAY) ||
-                    (plantName.equals("Plantern") && mode == GameMode.DAY)) {
+            } else if (selectedCards.size() < 6) {
+                if ((plantName.equals("CoffeeBean") && mode == GameMode.NIGHT)
+                        || (plantName.equals("GraveBuster") && mode == GameMode.DAY)
+                        || (plantName.equals("Plantern") && mode == GameMode.DAY)) {
                     btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
                     return;
                 }
                 selectedCards.add(plantName);
                 Button btn2 = getCardButton(plantName);
-                ImageView imageView = new ImageView(((ImageView)btn.getGraphic()).getImage());
+                ImageView imageView = new ImageView(((ImageView) btn.getGraphic()).getImage());
                 imageView.setFitWidth(Constants.PLANT_CARD_WIDTH);
                 imageView.setFitHeight(Constants.PLANT_CARD_HEIGHT);
                 btn2.setGraphic(imageView);
                 cardBar.getChildren().add(btn2);
+            } else {
+                btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
             }
-            else btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
         });
         btn.setOnMouseEntered(event -> Constants.changeScale(btn.getGraphic(), 1.05));
         btn.setOnMouseExited(event -> {
-            Constants.changeScale(btn.getGraphic(), 1/ 1.05);
+            Constants.changeScale(btn.getGraphic(), 1 / 1.05);
             btn.setStyle("-fx-background-color: transparent;");
         });
         return btn;
     }
 
-    private Pane MainMenuPane(){
+    private Pane MainMenuPane() {
         Pane pane = new Pane();
         pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
 
-        ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH/2.6, Constants.SCREEN_HEIGHT/4.2);
+        ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
         adventure.setLayoutX(Constants.SCREEN_WIDTH / 1.97);
-            adventure.setLayoutY(Constants.SCREEN_HEIGHT / 8);
+        adventure.setLayoutY(Constants.SCREEN_HEIGHT / 8);
         adventure.setOnMouseClicked(event -> {
             mode = GameMode.DAY;
             plantSelectionPage();
         });
 
-            ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/4.35);
-        newGame.setLayoutX(Constants.SCREEN_WIDTH/1.98);
-        newGame.setLayoutY(Constants.SCREEN_HEIGHT/3.1);
+        ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
+        newGame.setLayoutX(Constants.SCREEN_WIDTH / 1.98);
+        newGame.setLayoutY(Constants.SCREEN_HEIGHT / 3.1);
         newGame.setOnMouseClicked(event -> {
             mode = GameMode.NIGHT;
             plantSelectionPage();
         });
 
-        ImageView loadGame = menuItem("LoadGame", Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/4.8);
+        ImageView loadGame = menuItem("LoadGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
         loadGame.setLayoutX(Constants.SCREEN_WIDTH / 1.94);
-        loadGame.setLayoutY(Constants.SCREEN_HEIGHT/2);
+        loadGame.setLayoutY(Constants.SCREEN_HEIGHT / 2);
         loadGame.setOnMouseClicked(event -> load());
 
-        ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH/8.4, Constants.SCREEN_HEIGHT/6);
+        ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
         quit.setLayoutX(Constants.SCREEN_WIDTH / 1.14);
         quit.setLayoutY(Constants.SCREEN_HEIGHT / 1.405);
         quit.setOnMouseClicked(event -> stage.close());
 
-        ImageView help = menuItem("help", Constants.SCREEN_WIDTH/8.4, Constants.SCREEN_HEIGHT/4);
+        ImageView help = menuItem("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
         help.setLayoutX(Constants.SCREEN_WIDTH / 1.28);
         help.setLayoutY(Constants.SCREEN_HEIGHT / 1.54);
 
-        ImageView options = menuItem("option", Constants.SCREEN_WIDTH/6.55, Constants.SCREEN_HEIGHT/5.4);
+        ImageView options = menuItem("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
         options.setLayoutX(Constants.SCREEN_WIDTH / 1.475);
         options.setLayoutY(Constants.SCREEN_HEIGHT / 1.47);
 
@@ -214,12 +223,12 @@ public class Introduction {
         return pane;
     }
 
-    private ImageView menuItem(String str, double width, double height){
+    private ImageView menuItem(String str, double width, double height) {
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + str + ".png"));
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
         imageView.setOnMouseEntered(event -> Constants.changeScale(imageView, 1.05));
-        imageView.setOnMouseExited(event -> Constants.changeScale(imageView, 1/1.05));
+        imageView.setOnMouseExited(event -> Constants.changeScale(imageView, 1 / 1.05));
         return imageView;
     }
 }

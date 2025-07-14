@@ -1,22 +1,22 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
-public class CherryBomb extends BombPlant{
+import javafx.scene.image.Image;
 
-    private static final Image[] images;
-    private static final Image[] boomImages;
-    private static final int imagesNum = 14;
-    private static final int boomImagesNum = 13;
+public class CherryBomb extends BombPlant {
+
+    private static final Image[] NORMAL_FRAMES;
+    private static final Image[] EXPLOSION_FRAMES;
+    private static final int NORMAL_FRAME_COUNT = 14;
+    private static final int EXPLOSION_FRAME_COUNT = 13;
 
     static {
-        images = Constants.getArrayImage("Pictures/plantsGifs/CherryBomb/normal/frame_", imagesNum);
-        boomImages = Constants.getArrayImage("Pictures/plantsGifs/CherryBomb/boom/frame_", boomImagesNum);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CherryBomb/normal/frame_", NORMAL_FRAME_COUNT);
+        EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CherryBomb/boom/frame_", EXPLOSION_FRAME_COUNT);
     }
 
-    public CherryBomb(int row, int col){
+    public CherryBomb(int row, int col) {
         super(row, col);
         price = 150;
         HP = 100;
@@ -25,16 +25,17 @@ public class CherryBomb extends BombPlant{
 
     @Override
     protected Image[] getImage() {
-        return isExploded ? boomImages : images;
+        return isExploded ? EXPLOSION_FRAMES : NORMAL_FRAMES;
     }
 
     @Override
-    public void action(List<Zombie> zombies){
-        gif.setImage(boomImages[0]);
+    public void action(List<Zombie> zombies) {
+        gif.setImage(EXPLOSION_FRAMES[0]);
         Constants.changeScale(gif, 2.5);
-        for (Zombie z : zombies){
-            if(Math.abs(z.getRow() - row) <= 1 &&  Math.abs(z.getCol() - col) <= 1)
+        for (Zombie z : zombies) {
+            if (Math.abs(z.getRow() - row) <= 1 && Math.abs(z.getCol() - col) <= 1) {
                 z.setState(ZombieState.BOOM_DIE);
+            }
         }
     }
 }
