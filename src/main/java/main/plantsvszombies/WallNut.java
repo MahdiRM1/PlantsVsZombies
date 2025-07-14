@@ -4,16 +4,16 @@ import javafx.scene.image.Image;
 
 public class WallNut extends NutPlant {
 
-    private static final int imagesNum = 17;
-    private static final Image[] fullLife;
-    private static final Image[] halfLife;
-    private static final Image[] endLife;
+    private static final int FRAME_COUNT = 17;
+    private static final Image[] FULL_LIFE;
+    private static final Image[] HALF_LIFE;
+    private static final Image[] END_LIFE;
 
 
     static {
-        fullLife = Constants.getArrayImage("Pictures/plantsGifs/WallNut/FullLife/frame_", imagesNum);
-        halfLife = Constants.getArrayImage("Pictures/plantsGifs/WallNut/HalfLife/frame_", imagesNum);
-        endLife = Constants.getArrayImage("Pictures/plantsGifs/WallNut/EndLife/frame_", imagesNum);
+        FULL_LIFE = Constants.getArrayImage("Pictures/plantsGifs/WallNut/FullLife/frame_", FRAME_COUNT);
+        HALF_LIFE = Constants.getArrayImage("Pictures/plantsGifs/WallNut/HalfLife/frame_", FRAME_COUNT);
+        END_LIFE = Constants.getArrayImage("Pictures/plantsGifs/WallNut/EndLife/frame_", FRAME_COUNT);
     }
 
     public WallNut(int row, int col){
@@ -26,9 +26,9 @@ public class WallNut extends NutPlant {
     @Override
     protected Image[] getImage() {
         return switch (state){
-            case FULL_LIFE -> fullLife;
-            case HALF_LIFE -> halfLife;
-            case END_LIFE -> endLife;
+            case FULL_LIFE -> FULL_LIFE;
+            case HALF_LIFE -> HALF_LIFE;
+            case END_LIFE -> END_LIFE;
         };
     }
 }

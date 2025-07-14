@@ -7,11 +7,11 @@ import java.util.List;
 public class GraveBuster extends Plant{
 
     private final Grave grave;
-    private static final Image[] images;
-    private static final int imagesNum = 28;
+    private static final Image[] FRAMES;
+    private static final int FRAME_COUNT = 28;
 
     static {
-        images = Constants.getArrayImage("Pictures/plantsGifs/GraveBuster/frame_", imagesNum);
+        FRAMES = Constants.getArrayImage("Pictures/plantsGifs/GraveBuster/frame_", FRAME_COUNT);
     }
 
     public GraveBuster(int row, int col, Grave grave){
@@ -42,6 +42,6 @@ public class GraveBuster extends Plant{
 
     @Override
     protected Image[] getImage(){
-        return images;
+        return FRAMES;
     }
 }

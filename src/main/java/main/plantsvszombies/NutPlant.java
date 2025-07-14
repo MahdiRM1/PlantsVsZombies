@@ -1,7 +1,5 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
 public abstract class NutPlant extends Plant{

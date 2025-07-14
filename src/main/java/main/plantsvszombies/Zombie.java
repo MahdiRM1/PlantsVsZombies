@@ -102,10 +102,7 @@ public abstract class Zombie {
     private void dieAnimation(){
         Image[] images;
         if(state == ZombieState.DIE) images = getDieImage();
-        else {
-            if (GlobalState.gameTime % 40 != 0) return;
-            images = boomDiePictures;
-        }
+        else images = boomDiePictures;
         if(nowPic >= images.length - 1) {
             state = ZombieState.DEAD;
             return;

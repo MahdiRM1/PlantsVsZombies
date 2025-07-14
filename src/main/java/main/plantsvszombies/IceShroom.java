@@ -3,19 +3,18 @@ package main.plantsvszombies;
 import javafx.scene.image.Image;
 
 import java.util.List;
-import java.util.Objects;
 
 public class IceShroom extends BombPlant implements Shroom{
 
     private long wakeUpTime;
     private boolean isSleep;
-    private static final int imagesNum = 17;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
+    private static final int FRAME_COUNT = 17;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
 
     static {
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/sleep/frame_", imagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/normal/frame_", imagesNum);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/normal/frame_", FRAME_COUNT);
     }
 
     public IceShroom(int row, int col, GameMode mode){
@@ -30,8 +29,9 @@ public class IceShroom extends BombPlant implements Shroom{
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if(!isExploded && nowPic >= getImage().length - 1) {
-            nowPic = 0;
+        if (isSleep) wakeUpTime = GlobalState.gameTime;
+        else if(Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500) {
+            HP = 0;
             return isExploded = true;
         }
         return false;
@@ -57,8 +57,8 @@ public class IceShroom extends BombPlant implements Shroom{
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        return normalImages;
+        if (isSleep) return SLEEP_FRAMES;
+        return NORMAL_FRAMES;
     }
 
 }

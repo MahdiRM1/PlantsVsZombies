@@ -8,18 +8,18 @@ public class DoomShroom extends BombPlant implements Shroom{
 
     private long wakeUpTime;
     private boolean isSleep;
-    private static final int imagesNum = 22;
-    private static final int sleepImagesNum = 25;
-    private static final int doomImagesNum = 10;
-    private static final Image[] sleepImages;
-    private static final Image[] normalImages;
-    private static final Image[] doomImages;
     private boolean finishAnimation;
+    private static final int NORMAL_FRAME_COUNT = 22;
+    private static final int SLEEP_FRAME_COUNT = 25;
+    private static final int DOOM_FRAME_COUNT = 10;
+    private static final Image[] SLEEP_FRAMES;
+    private static final Image[] NORMAL_FRAMES;
+    private static final Image[] DOOM_FRAMES;
 
     static {
-        sleepImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", sleepImagesNum);
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", imagesNum);
-        doomImages = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", doomImagesNum);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
+        DOOM_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
     }
 
     public DoomShroom(int row, int col, GameMode mode){
@@ -87,8 +87,8 @@ public class DoomShroom extends BombPlant implements Shroom{
 
     @Override
     protected Image[] getImage() {
-        if (isSleep) return sleepImages;
-        if (isExploded) return doomImages;
-        return normalImages;
+        if (isSleep) return SLEEP_FRAMES;
+        if (isExploded) return DOOM_FRAMES;
+        return NORMAL_FRAMES;
     }
 }

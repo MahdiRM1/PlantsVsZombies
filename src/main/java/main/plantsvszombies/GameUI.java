@@ -347,7 +347,7 @@ public class GameUI {
     //controls the general timing of zombies entering and attack waves
     private void timeHandler(){
         Random rdm = new Random();
-        if(GlobalState.gameTime <= 20000) return;
+//        if(GlobalState.gameTime <= 20000) return;
         if(GlobalState.gameTime <= 40_000) handleZombie(5000, 1000, 1, rdm);
         else if(GlobalState.gameTime < 60_000) handleZombie(4000, 0, 2, rdm);
         else if(GlobalState.gameTime < 70_000) return;
