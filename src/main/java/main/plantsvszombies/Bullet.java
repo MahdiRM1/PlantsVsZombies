@@ -2,7 +2,6 @@ package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
 
-
 public class Bullet {
 
     private final int row;
@@ -16,8 +15,8 @@ public class Bullet {
     }
 
     //manage bullet movement
-    public void move(){
-        if(picture != null) {
+    public void move() {
+        if (picture != null) {
             picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (25));
         }
     }

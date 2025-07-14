@@ -1,17 +1,16 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.Image;
-
 import java.util.List;
 
+import javafx.scene.image.Image;
 
-public class Plantern extends Plant{
+public class Plantern extends Plant {
 
-    private static final int imagesNum = 20;
-    private static final Image[] normalImages;
+    private static final int FRAME_COUNT = 20;
+    private static final Image[] FRAMES;
 
     static {
-        normalImages = Constants.getArrayImage("Pictures/plantsGifs/Plantern/normal/frame_", imagesNum);
+        FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Plantern/normal/frame_", FRAME_COUNT);
     }
 
     public Plantern(int row, int col) {
@@ -33,6 +32,6 @@ public class Plantern extends Plant{
 
     @Override
     public Image[] getImage() {
-        return normalImages;
+        return FRAMES;
     }
 }

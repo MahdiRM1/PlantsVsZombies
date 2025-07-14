@@ -1,11 +1,12 @@
 package main.plantsvszombies;
 
+import java.util.List;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.List;
-
 public abstract class Plant {
+
     protected final int row, col;
     protected final long timeCreated;
     protected int price;
@@ -16,7 +17,7 @@ public abstract class Plant {
     protected int frameUpdateTime;
     protected int nowPic = 0;
 
-    public Plant(int row, int col){
+    public Plant(int row, int col) {
         this.row = row;
         this.col = col;
         this.timeCreated = GlobalState.gameTime;
@@ -24,16 +25,18 @@ public abstract class Plant {
         frameUpdateTime = 40;
     }
 
-    public void damage(){
+    public void damage() {
         damageCaused += 2.5;
-        if(damageCaused == 25) {
+        if (damageCaused == 25) {
             HP -= 25;
             damageCaused = 0;
         }
     }
 
-    protected void updateFrame(){
-        if (GlobalState.gameTime % frameUpdateTime != 0) return;
+    protected void updateFrame() {
+        if (GlobalState.gameTime % frameUpdateTime != 0) {
+            return;
+        }
 
         Image[] frame = getImage();
         nowPic++;
@@ -45,11 +48,11 @@ public abstract class Plant {
 
     protected abstract Image[] getImage();
 
-    public void setHP(double HP){
+    public void setHP(double HP) {
         this.HP = HP;
     }
 
-    public void resetDamageCaused(){
+    public void resetDamageCaused() {
         damageCaused = 0;
     }
 
@@ -73,7 +76,7 @@ public abstract class Plant {
         return col;
     }
 
-    public int getRechargeTime(){
+    public int getRechargeTime() {
         return rechargeTime;
     }
 }

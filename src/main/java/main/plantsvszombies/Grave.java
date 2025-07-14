@@ -1,23 +1,23 @@
 package main.plantsvszombies;
 
-import javafx.scene.image.ImageView;
-
 import java.util.Random;
+
+import javafx.scene.image.ImageView;
 
 public class Grave {
 
-    private final int row , col;
+    private final int row, col;
     private final int picNumber;
     private final ImageView picture;
 
-    public Grave(GraveData data){
+    public Grave(GraveData data) {
         this.row = data.getRow();
         this.col = data.getCol();
         picNumber = data.getPicNumber();
         picture = Constants.setGravePicture(row, col, picNumber);
     }
 
-    public Grave(){
+    public Grave() {
         Random rdm = new Random();
         this.row = rdm.nextInt(5);
         this.col = rdm.nextInt(5) + 4;
@@ -33,7 +33,7 @@ public class Grave {
         return col;
     }
 
-    public int getPicNumber(){
+    public int getPicNumber() {
         return picNumber;
     }
 

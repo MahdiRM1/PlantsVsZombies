@@ -4,19 +4,18 @@ import javafx.scene.image.Image;
 
 public class TallNut extends NutPlant {
 
-    private static final int imagesNum = 17;
-    private static final Image[] fullLife;
-    private static final Image[] halfLife;
-    private static final Image[] endLife;
-
+    private static final int FRAME_COUNT = 17;
+    private static final Image[] FULL_LIFE;
+    private static final Image[] HALF_LIFE;
+    private static final Image[] END_LIFE;
 
     static {
-        fullLife = Constants.getArrayImage("Pictures/plantsGifs/TallNut/FullLife/frame_", imagesNum);
-        halfLife = Constants.getArrayImage("Pictures/plantsGifs/TallNut/HalfLife/frame_", imagesNum);
-        endLife = Constants.getArrayImage("Pictures/plantsGifs/TallNut/EndLife/frame_", imagesNum);
+        FULL_LIFE = Constants.getArrayImage("Pictures/plantsGifs/TallNut/FullLife/frame_", FRAME_COUNT);
+        HALF_LIFE = Constants.getArrayImage("Pictures/plantsGifs/TallNut/HalfLife/frame_", FRAME_COUNT);
+        END_LIFE = Constants.getArrayImage("Pictures/plantsGifs/TallNut/EndLife/frame_", FRAME_COUNT);
     }
 
-    public TallNut(int row, int col){
+    public TallNut(int row, int col) {
         super(row, col);
         price = 125;
         HP = maxHP = 400;
@@ -25,10 +24,13 @@ public class TallNut extends NutPlant {
 
     @Override
     protected Image[] getImage() {
-        return switch (state){
-            case FULL_LIFE -> fullLife;
-            case HALF_LIFE -> halfLife;
-            case END_LIFE -> endLife;
+        return switch (state) {
+            case FULL_LIFE ->
+                FULL_LIFE;
+            case HALF_LIFE ->
+                HALF_LIFE;
+            case END_LIFE ->
+                END_LIFE;
         };
     }
 }

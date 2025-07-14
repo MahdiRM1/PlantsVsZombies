@@ -3,12 +3,13 @@ package main.plantsvszombies;
 import java.io.Serializable;
 
 class PlantData implements Serializable {
+
     private final String type;
     private final int row, col;
     private final double HP;
     private final boolean isSleep;
 
-    public PlantData(Plant plant){
+    public PlantData(Plant plant) {
         type = plant.getClass().getSimpleName();
         row = plant.getRow();
         col = plant.getCol();
@@ -38,12 +39,13 @@ class PlantData implements Serializable {
 }
 
 class ZombieData implements Serializable {
+
     private final String type;
     private final int row;
     private final double picLayoutX;
     private final int HP;
 
-    public ZombieData(Zombie zombie){
+    public ZombieData(Zombie zombie) {
         type = zombie.getClass().getSimpleName();
         row = zombie.getRow();
         picLayoutX = zombie.getPicture().getLayoutX();
@@ -68,12 +70,13 @@ class ZombieData implements Serializable {
 }
 
 class CardData implements Serializable {
+
     private final String plantName;
     private final int rechargeTime;
     private final long lastSelected;
     private final int index;
 
-    public CardData(Card card){
+    public CardData(Card card) {
         plantName = card.getPlantName();
         rechargeTime = card.getRechargeTime();
         lastSelected = card.getLastSelected();
@@ -97,12 +100,12 @@ class CardData implements Serializable {
     }
 }
 
-class GraveData implements Serializable{
+class GraveData implements Serializable {
 
     private final int row, col;
     private final int picNumber;
 
-    public GraveData(Grave grave){
+    public GraveData(Grave grave) {
         row = grave.getRow();
         col = grave.getCol();
         picNumber = grave.getPicNumber();

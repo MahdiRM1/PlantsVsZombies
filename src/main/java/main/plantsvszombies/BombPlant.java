@@ -2,11 +2,11 @@ package main.plantsvszombies;
 
 import java.util.List;
 
-public abstract class BombPlant extends Plant{
+public abstract class BombPlant extends Plant {
 
     protected boolean isExploded;
 
-    public BombPlant(int row, int col){
+    public BombPlant(int row, int col) {
         super(row, col);
         isExploded = false;
     }
@@ -14,11 +14,13 @@ public abstract class BombPlant extends Plant{
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if(!isExploded && nowPic >= getImage().length - 1) {
+        if (!isExploded && nowPic >= getImage().length - 1) {
             nowPic = 0;
             return isExploded = true;
         }
-        if(isExploded && nowPic >= getImage().length - 1) HP = 0;
+        if (isExploded && nowPic >= getImage().length - 1) {
+            HP = 0;
+        }
         return false;
     }
 
