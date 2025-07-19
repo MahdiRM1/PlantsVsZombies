@@ -76,8 +76,8 @@ public final class Constants {
     public static ImageView setGravePicture(int row, int col, int i) {
         ImageView grave = createImageView("Pictures/graves/" + i + ".png",
                 TILE_SIZE * 0.8, TILE_SIZE * 0.8);
-        grave.setLayoutX(BOARD_X + (col * TILE_SIZE));
-        grave.setLayoutY(BOARD_Y + (row * TILE_SIZE));
+        grave.setLayoutX(BOARD_X + ((col + 0.1) * TILE_SIZE));
+        grave.setLayoutY(BOARD_Y + ((row + 0.1) * TILE_SIZE));
         grave.setMouseTransparent(true);
         return grave;
     }
@@ -93,7 +93,7 @@ public final class Constants {
     }
 
     public static ImageView setFogPicture(int fogLength){
-        double height = TILE_SIZE * COLS;
+        double height = TILE_SIZE * (ROWS + 1);
         ImageView picture = createImageView("Pictures/ui/fog.png", height, height);
         picture.setLayoutX(Constants.BOARD_X + fogLength * Constants.TILE_SIZE);
         picture.setLayoutY(Constants.BOARD_Y * 0.5);
@@ -143,7 +143,7 @@ public final class Constants {
         node.setLayoutY(node.getLayoutY() - (newHeight - currentHeight) / 2);
     }
 
-    public static Plant getPlant(int row, int col, String selectedPlant, GameMode mode) {
+    public static Plant getPlant(int row, int col, String selectedPlant, boolean isSleep) {
         return switch (selectedPlant) {
             case "PeaShooter" -> new PeaShooter(row, col);
             case "SunFlower" -> new SunFlower(row, col);
@@ -154,13 +154,13 @@ public final class Constants {
             case "CherryBomb" -> new CherryBomb(row, col);
             case "Jalapeno" -> new Jalapeno(row, col);
             case "PotatoMine" -> new PotatoMine(row, col);
-            case "HypnoShroom" -> new HypnoShroom(row, col, mode);
-            case "PuffShroom" -> new PuffShroom(row, col, mode);
-            case "ScaredyShroom" -> new ScaredyShroom(row, col, mode);
-            case "IceShroom" -> new IceShroom(row, col, mode);
-            case "DoomShroom" -> new DoomShroom(row, col, mode);
             case "Plantern" -> new Plantern(row, col);
             case "Blover" -> new Blover(row, col);
+            case "HypnoShroom" -> new HypnoShroom(row, col, isSleep);
+            case "PuffShroom" -> new PuffShroom(row, col, isSleep);
+            case "ScaredyShroom" -> new ScaredyShroom(row, col, isSleep);
+            case "IceShroom" -> new IceShroom(row, col, isSleep);
+            case "DoomShroom" -> new DoomShroom(row, col, isSleep);
             default -> null;
         };
     }

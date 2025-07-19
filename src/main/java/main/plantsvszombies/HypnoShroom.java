@@ -16,12 +16,12 @@ public class HypnoShroom extends BombPlant implements Shroom {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/HypnoShroom/normal/frame_", FRAME_COUNT);
     }
 
-    public HypnoShroom(int row, int col, GameMode mode) {
+    public HypnoShroom(int row, int col, boolean isSleep) {
         super(row, col);
         price = 75;
         HP = 100;
         rechargeTime = 15;
-        isSleep = setIsSleep(mode);
+        this.isSleep = isSleep;
     }
 
     @Override

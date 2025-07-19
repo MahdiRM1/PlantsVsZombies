@@ -13,6 +13,7 @@ public class GameState implements Serializable {
     private final int score;
     private final long time;
     private final GameMode mode;
+    private final int fogLength;
 
     public GameState(GameLogic logic, List<Card> cards, int score, GameMode mode) {
         getPlants(logic.getPottedPlants());
@@ -21,6 +22,7 @@ public class GameState implements Serializable {
         getGraves(logic.getGraves());
         this.score = score;
         this.mode = mode;
+        fogLength = mode.getFogLength();
         time = GlobalState.gameTime;
     }
 
@@ -82,5 +84,9 @@ public class GameState implements Serializable {
 
     public GameMode getMode() {
         return mode;
+    }
+
+    public int getFogLength(){
+        return fogLength;
     }
 }

@@ -21,13 +21,13 @@ public class ScaredyShroom extends PeaPlant implements Shroom {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/ScaredyShroom/normal/frame_", FRAME_COUNT);
     }
 
-    public ScaredyShroom(int row, int col, GameMode mode) {
+    public ScaredyShroom(int row, int col, boolean isSleep) {
         super(row, col);
         price = 25;
         HP = 100;
         rechargeTime = 10;
         bulletType = BulletType.SHROOM_BULLET;
-        isSleep = setIsSleep(mode);
+        this.isSleep = isSleep;
     }
 
     @Override

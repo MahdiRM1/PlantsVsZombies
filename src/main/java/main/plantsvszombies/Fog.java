@@ -1,6 +1,5 @@
 package main.plantsvszombies;
 
-import java.util.Random;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -13,12 +12,12 @@ public class Fog {
     private final int fogLength;
     private final ImageView picture;
     private final Rectangle full;
-    private long bloverTime;
     private final double moveValue;
     private final double minPicX;
+    private long bloverTime;
 
-    public Fog(Pane fogGrid) {
-        fogLength = (new Random().nextInt(3) + 5);
+    public Fog(Pane fogGrid, int fogLength) {
+        this.fogLength = fogLength;
         picture = Constants.setFogPicture(fogLength);
         minPicX = picture.getLayoutX();
         moveValue = (Constants.SCREEN_WIDTH - minPicX)/59;

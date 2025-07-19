@@ -40,9 +40,9 @@ public class GameUI {
     private final BorderPane borderPane = new BorderPane();
     private final Pane pane = new Pane();
     private final List<Card> cards = new ArrayList<>();
-    private final ScoreBoard scoreBoard;
     private final Stage stage;
     private final GameMode mode;
+    private ScoreBoard scoreBoard;
     private Timeline tl;
     private Scene scene;
     public static int selectedButton = -1;
@@ -54,10 +54,8 @@ public class GameUI {
         gameLogic = new GameLogic(state);
         this.mode = state.getMode();
         for (CardData data : state.getCards()) cards.add(new Card(data));
-        initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, state.getScore(), mode);
-        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
-        GlobalState.gameTime = state.getTime();
+        initStackPane(cardBar(), state.getScore(), state.getTime());
+        if (mode == GameMode.NIGHT) initFog(state.getFogLength());
         loadPlants();
         loadZombies();
         startGame();
@@ -69,11 +67,8 @@ public class GameUI {
         gameLogic = new GameLogic(mode);
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
-        initializeStackPane(cardBar());
-        scoreBoard = new ScoreBoard(borderPane, 1000, mode);
-//        scoreBoard = new ScoreBoard(borderPane, mode == GameMode.DAY ? 50 : 100, mode);
-        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
-        GlobalState.gameTime = 0;
+        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+        if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
 
@@ -91,16 +86,24 @@ public class GameUI {
         stage.show();
     }
 
-    private void initializeStackPane(HBox cardBar) {
+    private void initStackPane(HBox cardBar, int score, long time) {
         borderPane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "backGroundDay" : "backGroundNight"));
         borderPane.setTop(cardBar);
         borderPane.setBottom(map());
         pane.setMouseTransparent(true);
+        scoreBoard = new ScoreBoard(borderPane, score, mode);
+        for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
+        GlobalState.gameTime = time;
+        mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
+    }
+
+    private void initFog(int fogLength) {
         Pane fogGrid = new Pane();
         fogGrid.setMouseTransparent(true);
-        if (mode == GameMode.NIGHT) fog = new Fog(fogGrid);
-        mainPane.getChildren().addAll(borderPane, pane, fogGrid, buttonsPane());
+        fog = new Fog(fogGrid, fogLength);
+        mainPane.getChildren().add(2, fogGrid);
+        mode.setFogLength(fogLength);
     }
 
     //generate card bar
@@ -284,7 +287,7 @@ public class GameUI {
         return switch (plantName){
             case "CoffeeBean" -> getCoffeeBean(row, col);
             case "GraveBuster" -> getGraveBuster(row, col);
-            default -> Constants.getPlant(row, col, plantName, mode);
+            default -> Constants.getPlant(row, col, plantName, mode == GameMode.DAY);
         };
     }
 

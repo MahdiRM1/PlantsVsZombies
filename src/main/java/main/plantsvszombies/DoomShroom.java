@@ -22,12 +22,12 @@ public class DoomShroom extends BombPlant implements Shroom {
         DOOM_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
     }
 
-    public DoomShroom(int row, int col, GameMode mode) {
+    public DoomShroom(int row, int col, boolean isSleep) {
         super(row, col);
         price = 125;
         HP = 100;
         rechargeTime = 15;
-        isSleep = setIsSleep(mode);
+        this.isSleep = isSleep;
         wakeUpTime = timeCreated;
         finishAnimation = false;
     }
