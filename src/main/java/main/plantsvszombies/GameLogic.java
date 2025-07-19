@@ -15,7 +15,7 @@ public class GameLogic {
 
     //constructor: to load the previously saved game
     public GameLogic(GameState state) {
-        loadPlants(state.getPlants(), state.getMode());
+        loadPlants(state.getPlants());
         loadZombies(state.getZombies());
         loadGraves(state.getGraves());
     }
@@ -35,9 +35,10 @@ public class GameLogic {
     }
 
     //generates the plants list to reload a saved game
-    private void loadPlants(List<PlantData> plantDataList, GameMode mode) {
+    private void loadPlants(List<PlantData> plantDataList) {
         for (PlantData data : plantDataList) {
-            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), mode);
+            if (data.getType().equals("CoffeeBean")|| data.getType().equals("GraveBuster")) continue;
+            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), data.isSleep());
             plant.setHP(data.getHP());
             plants.add(plant);
         }

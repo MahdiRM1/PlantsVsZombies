@@ -16,13 +16,13 @@ public class PuffShroom extends PeaPlant implements Shroom {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PuffShroom/normal/frame_", FRAME_COUNT);
     }
 
-    public PuffShroom(int row, int col, GameMode mode) {
+    public PuffShroom(int row, int col, boolean isSleep) {
         super(row, col);
         price = 0;
         HP = 100;
         rechargeTime = 10;
         bulletType = BulletType.SHROOM_BULLET;
-        isSleep = setIsSleep(mode);
+        this.isSleep = isSleep;
     }
 
     @Override

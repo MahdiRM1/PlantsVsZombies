@@ -1,7 +1,17 @@
 package main.plantsvszombies;
 
 enum GameMode {
-    DAY, NIGHT
+    DAY(), NIGHT();
+
+    private int fogLength;
+
+    public void setFogLength(int fogLength){
+        if (this == NIGHT) this.fogLength = fogLength;
+    }
+
+    public int getFogLength() {
+        return fogLength;
+    }
 }
 
 enum ZombieState {

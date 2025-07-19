@@ -38,7 +38,7 @@ public class Card {
         Plant plant = switch (plantName){
             case "CoffeeBean" -> new CoffeeBean(0, 0, null);
             case "GraveBuster" -> new GraveBuster(0, 0, null);
-            default -> Constants.getPlant(0, 0, plantName, null);
+            default -> Constants.getPlant(0, 0, plantName, false);
         };
         return plant.getRechargeTime() * 1000;
     }
