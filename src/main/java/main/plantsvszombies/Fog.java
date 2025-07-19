@@ -29,8 +29,7 @@ public class Fog {
     public void clearFog(int centerRow, int centerCol) {
         Shape clip = (Shape)picture.getClip();
         Circle circle = new Circle(Constants.TILE_SIZE*2);
-        circle.setLayoutX((centerCol + 0.5 - fogLength) * Constants.TILE_SIZE);
-        circle.setLayoutY((centerRow + 1.23) * Constants.TILE_SIZE);
+        Constants.positionNode(circle, (centerCol + 0.5 - fogLength) * Constants.TILE_SIZE, (centerRow + 1.23) * Constants.TILE_SIZE);
         Shape clipped = Shape.subtract(clip, circle);
         picture.setClip(clipped);
     }

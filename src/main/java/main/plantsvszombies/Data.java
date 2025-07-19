@@ -44,12 +44,14 @@ class ZombieData implements Serializable {
     private final int row;
     private final double picLayoutX;
     private final int HP;
+    private final boolean hypnotized;
 
     public ZombieData(Zombie zombie) {
         type = zombie.getClass().getSimpleName();
         row = zombie.getRow();
         picLayoutX = zombie.getPicture().getLayoutX();
         HP = zombie.getHP();
+        hypnotized = zombie.getState() == ZombieState.HYPNOTIZED;
     }
 
     public String getType() {
@@ -66,6 +68,10 @@ class ZombieData implements Serializable {
 
     public int getHP() {
         return HP;
+    }
+
+    public boolean isHypnotized() {
+        return hypnotized;
     }
 }
 

@@ -1,5 +1,6 @@
 package main.plantsvszombies;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +39,7 @@ public class Introduction {
             new GameUI(stage, state);
             System.out.println("game loaded");
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("cant load data");
         }
     }
 
@@ -53,8 +54,7 @@ public class Introduction {
                 (mode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
 
         cardBar = new HBox(0);
-        cardBar.setLayoutX(Constants.CARD_BAR_X);
-        cardBar.setLayoutY(Constants.CARD_BAR_Y);
+        Constants.positionNode(cardBar, Constants.CARD_BAR_X, Constants.CARD_BAR_Y);
 
         double cardSpacing = Constants.SCREEN_WIDTH / 80;
         double layoutX = Constants.SCREEN_WIDTH / 15;
@@ -64,7 +64,7 @@ public class Introduction {
                 getCardButton("PotatoMine"), getCardButton("SnowPea"),
                 getCardButton("Repeater")
         );
-        positionHBox(box1, layoutX, Constants.SCREEN_HEIGHT / 4);
+        Constants.positionNode(box1, layoutX, Constants.SCREEN_HEIGHT / 4);
 
         HBox box2 = new HBox(cardSpacing,
                 getCardButton("CherryBomb"), getCardButton("Jalapeno"),
@@ -72,20 +72,20 @@ public class Introduction {
                 getCardButton("CoffeeBean")
 
         );
-        positionHBox(box2, layoutX, Constants.SCREEN_HEIGHT / 2.5);
+        Constants.positionNode(box2, layoutX, Constants.SCREEN_HEIGHT / 2.5);
 
         HBox box3 = new HBox(cardSpacing,
                 getCardButton("PuffShroom"), getCardButton("ScaredyShroom"),
                 getCardButton("IceShroom"), getCardButton("HypnoShroom"),
                 getCardButton("GraveBuster")
         );
-        positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT / 1.8);
+        Constants.positionNode(box3, layoutX, Constants.SCREEN_HEIGHT / 1.8);
 
         HBox box4 = new HBox(cardSpacing,
                 getCardButton("DoomShroom"), getCardButton("Plantern"),
                 getCardButton("Blover")
         );
-        positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT / 1.4);
+        Constants.positionNode(box4, layoutX, Constants.SCREEN_HEIGHT / 1.4);
 
         pane.getChildren().addAll(Constants.setScoreBoardPicture(),
                 cardBar, box1, box2, box3, box4, startGameBtn());
@@ -97,19 +97,12 @@ public class Introduction {
         stage.show();
     }
 
-    private void positionHBox(HBox box, double x, double y) {
-        box.setLayoutX(x);
-        box.setLayoutY(y);
-    }
-
     private ImageView startGameBtn() {
         Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
         Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
         ImageView start = new ImageView(letsRock1);
-        start.setFitWidth(Constants.SCREEN_WIDTH / 7.5);
-        start.setFitHeight(Constants.SCREEN_HEIGHT / 16);
-        start.setLayoutX(Constants.SCREEN_WIDTH / 5.65);
-        start.setLayoutY(Constants.SCREEN_HEIGHT / 1.122);
+        Constants.sizeNode(start, Constants.SCREEN_WIDTH / 7.5, Constants.SCREEN_HEIGHT / 16);
+        Constants.positionNode(start, Constants.SCREEN_WIDTH / 5.65, Constants.SCREEN_HEIGHT / 1.122);
 
         start.setOnMouseEntered(event -> {
             if (selectedCards.size() != 6) return;
@@ -121,7 +114,7 @@ public class Introduction {
             if (selectedCards.size() != 6) return;
 
             start.setImage(letsRock1);
-            Constants.changeScale(start, 1 / 1.05);
+            Constants.changeScale(start, 1);
         });
         start.setOnMouseClicked(event -> {
             if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
@@ -135,10 +128,10 @@ public class Introduction {
         String chosen = zombieTypes[rdm.nextInt(5)];
 
         ImageView image = new ImageView(new Image("file:Pictures/ZombiePicture/" + chosen + "/gif.gif"));
-        image.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
-        image.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
-        image.setLayoutX(Constants.SCREEN_WIDTH / 1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH / 3));
-        image.setLayoutY(rdm.nextDouble(Constants.SCREEN_HEIGHT / 1.5));
+        Constants.sizeNode(image, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
+        Constants.positionNode(image,
+                Constants.SCREEN_WIDTH / 1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH / 3),
+                rdm.nextDouble(Constants.SCREEN_HEIGHT / 1.5));
         return image;
     }
 
@@ -162,8 +155,7 @@ public class Introduction {
                 selectedCards.add(plantName);
                 Button btn2 = getCardButton(plantName);
                 ImageView imageView = new ImageView(((ImageView) btn.getGraphic()).getImage());
-                imageView.setFitWidth(Constants.PLANT_CARD_WIDTH);
-                imageView.setFitHeight(Constants.PLANT_CARD_HEIGHT);
+                Constants.sizeNode(imageView, Constants.PLANT_CARD_WIDTH, Constants.PLANT_CARD_HEIGHT);
                 btn2.setGraphic(imageView);
                 cardBar.getChildren().add(btn2);
             }
@@ -171,7 +163,7 @@ public class Introduction {
         });
         btn.setOnMouseEntered(event -> Constants.changeScale(btn.getGraphic(), 1.05));
         btn.setOnMouseExited(event -> {
-            Constants.changeScale(btn.getGraphic(), 1 / 1.05);
+            Constants.changeScale(btn.getGraphic(), 1);
             btn.setStyle("-fx-background-color: transparent;");
         });
         return btn;
@@ -182,49 +174,52 @@ public class Introduction {
         pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
 
         ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
-        adventure.setLayoutX(Constants.SCREEN_WIDTH / 1.97);
-        adventure.setLayoutY(Constants.SCREEN_HEIGHT / 8);
+        Constants.positionNode(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
         adventure.setOnMouseClicked(event -> {
             mode = GameMode.DAY;
             plantSelectionPage();
         });
 
         ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
-        newGame.setLayoutX(Constants.SCREEN_WIDTH / 1.98);
-        newGame.setLayoutY(Constants.SCREEN_HEIGHT / 3.1);
+        Constants.positionNode(newGame, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
         newGame.setOnMouseClicked(event -> {
             mode = GameMode.NIGHT;
             plantSelectionPage();
         });
 
-        ImageView loadGame = menuItem("LoadGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
-        loadGame.setLayoutX(Constants.SCREEN_WIDTH / 1.94);
-        loadGame.setLayoutY(Constants.SCREEN_HEIGHT / 2);
-        loadGame.setOnMouseClicked(event -> load());
+        ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
+        Constants.sizeNode(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
+        Constants.positionNode(loadGame, Constants.SCREEN_WIDTH / 1.94, Constants.SCREEN_HEIGHT / 2);
+        if (dataExists()) {
+            loadGame.setOnMouseEntered(event -> Constants.changeScale(loadGame, 1.05));
+            loadGame.setOnMouseExited(event -> Constants.changeScale(loadGame, 1));
+            loadGame.setOnMouseClicked(event -> load());
+        }else loadGame.setEffect(Constants.effect(0, 0, -0.5, 0));
 
         ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
-        quit.setLayoutX(Constants.SCREEN_WIDTH / 1.14);
-        quit.setLayoutY(Constants.SCREEN_HEIGHT / 1.405);
+        Constants.positionNode(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
         quit.setOnMouseClicked(event -> stage.close());
 
         ImageView help = menuItem("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
-        help.setLayoutX(Constants.SCREEN_WIDTH / 1.28);
-        help.setLayoutY(Constants.SCREEN_HEIGHT / 1.54);
+        Constants.positionNode(help, Constants.SCREEN_WIDTH / 1.28, Constants.SCREEN_HEIGHT / 1.54);
 
         ImageView options = menuItem("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
-        options.setLayoutX(Constants.SCREEN_WIDTH / 1.475);
-        options.setLayoutY(Constants.SCREEN_HEIGHT / 1.47);
+        Constants.positionNode(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
 
         pane.getChildren().addAll(adventure, newGame, loadGame, quit, options, help);
         return pane;
     }
 
+    private boolean dataExists(){
+        File file = new File("savegame.dat");
+        return file.exists();
+    }
+
     private ImageView menuItem(String str, double width, double height) {
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + str + ".png"));
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+        Constants.sizeNode(imageView, width, height);
         imageView.setOnMouseEntered(event -> Constants.changeScale(imageView, 1.05));
-        imageView.setOnMouseExited(event -> Constants.changeScale(imageView, 1 / 1.05));
+        imageView.setOnMouseExited(event -> Constants.changeScale(imageView, 1));
         return imageView;
     }
 }

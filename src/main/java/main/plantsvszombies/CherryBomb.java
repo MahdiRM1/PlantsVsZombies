@@ -35,6 +35,7 @@ public class CherryBomb extends BombPlant {
         picture.setImage(EXPLOSION_FRAMES[0]);
         Constants.changeScale(picture, 2.5);
         for (Zombie z : zombies)
-            if (Math.abs(z.getRow() - row) <= 1 && Math.abs(z.getCol() - col) <= 1) z.setState(ZombieState.BOOM_DIE);
+            if (Math.abs(z.getRow() - row) <= 1 && Math.abs(z.getCol() - col) <= 1 && z.getState() != ZombieState.HYPNOTIZED)
+                z.setState(ZombieState.BOOM_DIE);
     }
 }

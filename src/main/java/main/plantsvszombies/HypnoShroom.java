@@ -20,7 +20,7 @@ public class HypnoShroom extends BombPlant implements Shroom {
         super(row, col);
         price = 75;
         HP = 100;
-        rechargeTime = 15;
+        rechargeTime = 1;
         this.isSleep = isSleep;
     }
 
@@ -31,14 +31,13 @@ public class HypnoShroom extends BombPlant implements Shroom {
         return HP < 100;
     }
 
-    @Override
     public void action(List<Zombie> zombies) {
         for (Zombie z : zombies)
             if (row == z.getRow() && col == z.getCol()){
                 z.hypnosis();
                 break;
             }
-        HP = 0;
+//        HP = 0;
     }
 
     @Override

@@ -28,14 +28,14 @@ public class PotatoMine extends BombPlant {
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if (Math.abs(GlobalState.gameTime - timeCreated) < 5000) return false;
+        if (Math.abs(GlobalState.gameTime - timeCreated) < 10_000) return false;
         else if (explosionTime > 0) {
             if (Math.abs(GlobalState.gameTime - explosionTime) > 1000) HP = 0;
         }
         else{
             updateFrame();
             for (Zombie z : zombies)
-                if (row == z.getRow() && col == z.getCol()) return true;
+                if (row == z.getRow() && col == z.getCol() && z.getState() != ZombieState.HYPNOTIZED) return true;
         }
         return false;
     }
@@ -51,6 +51,7 @@ public class PotatoMine extends BombPlant {
         Constants.changeScale(picture, 1.5);
         explosionTime = GlobalState.gameTime;
         for (Zombie z : zombies)
-            if (row == z.getRow() && col == z.getCol()) z.setState(ZombieState.DEAD);
+            if (row == z.getRow() && col == z.getCol() && z.getState() != ZombieState.HYPNOTIZED)
+                z.setState(ZombieState.DEAD);
     }
 }
