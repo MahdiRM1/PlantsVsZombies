@@ -23,13 +23,14 @@ public class Blover extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        return nowPic == FRAMES.length - 1;
+        if(nowPic == FRAMES.length - 1) HP = 0;
+        return nowPic > 13 && nowPic < 49;
     }
 
     public void action(Fog fog) {
-        fog.clearFog();
+        if (fog == null) return;
+        fog.move(true);
         fog.setBloverTime(GlobalState.gameTime);
-        HP = 0;
     }
 
     @Override

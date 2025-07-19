@@ -92,6 +92,14 @@ public final class Constants {
         return bullet;
     }
 
+    public static ImageView setFogPicture(int fogLength){
+        double height = TILE_SIZE * COLS;
+        ImageView picture = createImageView("Pictures/ui/fog.png", height, height);
+        picture.setLayoutX(Constants.BOARD_X + fogLength * Constants.TILE_SIZE);
+        picture.setLayoutY(Constants.BOARD_Y * 0.5);
+        return picture;
+    }
+
     public static void setZombiePicture(ImageView picture, int row, int col) {
         picture.setFitWidth(ZOMBIE_PIC_WEIGHT);
         picture.setFitHeight(ZOMBIE_PIC_HEIGHT);
