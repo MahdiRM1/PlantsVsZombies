@@ -9,8 +9,8 @@ public class SnowPea extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/SnowPea/normal/frame_", FRAME_COUNT);
-        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/SnowPea/shoot/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SnowPea/normal/frame_", FRAME_COUNT);
+        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SnowPea/shoot/frame_", FRAME_COUNT);
     }
 
     public SnowPea(int row, int col) {

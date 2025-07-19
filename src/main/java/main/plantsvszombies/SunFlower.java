@@ -14,8 +14,8 @@ public class SunFlower extends Plant {
     private static final int GIVE_SUN_FRAME_COUNT = 26;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/SunFlower/normal/frame_", NORMAL_FRAME_COUNT);
-        GIVE_SUN_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/SunFlower/giveSun/frame_", GIVE_SUN_FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SunFlower/normal/frame_", NORMAL_FRAME_COUNT);
+        GIVE_SUN_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SunFlower/giveSun/frame_", GIVE_SUN_FRAME_COUNT);
     }
 
     public SunFlower(int row, int col) {

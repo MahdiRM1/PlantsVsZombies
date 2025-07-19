@@ -16,9 +16,9 @@ public class ScaredyShroom extends PeaPlant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SCARE_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/cry/frame_", SCARE_FRAME_COUNT);
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/ScaredyShroom/normal/frame_", FRAME_COUNT);
+        SCARE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/ScaredyShroom/cry/frame_", SCARE_FRAME_COUNT);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/ScaredyShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/ScaredyShroom/normal/frame_", FRAME_COUNT);
     }
 
     public ScaredyShroom(int row, int col, GameMode mode) {

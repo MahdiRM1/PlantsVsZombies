@@ -11,8 +11,8 @@ public class Jalapeno extends BombPlant {
     private static final int FRAME_COUNT = 13;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/normal/frame_", FRAME_COUNT);
-        EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Jalapeno/attack/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
+        EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
     }
 
     public Jalapeno(int row, int col) {
@@ -29,9 +29,9 @@ public class Jalapeno extends BombPlant {
 
     @Override
     public void action(List<Zombie> zombies) {
-        gif.setImage(EXPLOSION_FRAMES[0]);
-        gif.setFitWidth(Constants.TILE_SIZE * 9);
-        gif.setLayoutX(Constants.SCREEN_WIDTH / 4.9);
+        picture.setImage(EXPLOSION_FRAMES[0]);
+        picture.setFitWidth(Constants.TILE_SIZE * 9);
+        picture.setLayoutX(Constants.SCREEN_WIDTH / 4.9);
         for (Zombie z : zombies) {
             if (z.getRow() == row) z.setState(ZombieState.BOOM_DIE);
         }

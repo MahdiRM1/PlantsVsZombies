@@ -14,8 +14,8 @@ public class CoffeeBean extends Plant {
     private static final int EAT_FRAMES_COUNT = 14;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
-        EAT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
+        EAT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
     }
 
     public CoffeeBean(int row, int col, Shroom shroom) {

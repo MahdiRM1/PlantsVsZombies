@@ -10,7 +10,7 @@ public class Blover extends Plant {
     private static final Image[] FRAMES;
 
     static {
-        FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Blover/normal/frame_", FRAME_COUNT);
+        FRAMES = Constants.getArrayImage("Pictures/plantPictures/Blover/normal/frame_", FRAME_COUNT);
     }
 
     public Blover(int row, int col) {

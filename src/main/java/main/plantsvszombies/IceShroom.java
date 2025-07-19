@@ -13,8 +13,8 @@ public class IceShroom extends BombPlant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/IceShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
     }
 
     public IceShroom(int row, int col, GameMode mode) {

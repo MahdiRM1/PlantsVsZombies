@@ -56,30 +56,34 @@ public class Introduction {
         cardBar.setLayoutX(Constants.CARD_BAR_X);
         cardBar.setLayoutY(Constants.CARD_BAR_Y);
 
-        double cardSpacing = Constants.SCREEN_WIDTH / 37.5;
-        double layoutX = Constants.SCREEN_WIDTH / 14;
+        double cardSpacing = Constants.SCREEN_WIDTH / 80;
+        double layoutX = Constants.SCREEN_WIDTH / 15;
 
         HBox box1 = new HBox(cardSpacing,
                 getCardButton("PeaShooter"), getCardButton("SunFlower"),
-                getCardButton("WallNut"), getCardButton("TallNut")
+                getCardButton("PotatoMine"), getCardButton("SnowPea"),
+                getCardButton("Repeater")
         );
         positionHBox(box1, layoutX, Constants.SCREEN_HEIGHT / 4);
 
         HBox box2 = new HBox(cardSpacing,
-                getCardButton("Repeater"), getCardButton("SnowPea"),
-                getCardButton("CherryBomb"), getCardButton("Jalapeno")
+                getCardButton("CherryBomb"), getCardButton("Jalapeno"),
+                getCardButton("WallNut"), getCardButton("TallNut"),
+                getCardButton("CoffeeBean")
+
         );
         positionHBox(box2, layoutX, Constants.SCREEN_HEIGHT / 2.5);
 
         HBox box3 = new HBox(cardSpacing,
-                getCardButton("PuffShroom"), getCardButton("CoffeeBean"),
-                getCardButton("ScaredyShroom"), getCardButton("IceShroom")
+                getCardButton("PuffShroom"), getCardButton("ScaredyShroom"),
+                getCardButton("IceShroom"), getCardButton("HypnoShroom"),
+                getCardButton("GraveBuster")
         );
         positionHBox(box3, layoutX, Constants.SCREEN_HEIGHT / 1.8);
 
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom"), getCardButton("GraveBuster"),
-                getCardButton("Plantern"), getCardButton("Blover")
+                getCardButton("DoomShroom"), getCardButton("Plantern"),
+                getCardButton("Blover")
         );
         positionHBox(box4, layoutX, Constants.SCREEN_HEIGHT / 1.4);
 
@@ -130,7 +134,7 @@ public class Introduction {
         String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "Imp"};
         String chosen = zombieTypes[rdm.nextInt(5)];
 
-        ImageView image = new ImageView(new Image("file:Pictures/ZombieGif/" + chosen + ".gif"));
+        ImageView image = new ImageView(new Image("file:Pictures/ZombiePicture/" + chosen + "/gif.gif"));
         image.setFitHeight(Constants.ZOMBIE_PIC_HEIGHT);
         image.setFitWidth(Constants.ZOMBIE_PIC_WEIGHT);
         image.setLayoutX(Constants.SCREEN_WIDTH / 1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH / 3));
@@ -151,8 +155,7 @@ public class Introduction {
                                 .equals(((ImageView) btn.getGraphic()).getImage()));//image on clicked btn
             } else if (selectedCards.size() < 6) {
                 if ((plantName.equals("CoffeeBean") && mode == GameMode.NIGHT)
-                        || (plantName.equals("GraveBuster") && mode == GameMode.DAY)
-                        || (plantName.equals("Plantern") && mode == GameMode.DAY)) {
+                        || (plantName.equals("GraveBuster") && mode == GameMode.DAY)) {
                     btn.setStyle("-fx-background-color: rgb(150, 0, 0);");
                     return;
                 }
