@@ -2,71 +2,51 @@ package main.plantsvszombies;
 
 import java.util.Random;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Fog {
 
-    private final Rectangle[][] fogTiles;
     private final int fogLength;
+    private final ImageView picture;
+    private final Rectangle full;
     private long bloverTime;
+    private final double moveValue;
+    private final double minPicX;
 
     public Fog(Pane fogGrid) {
-        fogTiles = new Rectangle[Constants.ROWS][Constants.COLS + 1];
         fogLength = (new Random().nextInt(3) + 5);
-        for (int row = 0; row < Constants.ROWS; row++) {
-            for (int col = fogLength; col < Constants.COLS + 1; col++) {
-                fogTiles[row][col] = fogTile(row, col);
-                fogGrid.getChildren().add(fogTiles[row][col]);
-            }
-        }
-    }
-
-    private Rectangle fogTile(int row, int col) {
-        Rectangle rect = new Rectangle(
-                Constants.TILE_SIZE,
-                Constants.TILE_SIZE,
-                new Color(0.4, 0.4, 0.4, 1)
-        );
-        rect.setLayoutX(Constants.BOARD_X + (col * Constants.TILE_SIZE));
-        rect.setLayoutY(Constants.BOARD_Y + (row * Constants.TILE_SIZE));
-        return rect;
-    }
-
-    private void invisibleRect(Rectangle rect) {
-        Color color = new Color(1, 1, 1, 0);
-        rect.setFill(color);
-    }
-
-    private void visibleRect(Rectangle rect) {
-        Color color = new Color(0.4, 0.4, 0.4, 1);
-        rect.setFill(color);
+        picture = Constants.setFogPicture(fogLength);
+        minPicX = picture.getLayoutX();
+        moveValue = (Constants.SCREEN_WIDTH - minPicX)/59;
+        full = new Rectangle(picture.getFitWidth(), picture.getFitHeight());
+        picture.setClip(full);
+        fogGrid.getChildren().add(picture);
     }
 
     public void clearFog(int centerRow, int centerCol) {
-        for (int r = centerRow - 1; r <= centerRow + 1; r++)
-            for (int c = centerCol - 1; c <= centerCol + 1; c++)
-                clearFogAt(r, c);
+        Shape clip = (Shape)picture.getClip();
+        Circle circle = new Circle(Constants.TILE_SIZE*2);
+        circle.setLayoutX((centerCol + 0.5 - fogLength) * Constants.TILE_SIZE);
+        circle.setLayoutY((centerRow + 1.23) * Constants.TILE_SIZE);
+        Shape clipped = Shape.subtract(clip, circle);
+        picture.setClip(clipped);
     }
 
-    public void clearFog() {
-        for (int row = 0; row < Constants.ROWS; row++)
-            for (int col = fogLength; col < Constants.COLS + 1; col++)
-                clearFogAt(row, col);
-    }
-
-    public void clearFogAt(int row, int col) {
-        if (row >= 0 && row < Constants.ROWS && col >= 0 && col < Constants.COLS + 1 && fogTiles[row][col] != null)
-            invisibleRect(fogTiles[row][col]);
+    public void move(boolean blover) {
+        if(blover) picture.setLayoutX(picture.getLayoutX() + moveValue);
+        else if (picture.getLayoutX() >= minPicX) picture.setLayoutX(picture.getLayoutX() - moveValue/4);
     }
 
     public void updateFog() {
-        if (Math.abs(GlobalState.gameTime - bloverTime) <= 10000) return;
+        long blover = Math.abs(GlobalState.gameTime - bloverTime);
+        if (blover < 10_000) return;
+        else move(false);
 
-        for (int row = 0; row < Constants.ROWS; row++)
-            for (int col = fogLength; col < Constants.COLS + 1; col++)
-                visibleRect(fogTiles[row][col]);
+        picture.setClip(full);
     }
 
     public void setBloverTime(long time) {

@@ -8,6 +8,7 @@ public class Plantern extends Plant {
 
     private static final int FRAME_COUNT = 20;
     private static final Image[] FRAMES;
+    private boolean action;
 
     static {
         FRAMES = Constants.getArrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);
@@ -28,7 +29,6 @@ public class Plantern extends Plant {
 
     public void action(Fog fog) {
         if (fog == null) return;
-
         fog.clearFog(row, col);
     }
 
