@@ -51,7 +51,7 @@ public class DoomShroom extends BombPlant implements Shroom {
                 String str = timeCreated != wakeUpTime ? "Day" : "Night";
                 picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + str + "Hole1.png"));
                 picture.setLayoutY(picture.getLayoutY() + picture.getFitHeight() / 4);
-                Constants.changeScale(picture, 0.5);
+                Constants.changeScale(picture, 1);
             }
         } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
@@ -65,7 +65,7 @@ public class DoomShroom extends BombPlant implements Shroom {
         Constants.changeScale(picture, 2);
         picture.setLayoutY(picture.getLayoutY() - picture.getFitHeight() / 4);
         for (Zombie z : zombies) {
-            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2)
+            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2 && z.getState() != ZombieState.HYPNOTIZED)
                 z.setState(ZombieState.BOOM_DIE);
         }
     }

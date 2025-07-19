@@ -94,17 +94,13 @@ public class GameLogic {
     public List<Bullet> checkBulletStrike() {
         List<Bullet> toRemove = new ArrayList<>();
         for (Bullet bullet : bullets) {
-            if (bullet.getPicture().getLayoutX() > Constants.SCREEN_WIDTH) {
-                toRemove.add(bullet);
-                continue;
-            }
+            if (bullet.getPicture().getLayoutX() > Constants.SCREEN_WIDTH) toRemove.add(bullet);
             for (Zombie z : zombies) {
                 if (z.getRow() == bullet.getRow()
                         && Math.abs(bullet.getPicture().getLayoutX() - 2 * bullet.getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20
-                        && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) {
+                        && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE && z.getState() != ZombieState.HYPNOTIZED) {
                     z.damage(bullet.getType());
                     toRemove.add(bullet);
-                    break;
                 }
             }
         }
@@ -143,9 +139,9 @@ public class GameLogic {
 
     public List<Plant> plantsAction() {
         List<Plant> actions = new ArrayList<>();//gomesh nakoni
-        for (Plant plant : plants) {
-            if (plant.actionHappens(zombies)) actions.add(plant);
-        }
+        for (Plant plant : plants)
+            if (plant.actionHappens(zombies))
+                actions.add(plant);
         return actions;
     }
 

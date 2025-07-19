@@ -67,7 +67,8 @@ public class GameUI {
         gameLogic = new GameLogic(mode);
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
-        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+//        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+        initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
@@ -136,7 +137,7 @@ public class GameUI {
     //generate mapButtons and control planting visuals
     private Button mapButtons(int row, int col) {
         Button btn = new Button();
-        btn.setPrefSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
+        Constants.sizeNode(btn, Constants.TILE_SIZE, Constants.TILE_SIZE);
         btn.setStyle("-fx-background-color: transparent");
 
         btn.setOnAction(event -> handleMapClick(row, col, btn));
@@ -201,14 +202,14 @@ public class GameUI {
             tl.pause();
             menu();
         });
+        Constants.positionNode(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
 
         ImageView shovel = shovelImage();
         ImageView shovelBack = setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
+        Constants.positionNode(shovelBack, shovel.getLayoutX(), 0);
+
         Cursor cursor = new ImageCursor(shovel.getImage());
         shovelBack.setOnMouseClicked(event -> shovelButtonClick(shovel, shovelBack, cursor));
-
-        shovelBack.setLayoutX(shovel.getLayoutX());
-        menu.setLayoutX(Constants.SCREEN_WIDTH - menu.getFitWidth());
 
         buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
         return buttonsPane;
@@ -235,7 +236,7 @@ public class GameUI {
     private ImageView shovelImage() {
         ImageView shovel = setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
         shovel.setMouseTransparent(true);
-        shovel.setLayoutX(Constants.SCREEN_WIDTH / 2.1);
+        Constants.positionNode(shovel, Constants.SCREEN_WIDTH / 2.1, 0);
         return shovel;
     }
 
@@ -245,26 +246,22 @@ public class GameUI {
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         ImageView backToMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 18);
-        backToMenu.setLayoutX(Constants.SCREEN_WIDTH / 2.7);
-        backToMenu.setLayoutY(Constants.SCREEN_HEIGHT / 1.62);
+        Constants.positionNode(backToMenu, Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 1.62);
         backToMenu.setOnMouseClicked(event -> {
             save();
             new Introduction(stage).firstPage();
         });
 
         ImageView backToGame = setButton("BackToGame", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 18);
-        backToGame.setLayoutX(Constants.SCREEN_WIDTH / 1.95);
-        backToGame.setLayoutY(Constants.SCREEN_HEIGHT / 1.62);
+        Constants.positionNode(backToGame, Constants.SCREEN_WIDTH / 1.95, Constants.SCREEN_HEIGHT / 1.62);
         backToGame.setOnMouseClicked(event -> {
             tl.play();
             mainPane.getChildren().removeLast();
         });
 
         ImageView menuPic = new ImageView(new Image("file:Pictures/ui/menu.png"));
-        menuPic.setLayoutX(Constants.SCREEN_WIDTH / 3);
-        menuPic.setLayoutY(Constants.SCREEN_HEIGHT / 4.8);
-        menuPic.setFitWidth(Constants.SCREEN_WIDTH / 3);
-        menuPic.setFitHeight(Constants.SCREEN_HEIGHT / 2);
+        Constants.positionNode(menuPic, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
+        Constants.sizeNode(menuPic, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 2);
 
         menuPane.getChildren().addAll(menuPic, backToMenu, backToGame);
         mainPane.getChildren().add(menuPane);
@@ -273,10 +270,9 @@ public class GameUI {
     //generate buttons -> visuals
     private ImageView setButton(String text, double width, double height) {
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+        Constants.sizeNode(imageView, width, height);
         imageView.setOnMouseEntered(e -> Constants.changeScale(imageView, 1.1));
-        imageView.setOnMouseExited(e -> Constants.changeScale(imageView, 1 / 1.1));
+        imageView.setOnMouseExited(e -> Constants.changeScale(imageView, 1));
         return imageView;
     }
 
@@ -311,12 +307,6 @@ public class GameUI {
         logicUpdates();
         plantActions();
         timeHandler();
-    }
-
-    //manages win or lose visuals
-    public void winOrLose() {
-        if (gameLogic.checkLose()) finishGame("lose");
-        else if (gameLogic.checkWin()) finishGame("win");
     }
 
     //removes garbage images of struck bullets,dead zombies and eaten plants
@@ -417,8 +407,45 @@ public class GameUI {
             out.writeObject(state);
             System.out.println("Game saved");
         } catch (IOException e) {
-            System.out.println("cant save");
+            System.out.println("cant save data");
         }
+    }
+
+    //manages win or lose visuals
+    public void winOrLose() {
+        if (gameLogic.checkLose()) finishGame("lose");
+        else if (gameLogic.checkWin()) addTrophy();
+    }
+
+    private void addTrophy(){
+        tl.stop();
+        Pane pane = new Pane();
+        ImageView trophy = setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
+        Constants.positionNode(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
+        trophy.setOnMouseClicked(event -> finishGame("win"));
+        trophyTl(trophy);
+        pane.getChildren().add(trophy);
+        mainPane.getChildren().add(pane);
+    }
+
+    private void trophyTl(ImageView trophy){
+        var ref = new Object() {
+            boolean isRisen = true;
+        };
+        double minY = trophy.getLayoutY() - 1.2 * Constants.TILE_SIZE;
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20),
+                event -> ref.isRisen = trophyMove(minY, trophy, ref.isRisen)));
+        timeline.setCycleCount(60);
+        timeline.play();
+    }
+
+    private boolean trophyMove(double minY, ImageView trophy, boolean isRisen){
+        double diffY = Math.abs(minY - trophy.getLayoutY());
+        if (isRisen) {
+            Constants.positionNode(trophy, trophy.getLayoutX() - 1, trophy.getLayoutY() - diffY / 5);
+            if (diffY < 1) isRisen = false;
+        } else Constants.positionNode(trophy, trophy.getLayoutX() - 0.5, trophy.getLayoutY() + diffY / 5);
+        return isRisen;
     }
 
     private void finishGame(String str) {
@@ -427,13 +454,11 @@ public class GameUI {
         finishPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
-        restart.setLayoutX(Constants.SCREEN_WIDTH / 1.9);
-        restart.setLayoutY(Constants.SCREEN_HEIGHT / 1.3);
+        Constants.positionNode(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
         restart.setOnMouseClicked(event -> new Introduction(stage).plantSelectionPage(mode));
 
         ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
-        mainMenu.setLayoutX(Constants.SCREEN_WIDTH / 3.8);
-        mainMenu.setLayoutY(Constants.SCREEN_HEIGHT / 1.3);
+        Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
         mainMenu.setOnMouseClicked(event -> {
             deleteSaveData();
             new Introduction(stage).firstPage();
@@ -442,18 +467,15 @@ public class GameUI {
         stage.setOnCloseRequest(event -> deleteSaveData());
         if (str.equals("lose")) {
             ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
-            loseImage.setLayoutX(Constants.SCREEN_WIDTH / 4);
-            loseImage.setLayoutY(Constants.SCREEN_HEIGHT / 6);
-            loseImage.setFitWidth(Constants.SCREEN_WIDTH / 2);
-            loseImage.setFitHeight(Constants.SCREEN_HEIGHT / 1.8);
+            Constants.sizeNode(loseImage, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 1.8);
+            Constants.positionNode(loseImage, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 6);
             finishPane.getChildren().add(loseImage);
         } else {
             Label win = new Label("You win");
             win.setTextFill(Color.GREEN);
-            win.setFont(Font.font("Arial", FontWeight.BOLD, 200));
+            win.setFont(Font.font("Consolas", FontWeight.BOLD, 200));
             win.setEffect(new DropShadow(50, Color.BLACK));
-            win.setLayoutX(Constants.SCREEN_WIDTH / 3.3);
-            win.setLayoutY(Constants.SCREEN_HEIGHT / 3);
+            Constants.positionNode(win, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3);
             finishPane.getChildren().add(win);
         }
 

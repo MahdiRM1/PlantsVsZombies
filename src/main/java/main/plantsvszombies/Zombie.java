@@ -3,7 +3,6 @@ package main.plantsvszombies;
 import java.util.List;
 
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -29,9 +28,10 @@ public abstract class Zombie {
         this.row = data.getRow();
         picture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
-        picture.setLayoutX(data.getPicLayoutX());
+        Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
         col = Constants.getColumnZombie(picture);
-        state = ZombieState.WALKING;
+        if (data.isHypnotized()) hypnosis();
+        else state = ZombieState.WALKING;
         HP = data.getHP();
         freezeTime = -5000;
     }
@@ -62,8 +62,10 @@ public abstract class Zombie {
         int updateFrameTime = iceCondition ? 80 : 40;
         if (GlobalState.gameTime % updateFrameTime != 0) return;
 
-        if(state != ZombieState.HYPNOTIZED)
-            picture.setEffect(iceCondition ? effect(0.6, 0.3, 0.2, 0.1) : null);
+        boolean hypnotizedCondition = false;
+        if(picture.getEffect() != null) hypnotizedCondition = ((ColorAdjust)picture.getEffect()).getHue() == 1;
+        if(!hypnotizedCondition) picture.setEffect(iceCondition ?
+                Constants.effect(0.6, 0.3, 0.2, 0.1) : null);
         switch (state) {
             case WALKING, HYPNOTIZED -> walk(state == ZombieState.HYPNOTIZED);
             case EATING -> eatPlant();
@@ -75,15 +77,6 @@ public abstract class Zombie {
                 }
             }
         }
-    }
-
-    private Effect effect(double hue, double saturation, double brightness, double contrast) {
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setHue(hue);
-        colorAdjust.setSaturation(saturation);
-        colorAdjust.setBrightness(brightness);
-        colorAdjust.setContrast(contrast);
-        return colorAdjust;
     }
 
     private void dieAnimation() {
@@ -116,12 +109,6 @@ public abstract class Zombie {
         }
     }
 
-    protected abstract Image[] getWalkImage();
-
-    protected abstract Image[] getEatImage();
-
-    protected abstract Image[] getDieImage();
-
     //checks if a zombie has reached a plant
     private Plant plantCollision(List<Plant> plants) {
         for (Plant plant : plants) {
@@ -134,17 +121,16 @@ public abstract class Zombie {
 
     public void updateState(List<Plant> plants) {
 
-        if (state == ZombieState.DIE || state == ZombieState.DEAD
-                || state == ZombieState.BOOM_DIE || state == ZombieState.HYPNOTIZED) return;
+        switch (state){case DIE, DEAD, BOOM_DIE -> {return;}}
 
         if (HP <= 0) {
-            if (state == ZombieState.EATING) {
-                plantToEat.resetDamageCaused();
-            }
+            if (state == ZombieState.EATING) plantToEat.resetDamageCaused();
             state = ZombieState.DIE;
             nowPic = 0;
             return;
         }
+
+        if (state == ZombieState.HYPNOTIZED) return;
 
         Plant plant = plantCollision(plants);
         if (plant != null) {
@@ -166,9 +152,14 @@ public abstract class Zombie {
 
     public void hypnosis(){
         picture.setScaleX(-1);
-        picture.setEffect(effect(0.9, 0.4, 0.4, 0.2));
+        picture.setLayoutX(picture.getLayoutX() + Constants.ZOMBIE_PIC_WIDTH/5);
+        picture.setEffect(Constants.effect(1, 1, 0.3, 0.3));
         state = ZombieState.HYPNOTIZED;
     }
+
+    protected abstract Image[] getWalkImage();
+    protected abstract Image[] getEatImage();
+    protected abstract Image[] getDieImage();
 
     public int getHP() {
         return HP;

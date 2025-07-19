@@ -32,7 +32,8 @@ public class PuffShroom extends PeaPlant implements Shroom {
 
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() - col <= 4 && z.getCol() < 10 && z.getCol() >= col) {
-                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE) return true;
+                if (z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE &&
+                        z.getState() != ZombieState.HYPNOTIZED) return true;
             }
         }
         return false;
