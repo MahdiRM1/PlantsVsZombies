@@ -112,7 +112,7 @@ public class GameUI {
     }
 
     private void loadPlants() {
-        for (Plant plant : gameLogic.getPottedPlants()) borderPane.getChildren().add(plant.getGif());
+        for (Plant plant : gameLogic.getPottedPlants()) borderPane.getChildren().add(plant.getPicture());
     }
 
     private void loadZombies() {
@@ -163,7 +163,7 @@ public class GameUI {
         if (placed) {
             gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
-            borderPane.getChildren().add(plant.getGif());
+            borderPane.getChildren().add(plant.getPicture());
             btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
         }
 
@@ -175,7 +175,7 @@ public class GameUI {
     private void useShovel(int row, int col, Button btn) {
         Plant plant = gameLogic.getPlant(row, col);
         if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())) {
-            borderPane.getChildren().remove(plant.getGif());
+            borderPane.getChildren().remove(plant.getPicture());
             gameLogic.removePlant(row, col);
         }
         else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
@@ -320,7 +320,7 @@ public class GameUI {
     private void cleanUpImages() {
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().removeAll(plantToRemove.getGif());
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().removeAll(plantToRemove.getPicture());
     }
 
     private void logicUpdates() {
@@ -352,17 +352,18 @@ public class GameUI {
     //controls the general timing of zombies entering and attack waves
     private void timeHandler() {
         Random rdm = new Random();
-//        if (GlobalState.gameTime <= 20000) return;
-        if (GlobalState.gameTime <= 40_000) handleZombie(5000, 1000, 1, rdm);
-        else if (GlobalState.gameTime < 60_000) handleZombie(4000, 0, 2, rdm);
-        else if (GlobalState.gameTime < 70_000) return;
-        else if (GlobalState.gameTime < 80_000) Attack(rdm, 4, 1);
-        else if (GlobalState.gameTime < 130_000) {
+        int time = (int)GlobalState.gameTime / 1000;
+//        if (time <= 20);
+        if (time <= 40) handleZombie(5000, 1000, 1, rdm);
+        else if (time < 60) handleZombie(4000, 0, 2, rdm);
+        else if (time < 70);
+        else if (time < 80) wave(rdm, 4, 1);
+        else if (time < 130) {
             handleZombie(3000, 0, 4, rdm);
             handleZombie(3000, 0, 4, rdm);
         }
-        else if (GlobalState.gameTime < 140_000) return;
-        else if (GlobalState.gameTime < 155_000) Attack(rdm, 5, 2);
+        else if (time < 140);
+        else if (time < 155) wave(rdm, 5, 2);
     }
 
     private void handleZombie(long base, long mode, int zombieTypes, Random rdm) {
@@ -370,7 +371,7 @@ public class GameUI {
             spawnZombie(rdm.nextInt(zombieTypes), rdm.nextInt(5));
     }
 
-    private void Attack(Random rdm, int zombieTypes, int attackType) {
+    private void wave(Random rdm, int zombieTypes, int attackType) {
         if (GlobalState.gameTime == (long) attackType * 70_000) {
             spawnZombie(5, rdm.nextInt(5));
             if (attackType > 1) {

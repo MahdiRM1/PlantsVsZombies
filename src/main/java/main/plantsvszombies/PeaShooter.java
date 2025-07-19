@@ -9,8 +9,8 @@ public class PeaShooter extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PeaShooter/normal/frame_", FRAME_COUNT);
-        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/PeaShooter/shoot/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PeaShooter/normal/frame_", FRAME_COUNT);
+        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PeaShooter/shoot/frame_", FRAME_COUNT);
     }
 
     public PeaShooter(int row, int col) {

@@ -3,28 +3,26 @@ package main.plantsvszombies;
 import java.util.List;
 
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 
 public abstract class Zombie {
 
     protected int HP;
     protected int speed;
-    protected ImageView picture;
-    protected final int row;
-    protected int col;
-    protected ZombieState state;
-    protected long freezeTime;
-    private static final int boomDiePictureNum = 32;
-    private static final Image[] boomDiePictures;
+    private final ImageView picture;
+    private final int row;
+    private int col;
+    private ZombieState state;
+    private long freezeTime;
+    private static final int BOOM_DIE_FRAME_COUNTER = 32;
+    private static final Image[] BOOM_DIE_FRAMES;
     private int nowPic;
     private Plant plantToEat;
 
     static {
-        boomDiePictures = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", boomDiePictureNum);
+        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNTER);
     }
 
     public Zombie(ZombieData data) {
@@ -64,14 +62,12 @@ public abstract class Zombie {
         int updateFrameTime = iceCondition ? 80 : 40;
         if (GlobalState.gameTime % updateFrameTime != 0) return;
 
-        picture.setEffect(iceCondition ? iceEffect() : null);
+        if(state != ZombieState.HYPNOTIZED)
+            picture.setEffect(iceCondition ? effect(0.6, 0.3, 0.2, 0.1) : null);
         switch (state) {
-            case WALKING ->
-                walk();
-            case EATING ->
-                eatPlant();
-            case DIE, BOOM_DIE ->
-                dieAnimation();
+            case WALKING, HYPNOTIZED -> walk(state == ZombieState.HYPNOTIZED);
+            case EATING -> eatPlant();
+            case DIE, BOOM_DIE -> dieAnimation();
             case FREEZE -> {
                 if (Math.abs(GlobalState.gameTime - freezeTime) >= 4950) {
                     freezeTime = GlobalState.gameTime;
@@ -81,17 +77,17 @@ public abstract class Zombie {
         }
     }
 
-    private Effect iceEffect() {
-        ColorAdjust blueTone = new ColorAdjust();
-        blueTone.setHue(0.6);
-        blueTone.setSaturation(0.3);
-        blueTone.setBrightness(0.2);
-        blueTone.setContrast(0.1);
-        return blueTone;
+    private Effect effect(double hue, double saturation, double brightness, double contrast) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setHue(hue);
+        colorAdjust.setSaturation(saturation);
+        colorAdjust.setBrightness(brightness);
+        colorAdjust.setContrast(contrast);
+        return colorAdjust;
     }
 
     private void dieAnimation() {
-        Image[] images = (state == ZombieState.DIE) ? getDieImage() : boomDiePictures;
+        Image[] images = (state == ZombieState.DIE) ? getDieImage() : BOOM_DIE_FRAMES;
         if (nowPic >= images.length - 1) {
             state = ZombieState.DEAD;
             return;
@@ -104,9 +100,10 @@ public abstract class Zombie {
         picture.setImage(images[nowPic]);
     }
 
-    public void walk() {
+    public void walk(boolean hypnotized) {
         changePicture(getWalkImage());
-        picture.setLayoutX(picture.getLayoutX() - (Constants.TILE_SIZE / (speed * 1000.0 / 40)));
+        int sign = hypnotized ? -1 : 1;
+        picture.setLayoutX(picture.getLayoutX() - (sign)*(Constants.TILE_SIZE / (speed * 1000.0 / 40)));
         col = Constants.getColumnZombie(picture);
     }
 
@@ -137,7 +134,8 @@ public abstract class Zombie {
 
     public void updateState(List<Plant> plants) {
 
-        if (state == ZombieState.DIE || state == ZombieState.DEAD || state == ZombieState.BOOM_DIE) return;
+        if (state == ZombieState.DIE || state == ZombieState.DEAD
+                || state == ZombieState.BOOM_DIE || state == ZombieState.HYPNOTIZED) return;
 
         if (HP <= 0) {
             if (state == ZombieState.EATING) {
@@ -164,6 +162,12 @@ public abstract class Zombie {
         }
         this.state = state;
         nowPic = 0;
+    }
+
+    public void hypnosis(){
+        picture.setScaleX(-1);
+        picture.setEffect(effect(0.9, 0.4, 0.4, 0.2));
+        state = ZombieState.HYPNOTIZED;
     }
 
     public int getHP() {

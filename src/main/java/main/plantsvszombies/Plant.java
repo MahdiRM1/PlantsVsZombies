@@ -11,7 +11,7 @@ public abstract class Plant {
     protected final long timeCreated;
     protected int price;
     protected double HP;
-    protected ImageView gif;
+    protected ImageView picture;
     private double damageCaused = 0;
     protected int rechargeTime;
     protected int frameUpdateTime;
@@ -21,7 +21,7 @@ public abstract class Plant {
         this.row = row;
         this.col = col;
         this.timeCreated = GlobalState.gameTime;
-        gif = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
+        picture = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
         frameUpdateTime = 40;
     }
 
@@ -39,7 +39,7 @@ public abstract class Plant {
         Image[] frame = getImage();
         nowPic++;
         nowPic %= frame.length;
-        gif.setImage(frame[nowPic]);
+        picture.setImage(frame[nowPic]);
     }
 
     public abstract boolean actionHappens(List<Zombie> zombies);
@@ -54,8 +54,8 @@ public abstract class Plant {
         damageCaused = 0;
     }
 
-    public ImageView getGif() {
-        return gif;
+    public ImageView getPicture() {
+        return picture;
     }
 
     public double getHP() {

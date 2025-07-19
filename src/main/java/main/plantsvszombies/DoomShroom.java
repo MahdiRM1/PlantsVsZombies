@@ -17,9 +17,9 @@ public class DoomShroom extends BombPlant implements Shroom {
     private static final Image[] DOOM_FRAMES;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
-        DOOM_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
+        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
+        DOOM_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
     }
 
     public DoomShroom(int row, int col, GameMode mode) {
@@ -49,26 +49,24 @@ public class DoomShroom extends BombPlant implements Shroom {
             } else if (nowPic >= getImage().length - 1) {
                 finishAnimation = true;
                 String str = timeCreated != wakeUpTime ? "Day" : "Night";
-                gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom/" + str + "Hole1.png"));
-                gif.setLayoutY(gif.getLayoutY() + gif.getFitHeight() / 4);
-                Constants.changeScale(gif, 0.5);
+                picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + str + "Hole1.png"));
+                picture.setLayoutY(picture.getLayoutY() + picture.getFitHeight() / 4);
+                Constants.changeScale(picture, 0.5);
             }
         } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
-            gif.setImage(new Image("file:Pictures/plantsGifs/DoomShroom/" + time + "Hole2.png"));
+            picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + time + "Hole2.png"));
         } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) HP = 0;
         return false;
     }
 
     @Override
     public void action(List<Zombie> zombies) {
-        gif.setImage(new Image("file:Pictures/plantsGifs/doom.gif"));
-        Constants.changeScale(gif, 2);
-        gif.setLayoutY(gif.getLayoutY() - gif.getFitHeight() / 4);
+        Constants.changeScale(picture, 2);
+        picture.setLayoutY(picture.getLayoutY() - picture.getFitHeight() / 4);
         for (Zombie z : zombies) {
-            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2) {
+            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2)
                 z.setState(ZombieState.BOOM_DIE);
-            }
         }
     }
 

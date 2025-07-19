@@ -5,7 +5,7 @@ enum GameMode {
 }
 
 enum ZombieState {
-    WALKING, EATING, FREEZE, BOOM_DIE, DIE, DEAD
+    WALKING, EATING, FREEZE, HYPNOTIZED, BOOM_DIE, DIE, DEAD
 }
 
 enum NutState {

@@ -164,7 +164,7 @@ public class GameLogic {
 
     //win logic
     public boolean checkWin() {
-        return zombies.isEmpty() && GlobalState.gameTime >= 150_000;
+        return zombies.isEmpty() && GlobalState.gameTime >= 155_000;
     }
 
     public void removePlant(int row, int col) {

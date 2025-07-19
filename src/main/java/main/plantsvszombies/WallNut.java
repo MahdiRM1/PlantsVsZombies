@@ -10,9 +10,9 @@ public class WallNut extends NutPlant {
     private static final Image[] END_LIFE_FRAMES;
 
     static {
-        FULL_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/WallNut/FullLife/frame_", FRAME_COUNT);
-        HALF_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/WallNut/HalfLife/frame_", FRAME_COUNT);
-        END_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/WallNut/EndLife/frame_", FRAME_COUNT);
+        FULL_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/FullLife/frame_", FRAME_COUNT);
+        HALF_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/HalfLife/frame_", FRAME_COUNT);
+        END_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/EndLife/frame_", FRAME_COUNT);
     }
 
     public WallNut(int row, int col) {

@@ -10,8 +10,8 @@ public class Repeater extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Repeater/normal/frame_", NORMAL_FRAME_COUNT);
-        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Repeater/shoot/frame_", SHOOT_FRAME_COUNT);
+        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Repeater/normal/frame_", NORMAL_FRAME_COUNT);
+        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Repeater/shoot/frame_", SHOOT_FRAME_COUNT);
     }
 
     public Repeater(int row, int col) {

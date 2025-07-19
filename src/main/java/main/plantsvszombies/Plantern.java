@@ -10,7 +10,7 @@ public class Plantern extends Plant {
     private static final Image[] FRAMES;
 
     static {
-        FRAMES = Constants.getArrayImage("Pictures/plantsGifs/Plantern/normal/frame_", FRAME_COUNT);
+        FRAMES = Constants.getArrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);
     }
 
     public Plantern(int row, int col) {
@@ -27,6 +27,8 @@ public class Plantern extends Plant {
     }
 
     public void action(Fog fog) {
+        if (fog == null) return;
+
         fog.clearFog(row, col);
     }
 
