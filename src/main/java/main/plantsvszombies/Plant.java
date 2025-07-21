@@ -12,7 +12,6 @@ public abstract class Plant {
     protected int price;
     protected double HP;
     protected ImageView picture;
-    private double damageCaused = 0;
     protected int rechargeTime;
     protected int frameUpdateTime;
     protected int nowPic = 0;
@@ -26,11 +25,7 @@ public abstract class Plant {
     }
 
     public void damage() {
-        damageCaused += 2.5;
-        if (damageCaused == 25) {
-            HP -= 25;
-            damageCaused = 0;
-        }
+        HP -= 25;
     }
 
     protected void updateFrame() {
@@ -42,16 +37,16 @@ public abstract class Plant {
         picture.setImage(frame[nowPic]);
     }
 
+    public double layoutX(){
+        return picture.getLayoutX() + picture.getFitWidth() * 0.5;
+    }
+
     public abstract boolean actionHappens(List<Zombie> zombies);
 
     protected abstract Image[] getImage();
 
     public void setHP(double HP) {
         this.HP = HP;
-    }
-
-    public void resetDamageCaused() {
-        damageCaused = 0;
     }
 
     public ImageView getPicture() {

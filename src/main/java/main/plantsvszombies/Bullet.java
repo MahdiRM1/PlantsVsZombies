@@ -14,6 +14,10 @@ public class Bullet {
         this.type = type;
     }
 
+    public double layoutX(){
+        return picture.getLayoutX() + picture.getFitWidth() * 0.5;
+    }
+
     //manage bullet movement
     public void move() {
         picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (25));

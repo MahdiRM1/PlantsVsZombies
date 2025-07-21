@@ -130,8 +130,8 @@ public class Introduction {
         ImageView image = new ImageView(new Image("file:Pictures/ZombiePicture/" + chosen + "/gif.gif"));
         Constants.sizeNode(image, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
         Constants.positionNode(image,
-                Constants.SCREEN_WIDTH / 1.8 + rdm.nextDouble(Constants.SCREEN_WIDTH / 3),
-                rdm.nextDouble(Constants.SCREEN_HEIGHT / 1.5));
+                Constants.SCREEN_WIDTH / 1.5 + rdm.nextDouble(Constants.SCREEN_WIDTH / 4),
+                rdm.nextDouble(Constants.SCREEN_HEIGHT / 1.3));
         return image;
     }
 

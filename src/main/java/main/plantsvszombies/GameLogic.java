@@ -93,14 +93,13 @@ public class GameLogic {
     //manages bullets and zombie collisions.
     public List<Bullet> checkBulletStrike() {
         List<Bullet> toRemove = new ArrayList<>();
-        for (Bullet bullet : bullets) {
-            if (bullet.getPicture().getLayoutX() > Constants.SCREEN_WIDTH) toRemove.add(bullet);
+        for (Bullet b : bullets) {
+            if (b.layoutX() > Constants.SCREEN_WIDTH) toRemove.add(b);
             for (Zombie z : zombies) {
-                if (z.getRow() == bullet.getRow()
-                        && Math.abs(bullet.getPicture().getLayoutX() - 2 * bullet.getPicture().getFitHeight() - z.getPicture().getLayoutX()) < 20
-                        && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE && z.getState() != ZombieState.HYPNOTIZED) {
-                    z.damage(bullet.getType());
-                    toRemove.add(bullet);
+                if (Constants.checkCollision(10,  z.layoutX(), b.layoutX(), b.getRow(), z.getRow())
+                        && Constants.aliveZombie(z) && !z.isHypnotized()) {
+                    z.damage(b.getType());
+                    toRemove.add(b);
                 }
             }
         }
@@ -113,17 +112,14 @@ public class GameLogic {
     public List<Plant> plantsToRemove() {
         List<Plant> toRemove = new ArrayList<>();
 
-        for (Plant plant : plants) {
-            if (plant.getHP() <= 0) toRemove.add(plant);
-        }
-
+        for (Plant plant : plants) if (plant.getHP() <= 0) toRemove.add(plant);
         plants.removeAll(toRemove);
         return toRemove;
     }
 
     //sets the state of zombies
     public void setZombieState() {
-        for (Zombie zombie : zombies) zombie.updateState(plants);
+        for (Zombie zombie : zombies) zombie.updateState(plants, zombies);
     }
 
     //finds and removes dead zombies
@@ -161,7 +157,8 @@ public class GameLogic {
 
     //win logic
     public boolean checkWin() {
-        return zombies.isEmpty() && GlobalState.gameTime >= 155_000;
+        for (Zombie z : zombies) if(!z.isHypnotized()) return false;
+        return GlobalState.gameTime >= 155_000;
     }
 
     public void removePlant(int row, int col) {

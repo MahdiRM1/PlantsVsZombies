@@ -40,7 +40,7 @@ public class IceShroom extends BombPlant implements Shroom {
     @Override
     public void action(List<Zombie> zombies) {
         for (Zombie z : zombies) {
-            if (z.getState() != ZombieState.HYPNOTIZED){
+            if (Constants.aliveZombie(z) && !z.isHypnotized()){
                 z.setState(ZombieState.FREEZE);
                 z.updateFreezeTime();
             }
