@@ -17,8 +17,7 @@ public abstract class PeaPlant extends Plant {
         boolean nowShooting = false;
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() < 10 && z.getCol() >= col
-                    && z.getState() != ZombieState.DIE && z.getState() != ZombieState.BOOM_DIE &&
-                    z.getState() != ZombieState.DEAD && z.getState() != ZombieState.HYPNOTIZED) {
+                    && Constants.aliveZombie(z) && !z.isHypnotized()) {
                 if (!isShooting) nowPic = 0;
                 nowShooting = true;
                 break;

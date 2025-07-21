@@ -2,34 +2,29 @@ package main.plantsvszombies;
 
 import java.util.List;
 
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public abstract class Zombie {
 
-    protected int HP;
+    protected double HP;
     protected int speed;
+    protected ZombieState state;
     private final ImageView picture;
     private final int row;
     private int col;
-    private ZombieState state;
     private long freezeTime;
-    private static final int BOOM_DIE_FRAME_COUNTER = 32;
-    private static final Image[] BOOM_DIE_FRAMES;
     private int nowPic;
-    private Plant plantToEat;
-
-    static {
-        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNTER);
-    }
+    private boolean hypnotized;
+    private Object toEat;
+    private long lastBite;
 
     public Zombie(ZombieData data) {
         this.row = data.getRow();
         picture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
         Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
-        col = Constants.getColumnZombie(picture);
+        col = Constants.getColumnZombie(layoutX());
         if (data.isHypnotized()) hypnosis();
         else state = ZombieState.WALKING;
         HP = data.getHP();
@@ -43,6 +38,11 @@ public abstract class Zombie {
         Constants.setZombiePicture(picture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
+    }
+
+    private void damage(){
+        if (hypnotized) HP -= 20;
+        else HP -= 25;
     }
 
     //name change for boolean
@@ -61,15 +61,14 @@ public abstract class Zombie {
         boolean iceCondition = Math.abs(GlobalState.gameTime - freezeTime) <= 5000;
         int updateFrameTime = iceCondition ? 80 : 40;
         if (GlobalState.gameTime % updateFrameTime != 0) return;
+        if(!hypnotized)
+            picture.setEffect(iceCondition ? Constants.effect(0.6, 0.3, 0.2, 0.1) : null);
+        updateFrame();
 
-        boolean hypnotizedCondition = false;
-        if(picture.getEffect() != null) hypnotizedCondition = ((ColorAdjust)picture.getEffect()).getHue() == 1;
-        if(!hypnotizedCondition) picture.setEffect(iceCondition ?
-                Constants.effect(0.6, 0.3, 0.2, 0.1) : null);
         switch (state) {
-            case WALKING, HYPNOTIZED -> walk(state == ZombieState.HYPNOTIZED);
-            case EATING -> eatPlant();
-            case DIE, BOOM_DIE -> dieAnimation();
+            case WALKING -> walk(hypnotized);
+            case EATING -> eat();
+            case DIE, BOOM_DIE -> die();
             case FREEZE -> {
                 if (Math.abs(GlobalState.gameTime - freezeTime) >= 4950) {
                     freezeTime = GlobalState.gameTime;
@@ -79,73 +78,100 @@ public abstract class Zombie {
         }
     }
 
-    private void dieAnimation() {
-        Image[] images = (state == ZombieState.DIE) ? getDieImage() : BOOM_DIE_FRAMES;
-        if (nowPic >= images.length - 1) {
-            state = ZombieState.DEAD;
-            return;
-        }
-        changePicture(images);
+    private void die() {
+        Image[] images = getImages();
+        if (nowPic >= images.length - 1) state = ZombieState.DEAD;
     }
 
-    private void changePicture(Image[] images) {
+    private void updateFrame() {
+        Image[] images = getImages();
         nowPic = (nowPic + 1) % images.length;
         picture.setImage(images[nowPic]);
     }
 
     public void walk(boolean hypnotized) {
-        changePicture(getWalkImage());
         int sign = hypnotized ? -1 : 1;
         picture.setLayoutX(picture.getLayoutX() - (sign)*(Constants.TILE_SIZE / (speed * 1000.0 / 40)));
-        col = Constants.getColumnZombie(picture);
+        col = Constants.getColumnZombie(layoutX());
     }
 
-    public void eatPlant() {
-        plantToEat.damage();
-        changePicture(getEatImage());
-        if (plantToEat.getHP() <= 0) {
-            plantToEat = null;
+    private void eat(){
+        if (Math.abs(GlobalState.gameTime - lastBite) < 500) return;
+
+        if (toEat instanceof Zombie z) eatZombie(z);
+        else if (toEat instanceof Plant p) eatPlant(p);
+        lastBite = GlobalState.gameTime;
+    }
+
+    private void eatZombie(Zombie zombie){
+        if (state != ZombieState.DIE && state != ZombieState.BOOM_DIE) zombie.damage();
+        if (zombie.getHP() <= 0) {
+            toEat = null;
             state = ZombieState.WALKING;
         }
+    }
+
+    private void eatPlant(Plant plant) {
+        plant.damage();
+        if (plant.getHP() <= 0) {
+            toEat = null;
+            state = ZombieState.WALKING;
+        }
+    }
+
+    private Object collision(List<Plant> plants, List<Zombie> zombies) {
+        if (hypnotized) return zombieCollision(zombies);
+        else return plantCollision(plants);
     }
 
     //checks if a zombie has reached a plant
     private Plant plantCollision(List<Plant> plants) {
         for (Plant plant : plants) {
-            if (plant.getRow() == row && plant.getCol() == col) {
+            if (Constants.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0) {
                 return plant;
             }
         }
         return null;
     }
 
-    public void updateState(List<Plant> plants) {
+    private Zombie zombieCollision(List<Zombie> zombies){
+        for (Zombie zombie : zombies) {
+            if (Constants.aliveZombie(zombie) && !zombie.isHypnotized()) {
+                if (Constants.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && zombie.getHP() > 0)
+                    return zombie;
+            }
+        }
+        return null;
+    }
+
+    public void updateState(List<Plant> plants, List<Zombie> zombies) {
 
         switch (state){case DIE, DEAD, BOOM_DIE -> {return;}}
 
         if (HP <= 0) {
-            if (state == ZombieState.EATING) plantToEat.resetDamageCaused();
             state = ZombieState.DIE;
             nowPic = 0;
             return;
         }
 
-        if (state == ZombieState.HYPNOTIZED) return;
+        if (toEat != null) return;
 
-        Plant plant = plantCollision(plants);
-        if (plant != null) {
-            if (plant instanceof DoomShroom ds && !ds.isSleep()) return;
-            state = ZombieState.EATING;
-            plantToEat = plant;
-        } else {
-            if (state != ZombieState.FREEZE) state = ZombieState.WALKING;
+        Object eat = collision(plants, zombies);
+        if (eat != null){
+            if (eat instanceof Plant plant) {
+                state = ZombieState.EATING;
+                toEat = plant;
+            } else if (eat instanceof Zombie zombie) {
+                state = ZombieState.EATING;
+                toEat = eat;
+                zombie.zombieToEat(this);
+            }
         }
+        else if (state != ZombieState.FREEZE) state = ZombieState.WALKING;
     }
 
     public void setState(ZombieState state) {
-        if (this.state == state) {
-            return;
-        }
+        if (this.state == state) return;
         this.state = state;
         nowPic = 0;
     }
@@ -154,14 +180,23 @@ public abstract class Zombie {
         picture.setScaleX(-1);
         picture.setLayoutX(picture.getLayoutX() + Constants.ZOMBIE_PIC_WIDTH/5);
         picture.setEffect(Constants.effect(1, 1, 0.3, 0.3));
-        state = ZombieState.HYPNOTIZED;
+        state = ZombieState.WALKING;
+        toEat = null;
+        hypnotized = true;
     }
 
-    protected abstract Image[] getWalkImage();
-    protected abstract Image[] getEatImage();
-    protected abstract Image[] getDieImage();
+    public void zombieToEat(Zombie zombie){
+        toEat = zombie;
+        state = ZombieState.EATING;
+    }
 
-    public int getHP() {
+    public double layoutX(){
+        return picture.getLayoutX() + picture.getFitWidth() * 0.5;
+    }
+
+    protected abstract Image[] getImages();
+
+    public double getHP() {
         return HP;
     }
 
@@ -179,5 +214,9 @@ public abstract class Zombie {
 
     public ZombieState getState() {
         return state;
+    }
+
+    public boolean isHypnotized() {
+        return hypnotized;
     }
 }

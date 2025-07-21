@@ -35,7 +35,7 @@ public class PotatoMine extends BombPlant {
         else{
             updateFrame();
             for (Zombie z : zombies)
-                if (row == z.getRow() && col == z.getCol() && z.getState() != ZombieState.HYPNOTIZED) return true;
+                if (Constants.checkCollision(layoutX(), z.layoutX(), row, z.getRow()) && !z.isHypnotized()) return true;
         }
         return false;
     }
@@ -51,7 +51,7 @@ public class PotatoMine extends BombPlant {
         Constants.changeScale(picture, 1.5);
         explosionTime = GlobalState.gameTime;
         for (Zombie z : zombies)
-            if (row == z.getRow() && col == z.getCol() && z.getState() != ZombieState.HYPNOTIZED)
+            if (row == z.getRow() && col == z.getCol() && !z.isHypnotized())
                 z.setState(ZombieState.DEAD);
     }
 }

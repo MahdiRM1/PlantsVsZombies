@@ -32,8 +32,7 @@ public class Jalapeno extends BombPlant {
         picture.setImage(EXPLOSION_FRAMES[0]);
         Constants.sizeNode(picture, Constants.TILE_SIZE * 9, picture.getFitHeight());
         Constants.positionNode(picture, Constants.SCREEN_WIDTH / 4.9, picture.getLayoutY());
-        for (Zombie z : zombies) {
-            if (z.getRow() == row && z.getState() != ZombieState.HYPNOTIZED) z.setState(ZombieState.BOOM_DIE);
-        }
+        for (Zombie z : zombies)
+            if (z.getRow() == row && Constants.aliveZombie(z) && !z.isHypnotized()) z.setState(ZombieState.BOOM_DIE);
     }
 }

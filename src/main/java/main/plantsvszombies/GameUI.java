@@ -67,8 +67,8 @@ public class GameUI {
         gameLogic = new GameLogic(mode);
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
-//        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 0);
+        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+//        initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
@@ -311,9 +311,9 @@ public class GameUI {
 
     //removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages() {
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().removeAll(plantToRemove.getPicture());
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().remove(zombie.getPicture());
-        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().removeAll(plantToRemove.getPicture());
     }
 
     private void logicUpdates() {
@@ -342,11 +342,17 @@ public class GameUI {
         for (Card card : cards) card.rechargeCheck();
     }
 
+//    private void timeHandler(){
+//        if (GlobalState.gameTime == 1000) spawnZombie(0, 1);
+////        if (GlobalState.gameTime == 7000) spawnZombie(1, 1);
+//    }
+
     //controls the general timing of zombies entering and attack waves
     private void timeHandler() {
         Random rdm = new Random();
         int time = (int)GlobalState.gameTime / 1000;
-//        if (time <= 20);
+        if (time <= 20) return;
+
         if (time <= 40) handleZombie(5000, 1000, 1, rdm);
         else if (time < 60) handleZombie(4000, 0, 2, rdm);
         else if (time < 70);

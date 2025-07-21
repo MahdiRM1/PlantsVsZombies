@@ -7,14 +7,18 @@ public class BucketheadZombie extends Zombie {
     private final static int WALK_FRAME_COUNT = 47;
     private final static int ATTACK_FRAME_COUNT = 40;
     private final static int DIE_FRANE_COUNT = 39;
+    private static final int BOOM_DIE_FRAME_COUNT = 32;
     private final static Image[] WALK_FRAMES;
     private final static Image[] ATTACK_FRAMES;
     private final static Image[] DIE_FRAMES;
+    private static final Image[] BOOM_DIE_FRAMES;
+
 
     static {
         WALK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BucketheadZombie/Walk/frame_", WALK_FRAME_COUNT);
         ATTACK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BucketheadZombie/Attack/frame_", ATTACK_FRAME_COUNT);
         DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", DIE_FRANE_COUNT);
+        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public BucketheadZombie(ZombieData data) {
@@ -29,18 +33,14 @@ public class BucketheadZombie extends Zombie {
     }
 
     @Override
-    protected Image[] getWalkImage() {
-        return WALK_FRAMES;
-    }
-
-    @Override
-    protected Image[] getEatImage() {
-        return ATTACK_FRAMES;
-    }
-
-    @Override
-    protected Image[] getDieImage() {
-        return DIE_FRAMES;
+    protected Image[] getImages(){
+        return switch (state){
+            case WALKING -> WALK_FRAMES;
+            case EATING -> ATTACK_FRAMES;
+            case DIE -> DIE_FRAMES;
+            case BOOM_DIE -> BOOM_DIE_FRAMES;
+            default -> null;
+        };
     }
 
 }

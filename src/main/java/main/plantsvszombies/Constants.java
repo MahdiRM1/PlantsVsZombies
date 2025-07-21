@@ -48,7 +48,7 @@ public final class Constants {
         ImageView sun = createImageView("Pictures/ui/sun.png",
                 SUN_SIZE, SUN_SIZE);
         if (type == SunType.BASE_FALLEN) positionNode(sun, BOARD_X + TILE_SIZE * COLS * Math.random(), 0);
-        else positionNode(sun, type.getCol() * (TILE_SIZE + 5) + BOARD_X, BOARD_Y + (type.getRow() * TILE_SIZE));
+        else positionNode(sun, BOARD_X + (type.getCol() * TILE_SIZE), BOARD_Y + (type.getRow() * TILE_SIZE));
         return sun;
     }
 
@@ -62,8 +62,8 @@ public final class Constants {
         ImageView plant = createImageView("Pictures/plantPictures/" + plantName + "/frame_0.png",
                 TILE_SIZE * 0.8,
                 plantName.equals("TallNut") ? TILE_SIZE * 1.2 : TILE_SIZE * 0.8);
-        positionNode(plant, BOARD_X + ((col + 0.1) * TILE_SIZE),
-                plantName.equals("TallNut") ? (BOARD_Y) + ((row - 0.4) * TILE_SIZE) : (BOARD_Y) + ((row + 0.1) * TILE_SIZE));
+        positionNode(plant, BOARD_X + (col * TILE_SIZE),
+                plantName.equals("TallNut") ? (BOARD_Y) + ((row - 0.5) * TILE_SIZE) : (BOARD_Y) + (row * TILE_SIZE));
         plant.setMouseTransparent(true);
         return plant;
     }
@@ -71,7 +71,7 @@ public final class Constants {
     public static ImageView setGravePicture(int row, int col, int i) {
         ImageView grave = createImageView("Pictures/graves/" + i + ".png",
                 TILE_SIZE * 0.8, TILE_SIZE * 0.8);
-        positionNode(grave, BOARD_X + ((col + 0.1) * TILE_SIZE), BOARD_Y + ((row + 0.1) * TILE_SIZE));
+        positionNode(grave, BOARD_X + (col * TILE_SIZE), BOARD_Y + (row * TILE_SIZE));
         grave.setMouseTransparent(true);
         return grave;
     }
@@ -81,7 +81,7 @@ public final class Constants {
                 BULLET_SIZE, BULLET_SIZE);
         positionNode(bullet, BOARD_X + ((col + 0.6) * TILE_SIZE),
                 bulletType == BulletType.SHROOM_BULLET ?
-                        BOARD_Y + ((row + 0.45) * TILE_SIZE) : BOARD_Y + ((row + 0.25) * TILE_SIZE));
+                        BOARD_Y + ((row + 0.35) * TILE_SIZE) : BOARD_Y + ((row + 0.15) * TILE_SIZE));
         return bullet;
     }
 
@@ -97,9 +97,22 @@ public final class Constants {
         positionNode(picture, BOARD_X + ((col - 0.5) * TILE_SIZE), BOARD_Y + ((row - 0.7) * TILE_SIZE));
     }
 
-    public static int getColumnZombie(ImageView picture) {
-        double relativeX = picture.getLayoutX() + picture.getFitWidth() / 1.2 - BOARD_X;
-        return relativeX > -ZOMBIE_PIC_WIDTH / 8 ? (int) (relativeX / TILE_SIZE) : -1;
+    public static boolean aliveZombie(Zombie zombie){
+        return zombie.getState() != ZombieState.DIE && zombie.getState() != ZombieState.BOOM_DIE &&
+                zombie.getState() != ZombieState.DEAD;
+    }
+
+    public static boolean checkCollision(double l1, double l2, int row1, int row2){
+        return checkCollision(TILE_SIZE/4, l1, l2, row1, row2);
+    }
+
+    public static boolean checkCollision(double bound, double l1, double l2, int row1, int row2){
+        return Math.abs(l1- l2) <= bound && row1 == row2;
+    }
+
+    public static int getColumnZombie(double layoutX) {
+        double relativeX = layoutX - BOARD_X + ZOMBIE_PIC_WIDTH / 8;
+        return relativeX > 0 ?  (int) (relativeX / TILE_SIZE): -1;
     }
 
     public static Image[] getArrayImage(String path, int max) {

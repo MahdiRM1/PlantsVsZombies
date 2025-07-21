@@ -15,7 +15,7 @@ enum GameMode {
 }
 
 enum ZombieState {
-    WALKING, EATING, FREEZE, HYPNOTIZED, BOOM_DIE, DIE, DEAD
+    WALKING, EATING, FREEZE, BOOM_DIE, DIE, DEAD
 }
 
 enum NutState {
@@ -35,10 +35,9 @@ enum SunType {
     private int row, col;
 
     public SunType setCoordination(int row, int col) {
-        SunType type = RISEN;
         this.row = row;
         this.col = col;
-        return type;
+        return RISEN;
     }
 
     public int getRow() {
