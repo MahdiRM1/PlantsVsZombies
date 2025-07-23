@@ -65,9 +65,8 @@ public class GameLogic {
     }
 
     public boolean isPlantable(int row, int col) {
-        for (Grave grave : graves) {
+        for (Grave grave : graves)
             if (grave.getRow() == row && grave.getCol() == col) return false;
-        }
 
         return getPlant(row, col) == null;
     }
@@ -96,7 +95,8 @@ public class GameLogic {
         for (Bullet b : bullets) {
             if (b.layoutX() > Constants.SCREEN_WIDTH) toRemove.add(b);
             for (Zombie z : zombies) {
-                if (Constants.checkCollision(10,  z.layoutX(), b.layoutX(), b.getRow(), z.getRow())
+                double abs = z.layoutX() - b.layoutX();
+                if (b.getRow() == z.getRow() && (-100 < abs && abs < 10)
                         && Constants.aliveZombie(z) && !z.isHypnotized()) {
                     z.damage(b.getType());
                     toRemove.add(b);

@@ -67,8 +67,8 @@ public class GameUI {
         gameLogic = new GameLogic(mode);
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
-        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-//        initStackPane(cardBar(), 1000, 0);
+//        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+        initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
@@ -343,8 +343,8 @@ public class GameUI {
     }
 
 //    private void timeHandler(){
-//        if (GlobalState.gameTime == 1000) spawnZombie(0, 1);
-////        if (GlobalState.gameTime == 7000) spawnZombie(1, 1);
+//        if (GlobalState.gameTime == 1000) spawnZombie(1, 1);
+////        if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
 //    }
 
     //controls the general timing of zombies entering and attack waves
@@ -401,7 +401,7 @@ public class GameUI {
         };
 
         gameLogic.addZombie(zombie);
-        pane.getChildren().add(zombie.getPicture());
+        pane.getChildren().addAll(zombie.getPicture(), zombie.rect1, zombie.rect2);
     }
 
     //saves the game

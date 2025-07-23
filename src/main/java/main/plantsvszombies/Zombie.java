@@ -4,6 +4,8 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public abstract class Zombie {
 
@@ -18,6 +20,8 @@ public abstract class Zombie {
     private boolean hypnotized;
     private Object toEat;
     private long lastBite;
+    Rectangle rect1;
+    Rectangle rect2;
 
     public Zombie(ZombieData data) {
         this.row = data.getRow();
@@ -33,7 +37,6 @@ public abstract class Zombie {
 
     public Zombie(int row, int col) {
         this.row = row;
-        this.col = col;
         picture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
         state = ZombieState.WALKING;
@@ -104,7 +107,7 @@ public abstract class Zombie {
     }
 
     private void eatZombie(Zombie zombie){
-        if (state != ZombieState.DIE && state != ZombieState.BOOM_DIE) zombie.damage();
+        if (Constants.aliveZombie(zombie)) zombie.damage();
         if (zombie.getHP() <= 0) {
             toEat = null;
             state = ZombieState.WALKING;
@@ -127,9 +130,8 @@ public abstract class Zombie {
     //checks if a zombie has reached a plant
     private Plant plantCollision(List<Plant> plants) {
         for (Plant plant : plants) {
-            if (Constants.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0) {
+            if (Constants.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0)
                 return plant;
-            }
         }
         return null;
     }
@@ -137,7 +139,7 @@ public abstract class Zombie {
     private Zombie zombieCollision(List<Zombie> zombies){
         for (Zombie zombie : zombies) {
             if (Constants.aliveZombie(zombie) && !zombie.isHypnotized()) {
-                if (Constants.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && zombie.getHP() > 0)
+                if (Constants.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && toEat != zombie)
                     return zombie;
             }
         }
@@ -154,7 +156,7 @@ public abstract class Zombie {
             return;
         }
 
-        if (toEat != null) return;
+        if (toEat != null && !isHypnotized()) return;
 
         Object eat = collision(plants, zombies);
         if (eat != null){
@@ -163,7 +165,7 @@ public abstract class Zombie {
                 toEat = plant;
             } else if (eat instanceof Zombie zombie) {
                 state = ZombieState.EATING;
-                toEat = eat;
+                if (toEat == null) toEat = eat;
                 zombie.zombieToEat(this);
             }
         }
