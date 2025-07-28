@@ -135,11 +135,14 @@ public final class Constants {
 
 
     public static void sizeNode(Node node, double width, double height){
-        if (node instanceof ImageView imageView) {
-            imageView.setFitWidth(width);
-            imageView.setFitHeight(height);
+        switch (node){
+            case Button btn -> btn.setPrefSize(width, height);
+            case ImageView imageView -> {
+                imageView.setFitWidth(width);
+                imageView.setFitHeight(height);
+            }
+            default -> {}
         }
-        else if (node instanceof Button btn) btn.setPrefSize(width, height);
     }
 
     public static void positionNode(Node node, double x, double y) {
