@@ -8,7 +8,6 @@ public class Plantern extends Plant {
 
     private static final int FRAME_COUNT = 20;
     private static final Image[] FRAMES;
-    private boolean action;
 
     static {
         FRAMES = Constants.getArrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);

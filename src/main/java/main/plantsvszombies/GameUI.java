@@ -74,7 +74,7 @@ public class GameUI {
     }
 
     //manages the start of the game
-    public void startGame() {
+    public final void startGame() {
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             GlobalState.gameTime += 20;
             updateGame();
@@ -342,28 +342,28 @@ public class GameUI {
         for (Card card : cards) card.rechargeCheck();
     }
 
-//    private void timeHandler(){
-//        if (GlobalState.gameTime == 1000) spawnZombie(1, 1);
-////        if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
-//    }
+//   private void timeHandler(){
+//       if (GlobalState.gameTime == 1000) spawnZombie(1, 1);
+//       if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
+//   }
 
     //controls the general timing of zombies entering and attack waves
-    private void timeHandler() {
-        Random rdm = new Random();
-        int time = (int)GlobalState.gameTime / 1000;
-        if (time <= 20) return;
+     private void timeHandler() {
+         Random rdm = new Random();
+         int time = (int)GlobalState.gameTime / 1000;
+         if (time <= 20) return;
 
-        if (time <= 40) handleZombie(5000, 1000, 1, rdm);
-        else if (time < 60) handleZombie(4000, 0, 2, rdm);
-        else if (time < 70);
-        else if (time < 80) wave(rdm, 4, 1);
-        else if (time < 130) {
-            handleZombie(3000, 0, 4, rdm);
-            handleZombie(3000, 0, 4, rdm);
-        }
-        else if (time < 140);
-        else if (time < 155) wave(rdm, 5, 2);
-    }
+         if (time <= 40) handleZombie(5000, 1000, 1, rdm);
+         else if (time < 60) handleZombie(4000, 0, 2, rdm);
+         else if (time < 70);
+         else if (time < 80) wave(rdm, 4, 1);
+         else if (time < 130) {
+             handleZombie(3000, 0, 4, rdm);
+             handleZombie(3000, 0, 4, rdm);
+         }
+         else if (time < 140);
+         else if (time < 155) wave(rdm, 5, 2);
+     }
 
     private void handleZombie(long base, long mode, int zombieTypes, Random rdm) {
         if (GlobalState.gameTime % base == mode)
@@ -401,7 +401,7 @@ public class GameUI {
         };
 
         gameLogic.addZombie(zombie);
-        pane.getChildren().addAll(zombie.getPicture(), zombie.rect1, zombie.rect2);
+        pane.getChildren().add(zombie.getPicture());
     }
 
     //saves the game
@@ -425,13 +425,13 @@ public class GameUI {
 
     private void addTrophy(){
         tl.stop();
-        Pane pane = new Pane();
+        Pane trophyPane = new Pane();
         ImageView trophy = setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
         Constants.positionNode(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
         trophy.setOnMouseClicked(event -> finishGame("win"));
         trophyTl(trophy);
-        pane.getChildren().add(trophy);
-        mainPane.getChildren().add(pane);
+        trophyPane.getChildren().add(trophy);
+        mainPane.getChildren().add(trophyPane);
     }
 
     private void trophyTl(ImageView trophy){
