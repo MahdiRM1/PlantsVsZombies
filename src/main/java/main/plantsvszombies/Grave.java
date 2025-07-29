@@ -17,10 +17,10 @@ public class Grave {
         picture = Constants.setGravePicture(row, col, picNumber);
     }
 
-    public Grave() {
+    public Grave(int row, int col) {
         Random rdm = new Random();
-        this.row = rdm.nextInt(5);
-        this.col = rdm.nextInt(5) + 4;
+        this.row = row;
+        this.col = col;
         picNumber = rdm.nextInt(5) + 1;
         picture = Constants.setGravePicture(row, col, picNumber);
     }
