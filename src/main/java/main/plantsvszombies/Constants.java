@@ -94,7 +94,7 @@ public final class Constants {
 
     public static void setZombiePicture(ImageView picture, int row, int col) {
         sizeNode(picture, ZOMBIE_PIC_WIDTH, ZOMBIE_PIC_HEIGHT);
-        positionNode(picture, BOARD_X + ((col - 0.5) * TILE_SIZE), BOARD_Y + ((row - 0.7) * TILE_SIZE));
+        positionNode(picture, BOARD_X + ((col - 0.5) * TILE_SIZE), BOARD_Y + ((row - 1) * TILE_SIZE));
     }
 
     public static boolean aliveZombie(Zombie zombie){

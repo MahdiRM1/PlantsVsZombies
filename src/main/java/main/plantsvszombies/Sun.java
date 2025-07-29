@@ -1,6 +1,7 @@
 package main.plantsvszombies;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 
 public class Sun {
 
@@ -9,6 +10,11 @@ public class Sun {
     private SunType type;
     private final double maxY;
     private final double minY;
+    public static final AudioClip sound;
+
+    static {
+        sound = new AudioClip("file:Audio/points.mp3");
+    }
 
     public Sun(SunType type) {
         timeCreated = GlobalState.gameTime;

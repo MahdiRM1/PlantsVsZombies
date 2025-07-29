@@ -3,16 +3,19 @@ package main.plantsvszombies;
 import java.util.List;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
 public class Jalapeno extends BombPlant {
 
     private static final Image[] NORMAL_FRAMES;
     private static final Image[] EXPLOSION_FRAMES;
     private static final int FRAME_COUNT = 13;
+    private static final AudioClip sound;
 
     static {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
         EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
+        sound = new AudioClip("file:Audio/jalapeno.mp3");
     }
 
     public Jalapeno(int row, int col) {
@@ -29,6 +32,7 @@ public class Jalapeno extends BombPlant {
 
     @Override
     public void action(List<Zombie> zombies) {
+        sound.play();
         picture.setImage(EXPLOSION_FRAMES[0]);
         Constants.sizeNode(picture, Constants.TILE_SIZE * 9, picture.getFitHeight());
         Constants.positionNode(picture, Constants.SCREEN_WIDTH / 4.9, picture.getLayoutY());
