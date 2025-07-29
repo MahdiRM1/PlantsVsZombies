@@ -1,11 +1,13 @@
 package main.plantsvszombies;
 
+import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Screen;
 
 public final class Constants {
@@ -112,13 +114,19 @@ public final class Constants {
 
     public static int getColumnZombie(double layoutX) {
         double relativeX = layoutX - BOARD_X + ZOMBIE_PIC_WIDTH / 8;
-        return relativeX > 0 ?  (int) (relativeX / TILE_SIZE): -1;
+        return relativeX > -ZOMBIE_PIC_WIDTH / 4 ?  (int) (relativeX / TILE_SIZE): -1;
     }
 
     public static Image[] getArrayImage(String path, int max) {
         Image[] images = new Image[max];
         for (int i = 0; i < max; i++) images[i] = new Image("file:" + path + i + ".png");
         return images;
+    }
+
+    public static AudioClip setSound(String name, boolean repeat){
+        AudioClip sound = new AudioClip("file:Audio/" + name + ".mp3");
+        if (repeat) sound.setCycleCount(Timeline.INDEFINITE);
+        return sound;
     }
 
     private static ImageView createImageView(String path, double width, double height) {

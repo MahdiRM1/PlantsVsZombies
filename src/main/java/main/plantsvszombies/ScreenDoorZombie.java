@@ -7,7 +7,7 @@ public class ScreenDoorZombie extends Zombie {
     private final static int WALK_FRAME_COUNT = 47;
     private final static int ATTACK_FRAME_COUNT = 40;
     private final static int DIE_FRAME_COUNT = 39;
-    private final static int BOOM_DIE_FRAME_COUNT = 39;
+    private final static int BOOM_DIE_FRAME_COUNT = 37;
     private final static Image[] WALK_FRAMES;
     private final static Image[] ATTACK_FRAMES;
     private final static Image[] DIE_FRAMES;
@@ -28,7 +28,7 @@ public class ScreenDoorZombie extends Zombie {
     public ScreenDoorZombie(int row, int col) {
         super(row, col);
         HP = 200;
-        speed = 5;
+        speed = 1;
     }
 
     @Override
