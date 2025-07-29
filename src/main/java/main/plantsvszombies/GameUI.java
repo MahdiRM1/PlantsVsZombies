@@ -386,7 +386,7 @@ public class GameUI {
     }
 
     private void spawnZombie(int z, int row) {
-        spawnZombie(z, row, 10);
+        spawnZombie(z, row, 11);
     }
 
     //determines what type of zombie to add

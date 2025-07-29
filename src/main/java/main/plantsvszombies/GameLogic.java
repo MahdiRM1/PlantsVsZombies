@@ -30,8 +30,13 @@ public class GameLogic {
     //generates graves for night
     private void makeGraves() {
         Random rdm = new Random();
-        int graveNum = rdm.nextInt(5) + 2;
-        for (int i = 0; i < graveNum; i++) graves.add(new Grave());
+        int graveNum = rdm.nextInt(5) + 3;
+        for (int i = 0; i < graveNum; i++) {
+            int row = rdm.nextInt(5);
+            int col = rdm.nextInt(5) + 4;
+            if (getGrave(row, col) == null) graves.add(new Grave(row, col));
+            else i--;
+        }
     }
 
     //generates the plants list to reload a saved game
@@ -134,11 +139,11 @@ public class GameLogic {
     }
 
     public List<Plant> plantsAction() {
-        List<Plant> actions = new ArrayList<>();//gomesh nakoni
+        List<Plant> plantsList = new ArrayList<>();//gomesh nakoni
         for (Plant plant : plants)
             if (plant.actionHappens(zombies))
-                actions.add(plant);
-        return actions;
+                plantsList.add(plant);
+        return plantsList;
     }
 
     public void updateGame() {
@@ -174,6 +179,13 @@ public class GameLogic {
     public Plant getPlant(int row, int col) {
         for (Plant plant : plants) {
             if (plant.getRow() == row && plant.getCol() == col) return plant;
+        }
+        return null;
+    }
+
+    public Grave getGrave(int row, int col) {
+        for (Grave grave : graves) {
+            if (grave.getRow() == row && grave.getCol() == col) return grave;
         }
         return null;
     }

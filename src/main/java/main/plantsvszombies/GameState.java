@@ -16,10 +16,10 @@ public class GameState implements Serializable {
     private final int fogLength;
 
     public GameState(GameLogic logic, List<Card> cards, int score, GameMode mode) {
-        getPlants(logic.getPottedPlants());
-        getZombies(logic.getZombies());
-        getCards(cards);
-        getGraves(logic.getGraves());
+        setPlantsData(logic.getPottedPlants());
+        setZombieData(logic.getZombies());
+        setCardData(cards);
+        setGraveData(logic.getGraves());
         this.score = score;
         this.mode = mode;
         fogLength = mode.getFogLength();
@@ -27,7 +27,7 @@ public class GameState implements Serializable {
     }
 
     //saves plant data
-    private void getPlants(List<Plant> pottedPlants) {
+    private void setPlantsData(List<Plant> pottedPlants) {
         for (Plant plant : pottedPlants) {
             PlantData plantData = new PlantData(plant);
             plants.add(plantData);
@@ -35,7 +35,7 @@ public class GameState implements Serializable {
     }
 
     //saves zombie data
-    private void getZombies(List<Zombie> zombies) {
+    private void setZombieData(List<Zombie> zombies) {
         for (Zombie z : zombies) {
             ZombieData zombieData = new ZombieData(z);
             this.zombies.add(zombieData);
@@ -43,14 +43,14 @@ public class GameState implements Serializable {
     }
 
     //saves card data
-    private void getCards(List<Card> cards) {
+    private void setCardData(List<Card> cards) {
         for (Card c : cards) {
             CardData cardData = new CardData(c);
             this.cards.add(cardData);
         }
     }
 
-    private void getGraves(List<Grave> graves) {
+    private void setGraveData(List<Grave> graves) {
         for (Grave grave : graves) {
             GraveData data = new GraveData(grave);
             this.graves.add(data);
