@@ -6,6 +6,7 @@ module main.plantsvszombies {
     requires org.kordamp.ikonli.javafx;
     requires java.desktop;
     requires java.sql;
+    requires javafx.media;
 
     opens main.plantsvszombies to javafx.fxml;
     exports main.plantsvszombies;

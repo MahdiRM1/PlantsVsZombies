@@ -49,7 +49,10 @@ public class ScoreBoard {
         if (sun == null) return;
 
         ImageView sunImage = sun.getPicture();
-        sunImage.setOnMouseClicked(event -> sun.setType(SunType.COLLECTED));
+        sunImage.setOnMouseClicked(event -> {
+            sun.setType(SunType.COLLECTED);
+            Sun.sound.play();
+        });
         pane.getChildren().add(sunImage);
         suns.add(sun);
     }

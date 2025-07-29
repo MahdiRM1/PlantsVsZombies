@@ -4,10 +4,12 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 
 
 public abstract class Zombie {
 
+    private static final AudioClip[] chomp = new AudioClip[2];
     protected double HP;
     protected int speed;
     protected ZombieState state;
@@ -19,6 +21,11 @@ public abstract class Zombie {
     private boolean hypnotized;
     private Object toEat;
     private long lastBite;
+
+    static {
+        chomp[0] = new AudioClip("file:Audio/chomp.mp3");
+        chomp[1] = new AudioClip("file:Audio/chompsoft.mp3");
+    }
 
     public Zombie(ZombieData data) {
         this.row = data.getRow();
@@ -45,7 +52,6 @@ public abstract class Zombie {
         else HP -= 25;
     }
 
-    //name change for boolean
     public void damage(BulletType bulletType) {
         if (bulletType == BulletType.ICE_BULLET) {
             updateFreezeTime();
@@ -85,6 +91,7 @@ public abstract class Zombie {
     }
 
     private void updateFrame() {
+        if (state == ZombieState.FREEZE) return;
         Image[] images = getImages();
         nowPic = (nowPic + 1) % images.length;
         picture.setImage(images[nowPic]);
@@ -99,6 +106,7 @@ public abstract class Zombie {
     private void eat(){
         if (Math.abs(GlobalState.gameTime - lastBite) < 500) return;
 
+        chomp[nowPic % 2].play();
         switch (toEat){
             case Zombie z -> eatZombie(z);
             case Plant p -> eatPlant(p);
@@ -129,7 +137,7 @@ public abstract class Zombie {
         else return plantCollision(plants);
     }
 
-    //checks if a zombie has reached a plant
+    // ?checks if a zombie has reached a plant
     private Plant plantCollision(List<Plant> plants) {
         for (Plant plant : plants) {
             if (Constants.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0)
@@ -138,6 +146,7 @@ public abstract class Zombie {
         return null;
     }
 
+    // ?checks if a zombie has reached a zombie
     private Zombie zombieCollision(List<Zombie> zombies){
         for (Zombie zombie : zombies) {
             if (Constants.aliveZombie(zombie) && !zombie.isHypnotized()) {

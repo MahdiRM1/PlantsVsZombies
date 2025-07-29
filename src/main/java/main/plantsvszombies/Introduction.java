@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
 public class Introduction {
@@ -22,8 +23,11 @@ public class Introduction {
     private final List<String> selectedCards = new ArrayList<>();
     private GameMode mode;
     private HBox cardBar;
+    private AudioClip backgroundMusic;
 
     public Introduction(Stage stage) {
+        backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
+        backgroundMusic.play();
         this.stage = stage;
     }
 
@@ -36,6 +40,7 @@ public class Introduction {
     private void load() {
         try (ObjectInputStream input = new ObjectInputStream(new FileInputStream("savegame.dat"))) {
             GameState state = (GameState) input.readObject();
+            backgroundMusic.stop();
             new GameUI(stage, state);
             System.out.println("game loaded");
         } catch (IOException | ClassNotFoundException e) {
@@ -117,6 +122,10 @@ public class Introduction {
             Constants.changeScale(start, 1);
         });
         start.setOnMouseClicked(event -> {
+            GlobalState.playClickTrack();
+            AudioClip startGame = new AudioClip("file:Audio/readysetplant.mp3");
+            startGame.play();
+            backgroundMusic.stop();
             if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
         });
         return start;
@@ -176,6 +185,7 @@ public class Introduction {
         ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
         Constants.positionNode(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
         adventure.setOnMouseClicked(event -> {
+            GlobalState.playClickTrack();
             mode = GameMode.DAY;
             plantSelectionPage();
         });
@@ -183,6 +193,7 @@ public class Introduction {
         ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         Constants.positionNode(newGame, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
         newGame.setOnMouseClicked(event -> {
+            GlobalState.playClickTrack();
             mode = GameMode.NIGHT;
             plantSelectionPage();
         });
@@ -193,18 +204,26 @@ public class Introduction {
         if (dataExists()) {
             loadGame.setOnMouseEntered(event -> Constants.changeScale(loadGame, 1.05));
             loadGame.setOnMouseExited(event -> Constants.changeScale(loadGame, 1));
-            loadGame.setOnMouseClicked(event -> load());
+            loadGame.setOnMouseClicked(event -> {
+                GlobalState.playClickTrack();
+                load();
+            });
         }else loadGame.setEffect(Constants.effect(0, 0, -0.5, 0));
 
         ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
         Constants.positionNode(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
-        quit.setOnMouseClicked(event -> stage.close());
+        quit.setOnMouseClicked(event -> {
+            GlobalState.playClickTrack();
+            stage.close();
+        });
 
         ImageView help = menuItem("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
         Constants.positionNode(help, Constants.SCREEN_WIDTH / 1.28, Constants.SCREEN_HEIGHT / 1.54);
+        help.setOnMouseClicked(e -> GlobalState.playClickTrack());
 
         ImageView options = menuItem("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
         Constants.positionNode(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
+        options.setOnMouseClicked(e -> GlobalState.playClickTrack());
 
         pane.getChildren().addAll(adventure, newGame, loadGame, quit, options, help);
         return pane;

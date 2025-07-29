@@ -3,15 +3,18 @@ package main.plantsvszombies;
 import java.util.List;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
 public class GraveBuster extends Plant {
 
     private final Grave grave;
     private static final Image[] FRAMES;
     private static final int FRAME_COUNT = 28;
+    private static final AudioClip sound;
 
     static {
         FRAMES = Constants.getArrayImage("Pictures/plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
+        sound = new AudioClip("file:Audio/gravebusterchomp.mp3");
     }
 
     public GraveBuster(int row, int col, Grave grave) {
@@ -22,6 +25,7 @@ public class GraveBuster extends Plant {
         this.grave = grave;
         Constants.changeScale(picture, 1.3);
         picture.setLayoutY(picture.getLayoutY() - Constants.TILE_SIZE / 2);
+        if (grave != null) sound.play();
     }
 
     @Override

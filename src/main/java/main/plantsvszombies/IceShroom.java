@@ -3,6 +3,7 @@ package main.plantsvszombies;
 import java.util.List;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
 public class IceShroom extends BombPlant implements Shroom {
 
@@ -11,10 +12,12 @@ public class IceShroom extends BombPlant implements Shroom {
     private static final int FRAME_COUNT = 17;
     private static final Image[] SLEEP_FRAMES;
     private static final Image[] NORMAL_FRAMES;
+    private static final AudioClip sound;
 
     static {
         SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
+        sound = new AudioClip("file:Audio/frozen.mp3");
     }
 
     public IceShroom(int row, int col, boolean isSleep) {
@@ -39,6 +42,7 @@ public class IceShroom extends BombPlant implements Shroom {
 
     @Override
     public void action(List<Zombie> zombies) {
+        sound.play();
         for (Zombie z : zombies) {
             if (Constants.aliveZombie(z) && !z.isHypnotized()){
                 z.setState(ZombieState.FREEZE);
