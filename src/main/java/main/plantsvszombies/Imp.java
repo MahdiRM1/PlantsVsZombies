@@ -7,7 +7,7 @@ public class Imp extends Zombie {
     private final static int WALK_FRAME_COUNT = 33;
     private final static int ATTACK_FRAME_COUNT = 27;
     private final static int DIE_FRAME_COUNT = 22;
-    private final static int BOOM_DIE_FRAME_COUNT = 32;
+    private final static int BOOM_DIE_FRAME_COUNT = 37;
     private final static Image[] WALK_FRAMES;
     private final static Image[] ATTACK_FRAMES;
     private final static Image[] DIE_FRAMES;

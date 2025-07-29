@@ -2,18 +2,24 @@ package main.plantsvszombies;
 
 import java.util.List;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
+import javafx.util.Duration;
 
 
 public abstract class Zombie {
 
     private static final AudioClip[] chomp = new AudioClip[2];
+    private static final Image[] HEAD_FRAMES;
+    private static final int HEAD_FRAME_COUNT = 25;
     protected double HP;
     protected int speed;
     protected ZombieState state;
     private final ImageView picture;
+    private final ImageView headPicture;
     private final int row;
     private int col;
     private long freezeTime;
@@ -23,6 +29,7 @@ public abstract class Zombie {
     private long lastBite;
 
     static {
+        HEAD_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
         chomp[0] = new AudioClip("file:Audio/chomp.mp3");
         chomp[1] = new AudioClip("file:Audio/chompsoft.mp3");
     }
@@ -30,7 +37,9 @@ public abstract class Zombie {
     public Zombie(ZombieData data) {
         this.row = data.getRow();
         picture = new ImageView();
+        headPicture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
+        Constants.setZombiePicture(headPicture, row, col);
         Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
         col = Constants.getColumnZombie(layoutX());
         if (data.isHypnotized()) hypnosis();
@@ -42,7 +51,9 @@ public abstract class Zombie {
     public Zombie(int row, int col) {
         this.row = row;
         picture = new ImageView();
+        headPicture = new ImageView();
         Constants.setZombiePicture(picture, row, col);
+        Constants.setZombiePicture(headPicture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
     }
@@ -86,8 +97,24 @@ public abstract class Zombie {
     }
 
     private void die() {
+        if (nowPic <= 1 && state == ZombieState.DIE) headZombie();
         Image[] images = getImages();
         if (nowPic >= images.length - 1) state = ZombieState.DEAD;
+    }
+
+    private void headZombie(){
+        if (this.getClass().getSimpleName().equals("Imp")) return;
+
+        var ref = new Object() {
+            int headPic = 0;
+        };
+        headPicture.setLayoutX(picture.getLayoutX());
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            ref.headPic++;
+            headPicture.setImage(HEAD_FRAMES[ref.headPic]);
+        }));
+        tl.setCycleCount(HEAD_FRAME_COUNT - 1);
+        tl.play();
     }
 
     private void updateFrame() {
@@ -211,6 +238,10 @@ public abstract class Zombie {
 
     public ImageView getPicture() {
         return picture;
+    }
+
+    public ImageView getHeadPicture() {
+        return headPicture;
     }
 
     public int getRow() {

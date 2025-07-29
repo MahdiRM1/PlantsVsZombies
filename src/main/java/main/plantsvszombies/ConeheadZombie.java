@@ -7,7 +7,7 @@ public class ConeheadZombie extends Zombie {
     private final static int WALK_FRAME_COUNT = 47;
     private final static int ATTACK_FRAME_COUNT = 40;
     private final static int DIE_FRAME_COUNT = 39;
-    private static final int BOOM_DIE_FRAME_COUNT = 32;
+    private static final int BOOM_DIE_FRAME_COUNT = 37;
     private final static Image[] WALK_FRAMES;
     private final static Image[] BOOM_DIE_FRAMES;
     private final static Image[] ATTACK_FRAMES;

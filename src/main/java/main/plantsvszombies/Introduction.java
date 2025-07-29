@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -27,6 +28,7 @@ public class Introduction {
 
     public Introduction(Stage stage) {
         backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
+        backgroundMusic.setCycleCount(Timeline.INDEFINITE);
         backgroundMusic.play();
         this.stage = stage;
     }
@@ -122,11 +124,13 @@ public class Introduction {
             Constants.changeScale(start, 1);
         });
         start.setOnMouseClicked(event -> {
+            if (selectedCards.size() != 6) return;
+
             GlobalState.playClickTrack();
             AudioClip startGame = new AudioClip("file:Audio/readysetplant.mp3");
             startGame.play();
             backgroundMusic.stop();
-            if (selectedCards.size() == 6) new GameUI(stage, selectedCards, mode);
+            new GameUI(stage, selectedCards, mode);
         });
         return start;
     }
