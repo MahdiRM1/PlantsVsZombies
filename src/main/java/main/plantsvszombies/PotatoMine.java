@@ -23,7 +23,7 @@ public class PotatoMine extends BombPlant {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
         ATTACK_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
         READY_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
-        sound = new AudioClip("file:Audio/explosion.mp3");
+        sound = Constants.setSound("potato_mine", false);
     }
 
     public PotatoMine(int row, int col) {

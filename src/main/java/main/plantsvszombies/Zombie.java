@@ -13,11 +13,11 @@ import javafx.util.Duration;
 public abstract class Zombie {
 
     private static final AudioClip[] chomp = new AudioClip[2];
+    private static final AudioClip[] groan = new AudioClip[7];
+    private static final AudioClip gulp;
+    private static final AudioClip fall;
     private static final Image[] HEAD_FRAMES;
     private static final int HEAD_FRAME_COUNT = 24;
-    protected double HP;
-    protected int speed;
-    protected ZombieState state;
     private final ImageView picture;
     private final ImageView headPicture;
     private final int row;
@@ -27,11 +27,18 @@ public abstract class Zombie {
     private boolean hypnotized;
     private Object toEat;
     private long lastBite;
+    protected double HP;
+    protected int speed;
+    protected ZombieState state;
 
     static {
         HEAD_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
-        chomp[0] = new AudioClip("file:Audio/chomp.mp3");
-        chomp[1] = new AudioClip("file:Audio/chompsoft.mp3");
+        gulp = Constants.setSound("gulp", false);
+        fall = Constants.setSound("zombie_falling", false);
+        chomp[0] = Constants.setSound("chomp", false);
+        chomp[1] = Constants.setSound("chompsoft", false);
+        for (int soundNum = 0; soundNum < 7; soundNum++)
+            groan[soundNum] = Constants.setSound("groan" + soundNum, false);
     }
 
     public Zombie(ZombieData data) {
@@ -53,6 +60,12 @@ public abstract class Zombie {
         Constants.setZombiePicture(picture, headPicture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
+        zombieSound();
+    }
+
+    private void zombieSound(){
+        int soundNum = this.getClass().getSimpleName().equals("Imp") ? 6 : (int)(Math.random() * 6);
+        groan[soundNum].play();
     }
 
     private void damage(){
@@ -110,6 +123,7 @@ public abstract class Zombie {
             ref.headPic++;
             headPicture.setImage(HEAD_FRAMES[ref.headPic]);
         }));
+        tl.setOnFinished(e -> fall.play());
         tl.setCycleCount(HEAD_FRAME_COUNT - 1);
         tl.play();
     }
@@ -153,6 +167,7 @@ public abstract class Zombie {
         if (plant.getHP() <= 0) {
             toEat = null;
             state = ZombieState.WALKING;
+            gulp.play();
         }
     }
 
