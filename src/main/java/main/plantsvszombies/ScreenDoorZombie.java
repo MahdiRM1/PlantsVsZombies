@@ -28,7 +28,7 @@ public class ScreenDoorZombie extends Zombie {
     public ScreenDoorZombie(int row, int col) {
         super(row, col);
         HP = 200;
-        speed = 1;
+        speed = 5;
     }
 
     @Override

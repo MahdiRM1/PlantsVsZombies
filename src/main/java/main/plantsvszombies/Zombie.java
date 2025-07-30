@@ -14,7 +14,7 @@ public abstract class Zombie {
 
     private static final AudioClip[] chomp = new AudioClip[2];
     private static final Image[] HEAD_FRAMES;
-    private static final int HEAD_FRAME_COUNT = 25;
+    private static final int HEAD_FRAME_COUNT = 24;
     protected double HP;
     protected int speed;
     protected ZombieState state;
@@ -38,10 +38,8 @@ public abstract class Zombie {
         this.row = data.getRow();
         picture = new ImageView();
         headPicture = new ImageView();
-        Constants.setZombiePicture(picture, row, col);
-        Constants.setZombiePicture(headPicture, row, col);
+        Constants.setZombiePicture(picture, headPicture, row, col);
         Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
-        col = Constants.getColumnZombie(layoutX());
         if (data.isHypnotized()) hypnosis();
         else state = ZombieState.WALKING;
         HP = data.getHP();
@@ -52,8 +50,7 @@ public abstract class Zombie {
         this.row = row;
         picture = new ImageView();
         headPicture = new ImageView();
-        Constants.setZombiePicture(picture, row, col);
-        Constants.setZombiePicture(headPicture, row, col);
+        Constants.setZombiePicture(picture, headPicture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
     }
@@ -109,7 +106,7 @@ public abstract class Zombie {
             int headPic = 0;
         };
         headPicture.setLayoutX(picture.getLayoutX());
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(40), event -> {
             ref.headPic++;
             headPicture.setImage(HEAD_FRAMES[ref.headPic]);
         }));

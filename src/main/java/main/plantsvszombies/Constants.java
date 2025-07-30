@@ -94,9 +94,12 @@ public final class Constants {
         return picture;
     }
 
-    public static void setZombiePicture(ImageView picture, int row, int col) {
+    public static void setZombiePicture(ImageView picture, ImageView headPicture, int row, int col) {
         sizeNode(picture, ZOMBIE_PIC_WIDTH, ZOMBIE_PIC_HEIGHT);
+        sizeNode(headPicture, ZOMBIE_PIC_WIDTH, ZOMBIE_PIC_HEIGHT);
         positionNode(picture, BOARD_X + ((col - 0.5) * TILE_SIZE), BOARD_Y + ((row - 1) * TILE_SIZE));
+        positionNode(headPicture, BOARD_X + ((col - 0.5) * TILE_SIZE), BOARD_Y + ((row - 1) * TILE_SIZE));
+        changeScale(headPicture, 1.2);
     }
 
     public static boolean aliveZombie(Zombie zombie){
