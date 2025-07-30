@@ -46,6 +46,7 @@ public class PuffShroom extends PeaPlant implements Shroom {
     @Override
     public void wakeUp() {
         isSleep = false;
+        wakeUpSound.play();
     }
 
     @Override

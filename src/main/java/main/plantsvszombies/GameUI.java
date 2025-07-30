@@ -50,7 +50,7 @@ public class GameUI {
     private Fog fog;
     private AudioClip backgroundMusic;
 
-    // ?constructor: to load the previously saved game
+    // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state) {
         this.stage = stage;
         gameLogic = new GameLogic(state);
@@ -63,7 +63,7 @@ public class GameUI {
         startGame();
     }
 
-    // ?constructor: to start a new game
+    // constructor: to start a new game
     public GameUI(Stage stage, List<String> plantsName, GameMode mode) {
         this.stage = stage;
         gameLogic = new GameLogic(mode);
@@ -75,10 +75,11 @@ public class GameUI {
         startGame();
     }
 
-    // ?manages the start of the game
+    // manages the start of the game
     public final void startGame() {
         backgroundMusic = new AudioClip("file:Audio/Loonboon.mp3");
         backgroundMusic.setCycleCount(Timeline.INDEFINITE);
+        backgroundMusic.setVolume(0.5);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             GlobalState.gameTime += 20;
@@ -92,7 +93,7 @@ public class GameUI {
         stage.show();
     }
 
-    // ?initializes the stack pane
+    // initializes the stack pane
     private void initStackPane(HBox cardBar, int score, long time) {
         borderPane.getChildren().add(Constants.setBackGround(
                 (mode == GameMode.DAY) ? "backGroundDay" : "backGroundNight"));
@@ -105,7 +106,7 @@ public class GameUI {
         mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
     }
 
-    // ?initialized the fog
+    // initialized the fog
     private void initFog(int fogLength) {
         Pane fogGrid = new Pane();
         fogGrid.setMouseTransparent(true);
@@ -114,7 +115,7 @@ public class GameUI {
         mode.setFogLength(fogLength);
     }
 
-    // ?generate card bar
+    // generate card bar
     private HBox cardBar() {
         HBox cardBar = new HBox(0);
         for (Card card : cards) cardBar.getChildren().add(card.getBtn());
@@ -122,17 +123,17 @@ public class GameUI {
         return cardBar;
     }
 
-    // ?loads the potted plants
+    // loads the potted plants
     private void loadPlants() {
         for (Plant plant : gameLogic.getPottedPlants()) borderPane.getChildren().add(plant.getPicture());
     }
 
-    // ?loads the zombies
+    // loads the zombies
     private void loadZombies() {
         for (Zombie z : gameLogic.getZombies()) pane.getChildren().add(z.getPicture());
     }
 
-    // ?generate game map
+    // generate game map
     private GridPane map() {
         GridPane grid = new GridPane();
         for (int row = 0; row < Constants.ROWS; row++)
@@ -143,7 +144,7 @@ public class GameUI {
         return grid;
     }
 
-    // ?generate mapButtons and control planting visuals
+    // generate mapButtons and control planting visuals
     private Button mapButtons(int row, int col) {
         Button btn = new Button();
         Constants.sizeNode(btn, Constants.TILE_SIZE, Constants.TILE_SIZE);
@@ -152,18 +153,27 @@ public class GameUI {
         btn.setOnAction(event -> handleMapClick(row, col, btn));
         btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: rgba(140, 140, 140, 0.3);"));
         btn.setOnMouseExited(event -> btn.setStyle("-fx-background-color: transparent;"));
-        btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(161, 245, 163, 0.3);"));
         return btn;
     }
 
-    // ?handles the map click
+    // handles the map click
     private void handleMapClick(int row, int col, Button btn) {
-        if (selectedButton < 0) btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        if (selectedButton < 0) btn.setOnMouseClicked(event -> wrongClick(btn));
         else if (selectedButton < cards.size()) handlePlanting(row, col, btn);
         else useShovel(row, col, btn);
     }
 
-    // ?handles the planting
+    private void wrongClick(Button btn){
+        btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);");
+        GlobalState.playWrongClick();
+    }
+
+    private void correctClick(Button btn){
+        btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);");
+        GlobalState.playCorrectClick();
+    }
+
+    // handles the planting
     private void handlePlanting(int row, int col, Button btn) {
         Plant plant = getPlant(row, col);
         boolean placed = false;
@@ -172,27 +182,27 @@ public class GameUI {
             if (scoreBoard.purchasePlant(plant.getPrice())) placed = true;
 
         if (plant != null && gameLogic.isPlantable(row, col) && scoreBoard.purchasePlant(plant.getPrice())) placed = true;
-        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        else btn.setOnMouseClicked(event -> wrongClick(btn));
 
         if (placed) {
             gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
             borderPane.getChildren().add(plant.getPicture());
-            btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);"));
+            btn.setOnMouseClicked(event -> correctClick(btn));
         }
 
         cards.get(selectedButton).getBtn().setStyle("-fx-background-color: transparent;");
         selectedButton = -1;
     }
 
-    // ?manage shovel visuals
+    // manage shovel visuals
     private void useShovel(int row, int col, Button btn) {
         Plant plant = gameLogic.getPlant(row, col);
         if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())) {
             borderPane.getChildren().remove(plant.getPicture());
             gameLogic.removePlant(row, col);
         }
-        else btn.setOnMouseClicked(event -> btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);"));
+        else btn.setOnMouseClicked(event -> wrongClick(btn));
 
         Pane buttons = (Pane) mainPane.getChildren().getLast();
         ImageView shovelBack = ((ImageView) buttons.getChildren().getLast());
@@ -202,7 +212,7 @@ public class GameUI {
         selectedButton = -1;
     }
 
-    // ?control menu buttons
+    // control menu buttons
     private Pane buttonsPane() {
         Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
@@ -223,13 +233,14 @@ public class GameUI {
         shovelBack.setOnMouseClicked(event -> {
             GlobalState.playClickTrack();
             shovelButtonClick(shovel, shovelBack, cursor);
+            GlobalState.playShovelClick();
         });
 
         buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
         return buttonsPane;
     }
 
-    // ?handles the shovel button click
+    // handles the shovel button click
     private void shovelButtonClick(ImageView shovel, ImageView shovelBack, Cursor cursor) {
         Pane buttonsPane = (Pane) (mainPane.getChildren().getLast());
         if (selectedButton != cards.size()) {
@@ -247,7 +258,7 @@ public class GameUI {
         }
     }
 
-    // ?add shovel image
+    // add shovel image
     private ImageView shovelImage() {
         ImageView shovel = setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
         shovel.setMouseTransparent(true);
@@ -255,14 +266,17 @@ public class GameUI {
         return shovel;
     }
 
-    // ?generate the menu pane
+    // generate the menu pane
     private void menu() {
+        AudioClip pause = new AudioClip("file:Audio/pause.mp3");
+        pause.play();
         Pane menuPane = new Pane();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         ImageView backToMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 18);
         Constants.positionNode(backToMenu, Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 1.62);
         backToMenu.setOnMouseClicked(event -> {
+            backgroundMusic.stop();
             GlobalState.playClickTrack();
             save();
             new Introduction(stage).firstPage();
@@ -284,7 +298,7 @@ public class GameUI {
         mainPane.getChildren().add(menuPane);
     }
 
-    // ?generate buttons -> visuals
+    // generate buttons -> visuals
     private ImageView setButton(String text, double width, double height) {
         ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
         Constants.sizeNode(imageView, width, height);
@@ -293,7 +307,7 @@ public class GameUI {
         return imageView;
     }
 
-    // ?get the plant from the selected button
+    // get the plant from the selected button
     private Plant getPlant(int row, int col) {
         if (selectedButton < 0 || selectedButton >= cards.size()) return null;
 
@@ -305,14 +319,14 @@ public class GameUI {
         };
     }
 
-    // ?get the coffee bean from the selected button
+    // get the coffee bean from the selected button
     private CoffeeBean getCoffeeBean(int row, int col) {
         if (gameLogic.getPlant(row, col) instanceof Shroom shroom && shroom.isSleep())
             return new CoffeeBean(row, col, shroom);
         else return null;
     }
 
-    // ?get the grave buster from the selected button
+    // get the grave buster from the selected button
     private GraveBuster getGraveBuster(int row, int col) {
         for (Grave grave : gameLogic.getGraves()) {
             if (grave.getRow() == row && grave.getCol() == col) return new GraveBuster(row, col, grave);
@@ -320,7 +334,7 @@ public class GameUI {
         return null;
     }
 
-    // ?updates the game
+    // updates the game
     public void updateGame() {
         winOrLose();
         cleanUpImages();
@@ -330,21 +344,21 @@ public class GameUI {
         timeHandler();
     }
 
-    // ?removes garbage images of struck bullets,dead zombies and eaten plants
+    // removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages() {
         for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().remove(plantToRemove.getPicture());
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().removeAll(zombie.getPicture(), zombie.getHeadPicture());
     }
 
-    // ?updates the game logic
+    // updates the game logic
     private void logicUpdates() {
         gameLogic.updateGame();
         scoreBoard.handleSuns();
         if(mode == GameMode.NIGHT) fog.updateFog();
     }
 
-    // ?updates the plant actions
+    // updates the plant actions
     private void plantActions() {
         List<Plant> actions = gameLogic.updatePlantActions();
         for (Plant plant : actions) {
@@ -361,7 +375,7 @@ public class GameUI {
         }
     }
 
-    // ?updates the recharges
+    // updates the recharges
     private void updateRecharges() {
         for (Card card : cards) card.rechargeCheck();
     }
@@ -371,7 +385,7 @@ public class GameUI {
 //       if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
 //   }
 
-    // ?controls the general timing of zombies entering and attack waves
+    // controls the general timing of zombies entering and attack waves
      private void timeHandler() {
          Random rdm = new Random();
          int time = (int)GlobalState.gameTime / 1000;
@@ -393,13 +407,13 @@ public class GameUI {
          else if (time < 155) wave(rdm, 5, 2);
      }
 
-    // ?handles the zombie entering
+    // handles the zombie entering
     private void handleZombie(long base, long mode, int zombieTypes, Random rdm) {
         if (GlobalState.gameTime % base == mode)
             spawnZombie(rdm.nextInt(zombieTypes), rdm.nextInt(5));
     }
 
-    // ?handles the attack waves
+    // handles the attack waves
     private void wave(Random rdm, int zombieTypes, int attackType) {
         if (GlobalState.gameTime == (long) attackType * 70_000) {
             spawnZombie(5, rdm.nextInt(5));
@@ -420,12 +434,12 @@ public class GameUI {
         }
     }
 
-    // ?spawns a zombie
+    // spawns a zombie
     private void spawnZombie(int z, int row) {
         spawnZombie(z, row, 11);
     }
 
-    // ?determines what type of zombie to add
+    // determines what type of zombie to add
     private void spawnZombie(int z, int row, int col) {
         Zombie zombie = switch (z) {
             case 0 -> new OriginalZombie(row, col);
@@ -440,7 +454,7 @@ public class GameUI {
         pane.getChildren().addAll(zombie.getPicture(), zombie.getHeadPicture());
     }
 
-    // ?saves the game
+    // saves the game
     public void save() {
         GameState state = new GameState(gameLogic, cards, scoreBoard.getScore(), mode);
 
@@ -453,13 +467,13 @@ public class GameUI {
         }
     }
 
-    // ?manages win or lose visuals
+    // manages win or lose visuals
     public void winOrLose() {
         if (gameLogic.checkLose()) finishGame("lose");
         else if (gameLogic.checkWin()) addTrophy();
     }
 
-    // ?adds the trophy to the screen
+    // adds the trophy to the screen
     private void addTrophy(){
         tl.stop();
         Pane trophyPane = new Pane();
@@ -471,7 +485,7 @@ public class GameUI {
         mainPane.getChildren().add(trophyPane);
     }
 
-    // ?controls the trophy movement
+    // controls the trophy movement
     private void trophyTl(ImageView trophy){
         var ref = new Object() {
             boolean isRisen = true;
@@ -483,7 +497,7 @@ public class GameUI {
         timeline.play();
     }
 
-    // ?controls the trophy movement
+    // controls the trophy movement
     private boolean trophyMove(double minY, ImageView trophy, boolean isRisen){
         double diffY = Math.abs(minY - trophy.getLayoutY());
         if (isRisen) {
@@ -493,7 +507,7 @@ public class GameUI {
         return isRisen;
     }
 
-    // ?manages the win or lose visuals
+    // manages the win or lose visuals
     private void finishGame(String str) {
         tl.stop();
         backgroundMusic.stop();
@@ -511,6 +525,7 @@ public class GameUI {
         ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
         mainMenu.setOnMouseClicked(event -> {
+            backgroundMusic.stop();
             GlobalState.playClickTrack();
             deleteSaveData();
             new Introduction(stage).firstPage();
@@ -522,7 +537,7 @@ public class GameUI {
             Constants.sizeNode(loseImage, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 1.8);
             Constants.positionNode(loseImage, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 6);
             finishPane.getChildren().add(loseImage);
-            sound = new AudioClip("file:Audio/scream.mp3");
+            sound = Constants.setSound("losemusic", false);
         } else {
             Label win = new Label("You win");
             win.setTextFill(Color.GREEN);
@@ -530,7 +545,7 @@ public class GameUI {
             win.setEffect(new DropShadow(50, Color.BLACK));
             Constants.positionNode(win, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3);
             finishPane.getChildren().add(win);
-            sound = new AudioClip("file:Audio/winmusic.mp3");
+            sound = Constants.setSound("winmusic", false);
         }
         sound.play();
 
@@ -538,7 +553,7 @@ public class GameUI {
         mainPane.getChildren().add(finishPane);
     }
 
-    // ?deletes the save data if the game is finished
+    // deletes the save data if the game is finished
     private void deleteSaveData() {
         Path path = Paths.get("savegame.dat");
         try {

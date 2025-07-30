@@ -78,6 +78,7 @@ public class DoomShroom extends BombPlant implements Shroom {
     @Override
     public void wakeUp() {
         isSleep = false;
+        wakeUpSound.play();
     }
 
     @Override

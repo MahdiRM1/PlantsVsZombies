@@ -29,6 +29,7 @@ public class Introduction {
     public Introduction(Stage stage) {
         backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
         backgroundMusic.setCycleCount(Timeline.INDEFINITE);
+        backgroundMusic.setVolume(0.5);
         backgroundMusic.play();
         this.stage = stage;
     }

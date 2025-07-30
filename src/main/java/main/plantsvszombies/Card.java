@@ -36,9 +36,9 @@ public class Card {
     //recharge time of each plant
     private int findRechargeTime() {
         Plant plant = switch (plantName){
-            case "CoffeeBean" -> new CoffeeBean(0, 0, null);
-            case "GraveBuster" -> new GraveBuster(0, 0, null);
-            default -> Constants.getPlant(0, 0, plantName, false);
+            case "CoffeeBean" -> new CoffeeBean(-1, -1, null);
+            case "GraveBuster" -> new GraveBuster(-1, -1, null);
+            default -> Constants.getPlant(-1, -1, plantName, false);
         };
         return plant.getRechargeTime() * 1000;
     }
@@ -49,7 +49,10 @@ public class Card {
         btn.setGraphic(Constants.setCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
-            if (!canChoose) return;
+            if (!canChoose) {
+                GlobalState.playWrongClick();
+                return;
+            }
 
             if (GameUI.selectedButton >= 0 && GameUI.selectedButton < 6) {
                 HBox cardBar = (HBox) btn.getParent();

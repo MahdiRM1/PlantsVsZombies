@@ -54,6 +54,7 @@ public class IceShroom extends BombPlant implements Shroom {
     @Override
     public void wakeUp() {
         isSleep = false;
+        wakeUpSound.play();
     }
 
     @Override
