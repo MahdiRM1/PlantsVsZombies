@@ -25,7 +25,7 @@ public abstract class Plant {
     }
 
     public void damage() {
-        HP -= 25;
+        HP -= 20;
     }
 
     protected void updateFrame() {

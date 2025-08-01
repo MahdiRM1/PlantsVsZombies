@@ -16,7 +16,7 @@ public class CherryBomb extends BombPlant {
     static {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CherryBomb/normal/frame_", NORMAL_FRAME_COUNT);
         EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CherryBomb/boom/frame_", EXPLOSION_FRAME_COUNT);
-        sound = new AudioClip("file:Audio/cherrybomb.mp3");
+        sound = Constants.setSound("cherrybomb", false);
     }
 
     public CherryBomb(int row, int col) {

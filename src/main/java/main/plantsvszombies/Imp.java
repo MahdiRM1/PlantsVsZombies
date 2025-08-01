@@ -33,7 +33,7 @@ public class Imp extends Zombie {
     }
 
     @Override
-    protected Image[] getImages(){
+    protected Image[] getZombiePictures(){
         return switch (state){
             case WALKING -> WALK_FRAMES;
             case EATING -> ATTACK_FRAMES;
@@ -41,5 +41,10 @@ public class Imp extends Zombie {
             case BOOM_DIE -> BOOM_DIE_FRAMES;
             default -> null;
         };
+    }
+
+    @Override
+    protected Image[] getPictures() {
+        return null;
     }
 }

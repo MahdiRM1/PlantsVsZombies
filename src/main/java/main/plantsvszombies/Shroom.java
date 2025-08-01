@@ -4,7 +4,7 @@ import javafx.scene.media.AudioClip;
 
 interface Shroom {
 
-    AudioClip wakeUpSound = new AudioClip("file:Audio/wakeup.mp3");
+    AudioClip wakeUpSound = Constants.setSound("wakeup", false);
 
     default boolean setIsSleep(GameMode mode) {
         return mode == GameMode.DAY;

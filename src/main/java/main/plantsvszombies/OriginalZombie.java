@@ -32,14 +32,28 @@ public class OriginalZombie extends Zombie {
         speed = 5;
     }
 
-    @Override
-    protected Image[] getImages(){
-        return switch (state){
-            case WALKING -> WALK_FRAMES;
-            case EATING -> ATTACK_FRAMES;
-            case DIE -> DIE_FRAMES;
-            case BOOM_DIE -> BOOM_DIE_FRAMES;
-            default -> null;
+    public static Image[] getimages(ZombieState state) {
+        return switch (state) {
+            case WALKING ->
+                WALK_FRAMES;
+            case EATING ->
+                ATTACK_FRAMES;
+            case DIE ->
+                DIE_FRAMES;
+            case BOOM_DIE ->
+                BOOM_DIE_FRAMES;
+            default ->
+                null;
         };
+    }
+
+    @Override
+    protected Image[] getZombiePictures(){
+        return OriginalZombie.getimages(state);
+    }
+
+    @Override
+    protected Image[] getPictures() {
+        return HEAD_FRAMES;
     }
 }

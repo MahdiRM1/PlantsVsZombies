@@ -5,14 +5,13 @@ import javafx.scene.media.AudioClip;
 
 public class Bullet {
 
-    private static final AudioClip[] hit = new AudioClip[3];
+    private static final AudioClip[] hit = new AudioClip[4];
     private static final AudioClip[] shoot = new AudioClip[2];
     private final int row;
     private final ImageView picture;
     private final BulletType type;
-
     static {
-        for (int i = 0; i < 3; i++) hit[i] = Constants.setSound("splat" + i, false);
+        for (int i = 0; i < 4; i++) hit[i] = Constants.setSound("splat" + i, false);
         for (int i = 0; i < 2; i++) shoot[i] = Constants.setSound("shoot" + i, false);
     }
 
@@ -33,8 +32,9 @@ public class Bullet {
         picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (25));
     }
 
-    public void hit(){
-        int hitNum = (int)(Math.random() * 3);
+    public void hit(boolean sound){
+        int hitNum = (int)(Math.random() * 2);
+        if (sound) hitNum += 2;
         hit[hitNum].play();
     }
 

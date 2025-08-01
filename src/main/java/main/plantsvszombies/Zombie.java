@@ -15,14 +15,13 @@ public abstract class Zombie {
     private static final AudioClip[] chomp = new AudioClip[2];
     private static final AudioClip[] groan = new AudioClip[7];
     private static final AudioClip gulp;
-    private static final AudioClip fall;
-    private static final Image[] HEAD_FRAMES;
+    protected static final Image[] HEAD_FRAMES;
     private static final int HEAD_FRAME_COUNT = 24;
     private final ImageView picture;
-    private final ImageView headPicture;
+    private final ImageView secondPicture;
     private final int row;
     private int col;
-    private long freezeTime;
+    protected long freezeTime;
     private int nowPic;
     private boolean hypnotized;
     private Object toEat;
@@ -34,7 +33,6 @@ public abstract class Zombie {
     static {
         HEAD_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
         gulp = Constants.setSound("gulp", false);
-        fall = Constants.setSound("zombie_falling", false);
         chomp[0] = Constants.setSound("chomp", false);
         chomp[1] = Constants.setSound("chompsoft", false);
         for (int soundNum = 0; soundNum < 7; soundNum++)
@@ -44,8 +42,8 @@ public abstract class Zombie {
     public Zombie(ZombieData data) {
         this.row = data.getRow();
         picture = new ImageView();
-        headPicture = new ImageView();
-        Constants.setZombiePicture(picture, headPicture, row, col);
+        secondPicture = new ImageView();
+        Constants.setZombiePicture(picture, secondPicture, row, col);
         Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
         if (data.isHypnotized()) hypnosis();
         else state = ZombieState.WALKING;
@@ -56,8 +54,8 @@ public abstract class Zombie {
     public Zombie(int row, int col) {
         this.row = row;
         picture = new ImageView();
-        headPicture = new ImageView();
-        Constants.setZombiePicture(picture, headPicture, row, col);
+        secondPicture = new ImageView();
+        Constants.setZombiePicture(picture, secondPicture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
         zombieSound();
@@ -69,15 +67,16 @@ public abstract class Zombie {
     }
 
     private void damage(){
-        if (hypnotized) HP -= 20;
-        else HP -= 25;
+        if (hypnotized) HP -= 15;
+        else HP -= 20;
+
+        if (80 < HP && HP <= 100 && !isHypnotized()) headZombie();
     }
 
-    public void damage(BulletType bulletType) {
-        if (bulletType == BulletType.ICE_BULLET) {
-            updateFreezeTime();
-        }
-        HP -= 20;
+    public void damage(Bullet bullet) {
+        if (bullet.getType() == BulletType.ICE_BULLET) updateFreezeTime();
+        damage();
+        bullet.hit(HP > 100 && !this.getClass().getSimpleName().equals("ConeheadZombie"));
     }
 
     public void updateFreezeTime() {
@@ -108,29 +107,30 @@ public abstract class Zombie {
 
     private void die() {
         if (nowPic <= 1 && state == ZombieState.DIE) headZombie();
-        Image[] images = getImages();
+        Image[] images = getZombiePictures();
         if (nowPic >= images.length - 1) state = ZombieState.DEAD;
     }
 
     private void headZombie(){
         if (this.getClass().getSimpleName().equals("Imp")) return;
 
+        Image[] images = getPictures();
         var ref = new Object() {
             int headPic = 0;
         };
-        headPicture.setLayoutX(picture.getLayoutX());
+        secondPicture.setLayoutX(picture.getLayoutX());
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(40), event -> {
-            ref.headPic++;
-            headPicture.setImage(HEAD_FRAMES[ref.headPic]);
+            if (ref.headPic < images.length - 1) ref.headPic++;
+            secondPicture.setImage(images[ref.headPic]);
         }));
-        tl.setOnFinished(e -> fall.play());
-        tl.setCycleCount(HEAD_FRAME_COUNT - 1);
+        tl.setOnFinished(e -> secondPicture.setImage(null));
+        tl.setCycleCount(40);
         tl.play();
     }
 
     private void updateFrame() {
         if (state == ZombieState.FREEZE) return;
-        Image[] images = getImages();
+        Image[] images = getZombiePictures();
         nowPic = (nowPic + 1) % images.length;
         picture.setImage(images[nowPic]);
     }
@@ -242,7 +242,9 @@ public abstract class Zombie {
         return picture.getLayoutX() + picture.getFitWidth() * 0.5;
     }
 
-    protected abstract Image[] getImages();
+    protected abstract Image[] getZombiePictures();
+
+    protected abstract Image[] getPictures();
 
     public double getHP() {
         return HP;
@@ -252,8 +254,8 @@ public abstract class Zombie {
         return picture;
     }
 
-    public ImageView getHeadPicture() {
-        return headPicture;
+    public ImageView getSecondPicture() {
+        return secondPicture;
     }
 
     public int getRow() {

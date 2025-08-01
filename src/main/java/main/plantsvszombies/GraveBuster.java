@@ -14,7 +14,7 @@ public class GraveBuster extends Plant {
 
     static {
         FRAMES = Constants.getArrayImage("Pictures/plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
-        sound = new AudioClip("file:Audio/gravebusterchomp.mp3");
+        sound = Constants.setSound("gravebusterchomp", false);
     }
 
     public GraveBuster(int row, int col, Grave grave) {

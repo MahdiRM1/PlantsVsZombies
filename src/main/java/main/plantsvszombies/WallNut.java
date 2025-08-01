@@ -18,7 +18,7 @@ public class WallNut extends NutPlant {
     public WallNut(int row, int col) {
         super(row, col);
         price = 50;
-        HP = maxHP = 250;
+        HP = maxHP = 300;
         rechargeTime = 20;
     }
 

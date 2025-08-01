@@ -104,9 +104,8 @@ public class GameLogic {
                 double abs = z.layoutX() - b.layoutX();
                 if (b.getRow() == z.getRow() && (-100 < abs && abs < 10)
                         && Constants.aliveZombie(z) && !z.isHypnotized()) {
-                    z.damage(b.getType());
+                    z.damage(b);
                     toRemove.add(b);
-                    b.hit();
                 }
             }
         }

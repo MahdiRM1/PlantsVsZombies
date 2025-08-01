@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Introduction {
 
@@ -24,10 +26,13 @@ public class Introduction {
     private final List<String> selectedCards = new ArrayList<>();
     private GameMode mode;
     private HBox cardBar;
-    private AudioClip backgroundMusic;
+    private static final AudioClip backgroundMusic;
+
+    static {
+        backgroundMusic = Constants.setSound("LookupattheSky", false);
+    }
 
     public Introduction(Stage stage) {
-        backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
         backgroundMusic.setCycleCount(Timeline.INDEFINITE);
         backgroundMusic.setVolume(0.5);
         backgroundMusic.play();
@@ -98,11 +103,10 @@ public class Introduction {
         pane.getChildren().addAll(Constants.setScoreBoardPicture(),
                 cardBar, box1, box2, box3, box4, startGameBtn());
         for (int i = 0; i < 8; i++) {
-            pane.getChildren().add(createZombie());
+            pane.getChildren().add(createZombie((int)(Math.random()*5)));
         }
         Scene scene = new Scene(pane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
-        stage.show();
     }
 
     private ImageView startGameBtn() {
@@ -128,7 +132,7 @@ public class Introduction {
             if (selectedCards.size() != 6) return;
 
             GlobalState.playClickTrack();
-            AudioClip startGame = new AudioClip("file:Audio/readysetplant.mp3");
+            AudioClip startGame = Constants.setSound("readysetplant", false);
             startGame.play();
             backgroundMusic.stop();
             new GameUI(stage, selectedCards, mode);
@@ -136,10 +140,10 @@ public class Introduction {
         return start;
     }
 
-    private ImageView createZombie() {
+    private ImageView createZombie(int z) {
         Random rdm = new Random();
         String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "Imp"};
-        String chosen = zombieTypes[rdm.nextInt(5)];
+        String chosen = zombieTypes[z];
 
         ImageView image = new ImageView(new Image("file:Pictures/ZombiePicture/" + chosen + "/gif.gif"));
         Constants.sizeNode(image, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
@@ -189,19 +193,14 @@ public class Introduction {
 
         ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
         Constants.positionNode(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
-        adventure.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
-            mode = GameMode.DAY;
-            plantSelectionPage();
-        });
+        adventure.setOnMouseClicked(event -> handAnimation(pane, false));
 
-        ImageView newGame = menuItem("NewGame", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
-        Constants.positionNode(newGame, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
-        newGame.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
-            mode = GameMode.NIGHT;
-            plantSelectionPage();
-        });
+        ImageView socket = menuItem("Socket", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
+        Constants.positionNode(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
+        socket.setOnMouseEntered(e -> {});
+        socket.setOnMouseExited(e -> {});
+        socket.setEffect(Constants.effect(0, 0, -0.5, 0));
+        socket.setOnMouseClicked(event -> GlobalState.playWrongClick());
 
         ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
         Constants.sizeNode(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
@@ -211,9 +210,12 @@ public class Introduction {
             loadGame.setOnMouseExited(event -> Constants.changeScale(loadGame, 1));
             loadGame.setOnMouseClicked(event -> {
                 GlobalState.playClickTrack();
-                load();
+                handAnimation(pane, true);
             });
-        }else loadGame.setEffect(Constants.effect(0, 0, -0.5, 0));
+        }else {
+            loadGame.setEffect(Constants.effect(0, 0, -0.5, 0));
+            loadGame.setOnMouseClicked(event -> GlobalState.playWrongClick());
+        }
 
         ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
         Constants.positionNode(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
@@ -230,8 +232,60 @@ public class Introduction {
         Constants.positionNode(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
         options.setOnMouseClicked(e -> GlobalState.playClickTrack());
 
-        pane.getChildren().addAll(adventure, newGame, loadGame, quit, options, help);
+        pane.getChildren().addAll(adventure, socket, loadGame, quit, options, help);
         return pane;
+    }
+
+    private void handAnimation(Pane pane, boolean load){
+        ImageView hand = new ImageView(new Image("file:Pictures/ui/handGif.gif"));
+        double size = Constants.SCREEN_HEIGHT / 2;
+        Constants.positionNode(hand, Constants.SCREEN_WIDTH / 3 , Constants.SCREEN_HEIGHT / 2);
+        Constants.sizeNode(hand, size, size);
+        pane.getChildren().add(hand);
+        backgroundMusic.stop();
+        AudioClip laugh = Constants.setSound("evillaugh", false);
+        laugh.play();
+        Timeline tl = new Timeline(new KeyFrame(Duration.seconds(2)));
+        tl.setOnFinished(e -> {
+            if(load) load();
+            else modeSelection();
+        });
+        tl.setCycleCount(2);
+        tl.play();
+    }
+
+    private void modeSelection(){
+        backgroundMusic.play();
+        Pane pane = new Pane();
+        pane.getChildren().addFirst(Constants.setBackGround("ModeSelection"));
+
+        ImageView day = menuItem("DayMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
+        Constants.positionNode(day, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 4);
+        day.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            mode = GameMode.DAY;
+            plantSelectionPage();
+        });
+
+        double sizePlant = Constants.SCREEN_HEIGHT / 6.3;
+        ImageView plant = new ImageView(new Image("file:Pictures/plantPictures/SunFlower/gif.gif"));
+        Constants.sizeNode(plant, sizePlant, sizePlant);
+        Constants.positionNode(plant, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3.7);
+
+        ImageView night = menuItem("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
+        Constants.positionNode(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);
+        night.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            mode = GameMode.NIGHT;
+            plantSelectionPage();
+        });
+
+        ImageView zombie = createZombie(0);
+        Constants.positionNode(zombie, Constants.SCREEN_WIDTH / 1.68, Constants.SCREEN_HEIGHT / 3.9);
+
+        pane.getChildren().addAll(plant, day, zombie, night);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
     }
 
     private boolean dataExists(){
