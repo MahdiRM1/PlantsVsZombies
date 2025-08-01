@@ -15,7 +15,7 @@ public class Jalapeno extends BombPlant {
     static {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
         EXPLOSION_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
-        sound = new AudioClip("file:Audio/jalapeno.mp3");
+        sound = Constants.setSound("jalapeno", false);
     }
 
     public Jalapeno(int row, int col) {

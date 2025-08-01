@@ -22,7 +22,7 @@ public class DoomShroom extends BombPlant implements Shroom {
         SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
         DOOM_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
-        sound = new AudioClip("file:Audio/doomshroom.mp3");
+        sound = Constants.setSound("doomshroom", false);
     }
 
     public DoomShroom(int row, int col, boolean isSleep) {

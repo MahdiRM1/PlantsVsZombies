@@ -14,7 +14,7 @@ public class Blover extends Plant {
 
     static {
         FRAMES = Constants.getArrayImage("Pictures/plantPictures/Blover/normal/frame_", FRAME_COUNT);
-        sound = new AudioClip("file:Audio/blover.mp3");
+        sound = Constants.setSound("blover", false);
     }
 
     public Blover(int row, int col) {

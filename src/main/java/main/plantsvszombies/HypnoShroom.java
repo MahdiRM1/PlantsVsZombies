@@ -19,8 +19,8 @@ public class HypnoShroom extends BombPlant implements Shroom {
     public HypnoShroom(int row, int col, boolean isSleep) {
         super(row, col);
         price = 75;
-        HP = 25;
-        rechargeTime = 1;
+        HP = 100;
+        rechargeTime = 15;
         this.isSleep = isSleep;
     }
 
@@ -28,13 +28,14 @@ public class HypnoShroom extends BombPlant implements Shroom {
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
         if (isSleep) return false;
-        return HP <= 0;
+        return HP < 100;
     }
 
     public void action(List<Zombie> zombies) {
         for (Zombie z : zombies)
             if (Constants.checkCollision(layoutX(), z.layoutX(), row, z.getRow())){
                 z.hypnosis();
+                HP = 0;
                 break;
             }
     }

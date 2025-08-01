@@ -18,7 +18,7 @@ public class CoffeeBean extends Plant {
     static {
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
         EAT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
-        sound = new AudioClip("file:Audio/coffee.mp3");
+        sound = Constants.setSound("coffee", false);
     }
 
     public CoffeeBean(int row, int col, Shroom shroom) {

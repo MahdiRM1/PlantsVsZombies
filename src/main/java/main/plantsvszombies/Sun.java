@@ -13,7 +13,7 @@ public class Sun {
     public static final AudioClip sound;
 
     static {
-        sound = new AudioClip("file:Audio/points.mp3");
+        sound = Constants.setSound("points", false);
     }
 
     public Sun(SunType type) {

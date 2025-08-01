@@ -17,7 +17,7 @@ public class IceShroom extends BombPlant implements Shroom {
     static {
         SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
         NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
-        sound = new AudioClip("file:Audio/frozen.mp3");
+        sound = Constants.setSound("frozen", false);
     }
 
     public IceShroom(int row, int col, boolean isSleep) {

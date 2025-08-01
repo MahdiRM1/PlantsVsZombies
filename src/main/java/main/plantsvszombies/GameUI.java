@@ -17,9 +17,7 @@ import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -28,9 +26,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -70,15 +65,14 @@ public class GameUI {
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
 //        *initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 19000);
+        initStackPane(cardBar(), 1000, 190000);
         if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
 
     // manages the start of the game
     public final void startGame() {
-        backgroundMusic = new AudioClip("file:Audio/Loonboon.mp3");
-        backgroundMusic.setCycleCount(Timeline.INDEFINITE);
+        backgroundMusic = Constants.setSound("Loonboon", true);
         backgroundMusic.setVolume(0.5);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
@@ -268,7 +262,7 @@ public class GameUI {
 
     // generate the menu pane
     private void menu() {
-        AudioClip pause = new AudioClip("file:Audio/pause.mp3");
+        AudioClip pause = Constants.setSound("pause", false);
         pause.play();
         Pane menuPane = new Pane();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
@@ -348,7 +342,7 @@ public class GameUI {
     private void cleanUpImages() {
         for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().remove(plantToRemove.getPicture());
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
-        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().removeAll(zombie.getPicture(), zombie.getHeadPicture());
+        for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().removeAll(zombie.getPicture(), zombie.getSecondPicture());
     }
 
     // updates the game logic
@@ -380,32 +374,33 @@ public class GameUI {
         for (Card card : cards) card.rechargeCheck();
     }
 
-//   private void timeHandler(){
-//       if (GlobalState.gameTime == 1000) spawnZombie(1, 1);
-//       if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
-//   }
+//  private void timeHandler(){
+//      if (GlobalState.gameTime == 1000) spawnZombie(4, 2, 1);
+//
+//    //   if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
+//  }
 
     // controls the general timing of zombies entering and attack waves
-     private void timeHandler() {
-         Random rdm = new Random();
-         int time = (int)GlobalState.gameTime / 1000;
-         if (GlobalState.gameTime == 20_000) {
-             AudioClip sound = new AudioClip("file:Audio/awooga.mp3");
-             sound.play();
-         }
-         if (time <= 20) return;
+      private void timeHandler() {
+          Random rdm = new Random();
+          int time = (int)GlobalState.gameTime / 1000;
+          if (GlobalState.gameTime == 20_000) {
+              AudioClip sound = Constants.setSound("awooga", false);
+              sound.play();
+          }
+          if (time <= 20) return;
 
-         if (time <= 40) handleZombie(5000, 1000, 1, rdm);
-         else if (time < 60) handleZombie(4000, 0, 2, rdm);
-         else if (time < 70);
-         else if (time < 80) wave(rdm, 4, 1);
-         else if (time < 130) {
-             handleZombie(3000, 0, 4, rdm);
-             handleZombie(3000, 0, 4, rdm);
-         }
-         else if (time < 140);
-         else if (time < 155) wave(rdm, 5, 2);
-     }
+          if (time <= 40) handleZombie(5000, 1000, 1, rdm);
+          else if (time < 60) handleZombie(4000, 0, 2, rdm);
+          else if (time < 70);
+          else if (time < 80) wave(rdm, 4, 1);
+          else if (time < 130) {
+              handleZombie(3000, 0, 4, rdm);
+              handleZombie(3000, 0, 4, rdm);
+          }
+          else if (time < 140);
+          else if (time < 155) wave(rdm, 5, 2);
+      }
 
     // handles the zombie entering
     private void handleZombie(long base, long mode, int zombieTypes, Random rdm) {
@@ -417,10 +412,10 @@ public class GameUI {
     private void wave(Random rdm, int zombieTypes, int attackType) {
         if (GlobalState.gameTime == (long) attackType * 70_000) {
             spawnZombie(5, rdm.nextInt(5));
-            AudioClip attackWave = new AudioClip("file:Audio/hugewave.mp3");
+            AudioClip attackWave = Constants.setSound("hugewave", false);
             if (attackType > 1) {
-                attackWave = new AudioClip("file:Audio/siren.mp3");
-                AudioClip sound = new AudioClip("file:Audio/awooga.mp3");
+                attackWave = Constants.setSound("siren", false);
+                AudioClip sound = Constants.setSound("awooga", false);
                 sound.play();
                 for (Grave grave : gameLogic.getGraves()) {
                     spawnZombie(rdm.nextInt(4), grave.getRow(), grave.getCol());
@@ -451,7 +446,7 @@ public class GameUI {
         };
 
         gameLogic.addZombie(zombie);
-        pane.getChildren().addAll(zombie.getPicture(), zombie.getHeadPicture());
+        pane.getChildren().addAll(zombie.getSecondPicture(), zombie.getPicture());
     }
 
     // saves the game
@@ -469,17 +464,38 @@ public class GameUI {
 
     // manages win or lose visuals
     public void winOrLose() {
-        if (gameLogic.checkLose()) finishGame("lose");
-        else if (gameLogic.checkWin()) addTrophy();
+        if (gameLogic.checkLose()) lose();
+        else if (gameLogic.checkWin()) win();
+    }
+
+    private void lose(){
+        tl.stop();
+        Pane pane = new Pane();
+        AudioClip sound = Constants.setSound("losemusic", false);
+        sound.play();
+        ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
+        Constants.sizeNode(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        Constants.positionNode(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
+        pane.getChildren().add(loseImage);
+        mainPane.getChildren().add(pane);
+        finnishAnimation(loseImage);
+    }
+
+    private void win(){
+        tl.stop();
+        addTrophy();
     }
 
     // adds the trophy to the screen
     private void addTrophy(){
-        tl.stop();
         Pane trophyPane = new Pane();
         ImageView trophy = setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
         Constants.positionNode(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
-        trophy.setOnMouseClicked(event -> finishGame("win"));
+        trophy.setOnMouseClicked(event -> {
+            AudioClip win = Constants.setSound("winmusic", false);
+            win.play();
+            finnishAnimation(trophy);
+        });
         trophyTl(trophy);
         trophyPane.getChildren().add(trophy);
         mainPane.getChildren().add(trophyPane);
@@ -507,13 +523,28 @@ public class GameUI {
         return isRisen;
     }
 
+    private void finnishAnimation(ImageView image){
+        image.setOnMouseExited(e -> {});
+        image.setOnMouseEntered(e -> {});
+        image.setOnMouseClicked(e -> {});
+        double size = image.getFitHeight();
+        double diffX = image.getLayoutX() - Constants.SCREEN_WIDTH/3;
+        double diffY = image.getLayoutY() - Constants.SCREEN_HEIGHT/10;
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(20), e ->{
+            image.setFitWidth(image.getFitWidth() + (size / 50));
+            image.setFitHeight(image.getFitHeight() + (size / 50));
+            image.setLayoutX(image.getLayoutX() - (diffX / 150));
+            image.setLayoutY(image.getLayoutY() - (diffY / 150));
+        }));
+        tl.setCycleCount(150);
+        tl.setOnFinished(e -> finishGame((Pane)(mainPane.getChildren().getLast())));
+        tl.play();
+    }
+
     // manages the win or lose visuals
-    private void finishGame(String str) {
-        tl.stop();
+    private void finishGame(Pane pane) {
         backgroundMusic.stop();
-        Pane finishPane = new Pane();
-        finishPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
-        AudioClip sound;
+        pane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         Constants.positionNode(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
@@ -532,25 +563,8 @@ public class GameUI {
         });
 
         stage.setOnCloseRequest(event -> deleteSaveData());
-        if (str.equals("lose")) {
-            ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
-            Constants.sizeNode(loseImage, Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 1.8);
-            Constants.positionNode(loseImage, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 6);
-            finishPane.getChildren().add(loseImage);
-            sound = Constants.setSound("losemusic", false);
-        } else {
-            Label win = new Label("You win");
-            win.setTextFill(Color.GREEN);
-            win.setFont(Font.font("Consolas", FontWeight.BOLD, 200));
-            win.setEffect(new DropShadow(50, Color.BLACK));
-            Constants.positionNode(win, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3);
-            finishPane.getChildren().add(win);
-            sound = Constants.setSound("winmusic", false);
-        }
-        sound.play();
 
-        finishPane.getChildren().addAll(restart, mainMenu);
-        mainPane.getChildren().add(finishPane);
+        pane.getChildren().addAll(restart, mainMenu);
     }
 
     // deletes the save data if the game is finished
