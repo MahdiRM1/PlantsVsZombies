@@ -10,13 +10,20 @@ import java.util.Random;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -29,12 +36,12 @@ public class Introduction {
     private static final AudioClip backgroundMusic;
 
     static {
-        backgroundMusic = Constants.setSound("LookupattheSky", false);
+        backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
     }
 
     public Introduction(Stage stage) {
         backgroundMusic.setCycleCount(Timeline.INDEFINITE);
-        backgroundMusic.setVolume(0.5);
+        backgroundMusic.setVolume(GlobalState.music);
         backgroundMusic.play();
         this.stage = stage;
     }
@@ -188,6 +195,7 @@ public class Introduction {
     }
 
     private Pane MainMenuPane() {
+        StackPane mainpane = new StackPane();
         Pane pane = new Pane();
         pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
 
@@ -195,7 +203,7 @@ public class Introduction {
         Constants.positionNode(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
         adventure.setOnMouseClicked(event -> handAnimation(pane, false));
 
-        ImageView socket = menuItem("Socket", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
+        ImageView socket = menuItem("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         Constants.positionNode(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
         socket.setOnMouseEntered(e -> {});
         socket.setOnMouseExited(e -> {});
@@ -230,10 +238,75 @@ public class Introduction {
 
         ImageView options = menuItem("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
         Constants.positionNode(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
-        options.setOnMouseClicked(e -> GlobalState.playClickTrack());
+        options.setOnMouseClicked(e -> option(mainpane));
 
         pane.getChildren().addAll(adventure, socket, loadGame, quit, options, help);
-        return pane;
+        mainpane.getChildren().add(pane);
+        return mainpane;
+    }
+
+    private void option(StackPane pane){
+        GlobalState.playClickTrack();
+        Pane option = new Pane();
+        ImageView optionImg = new ImageView(new Image("file:Pictures/ui/optionPic.png"));
+        Constants.positionNode(optionImg, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 10);
+        Constants.sizeNode(optionImg, Constants.SCREEN_WIDTH / 2.5, Constants.SCREEN_HEIGHT / 1.25);
+
+        ImageView OK = menuItem("OK", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
+        Constants.positionNode(OK, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+        OK.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            pane.getChildren().removeLast();
+            if (GlobalState.music != backgroundMusic.getVolume()){
+                backgroundMusic.stop();
+                backgroundMusic.setVolume(GlobalState.music);
+                backgroundMusic.play();
+            }
+        });
+
+        Slider music = new Slider(0, 1, GlobalState.music);
+        setSlider(music);
+        music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
+        music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
+
+        Slider volume = new Slider(0, 1, GlobalState.music);
+        setSlider(volume);
+        volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
+        volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
+
+        option.getChildren().addAll(optionImg, OK, music, setLabel("Music", music), volume, setLabel("Volume", volume));
+        pane.getChildren().add(option);
+    }
+
+    private void setSlider(Slider slider){
+        slider.setPrefWidth(Constants.SCREEN_WIDTH / 5);
+        slider.setLayoutX(Constants.SCREEN_WIDTH / 2.3);
+        Platform.runLater(() -> {
+            slider.applyCss();
+            Region track = (Region) slider.lookup(".track");
+            if (track != null) track.setStyle(
+                    "-fx-background-color: rgba(30, 30, 30, 0.7);" +
+                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 70 + ";" +
+                            "-fx-background-radius: 10;");
+            Region thumb = (Region) slider.lookup(".thumb");
+            if (thumb != null) thumb.setStyle(
+                    "-fx-background-image: url('file:Pictures/ui/sound.png');" +
+                            "-fx-background-size: cover;" +
+                            "-fx-background-color: transparent;" +
+                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 20 +"px;" +
+                            "-fx-pref-Width : " + Constants.SCREEN_HEIGHT / 20 +"px;"
+            );
+        });
+    }
+
+    private Label setLabel(String str, Slider slider){
+        Label label = new Label(str);
+        label.setLayoutX(Constants.SCREEN_WIDTH / 2.75);
+        label.setLayoutY(slider.getLayoutY());
+        label.setFont(new Font("Arial", 40));
+        label.setStyle("-fx-font-weight: bold;");
+        label.setTextFill(new Color(0.1, 0.1, 0.1, 1));
+        return label;
     }
 
     private void handAnimation(Pane pane, boolean load){
