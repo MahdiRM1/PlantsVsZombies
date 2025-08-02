@@ -129,6 +129,7 @@ public final class Constants {
     public static AudioClip setSound(String name, boolean repeat){
         AudioClip sound = new AudioClip("file:Audio/" + name + ".mp3");
         if (repeat) sound.setCycleCount(Timeline.INDEFINITE);
+        sound.setVolume(GlobalState.volume);
         return sound;
     }
 

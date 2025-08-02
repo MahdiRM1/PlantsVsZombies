@@ -65,7 +65,7 @@ public class GameUI {
         this.mode = mode;
         for (int i = 0; i < plantsName.size(); i++) cards.add(new Card(plantsName.get(i), i));
 //        *initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 190000);
+        initStackPane(cardBar(), 1000, 19000);
         if (mode == GameMode.NIGHT) initFog((int)(Math.random() * 3) + 5);
         startGame();
     }
@@ -73,7 +73,7 @@ public class GameUI {
     // manages the start of the game
     public final void startGame() {
         backgroundMusic = Constants.setSound("Loonboon", true);
-        backgroundMusic.setVolume(0.5);
+        backgroundMusic.setVolume(GlobalState.volume);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             GlobalState.gameTime += 20;
@@ -375,9 +375,9 @@ public class GameUI {
     }
 
 //  private void timeHandler(){
-//      if (GlobalState.gameTime == 1000) spawnZombie(4, 2, 1);
+//      if (GlobalState.gameTime == 1000) spawnZombie(4, 2);
 //
-//    //   if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
+//      if (GlobalState.gameTime == 7000) spawnZombie(0, 1);
 //  }
 
     // controls the general timing of zombies entering and attack waves
