@@ -144,7 +144,6 @@ public abstract class Zombie {
     private void eat(){
         if (Math.abs(GlobalState.gameTime - lastBite) < 500) return;
 
-        chomp[nowPic % 2].play();
         switch (toEat){
             case Zombie z -> eatZombie(z);
             case Plant p -> eatPlant(p);
@@ -156,6 +155,7 @@ public abstract class Zombie {
     private void eatZombie(Zombie zombie){
         if (Constants.aliveZombie(zombie)) zombie.damage();
 
+        chomp[nowPic % 2].play();
         if (zombie.getHP() <= 0) {
             toEat = null;
             state = ZombieState.WALKING;
@@ -164,11 +164,12 @@ public abstract class Zombie {
 
     private void eatPlant(Plant plant) {
         plant.damage();
-        if (plant.getHP() <= 0) {
+        if (plant.getHP() < 5) {
             toEat = null;
             state = ZombieState.WALKING;
             gulp.play();
         }
+        else chomp[nowPic % 2].play();
     }
 
     private Object collision(List<Plant> plants, List<Zombie> zombies) {
