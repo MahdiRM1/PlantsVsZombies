@@ -25,10 +25,16 @@ public class HypnoShroom extends BombPlant implements Shroom {
     }
 
     @Override
+    public void damage(){
+        if (isSleep) HP -= 20;
+        else HP = 1;
+    }
+
+    @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
         if (isSleep) return false;
-        return HP < 100;
+        return HP == 1;
     }
 
     public void action(List<Zombie> zombies) {

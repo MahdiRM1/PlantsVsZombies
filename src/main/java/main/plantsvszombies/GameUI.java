@@ -26,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -230,8 +231,26 @@ public class GameUI {
             GlobalState.playShovelClick();
         });
 
-        buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
+        ImageView empty = conditionGame("FlagMeterEmpty", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 30);
+        ImageView full = conditionGame("FlagMeterFull", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 30);
+        ImageView zombieHead = conditionGame("flagZombieHead", Constants.TILE_SIZE / 3, Constants.TILE_SIZE / 3);
+        ImageView flag1 = conditionGame("FlagMeterParts", Constants.TILE_SIZE / 4, Constants.TILE_SIZE / 4);
+        Constants.positionNode(flag1, full.getLayoutX() + full.getFitWidth()/1.95, full.getLayoutY() - full.getFitHeight());
+        ImageView flag2 = conditionGame("FlagMeterParts", Constants.TILE_SIZE / 4, Constants.TILE_SIZE / 4);
+        Constants.positionNode(flag2, full.getLayoutX() + full.getFitWidth()/1.05, full.getLayoutY() - full.getFitHeight());
+        full.setClip(new Rectangle(0, full.getFitHeight()));
+
+        buttonsPane.getChildren().addAll(menu, empty, full, zombieHead, flag1, flag2, shovelBack, shovel);
         return buttonsPane;
+    }
+
+    private ImageView conditionGame(String str, double width, double height){
+        ImageView imageView = new ImageView(new Image("file:Pictures/ui/"+ str + ".png"));
+        imageView.setLayoutX(Constants.SCREEN_WIDTH / 1.25);
+        imageView.setLayoutY(Constants.SCREEN_HEIGHT / 1.09);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        return imageView;
     }
 
     // handles the shovel button click
@@ -336,6 +355,7 @@ public class GameUI {
         logicUpdates();
         plantActions();
         timeHandler();
+        sliderUpdate();
     }
 
     // removes garbage images of struck bullets,dead zombies and eaten plants
@@ -367,6 +387,19 @@ public class GameUI {
                 default -> {}
             }
         }
+    }
+
+    private void sliderUpdate(){
+        Pane pane = (Pane)(mainPane.getChildren().getLast());
+        ImageView full = (ImageView)(pane.getChildren().get(2));
+        ImageView head = (ImageView) (pane.getChildren().get(3));
+        double value;
+        if (GlobalState.gameTime < 70_000) value = (GlobalState.gameTime - 20_000.0) / 100_000;
+        else if (GlobalState.gameTime < 80_000) value = 1.0 / 2;
+        else value = (GlobalState.gameTime - 20_000.0) / 120_000;
+        Rectangle clip = new Rectangle(full.getFitWidth() * value, full.getFitHeight());
+        full.setClip(clip);
+        head.setLayoutX(full.getLayoutX() + clip.getWidth() - head.getFitWidth()/2);
     }
 
     // updates the recharges

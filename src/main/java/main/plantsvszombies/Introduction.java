@@ -269,7 +269,7 @@ public class Introduction {
         music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
         music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
 
-        Slider volume = new Slider(0, 1, GlobalState.music);
+        Slider volume = new Slider(0, 1, GlobalState.volume);
         setSlider(volume);
         volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
         volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
