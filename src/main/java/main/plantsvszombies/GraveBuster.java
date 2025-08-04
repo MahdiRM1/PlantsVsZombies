@@ -34,7 +34,7 @@ public class GraveBuster extends Plant {
         if (Math.abs(GlobalState.gameTime - timeCreated) < 2000)
             picture.setLayoutY(picture.getLayoutY() + Constants.TILE_SIZE / 200);
         else if (Math.abs(GlobalState.gameTime - timeCreated) == 2000) {
-            HP = 0;
+            die();
             return true;
         }
         return false;

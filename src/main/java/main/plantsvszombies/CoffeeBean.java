@@ -38,7 +38,7 @@ public class CoffeeBean extends Plant {
             isEaten = true;
             sound.play();
         } else if (isEaten && nowPic >= getImage().length - 1) {
-            HP = 0;
+            die();
             return true;
         }
         return false;

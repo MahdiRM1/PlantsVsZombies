@@ -41,7 +41,7 @@ public class HypnoShroom extends BombPlant implements Shroom {
         for (Zombie z : zombies)
             if (Constants.checkCollision(layoutX(), z.layoutX(), row, z.getRow())){
                 z.hypnosis();
-                HP = 0;
+                die();
                 break;
             }
     }

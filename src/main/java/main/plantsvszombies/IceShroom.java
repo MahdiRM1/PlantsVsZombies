@@ -34,7 +34,7 @@ public class IceShroom extends BombPlant implements Shroom {
         updateFrame();
         if (isSleep) wakeUpTime = GlobalState.gameTime;
         else if (Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500) {
-            HP = 0;
+            die();
             return isExploded = true;
         }
         return false;

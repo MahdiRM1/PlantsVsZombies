@@ -46,7 +46,7 @@ public class PotatoMine extends BombPlant {
             return true;
         }
         else if (state == MineState.EXPLODED) {
-            if (GlobalState.gameTime - explosionTime > 1000) HP = 0;
+            if (GlobalState.gameTime - explosionTime > 1000) die();
             return false;
         }
         updateFrame();

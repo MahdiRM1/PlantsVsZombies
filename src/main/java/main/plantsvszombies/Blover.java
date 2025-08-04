@@ -28,7 +28,7 @@ public class Blover extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if(nowPic == FRAMES.length - 1) HP = 0;
+        if(nowPic == FRAMES.length - 1) die();
         return nowPic > 13 && nowPic < 49;
     }
 
