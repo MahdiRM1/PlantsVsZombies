@@ -1,5 +1,7 @@
 package main.plantsvszombies;
 
+import java.util.List;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 
@@ -23,19 +25,34 @@ public class Bullet {
         else shoot[0].play();
     }
 
-    public double layoutX(){
-        return picture.getLayoutX() + picture.getFitWidth() * 0.5;
-    }
-
     //manage bullet movement
     public void move() {
         picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE / (25));
     }
 
-    public void hit(boolean sound){
-        int hitNum = (int)(Math.random() * 2);
-        if (sound) hitNum += 2;
+    public void hit(boolean sound) {
+        int hitNum = (int) (Math.random() * 2);
+        if (sound) {
+            hitNum += 2;
+        }
         hit[hitNum].play();
+    }
+
+    public boolean checkStrike(List<Zombie> zombies){
+        if (layoutX() > Constants.SCREEN_WIDTH) return true;
+        for (Zombie z : zombies){
+            double abs = layoutX() - z.layoutX();
+            if (row == z.getRow() && (-10 < abs && abs < 100) &&
+                z.alive() && !z.isHypnotized()){
+                    z.damage(this);
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public double layoutX(){
+        return picture.getLayoutX() + picture.getFitWidth() * 0.5;
     }
 
     //getters

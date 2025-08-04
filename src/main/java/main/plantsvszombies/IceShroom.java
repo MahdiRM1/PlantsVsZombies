@@ -44,7 +44,7 @@ public class IceShroom extends BombPlant implements Shroom {
     public void action(List<Zombie> zombies) {
         sound.play();
         for (Zombie z : zombies) {
-            if (Constants.aliveZombie(z) && !z.isHypnotized()){
+            if (z.alive() && !z.isHypnotized()){
                 z.setState(ZombieState.FREEZE);
                 z.updateFreezeTime();
             }

@@ -39,7 +39,7 @@ public class ScaredyShroom extends PeaPlant implements Shroom {
 
         for (Zombie z : zombies) {
             if (row == z.getRow() && z.getCol() < 10 && z.getCol() >= col) {
-                if (Constants.aliveZombie(z) && !z.isHypnotized())
+                if (z.alive() && !z.isHypnotized())
                     return true;
             }
         }

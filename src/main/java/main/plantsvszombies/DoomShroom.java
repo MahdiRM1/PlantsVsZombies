@@ -69,8 +69,7 @@ public class DoomShroom extends BombPlant implements Shroom {
         Constants.changeScale(picture, 2);
         picture.setLayoutY(picture.getLayoutY() - picture.getFitHeight() / 4);
         for (Zombie z : zombies) {
-            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2 &&
-                    Constants.aliveZombie(z) && !z.isHypnotized())
+            if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2 && z.alive() && !z.isHypnotized())
                 z.setState(ZombieState.BOOM_DIE);
         }
     }

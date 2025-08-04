@@ -153,7 +153,7 @@ public abstract class Zombie {
     }
 
     private void eatZombie(Zombie zombie){
-        if (Constants.aliveZombie(zombie)) zombie.damage();
+        if (alive()) zombie.damage();
 
         chomp[nowPic % 2].play();
         if (zombie.getHP() <= 0) {
@@ -189,7 +189,7 @@ public abstract class Zombie {
     // ?checks if a zombie has reached a zombie
     private Zombie zombieCollision(List<Zombie> zombies){
         for (Zombie zombie : zombies) {
-            if (Constants.aliveZombie(zombie) && !zombie.isHypnotized()) {
+            if (alive() && !zombie.isHypnotized()) {
                 if (Constants.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && toEat != zombie) {
                     zombie.zombieToEat(this);
                     return zombie;
@@ -201,7 +201,7 @@ public abstract class Zombie {
 
     public void updateState(List<Plant> plants, List<Zombie> zombies) {
 
-        if (!Constants.aliveZombie(this) || state == ZombieState.FREEZE) return;
+        if (!alive() || state == ZombieState.FREEZE) return;
 
         if (HP <= 0) {
             state = ZombieState.DIE;
@@ -219,10 +219,16 @@ public abstract class Zombie {
         else state = ZombieState.WALKING;
     }
 
-    public void setState(ZombieState state) {
-        if (this.state == state) return;
-        this.state = state;
-        nowPic = 0;
+    public boolean alive(){
+        return switch (state) {
+            case DIE, BOOM_DIE, DEAD -> false;
+            default -> true;
+        };
+    }
+
+    public boolean checkDied(){
+        return (isHypnotized() && layoutX() > Constants.SCREEN_WIDTH) ||
+                state == ZombieState.DEAD;
     }
 
     public final void hypnosis(){
@@ -241,6 +247,14 @@ public abstract class Zombie {
 
     public final double layoutX(){
         return picture.getLayoutX() + picture.getFitWidth() * 0.5;
+    }
+
+    public void setState(ZombieState state) {
+        if (this.state == state) {
+            return;
+        }
+        this.state = state;
+        nowPic = 0;
     }
 
     protected abstract Image[] getZombiePictures();
