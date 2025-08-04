@@ -102,11 +102,6 @@ public final class Constants {
         changeScale(headPicture, 1.2);
     }
 
-    public static boolean aliveZombie(Zombie zombie){
-        return zombie.getState() != ZombieState.DIE && zombie.getState() != ZombieState.BOOM_DIE &&
-                zombie.getState() != ZombieState.DEAD;
-    }
-
     public static boolean checkCollision(double l1, double l2, int row1, int row2){
         return checkCollision(TILE_SIZE/4, l1, l2, row1, row2);
     }

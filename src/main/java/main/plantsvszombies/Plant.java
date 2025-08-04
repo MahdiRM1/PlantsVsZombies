@@ -41,6 +41,10 @@ public abstract class Plant {
         return picture.getLayoutX() + picture.getFitWidth() * 0.5;
     }
 
+    public boolean checkDied(){
+        return plant.getHP() <= 0;
+    }
+
     public abstract boolean actionHappens(List<Zombie> zombies);
 
     protected abstract Image[] getImage();

@@ -98,17 +98,8 @@ public class GameLogic {
     // manages bullets and zombie collisions.
     public List<Bullet> checkBulletStrike() {
         List<Bullet> toRemove = new ArrayList<>();
-        for (Bullet b : bullets) {
-            if (b.layoutX() > Constants.SCREEN_WIDTH) toRemove.add(b);
-            for (Zombie z : zombies) {
-                double abs = z.layoutX() - b.layoutX();
-                if (b.getRow() == z.getRow() && (-100 < abs && abs < 10)
-                        && Constants.aliveZombie(z) && !z.isHypnotized()) {
-                    z.damage(b);
-                    toRemove.add(b);
-                }
-            }
-        }
+        for (Bullet b : bullets) 
+            if (b.checkStrike(zombies)) toRemove.add(b);
 
         bullets.removeAll(toRemove);
         return toRemove;
@@ -118,7 +109,7 @@ public class GameLogic {
     public List<Plant> plantsToRemove() {
         List<Plant> toRemove = new ArrayList<>();
 
-        for (Plant plant : plants) if (plant.getHP() <= 0) toRemove.add(plant);
+        for (Plant plant : plants) if (plant.checkDied()) toRemove.add(plant);
         plants.removeAll(toRemove);
         return toRemove;
     }
@@ -132,7 +123,7 @@ public class GameLogic {
     public List<Zombie> zombieToRemove() {
         List<Zombie> died = new ArrayList<>();
         for (Zombie zombie : zombies) {
-            if (zombie.getState() == ZombieState.DEAD) died.add(zombie);
+            if (zombie.checkDied()) died.add(zombie);
         }
 
         zombies.removeAll(died);
