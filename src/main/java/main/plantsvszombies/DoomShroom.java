@@ -59,7 +59,7 @@ public class DoomShroom extends BombPlant implements Shroom {
         } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
             picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + time + "Hole2.png"));
-        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) HP = 0;
+        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) die();
         return false;
     }
 

@@ -42,7 +42,11 @@ public abstract class Plant {
     }
 
     public boolean checkDied(){
-        return plant.getHP() <= 0;
+        return HP <= 0;
+    }
+
+    protected void die(){
+        die();
     }
 
     public abstract boolean actionHappens(List<Zombie> zombies);

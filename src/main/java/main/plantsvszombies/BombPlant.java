@@ -18,7 +18,7 @@ public abstract class BombPlant extends Plant {
             nowPic = 0;
             return isExploded = true;
         }
-        if (isExploded && nowPic >= getImage().length - 1) HP = 0;
+        if (isExploded && nowPic >= getImage().length - 1) die();
         return false;
     }
 
