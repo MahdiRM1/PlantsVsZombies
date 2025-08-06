@@ -1,0 +1,208 @@
+package main.plantsvszombies.Game;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javafx.scene.layout.Pane;
+import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.GameState.GameState;
+import main.plantsvszombies.GameState.GraveData;
+import main.plantsvszombies.GameState.PlantData;
+import main.plantsvszombies.GameState.ZombieData;
+import main.plantsvszombies.Items.*;
+import main.plantsvszombies.Plants.*;
+import main.plantsvszombies.Zombies.*;
+
+public class GameLogic {
+
+    private final List<Plant> plants = new ArrayList<>();
+    private final List<Zombie> zombies = new ArrayList<>();
+    private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Grave> graves = new ArrayList<>();
+
+    // constructor: to load the previously saved game
+    public GameLogic(GameState state) {
+        loadPlants(state.getPlants());
+        loadZombies(state.getZombies());
+        loadGraves(state.getGraves());
+    }
+
+    // constructor: to start a new game
+    public GameLogic(GameMode mode) {
+        if (mode == GameMode.NIGHT) {
+            makeGraves();
+        }
+    }
+
+    // generates graves for night
+    private void makeGraves() {
+        Random rdm = new Random();
+        int graveNum = rdm.nextInt(5) + 3;
+        for (int i = 0; i < graveNum; i++) {
+            int row = rdm.nextInt(5);
+            int col = rdm.nextInt(5) + 4;
+            if (getGrave(row, col) == null) graves.add(new Grave(row, col));
+            else i--;
+        }
+    }
+
+    // generates the plants list to reload a saved game
+    private void loadPlants(List<PlantData> plantDataList) {
+        for (PlantData data : plantDataList) {
+            if (data.getType().equals("CoffeeBean")|| data.getType().equals("GraveBuster")) continue;
+            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), data.isSleep());
+            plant.setHP(data.getHP());
+            plants.add(plant);
+        }
+    }
+
+    // generates the zombie list to reload a saved game
+    private void loadZombies(List<ZombieData> zombieDataList) {
+        for (ZombieData data : zombieDataList) {
+            Zombie zombie = switch (data.getType()) {
+                case "OriginalZombie" -> new OriginalZombie(data);
+                case "ConeheadZombie" -> new ConeheadZombie(data);
+                case "ScreenDoorZombie" -> new ScreenDoorZombie(data);
+                case "BucketheadZombie" -> new BucketheadZombie(data);
+                case "Imp" -> new Imp(data);
+                default -> new FlagZombie(data);
+            };
+            zombies.add(zombie);
+        }
+    }
+
+    // generates the graves list to reload a saved game
+    private void loadGraves(List<GraveData> graveDataList) {
+        for (GraveData data : graveDataList) graves.add(new Grave(data));
+    }
+
+    // checks if the plant is plantable
+    public boolean isPlantable(int row, int col) {
+        for (Grave grave : graves)
+            if (grave.getRow() == row && grave.getCol() == col) return false;
+
+        return getPlant(row, col) == null;
+    }
+
+    // plant arraylist to manage all plants
+    public void setPlant(Plant plant) {
+        plants.add(plant);
+    }
+
+    // zombie arraylist to manage all zombies
+    public void addZombie(Zombie z) {
+        zombies.add(z);
+    }
+
+    // bullet arraylist to manage all bullets
+    public void addBullet(Bullet bullet, Pane pane) {
+        if (bullet == null) return;
+
+        bullets.add(bullet);
+        pane.getChildren().addAll(bullet.getPicture());
+    }
+
+    // manages bullets and zombie collisions.
+    public List<Bullet> checkBulletStrike() {
+        List<Bullet> toRemove = new ArrayList<>();
+        for (Bullet b : bullets) 
+            if (b.checkStrike(zombies)) toRemove.add(b);
+
+        bullets.removeAll(toRemove);
+        return toRemove;
+    }
+
+    // finds and removes finished plants
+    public List<Plant> plantsToRemove() {
+        List<Plant> toRemove = new ArrayList<>();
+
+        for (Plant plant : plants) if (plant.checkDied()) toRemove.add(plant);
+        plants.removeAll(toRemove);
+        return toRemove;
+    }
+
+    // sets the state of zombies
+    public void setZombieState() {
+        for (Zombie zombie : zombies) zombie.updateState(plants, zombies);
+    }
+
+    // finds and removes dead zombies
+    public List<Zombie> zombieToRemove() {
+        List<Zombie> died = new ArrayList<>();
+        for (Zombie zombie : zombies) {
+            if (zombie.checkDied()) died.add(zombie);
+        }
+
+        zombies.removeAll(died);
+        return died;
+    }
+
+    // updates the plant actions
+    public List<Plant> updatePlantActions() {
+        List<Plant> plantsList = new ArrayList<>();// !gomesh nakoni
+        for (Plant plant : plants)
+            if (plant.actionHappens(zombies))
+                plantsList.add(plant);
+        return plantsList;
+    }
+
+    // updates the game logic
+    public void updateGame() {
+        for (Zombie z : zombies) z.action();
+        for (Bullet b : bullets) b.move();
+        setZombieState();
+    }
+
+    // lose logic
+    public boolean checkLose() {
+        for (Zombie zombie : zombies) {
+            if (zombie.getCol() < 0) return true;
+        }
+        return false;
+    }
+
+    // win logic
+    public boolean checkWin() {
+        for (Zombie z : zombies) if(!z.isHypnotized()) return false;
+        return GlobalState.gameTime >= 155_000;
+    }
+
+    // removes the plant
+    public void removePlant(int row, int col) {
+        plants.remove(getPlant(row, col));
+    }
+
+    // removes the grave
+    public void removeGrave(Grave grave, Pane pane) {
+        pane.getChildren().remove(grave.getPicture());
+        graves.remove(grave);
+    }
+
+    // getters
+    public Plant getPlant(int row, int col) {
+        for (Plant plant : plants) {
+            if (plant.getRow() == row && plant.getCol() == col) return plant;
+        }
+        return null;
+    }
+
+    public Grave getGrave(int row, int col) {
+        for (Grave grave : graves) {
+            if (grave.getRow() == row && grave.getCol() == col) return grave;
+        }
+        return null;
+    }
+
+    public List<Zombie> getZombies() {
+        return zombies;
+    }
+
+    public List<Plant> getPottedPlants() {
+        return plants;
+    }
+
+    public List<Grave> getGraves() {
+        return graves;
+    }
+}
