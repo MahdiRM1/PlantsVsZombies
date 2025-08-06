@@ -46,7 +46,7 @@ public abstract class Plant {
     }
 
     protected void die(){
-        die();
+        HP = 0;
     }
 
     public abstract boolean actionHappens(List<Zombie> zombies);

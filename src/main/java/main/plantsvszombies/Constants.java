@@ -1,13 +1,19 @@
 package main.plantsvszombies;
 
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 
 public final class Constants {
@@ -186,5 +192,45 @@ public final class Constants {
             case "DoomShroom" -> new DoomShroom(row, col, isSleep);
             default -> null;
         };
+    }
+
+    public static void setSlider(Slider slider){
+        slider.setPrefWidth(Constants.SCREEN_WIDTH / 5);
+        slider.setLayoutX(Constants.SCREEN_WIDTH / 2.3);
+        Platform.runLater(() -> {
+            slider.applyCss();
+            Region track = (Region) slider.lookup(".track");
+            if (track != null) track.setStyle(
+                    "-fx-background-color: rgba(30, 30, 30, 0.7);" +
+                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 70 + ";" +
+                            "-fx-background-radius: 10;");
+            Region thumb = (Region) slider.lookup(".thumb");
+            if (thumb != null) thumb.setStyle(
+                    "-fx-background-image: url('file:Pictures/ui/sound.png');" +
+                            "-fx-background-size: cover;" +
+                            "-fx-background-color: transparent;" +
+                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 20 +"px;" +
+                            "-fx-pref-Width : " + Constants.SCREEN_HEIGHT / 20 +"px;"
+            );
+        });
+    }
+
+    // generate buttons -> visuals
+    public static ImageView setButton(String text, double width, double height) {
+        ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
+        Constants.sizeNode(imageView, width, height);
+        imageView.setOnMouseEntered(e -> Constants.changeScale(imageView, 1.05));
+        imageView.setOnMouseExited(e -> Constants.changeScale(imageView, 1));
+        return imageView;
+    }
+
+    public static Label setSliderLabel(String str, Slider slider){
+        Label label = new Label(str);
+        label.setLayoutX(Constants.SCREEN_WIDTH / 2.75);
+        label.setLayoutY(slider.getLayoutY());
+        label.setFont(new Font("Arial", 40));
+        label.setStyle("-fx-font-weight: bold;");
+        label.setTextFill(new Color(0.1, 0.1, 0.1, 1));
+        return label;
     }
 }
