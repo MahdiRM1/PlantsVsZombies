@@ -10,20 +10,15 @@ import java.util.Random;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -199,11 +194,11 @@ public class Introduction {
         Pane pane = new Pane();
         pane.getChildren().addFirst(Constants.setBackGround("MainMenu"));
 
-        ImageView adventure = menuItem("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
+        ImageView adventure = Constants.setButton("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
         Constants.positionNode(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
         adventure.setOnMouseClicked(event -> handAnimation(pane, false));
 
-        ImageView socket = menuItem("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
+        ImageView socket = Constants.setButton("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         Constants.positionNode(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
         socket.setOnMouseEntered(e -> {});
         socket.setOnMouseExited(e -> {});
@@ -225,24 +220,63 @@ public class Introduction {
             loadGame.setOnMouseClicked(event -> GlobalState.playWrongClick());
         }
 
-        ImageView quit = menuItem("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
+        ImageView quit = Constants.setButton("Quit", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 6);
         Constants.positionNode(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
-        quit.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
-            stage.close();
-        });
+        quit.setOnMouseClicked(event -> checkQuit(mainpane));
 
-        ImageView help = menuItem("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
+        ImageView help = Constants.setButton("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
         Constants.positionNode(help, Constants.SCREEN_WIDTH / 1.28, Constants.SCREEN_HEIGHT / 1.54);
-        help.setOnMouseClicked(e -> GlobalState.playClickTrack());
+        help.setOnMouseClicked(e -> helpPage(mainpane));
 
-        ImageView options = menuItem("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
+        ImageView options = Constants.setButton("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
         Constants.positionNode(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
         options.setOnMouseClicked(e -> option(mainpane));
 
         pane.getChildren().addAll(adventure, socket, loadGame, quit, options, help);
         mainpane.getChildren().add(pane);
         return mainpane;
+    }
+
+    private void helpPage(StackPane mainPane){
+        Pane helpPage = new Pane();
+        GlobalState.playClickTrack();
+        
+        ImageView backGround = Constants.setBackGround("help");
+        ImageView mainmenu = Constants.setButton("mainmenuhelp", Constants.SCREEN_WIDTH / 6 , Constants.SCREEN_HEIGHT / 12);
+        Constants.positionNode(mainmenu, Constants.SCREEN_WIDTH / 2.4, Constants.SCREEN_HEIGHT / 1.25);
+        mainmenu.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            mainPane.getChildren().removeLast();
+        });
+
+        helpPage.getChildren().addAll(backGround, mainmenu);
+        mainPane.getChildren().add(helpPage);
+    }
+
+    private void checkQuit(StackPane mainPane){
+        Pane quitPage = new Pane();
+        GlobalState.playClickTrack();
+
+        ImageView quitImg = new ImageView(new Image("file:Pictures/ui/quitPic.png"));
+        Constants.positionNode(quitImg, Constants.SCREEN_WIDTH / 3.2, Constants.SCREEN_HEIGHT / 4);
+        Constants.sizeNode(quitImg, Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 2);
+
+        ImageView quit = Constants.setButton("quitBtn", Constants.SCREEN_WIDTH / 6.7, Constants.SCREEN_HEIGHT / 13.5);
+        Constants.positionNode(quit, Constants.SCREEN_WIDTH / 2.9, Constants.SCREEN_HEIGHT / 1.58);
+        quit.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            stage.close();
+        });
+
+        ImageView cancel = Constants.setButton("cancel", Constants.SCREEN_WIDTH / 6.7, Constants.SCREEN_HEIGHT / 13.5);
+        Constants.positionNode(cancel, Constants.SCREEN_WIDTH / 1.95, Constants.SCREEN_HEIGHT / 1.58);
+        cancel.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            mainPane.getChildren().removeLast();
+        });
+
+        quitPage.getChildren().addAll(quitImg, quit, cancel);
+        mainPane.getChildren().add(quitPage);
     }
 
     private void option(StackPane pane){
@@ -252,7 +286,7 @@ public class Introduction {
         Constants.positionNode(optionImg, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 10);
         Constants.sizeNode(optionImg, Constants.SCREEN_WIDTH / 2.5, Constants.SCREEN_HEIGHT / 1.25);
 
-        ImageView OK = menuItem("OK", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
+        ImageView OK = Constants.setButton("OK", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
         Constants.positionNode(OK, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
         OK.setOnMouseClicked(e -> {
             GlobalState.playClickTrack();
@@ -265,48 +299,17 @@ public class Introduction {
         });
 
         Slider music = new Slider(0, 1, GlobalState.music);
-        setSlider(music);
+        Constants.setSlider(music);
         music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
         music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
 
         Slider volume = new Slider(0, 1, GlobalState.volume);
-        setSlider(volume);
+        Constants.setSlider(volume);
         volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
         volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
 
-        option.getChildren().addAll(optionImg, OK, music, setLabel("Music", music), volume, setLabel("Volume", volume));
+        option.getChildren().addAll(optionImg, OK, music, Constants.setSliderLabel("Music", music), volume, Constants.setSliderLabel("Volume", volume));
         pane.getChildren().add(option);
-    }
-
-    private void setSlider(Slider slider){
-        slider.setPrefWidth(Constants.SCREEN_WIDTH / 5);
-        slider.setLayoutX(Constants.SCREEN_WIDTH / 2.3);
-        Platform.runLater(() -> {
-            slider.applyCss();
-            Region track = (Region) slider.lookup(".track");
-            if (track != null) track.setStyle(
-                    "-fx-background-color: rgba(30, 30, 30, 0.7);" +
-                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 70 + ";" +
-                            "-fx-background-radius: 10;");
-            Region thumb = (Region) slider.lookup(".thumb");
-            if (thumb != null) thumb.setStyle(
-                    "-fx-background-image: url('file:Pictures/ui/sound.png');" +
-                            "-fx-background-size: cover;" +
-                            "-fx-background-color: transparent;" +
-                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 20 +"px;" +
-                            "-fx-pref-Width : " + Constants.SCREEN_HEIGHT / 20 +"px;"
-            );
-        });
-    }
-
-    private Label setLabel(String str, Slider slider){
-        Label label = new Label(str);
-        label.setLayoutX(Constants.SCREEN_WIDTH / 2.75);
-        label.setLayoutY(slider.getLayoutY());
-        label.setFont(new Font("Arial", 40));
-        label.setStyle("-fx-font-weight: bold;");
-        label.setTextFill(new Color(0.1, 0.1, 0.1, 1));
-        return label;
     }
 
     private void handAnimation(Pane pane, boolean load){
@@ -332,7 +335,7 @@ public class Introduction {
         Pane pane = new Pane();
         pane.getChildren().addFirst(Constants.setBackGround("ModeSelection"));
 
-        ImageView day = menuItem("DayMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
+        ImageView day = Constants.setButton("DayMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         Constants.positionNode(day, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 4);
         day.setOnMouseClicked(e -> {
             GlobalState.playClickTrack();
@@ -345,7 +348,7 @@ public class Introduction {
         Constants.sizeNode(plant, sizePlant, sizePlant);
         Constants.positionNode(plant, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3.7);
 
-        ImageView night = menuItem("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
+        ImageView night = Constants.setButton("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         Constants.positionNode(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);
         night.setOnMouseClicked(e -> {
             GlobalState.playClickTrack();
@@ -364,13 +367,5 @@ public class Introduction {
     private boolean dataExists(){
         File file = new File("savegame.dat");
         return file.exists();
-    }
-
-    private ImageView menuItem(String str, double width, double height) {
-        ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + str + ".png"));
-        Constants.sizeNode(imageView, width, height);
-        imageView.setOnMouseEntered(event -> Constants.changeScale(imageView, 1.05));
-        imageView.setOnMouseExited(event -> Constants.changeScale(imageView, 1));
-        return imageView;
     }
 }

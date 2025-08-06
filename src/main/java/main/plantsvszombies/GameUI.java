@@ -17,6 +17,8 @@ import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -212,7 +214,7 @@ public class GameUI {
         Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
 
-        ImageView menu = setButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
+        ImageView menu = Constants.setButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
         menu.setOnMouseClicked(event -> {
             GlobalState.playClickTrack();
             tl.pause();
@@ -221,7 +223,7 @@ public class GameUI {
         Constants.positionNode(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
 
         ImageView shovel = shovelImage();
-        ImageView shovelBack = setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
+        ImageView shovelBack = Constants.setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
         Constants.positionNode(shovelBack, shovel.getLayoutX(), 0);
 
         Cursor cursor = new ImageCursor(shovel.getImage());
@@ -273,21 +275,26 @@ public class GameUI {
 
     // add shovel image
     private ImageView shovelImage() {
-        ImageView shovel = setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
+        ImageView shovel = Constants.setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
         shovel.setMouseTransparent(true);
         Constants.positionNode(shovel, Constants.SCREEN_WIDTH / 2.1, 0);
         return shovel;
     }
 
     // generate the menu pane
-    private void menu() {
+    private void menu(){
         AudioClip pause = Constants.setSound("pause", false);
         pause.play();
+
         Pane menuPane = new Pane();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView backToMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 18);
-        Constants.positionNode(backToMenu, Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 1.62);
+        ImageView optionImg = new ImageView(new Image("file:Pictures/ui/optionPic.png"));
+        Constants.positionNode(optionImg, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 10);
+        Constants.sizeNode(optionImg, Constants.SCREEN_WIDTH / 2.5, Constants.SCREEN_HEIGHT / 1.25);
+
+        ImageView backToMenu = Constants.setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 6, Constants.SCREEN_HEIGHT / 15);
+        Constants.positionNode(backToMenu, Constants.SCREEN_WIDTH / 2.38, Constants.SCREEN_HEIGHT / 1.6);
         backToMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
             GlobalState.playClickTrack();
@@ -295,29 +302,41 @@ public class GameUI {
             new Introduction(stage).firstPage();
         });
 
-        ImageView backToGame = setButton("BackToGame", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 18);
-        Constants.positionNode(backToGame, Constants.SCREEN_WIDTH / 1.95, Constants.SCREEN_HEIGHT / 1.62);
-        backToGame.setOnMouseClicked(event -> {
+        ImageView restart = Constants.setButton("Restart", Constants.SCREEN_WIDTH / 6, Constants.SCREEN_HEIGHT / 15);
+        Constants.positionNode(restart, Constants.SCREEN_WIDTH / 2.38, Constants.SCREEN_HEIGHT / 1.8);
+        restart.setOnMouseClicked(event -> {
+            backgroundMusic.stop();
             GlobalState.playClickTrack();
-            tl.play();
-            mainPane.getChildren().removeLast();
+            new Introduction(stage).plantSelectionPage(mode);
         });
 
-        ImageView menuPic = new ImageView(new Image("file:Pictures/ui/menu.png"));
-        Constants.positionNode(menuPic, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
-        Constants.sizeNode(menuPic, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 2);
+        ImageView backToGame = Constants.setButton("BackToGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
+        Constants.positionNode(backToGame, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+        backToGame.setOnMouseClicked(e -> {
+            GlobalState.playClickTrack();
+            mainPane.getChildren().removeLast();
+            if (GlobalState.music != backgroundMusic.getVolume()){
+                backgroundMusic.stop();
+                backgroundMusic.setVolume(GlobalState.music);
+                backgroundMusic.play();
+            }
+            tl.play();
+        });
 
-        menuPane.getChildren().addAll(menuPic, backToMenu, backToGame);
+        Slider music = new Slider(0, 1, GlobalState.music);
+        Constants.setSlider(music);
+        music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
+        music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
+        Label musicLabel = Constants.setSliderLabel("Music", music);
+
+        Slider volume = new Slider(0, 1, GlobalState.volume);
+        Constants.setSlider(volume);
+        volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
+        volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
+        Label volumeLabel = Constants.setSliderLabel("Volume", volume);
+
+        menuPane.getChildren().addAll(optionImg, backToGame, backToMenu, restart, music, musicLabel, volume, volumeLabel);
         mainPane.getChildren().add(menuPane);
-    }
-
-    // generate buttons -> visuals
-    private ImageView setButton(String text, double width, double height) {
-        ImageView imageView = new ImageView(new Image("file:Pictures/ui/" + text + ".png"));
-        Constants.sizeNode(imageView, width, height);
-        imageView.setOnMouseEntered(e -> Constants.changeScale(imageView, 1.1));
-        imageView.setOnMouseExited(e -> Constants.changeScale(imageView, 1));
-        return imageView;
     }
 
     // get the plant from the selected button
@@ -355,7 +374,7 @@ public class GameUI {
         logicUpdates();
         plantActions();
         timeHandler();
-        sliderUpdate();
+        conditionUpdate();
     }
 
     // removes garbage images of struck bullets,dead zombies and eaten plants
@@ -389,10 +408,10 @@ public class GameUI {
         }
     }
 
-    private void sliderUpdate(){
-        Pane pane = (Pane)(mainPane.getChildren().getLast());
-        ImageView full = (ImageView)(pane.getChildren().get(2));
-        ImageView head = (ImageView) (pane.getChildren().get(3));
+    private void conditionUpdate(){
+        Pane p = (Pane)(mainPane.getChildren().getLast());
+        ImageView full = (ImageView)(p.getChildren().get(2));
+        ImageView head = (ImageView) (p.getChildren().get(3));
         double value;
         if (GlobalState.gameTime < 70_000) value = (GlobalState.gameTime - 20_000.0) / 100_000;
         else if (GlobalState.gameTime < 80_000) value = 1.0 / 2;
@@ -503,14 +522,14 @@ public class GameUI {
 
     private void lose(){
         tl.stop();
-        Pane pane = new Pane();
+        Pane lose = new Pane();
         AudioClip sound = Constants.setSound("losemusic", false);
         sound.play();
         ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
         Constants.sizeNode(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
         Constants.positionNode(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
-        pane.getChildren().add(loseImage);
-        mainPane.getChildren().add(pane);
+        lose.getChildren().add(loseImage);
+        mainPane.getChildren().add(lose);
         finnishAnimation(loseImage);
     }
 
@@ -522,7 +541,7 @@ public class GameUI {
     // adds the trophy to the screen
     private void addTrophy(){
         Pane trophyPane = new Pane();
-        ImageView trophy = setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
+        ImageView trophy = Constants.setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
         Constants.positionNode(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
         trophy.setOnMouseClicked(event -> {
             AudioClip win = Constants.setSound("winmusic", false);
@@ -563,15 +582,15 @@ public class GameUI {
         double size = image.getFitHeight();
         double diffX = image.getLayoutX() - Constants.SCREEN_WIDTH/3;
         double diffY = image.getLayoutY() - Constants.SCREEN_HEIGHT/10;
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(20), e ->{
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), e ->{
             image.setFitWidth(image.getFitWidth() + (size / 50));
             image.setFitHeight(image.getFitHeight() + (size / 50));
             image.setLayoutX(image.getLayoutX() - (diffX / 150));
             image.setLayoutY(image.getLayoutY() - (diffY / 150));
         }));
-        tl.setCycleCount(150);
-        tl.setOnFinished(e -> finishGame((Pane)(mainPane.getChildren().getLast())));
-        tl.play();
+        timeline.setCycleCount(150);
+        timeline.setOnFinished(e -> finishGame((Pane)(mainPane.getChildren().getLast())));
+        timeline.play();
     }
 
     // manages the win or lose visuals
@@ -579,14 +598,14 @@ public class GameUI {
         backgroundMusic.stop();
         pane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView restart = setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+        ImageView restart = Constants.setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         Constants.positionNode(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
         restart.setOnMouseClicked(event -> {
             GlobalState.playClickTrack();
             new Introduction(stage).plantSelectionPage(mode);
         });
 
-        ImageView mainMenu = setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+        ImageView mainMenu = Constants.setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
         mainMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
