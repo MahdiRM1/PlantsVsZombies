@@ -1,11 +1,5 @@
 package main.plantsvszombies.Game;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +21,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.*;
@@ -45,11 +38,12 @@ public class GameUI {
     private final GameLogic gameLogic;
     private final StackPane mainPane = new StackPane();
     private final BorderPane borderPane = new BorderPane();
-    private final Pane pane = new Pane();
     private final List<Card> cards = new ArrayList<>();
+    private final Pane pane = new Pane();
     private final Stage stage;
     private final GameMode mode;
     private final PlayMode playMode;
+    private final GameTimer timer;
     private ScoreBoard scoreBoard;
     private Timeline tl;
     private Scene scene;
@@ -62,6 +56,7 @@ public class GameUI {
         this.stage = stage;
         gameLogic = new GameLogic(state);
         this.mode = state.getMode();
+        timer = new GameTimer();
         for (CardData data : state.getCards()) cards.add(new Card(data));
         initStackPane(cardBar(), state.getScore(), state.getTime());
         if (mode == GameMode.NIGHT) initFog(state.getFogLength());
@@ -75,6 +70,7 @@ public class GameUI {
     public GameUI(Stage stage, GameMode gameMode) {
         this.stage = stage;
         this.mode = gameMode;
+        timer = new GameTimer();
         gameLogic = new GameLogic(this.mode);
         playMode = new DefaultMode(pane, gameLogic.getZombies(), gameLogic.getGraves());
         new PlantSelection(stage, this , gameMode);
@@ -84,8 +80,8 @@ public class GameUI {
         for (int i = 0; i < plantsName.size(); i++) {
             cards.add(new Card(plantsName.get(i), i));
         }
-        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-//        initStackPane(cardBar(), 1000, 190000);
+//        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+        initStackPane(cardBar(), 1000, 69000);
         if (mode == GameMode.NIGHT) {
             initFog((int) (Math.random() * 3) + 5);
         }
@@ -95,7 +91,7 @@ public class GameUI {
     // manages the start of the game
     public final void startGame() {
         backgroundMusic = Constants.setSound("gameMusic", true);
-        backgroundMusic.setVolume(GlobalState.volume);
+        backgroundMusic.setVolume(GlobalState.music);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             GlobalState.gameTime += 20;
@@ -252,26 +248,9 @@ public class GameUI {
             GlobalState.playShovelClick();
         });
 
-        ImageView empty = conditionGame("FlagMeterEmpty", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 30);
-        ImageView full = conditionGame("FlagMeterFull", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 30);
-        ImageView zombieHead = conditionGame("flagZombieHead", Constants.TILE_SIZE / 3, Constants.TILE_SIZE / 3);
-        ImageView flag1 = conditionGame("FlagMeterParts", Constants.TILE_SIZE / 4, Constants.TILE_SIZE / 4);
-        Constants.positionNode(flag1, full.getLayoutX() + full.getFitWidth()/1.95, full.getLayoutY() - full.getFitHeight());
-        ImageView flag2 = conditionGame("FlagMeterParts", Constants.TILE_SIZE / 4, Constants.TILE_SIZE / 4);
-        Constants.positionNode(flag2, full.getLayoutX() + full.getFitWidth()/1.05, full.getLayoutY() - full.getFitHeight());
-        full.setClip(new Rectangle(0, full.getFitHeight()));
-
-        buttonsPane.getChildren().addAll(menu, empty, full, zombieHead, flag1, flag2, shovelBack, shovel);
+        buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
+        buttonsPane.getChildren().addAll(timer.get());
         return buttonsPane;
-    }
-
-    private ImageView conditionGame(String str, double width, double height){
-        ImageView imageView = new ImageView(new Image("file:Pictures/ui/"+ str + ".png"));
-        imageView.setLayoutX(Constants.SCREEN_WIDTH / 1.25);
-        imageView.setLayoutY(Constants.SCREEN_HEIGHT / 1.09);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        return imageView;
     }
 
     // handles the shovel button click
@@ -382,7 +361,7 @@ public class GameUI {
         updateRecharges();
         logicUpdates();
         plantActions();
-        conditionUpdate();
+        timer.update();
         playMode.updateGame();
     }
 
@@ -417,21 +396,6 @@ public class GameUI {
         }
     }
 
-    private void conditionUpdate(){
-        Pane p = (Pane)(mainPane.getChildren().getLast());
-        if (p.getChildren().size() < 3) return;
-        ImageView full = (ImageView)(p.getChildren().get(2));
-        ImageView head = (ImageView) (p.getChildren().get(3));
-        double value;
-        if (GlobalState.gameTime < 20_000) return;
-        else if (GlobalState.gameTime < 70_000) value = (GlobalState.gameTime - 20_000.0) / 100_000;
-        else if (GlobalState.gameTime < 80_000) value = 1.0 / 2;
-        else value = (GlobalState.gameTime - 20_000.0) / 120_000;
-        Rectangle clip = new Rectangle(full.getFitWidth() * value, full.getFitHeight());
-        full.setClip(clip);
-        head.setLayoutX(full.getLayoutX() + clip.getWidth() - head.getFitWidth()/2);
-    }
-
     // updates the recharges
     private void updateRecharges() {
         for (Card card : cards) card.rechargeCheck();
@@ -440,14 +404,7 @@ public class GameUI {
     // saves the game
     public void save() {
         GameState state = new GameState(gameLogic, cards, scoreBoard.getScore(), mode);
-
-        try (ObjectOutputStream out = new ObjectOutputStream(
-                new FileOutputStream("savegame.dat"))) {
-            out.writeObject(state);
-            System.out.println("Game saved");
-        } catch (IOException e) {
-            System.out.println("cant save data");
-        }
+        Constants.writeState(state);
     }
 
     // manages win or lose visuals
@@ -544,7 +501,7 @@ public class GameUI {
         ImageView mainMenu = mainMenuBtn("full");
         Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
 
-        stage.setOnCloseRequest(event -> deleteSaveData());
+        stage.setOnCloseRequest(event -> Constants.deleteSaveData());
 
         pane.getChildren().addAll(restart, mainMenu);
     }
@@ -564,22 +521,10 @@ public class GameUI {
             backgroundMusic.stop();
             GlobalState.playClickTrack();
             new Introduction(stage).firstPage();
-            switch (state){
-                case "menu" -> save();
-                default -> deleteSaveData();
-            }
+
+            if (state.equals("menu")) save();
+            else Constants.deleteSaveData();
         });
         return mainMenu;
-    }
-
-    // deletes the save data if the game is finished
-    private void deleteSaveData() {
-        Path path = Paths.get("savegame.dat");
-        try {
-            Files.delete(path);
-            System.out.println("save data deleted");
-        } catch (IOException e) {
-            System.out.println("cant delete save data");
-        }
     }
 }

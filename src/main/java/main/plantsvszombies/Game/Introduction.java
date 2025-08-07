@@ -1,11 +1,5 @@
 package main.plantsvszombies.Game;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Random;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -43,14 +37,9 @@ public class Introduction {
     }
 
     private void load() {
-        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream("savegame.dat"))) {
-            GameState state = (GameState) input.readObject();
-            backgroundMusic.stop();
-            new GameUI(stage, state);
-            System.out.println("game loaded");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("cant load data");
-        }
+        backgroundMusic.stop();
+        GameState state = Constants.readState();
+        new GameUI(stage, state);
     }
 
     private Pane MainMenuPane() {
@@ -72,7 +61,7 @@ public class Introduction {
         ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
         Constants.sizeNode(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
         Constants.positionNode(loadGame, Constants.SCREEN_WIDTH / 1.94, Constants.SCREEN_HEIGHT / 2);
-        if (dataExists()) {
+        if (Constants.dataExists()) {
             loadGame.setOnMouseEntered(event -> Constants.changeScale(loadGame, 1.05));
             loadGame.setOnMouseExited(event -> Constants.changeScale(loadGame, 1));
             loadGame.setOnMouseClicked(event -> {
@@ -228,8 +217,4 @@ public class Introduction {
         new GameUI(stage, mode);
     }
 
-    private boolean dataExists(){
-        File file = new File("savegame.dat");
-        return file.exists();
-    }
 }

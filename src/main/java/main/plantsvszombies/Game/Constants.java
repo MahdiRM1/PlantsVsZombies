@@ -16,11 +16,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import main.plantsvszombies.Enums.*;
+import main.plantsvszombies.GameState.GameState;
 import main.plantsvszombies.Plants.BombPlants.*;
 import main.plantsvszombies.Plants.NutPlants.*;
 import main.plantsvszombies.Plants.OtherPlants.*;
 import main.plantsvszombies.Plants.PeaPlants.*;
 import main.plantsvszombies.Plants.Plant;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public final class Constants {
 
@@ -208,15 +214,15 @@ public final class Constants {
             Region track = (Region) slider.lookup(".track");
             if (track != null) track.setStyle(
                     "-fx-background-color: rgba(30, 30, 30, 0.7);" +
-                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 70 + ";" +
-                            "-fx-background-radius: 10;");
+                    "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 70 + ";" +
+                    "-fx-background-radius: 10;");
             Region thumb = (Region) slider.lookup(".thumb");
             if (thumb != null) thumb.setStyle(
                     "-fx-background-image: url('file:Pictures/ui/sound.png');" +
-                            "-fx-background-size: cover;" +
-                            "-fx-background-color: transparent;" +
-                            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 20 +"px;" +
-                            "-fx-pref-Width : " + Constants.SCREEN_HEIGHT / 20 +"px;"
+                    "-fx-background-size: cover;" +
+                    "-fx-background-color: transparent;" +
+                    "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 20 +"px;" +
+                    "-fx-pref-Width : " + Constants.SCREEN_HEIGHT / 20 +"px;"
             );
         });
     }
@@ -238,5 +244,43 @@ public final class Constants {
         label.setStyle("-fx-font-weight: bold;");
         label.setTextFill(new Color(0.1, 0.1, 0.1, 1));
         return label;
+    }
+
+    // deletes the save data if the game is finished
+    public static void deleteSaveData() {
+        Path path = Paths.get("savegame.dat");
+        try {
+            Files.delete(path);
+            System.out.println("save data deleted");
+        } catch (IOException e) {
+            System.out.println("cant delete save data");
+        }
+    }
+
+    public static void writeState(GameState state){
+        try (ObjectOutputStream out = new ObjectOutputStream(
+                new FileOutputStream("savegame.dat"))) {
+            out.writeObject(state);
+            System.out.println("Game saved");
+        } catch (IOException e) {
+            System.out.println("cant save data");
+        }
+    }
+
+    public static GameState readState(){
+        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream("savegame.dat"))) {
+            GameState state = (GameState) input.readObject();
+            System.out.println("game loaded");
+            return state;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("cant load data");
+        }
+        return null;
+    }
+
+
+    public static boolean dataExists(){
+        File file = new File("savegame.dat");
+        return file.exists();
     }
 }
