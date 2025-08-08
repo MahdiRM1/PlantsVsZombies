@@ -19,13 +19,15 @@ public class PlantSelection{
     private final List<String> selectedCards = new ArrayList<>();
     private final HBox cardBar;
     private final GameMode gameMode;
+    private final Stage stage;
     private static final AudioClip backgroundMusic;
 
     static {
         backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
     }
 
-    public PlantSelection(Stage stage, GameUI ui, GameMode mode){
+    public PlantSelection(Stage stage, GameMode mode){
+        this.stage = stage;
         backgroundMusic.play();
         Pane pane = new Pane();
         gameMode = mode;
@@ -38,7 +40,7 @@ public class PlantSelection{
         VBox box = new VBox(10, plants());
         Constants.positionNode(box, Constants.SCREEN_WIDTH / 15, Constants.SCREEN_HEIGHT / 4);
 
-        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box, startGameBtn(ui));
+        pane.getChildren().addAll(Constants.setScoreBoardPicture(), cardBar, box, startGameBtn());
 
         for (int i = 0; i < 8; i++) pane.getChildren().add(createZombie((int) (Math.random() * 5)));
 
@@ -72,7 +74,7 @@ public class PlantSelection{
         return new HBox[]{box1, box2, box3, box4};
     }
 
-    private ImageView startGameBtn(GameUI ui) {
+    private ImageView startGameBtn() {
         Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
         Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
         ImageView start = new ImageView(letsRock1);
@@ -94,17 +96,17 @@ public class PlantSelection{
         start.setOnMouseClicked(event -> {
             if (selectedCards.size() != 6) return;
 
-            startGame(ui);
+            startGame();
         });
         return start;
     }
 
-    private void startGame(GameUI ui){
+    private void startGame(){
         GlobalState.playClickTrack();
         backgroundMusic.stop();
         AudioClip startGame = Constants.setSound("readysetplant", false);
         startGame.play();
-        ui.start(selectedCards);
+        new GameUI(selectedCards, stage, gameMode);
     }
 
     private Button getCardButton(String plantName) {

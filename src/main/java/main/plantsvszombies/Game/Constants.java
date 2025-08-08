@@ -146,6 +146,14 @@ public final class Constants {
         return sound;
     }
 
+    // add shovel image
+    public static ImageView shovelImage() {
+        ImageView shovel = Constants.setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
+        shovel.setMouseTransparent(true);
+        Constants.positionNode(shovel, Constants.SCREEN_WIDTH / 2.1, 0);
+        return shovel;
+    }
+
     private static ImageView createImageView(String path, double width, double height) {
         ImageView imageView = new ImageView(new Image("file:" + path));
         sizeNode(imageView, width, height);

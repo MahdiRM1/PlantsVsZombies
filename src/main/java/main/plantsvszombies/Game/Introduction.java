@@ -214,6 +214,6 @@ public class Introduction {
     private void startGame(GameMode mode){
         GlobalState.playClickTrack();
         backgroundMusic.stop();
-        new GameUI(stage, mode);
+        new PlantSelection(stage, mode);
     }
 }

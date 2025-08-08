@@ -67,13 +67,13 @@ public class GameUI {
     }
 
     // constructor: to start a new game
-    public GameUI(Stage stage, GameMode gameMode) {
+    public GameUI(List<String> plantsName, Stage stage, GameMode gameMode) {
         this.stage = stage;
         this.mode = gameMode;
         timer = new GameTimer();
         gameLogic = new GameLogic(this.mode);
         playMode = new DefaultMode(pane, gameLogic.getZombies(), gameLogic.getGraves());
-        new PlantSelection(stage, this , gameMode);
+        start(plantsName);
     }
 
     public void start(List<String> plantsName) {
@@ -82,9 +82,8 @@ public class GameUI {
         }
 //        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
         initStackPane(cardBar(), 1000, 69000);
-        if (mode == GameMode.NIGHT) {
+        if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
-        }
         startGame();
     }
 
@@ -217,7 +216,7 @@ public class GameUI {
         Pane buttons = (Pane) mainPane.getChildren().getLast();
         ImageView shovelBack = ((ImageView) buttons.getChildren().getLast());
         shovelBack.setEffect(null);
-        buttons.getChildren().add(shovelImage());
+        buttons.getChildren().add(Constants.shovelImage());
         scene.setCursor(Cursor.DEFAULT);
         selectedButton = -1;
     }
@@ -235,7 +234,7 @@ public class GameUI {
         });
         Constants.positionNode(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
 
-        ImageView shovel = shovelImage();
+        ImageView shovel = Constants.shovelImage();
         ImageView shovelBack = Constants.setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
         Constants.positionNode(shovelBack, shovel.getLayoutX(), 0);
 
@@ -267,14 +266,6 @@ public class GameUI {
             buttonsPane.getChildren().add(shovel);
             shovelBack.setEffect(null);
         }
-    }
-
-    // add shovel image
-    private ImageView shovelImage() {
-        ImageView shovel = Constants.setButton("shovel", Constants.SCREEN_WIDTH / 19, Constants.SCREEN_HEIGHT / 10);
-        shovel.setMouseTransparent(true);
-        Constants.positionNode(shovel, Constants.SCREEN_WIDTH / 2.1, 0);
-        return shovel;
     }
 
     // generate the menu pane
@@ -508,7 +499,7 @@ public class GameUI {
         ImageView restart = Constants.setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         restart.setOnMouseClicked(event -> {
             GlobalState.playClickTrack();
-            new PlantSelection(stage, this, mode);
+            new PlantSelection(stage, mode);
         });
         return restart;
     }
