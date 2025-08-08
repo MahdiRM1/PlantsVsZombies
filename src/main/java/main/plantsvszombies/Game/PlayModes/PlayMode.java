@@ -19,9 +19,6 @@ public abstract class PlayMode{
         this.graves = graves;
     }
 
-    public abstract void updateGame();
-    public abstract String WinOrLose();
-
     protected void action(String str){
         switch (str.toLowerCase()) {
             case ("win") -> {}
@@ -45,7 +42,8 @@ public abstract class PlayMode{
         else if (time < 70); 
         else if (time < 80) return "wave";
         else if (time < 130) return handleZombie(3000, 0, 4);
-        else if (time < 140); else if (time < 155) return "wave";
+        else if (time < 140);
+        else if (time < 155) return "wave";
         return "execute no moves";
     }
 
@@ -125,4 +123,7 @@ public abstract class PlayMode{
         }
         return GlobalState.gameTime >= 155_000;
     }
+
+    public abstract void updateGame();
+    public abstract String WinOrLose();
 }

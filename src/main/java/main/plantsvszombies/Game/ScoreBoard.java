@@ -19,11 +19,11 @@ public class ScoreBoard {
     private static final int SUN_VALUE = 25;
     private static final int SUN_LIFE_TIME = 7500;
 
-    private int score;
     private final BorderPane pane;
     private final Label scoreLabel;
-    private final ArrayList<Sun> suns = new ArrayList<>();
     private final GameMode mode;
+    private final ArrayList<Sun> suns = new ArrayList<>();
+    private int score;
 
     public ScoreBoard(BorderPane pane, int score, GameMode mode) {
         this.pane = pane;

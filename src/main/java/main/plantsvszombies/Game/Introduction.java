@@ -1,7 +1,6 @@
 package main.plantsvszombies.Game;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -20,11 +19,10 @@ public class Introduction {
     private static final AudioClip backgroundMusic;
 
     static {
-        backgroundMusic = new AudioClip("file:Audio/introMusic.mp3");
+        backgroundMusic = Constants.setSound("introMusic", true);
     }
 
     public Introduction(Stage stage) {
-        backgroundMusic.setCycleCount(Timeline.INDEFINITE);
         backgroundMusic.setVolume(GlobalState.music);
         backgroundMusic.play();
         this.stage = stage;
@@ -34,12 +32,6 @@ public class Introduction {
         Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         stage.setScene(scene);
         stage.show();
-    }
-
-    private void load() {
-        backgroundMusic.stop();
-        GameState state = Constants.readState();
-        new GameUI(stage, state);
     }
 
     private Pane MainMenuPane() {
@@ -154,14 +146,17 @@ public class Introduction {
         Slider music = new Slider(0, 1, GlobalState.music);
         Constants.setSlider(music);
         music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
-        music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
+        music.valueProperty().addListener((obs, oldVal, newVal)
+                -> GlobalState.music = newVal.doubleValue());
 
         Slider volume = new Slider(0, 1, GlobalState.volume);
         Constants.setSlider(volume);
         volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
-        volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
+        volume.valueProperty().addListener((obs, oldVal, newVal)
+                -> GlobalState.volume = newVal.doubleValue());
 
-        option.getChildren().addAll(optionImg, OK, music, Constants.setSliderLabel("Music", music), volume, Constants.setSliderLabel("Volume", volume));
+        option.getChildren().addAll(optionImg, OK, music, Constants.setSliderLabel("Music", music),
+                volume, Constants.setSliderLabel("Volume", volume));
         pane.getChildren().add(option);
     }
 
@@ -174,14 +169,19 @@ public class Introduction {
         backgroundMusic.stop();
         AudioClip laugh = Constants.setSound("evillaugh", false);
         laugh.play();
-        Timeline tl = new Timeline(new KeyFrame(Duration.seconds(2)));
-        tl.setOnFinished(e -> {
+        PauseTransition pause = new PauseTransition(Duration.millis(4000));
+        pause.setOnFinished(e -> {
             if (mode.equals("load")) load();
-            else if (mode.equals("socket"));
+            else if (mode.equals("socket")) ;
             else modeSelection();
         });
-        tl.setCycleCount(2);
-        tl.play();
+        pause.play();
+    }
+
+    private void load() {
+        backgroundMusic.stop();
+        GameState state = Constants.readState();
+        new GameUI(stage, state);
     }
 
     private void modeSelection(){
@@ -216,5 +216,4 @@ public class Introduction {
         backgroundMusic.stop();
         new GameUI(stage, mode);
     }
-
 }
