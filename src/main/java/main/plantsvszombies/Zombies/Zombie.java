@@ -22,20 +22,20 @@ public abstract class Zombie {
     private static final AudioClip[] chomp = new AudioClip[2];
     private static final AudioClip[] groan = new AudioClip[7];
     private static final AudioClip gulp;
-    protected static final Image[] HEAD_FRAMES;
     private static final int HEAD_FRAME_COUNT = 24;
+    protected static final Image[] HEAD_FRAMES;
+    protected long freezeTime;
+    protected double HP;
+    protected int speed;
+    protected ZombieState state;
     private final ImageView picture;
     private final ImageView secondPicture;
     private final int row;
     private int col;
-    protected long freezeTime;
     private int nowPic;
     private boolean hypnotized;
     private Object toEat;
     private long lastBite;
-    protected double HP;
-    protected int speed;
-    protected ZombieState state;
 
     static {
         HEAD_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
@@ -77,17 +77,13 @@ public abstract class Zombie {
         if (hypnotized) HP -= 15;
         else HP -= 20;
 
-        if (80 < HP && HP <= 100 && !isHypnotized()) headZombie();
+        if (80 < HP && HP <= 100 && !isHypnotized()) zombiePartFall();
     }
 
     public void damage(Bullet bullet) {
         if (bullet.getType() == BulletType.ICE_BULLET) updateFreezeTime();
         damage();
         bullet.hit(HP > 100 && !this.getClass().getSimpleName().equals("ConeheadZombie"));
-    }
-
-    public void updateFreezeTime() {
-        freezeTime = GlobalState.gameTime;
     }
 
     public void action() {
@@ -113,12 +109,12 @@ public abstract class Zombie {
     }
 
     private void die() {
-        if (nowPic <= 1 && state == ZombieState.DIE) headZombie();
+        if (nowPic <= 1 && state == ZombieState.DIE) zombiePartFall();
         Image[] images = getZombiePictures();
         if (nowPic >= images.length - 1) state = ZombieState.DEAD;
     }
 
-    private void headZombie(){
+    private void zombiePartFall(){
         if (this.getClass().getSimpleName().equals("Imp")) return;
 
         Image[] images = getPictures();
@@ -262,6 +258,10 @@ public abstract class Zombie {
         }
         this.state = state;
         nowPic = 0;
+    }
+
+    public void updateFreezeTime() {
+        freezeTime = GlobalState.gameTime;
     }
 
     protected abstract Image[] getZombiePictures();

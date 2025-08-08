@@ -79,20 +79,12 @@ public class GameLogic {
 
     // checks if the plant is plantable
     public boolean isPlantable(int row, int col) {
-        for (Grave grave : graves)
-            if (grave.getRow() == row && grave.getCol() == col) return false;
-
-        return getPlant(row, col) == null;
+        return getPlant(row, col) == null && getGrave(row, col) == null;
     }
 
     // plant arraylist to manage all plants
     public void setPlant(Plant plant) {
         plants.add(plant);
-    }
-
-    // zombie arraylist to manage all zombies
-    public void addZombie(Zombie z) {
-        zombies.add(z);
     }
 
     // bullet arraylist to manage all bullets
@@ -154,23 +146,11 @@ public class GameLogic {
         setZombieState();
     }
 
-    // lose logic
-    public boolean checkLose() {
-        for (Zombie zombie : zombies) {
-            if (zombie.getCol() < 0) return true;
-        }
-        return false;
-    }
-
-    // win logic
-    public boolean checkWin() {
-        for (Zombie z : zombies) if(!z.isHypnotized()) return false;
-        return GlobalState.gameTime >= 155_000;
-    }
-
     // removes the plant
-    public void removePlant(int row, int col) {
-        plants.remove(getPlant(row, col));
+    public void removePlant(int row, int col, Pane pane) {
+        Plant plant = getPlant(row, col);
+        plants.remove(plant);
+        pane.getChildren().remove(plant.getPicture());
     }
 
     // removes the grave

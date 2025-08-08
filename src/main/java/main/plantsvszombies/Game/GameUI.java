@@ -210,10 +210,8 @@ public class GameUI {
     // manage shovel visuals
     private void useShovel(int row, int col, Button btn) {
         Plant plant = gameLogic.getPlant(row, col);
-        if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep())) {
-            borderPane.getChildren().remove(plant.getPicture());
-            gameLogic.removePlant(row, col);
-        }
+        if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep()))
+            gameLogic.removePlant(row, col, borderPane);
         else btn.setOnMouseClicked(event -> wrongClick(btn));
 
         Pane buttons = (Pane) mainPane.getChildren().getLast();
