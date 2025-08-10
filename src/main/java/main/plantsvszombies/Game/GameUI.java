@@ -59,20 +59,30 @@ public class GameUI {
         for (CardData data : state.getCards()) cards.add(new Card(data));
         initStackPane(cardBar(), state.getScore(), state.getTime());
         if (mode == GameMode.NIGHT) initFog(state.getFogLength());
-        playMode = new DefaultMode(pane, gameLogic.getZombies(), gameLogic.getGraves());
+        playMode = new DefaultMode();
+        playMode.setElements(pane, gameLogic.getZombies(), gameLogic.getGraves());
         loadPlants();
         loadZombies();
         startGame();
     }
 
     // constructor: to start a new game
-    public GameUI(List<String> plantsName, Stage stage, GameMode gameMode) {
+    public GameUI(List<String> plantsName, Stage stage, GameMode gameMode, PlayMode playMode) {
         this.stage = stage;
         this.mode = gameMode;
         timer = new GameTimer();
         gameLogic = new GameLogic(this.mode);
-        playMode = new DefaultMode(pane, gameLogic.getZombies(), gameLogic.getGraves());
+        this.playMode = playMode;
+        initializePlayMode();
         start(plantsName);
+    }
+
+    private void initializePlayMode() {
+        playMode.setElements(pane, gameLogic.getZombies(), gameLogic.getGraves());
+        if(playMode instanceof Client client) {
+            Thread thread = new Thread(client);
+            thread.start();
+        }
     }
 
     public void start(List<String> plantsName) {
@@ -475,7 +485,7 @@ public class GameUI {
         ImageView restart = ImageFactory.createButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         restart.setOnMouseClicked(event -> {
             SoundManager.playClickTrack();
-            new PlantSelection(stage, mode);
+            new PlantSelection(stage, mode, new DefaultMode());
         });
         return restart;
     }

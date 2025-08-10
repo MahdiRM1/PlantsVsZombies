@@ -1,5 +1,8 @@
 package main.plantsvszombies.Game;
 
+import main.plantsvszombies.Game.PlayModes.Client;
+import main.plantsvszombies.Game.PlayModes.DefaultMode;
+import main.plantsvszombies.Game.PlayModes.PlayMode;
 import main.plantsvszombies.Game.Tools.*;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
@@ -45,10 +48,7 @@ public class Introduction {
 
         ImageView socket = ImageFactory.createButton("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         ImageFactory.setNodePosition(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
-        socket.setOnMouseEntered(e -> {});
-        socket.setOnMouseExited(e -> {});
-        socket.setEffect(Utils.effect(0, 0, -0.5, 0));
-        socket.setOnMouseClicked(event -> SoundManager.playWrongClick());
+        socket.setOnMouseClicked(event -> handAnimation(pane, "socket"));
 
         ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
         ImageFactory.setNodeSize(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
@@ -156,10 +156,15 @@ public class Introduction {
         PauseTransition pause = new PauseTransition(Duration.millis(4000));
         pause.setOnFinished(e -> {
             if (mode.equals("load")) load();
-            else if (mode.equals("socket")) ;
+            else if (mode.equals("socket")) multiPlayerMode();
             else modeSelection();
         });
         pause.play();
+    }
+
+    private void multiPlayerMode() {
+        PlayMode playMode = new Client();
+        startGame(GameMode.DAY, playMode);
     }
 
     private void load() {
@@ -175,7 +180,7 @@ public class Introduction {
 
         ImageView day = ImageFactory.createButton("DayMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodePosition(day, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 4);
-        day.setOnMouseClicked(e -> startGame(GameMode.DAY));
+        day.setOnMouseClicked(e -> startGame(GameMode.DAY, new DefaultMode()));
 
         double sizePlant = Constants.SCREEN_HEIGHT / 6.3;
         ImageView plant = new ImageView(new Image("file:Pictures/plantPictures/SunFlower/gif.gif"));
@@ -184,7 +189,7 @@ public class Introduction {
 
         ImageView night = ImageFactory.createButton("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodePosition(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);
-        night.setOnMouseClicked(e -> startGame(GameMode.NIGHT));
+        night.setOnMouseClicked(e -> startGame(GameMode.NIGHT, new DefaultMode()));
 
         ImageView zombie = new ImageView(new Image("file:Pictures/ZombiePicture/OriginalZombie/gif.gif"));
         ImageFactory.setNodeSize(zombie, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
@@ -195,9 +200,9 @@ public class Introduction {
         stage.setScene(scene);
     }
 
-    private void startGame(GameMode mode){
+    private void startGame(GameMode mode, PlayMode playMode){
         SoundManager.playClickTrack();
         backgroundMusic.stop();
-        new PlantSelection(stage, mode);
+        new PlantSelection(stage, mode, playMode);
     }
 }
