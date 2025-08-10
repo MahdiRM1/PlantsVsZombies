@@ -41,7 +41,7 @@ public class GameUI {
     private final Pane pane = new Pane();
     private final Stage stage;
     private final GameMode mode;
-    private final PlayMode playMode;
+    private PlayMode playMode;
     private final GameTimer timer;
     private ScoreBoard scoreBoard;
     private Timeline tl;
@@ -90,7 +90,7 @@ public class GameUI {
             cards.add(new Card(plantsName.get(i), i));
         }
 //        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 69000);
+        initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
         startGame();

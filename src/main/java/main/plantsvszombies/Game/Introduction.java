@@ -1,19 +1,26 @@
 package main.plantsvszombies.Game;
 
-import main.plantsvszombies.Game.PlayModes.Client;
-import main.plantsvszombies.Game.PlayModes.DefaultMode;
-import main.plantsvszombies.Game.PlayModes.PlayMode;
-import main.plantsvszombies.Game.Tools.*;
 import javafx.animation.PauseTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.PlayModes.Client;
+import main.plantsvszombies.Game.PlayModes.DefaultMode;
+import main.plantsvszombies.Game.PlayModes.PlayMode;
+import main.plantsvszombies.Game.PlayModes.Server;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
+import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
 
 public class Introduction {
@@ -38,17 +45,17 @@ public class Introduction {
     }
 
     private Pane MainMenuPane() {
-        StackPane mainpane = new StackPane();
+        StackPane mainPane = new StackPane();
         Pane pane = new Pane();
         pane.getChildren().addFirst(ImageFactory.createBackGround("MainMenu"));
 
         ImageView adventure = ImageFactory.createButton("Adventure", Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 4.2);
         ImageFactory.setNodePosition(adventure, Constants.SCREEN_WIDTH / 1.97, Constants.SCREEN_HEIGHT / 8);
-        adventure.setOnMouseClicked(event -> handAnimation(pane, "default"));
+        adventure.setOnMouseClicked(event -> handAnimation(mainPane, "default"));
 
         ImageView socket = ImageFactory.createButton("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         ImageFactory.setNodePosition(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
-        socket.setOnMouseClicked(event -> handAnimation(pane, "socket"));
+        socket.setOnMouseClicked(event -> handAnimation(mainPane, "socket"));
 
         ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
         ImageFactory.setNodeSize(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
@@ -58,7 +65,7 @@ public class Introduction {
             loadGame.setOnMouseExited(event -> ImageFactory.changeScale(loadGame, 1));
             loadGame.setOnMouseClicked(event -> {
                 SoundManager.playClickTrack();
-                handAnimation(pane, "load");
+                handAnimation(mainPane, "load");
             });
         }else {
             loadGame.setEffect(Utils.effect(0, 0, -0.5, 0));
@@ -67,19 +74,19 @@ public class Introduction {
 
         ImageView quit = ImageFactory.createButton("Quit", Constants.SCREEN_WIDTH / 8.5, Constants.SCREEN_HEIGHT / 5.5);
         ImageFactory.setNodePosition(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
-        quit.setOnMouseClicked(event -> checkQuit(mainpane));
+        quit.setOnMouseClicked(event -> checkQuit(mainPane));
 
         ImageView help = ImageFactory.createButton("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
         ImageFactory.setNodePosition(help, Constants.SCREEN_WIDTH / 1.28, Constants.SCREEN_HEIGHT / 1.54);
-        help.setOnMouseClicked(e -> helpPage(mainpane));
+        help.setOnMouseClicked(e -> helpPage(mainPane));
 
         ImageView options = ImageFactory.createButton("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
         ImageFactory.setNodePosition(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
-        options.setOnMouseClicked(e -> option(mainpane));
+        options.setOnMouseClicked(e -> option(mainPane));
 
         pane.getChildren().addAll(adventure, socket, loadGame, quit, options, help);
-        mainpane.getChildren().add(pane);
-        return mainpane;
+        mainPane.getChildren().add(pane);
+        return mainPane;
     }
 
     private void helpPage(StackPane mainPane){
@@ -144,27 +151,83 @@ public class Introduction {
         pane.getChildren().add(option);
     }
 
-    private void handAnimation(Pane pane, String mode){
+    private void handAnimation(StackPane mainPane, String mode){
         ImageView hand = new ImageView(new Image("file:Pictures/ui/handGif.gif"));
         double size = Constants.SCREEN_HEIGHT / 2;
         ImageFactory.setNodePosition(hand, Constants.SCREEN_WIDTH / 3 , Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodeSize(hand, size, size);
-        pane.getChildren().add(hand);
+        mainPane.getChildren().add(hand);
         backgroundMusic.stop();
         AudioClip laugh = SoundManager.setSound("evillaugh", false);
         laugh.play();
         PauseTransition pause = new PauseTransition(Duration.millis(4000));
         pause.setOnFinished(e -> {
             if (mode.equals("load")) load();
-            else if (mode.equals("socket")) multiPlayerMode();
+            else if (mode.equals("socket")) multiPlayerMode(mainPane);
             else modeSelection();
         });
         pause.play();
     }
 
-    private void multiPlayerMode() {
-        PlayMode playMode = new Client();
-        startGame(GameMode.DAY, playMode);
+    private void multiPlayerMode(StackPane mainPane){
+        Pane pane = new Pane();
+        HBox box = socketBox();
+
+        Button btn1 = socketButtons("Client");
+        btn1.setOnAction(e -> {
+            PlayMode playMode = new Client();
+            startGame(GameMode.DAY, playMode);
+        });
+
+        Button btn2 = socketButtons("Server");
+        btn2.setOnMouseClicked(e -> {
+            Server server = new Server();
+            Thread thread = new Thread(server);
+            thread.start();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            PlayMode playMode = new Client();
+            startGame(GameMode.DAY, playMode);
+        });
+
+        box.getChildren().addAll(btn1, btn2);
+
+        pane.getChildren().addAll(box);
+        mainPane.getChildren().add(pane);
+    }
+
+    private HBox socketBox(){
+        HBox box = new HBox(Constants.SCREEN_WIDTH / 20);
+        box.setPrefSize(Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
+        box.setAlignment(Pos.CENTER);
+        box.setStyle(
+            "-fx-background-color:rgb(150, 150, 0); " +
+            "-fx-background-radius: 15px; " +
+            "-fx-padding: 20px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);"
+        );
+        box.setLayoutX(Constants.SCREEN_WIDTH / 3);
+        box.setLayoutY(Constants.SCREEN_HEIGHT / 4);
+        return box;
+    }
+
+    private Button socketButtons(String str){
+        Button btn = new Button(str);
+        btn.setPrefSize(Constants.SCREEN_WIDTH / 8, Constants.SCREEN_WIDTH / 8);
+        btn.setStyle(
+            "-fx-background-color:rgb(50, 50, 50); " +
+            "-fx-background-radius: 10px; " +
+            "-fx-text-fill: rgb(0, 150, 0);" +
+            "-fx-font-size: 25px;"+
+            "-fx-padding: 20px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);"
+        );
+        btn.setOnMouseEntered(e -> ImageFactory.changeScale(btn, 1.1));
+        btn.setOnMouseExited(e -> ImageFactory.changeScale(btn, 1));
+        return btn;
     }
 
     private void load() {
