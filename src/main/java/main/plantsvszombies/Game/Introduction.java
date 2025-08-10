@@ -153,10 +153,11 @@ public class Introduction {
 
     private void handAnimation(StackPane mainPane, String mode){
         ImageView hand = new ImageView(new Image("file:Pictures/ui/handGif.gif"));
+        Pane pane = (Pane)(mainPane.getChildren().getLast());
         double size = Constants.SCREEN_HEIGHT / 2;
         ImageFactory.setNodePosition(hand, Constants.SCREEN_WIDTH / 3 , Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodeSize(hand, size, size);
-        mainPane.getChildren().add(hand);
+        pane.getChildren().add(hand);
         backgroundMusic.stop();
         AudioClip laugh = SoundManager.setSound("evillaugh", false);
         laugh.play();
