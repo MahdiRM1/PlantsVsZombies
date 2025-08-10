@@ -10,20 +10,18 @@ import main.plantsvszombies.Items.Grave;
 import main.plantsvszombies.Zombies.*;
 
 public abstract class PlayMode{
-    private final Pane pane;
-    private final List<Zombie> zombies;
-    private final List<Grave> graves;
+    private Pane pane;
+    private List<Zombie> zombies;
+    private List<Grave> graves;
+    protected String gameState;
 
-    public PlayMode(Pane pane, List<Zombie> zombies, List<Grave> graves){
-        this.pane = pane;
-        this.zombies = zombies;
-        this.graves = graves;
+
+    public PlayMode(){
     }
 
     protected void action(String str){
         switch (str.toLowerCase()) {
-            case ("win") -> {}
-            case ("lose") -> {}
+            case ("win"), ("lose") -> gameState = str;
             case ("wave") -> wave();
             case ("execute no moves") -> {}
             default -> addZombie(str);
@@ -53,6 +51,7 @@ public abstract class PlayMode{
         int z = Integer.parseInt(parts[0]);
         int row = Integer.parseInt(parts[1]);
         spawnZombie(z, row);
+
     }
 
     // handles the zombie entering
@@ -106,7 +105,7 @@ public abstract class PlayMode{
     }
 
     // lose logic
-    public boolean checkLose() {
+    protected boolean checkLose() {
         for (Zombie zombie : zombies) {
             if (zombie.getCol() < 0) {
                 return true;
@@ -116,7 +115,7 @@ public abstract class PlayMode{
     }
 
     // win logic
-    public boolean checkWin() {
+    protected boolean checkWin() {
         for (Zombie z : zombies) {
             if (!z.isHypnotized()) {
                 return false;
@@ -125,6 +124,19 @@ public abstract class PlayMode{
         return Constants.gameTime >= 155_000;
     }
 
+    protected String checkGameState(){
+        if (checkWin()) return "win";
+        else if (checkLose()) return "lose";
+        return "playing";
+    }
+
     public abstract void updateGame();
     public abstract String WinOrLose();
+
+    public void setElements(Pane pane, List<Zombie> zombies, List<Grave> graves) {
+        this.pane = pane;
+        this.zombies = zombies;
+        this.graves = graves;
+
+    }
 }

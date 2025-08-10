@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import main.plantsvszombies.Game.PlayModes.PlayMode;
 import main.plantsvszombies.Game.Tools.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,9 +25,11 @@ public class PlantSelection{
     private final StackPane mainPane;
     private AudioClip backgroundMusic;
     private HBox cardBar;
+    private final PlayMode playMode;
 
-    public PlantSelection(Stage stage, GameMode mode){
+    public PlantSelection(Stage stage, GameMode mode, PlayMode playMode){
         this.stage = stage;
+        this.playMode = playMode;
         mainPane = new StackPane();
         gameMode = mode;
         music();
@@ -120,7 +123,7 @@ public class PlantSelection{
         backgroundMusic.stop();
         AudioClip startGame = SoundManager.setSound("readysetplant", false);
         startGame.play();
-        new GameUI(selectedCards, stage, gameMode);
+        new GameUI(selectedCards, stage, gameMode, playMode);
     }
 
     private Button getCardButton(String plantName) {
