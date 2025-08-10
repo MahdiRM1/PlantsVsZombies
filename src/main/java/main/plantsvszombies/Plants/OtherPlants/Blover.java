@@ -4,8 +4,9 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Items.Fog;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
@@ -18,8 +19,8 @@ public class Blover extends Plant {
 
 
     static {
-        FRAMES = Constants.getArrayImage("Pictures/plantPictures/Blover/normal/frame_", FRAME_COUNT);
-        sound = Constants.setSound("blover", false);
+        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Blover/normal/frame_", FRAME_COUNT);
+        sound = SoundManager.setSound("blover", false);
     }
 
     public Blover(int row, int col) {
@@ -40,7 +41,7 @@ public class Blover extends Plant {
     public void action(Fog fog) {
         if (fog == null) return;
         fog.move(true);
-        fog.setBloverTime(GlobalState.gameTime);
+        fog.setBloverTime(Constants.gameTime);
     }
 
     @Override

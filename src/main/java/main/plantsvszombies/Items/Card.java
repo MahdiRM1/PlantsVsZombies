@@ -6,6 +6,7 @@ import javafx.scene.effect.Effect;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import main.plantsvszombies.Game.*;
+import main.plantsvszombies.Game.Tools.*;
 import main.plantsvszombies.GameState.CardData;
 import main.plantsvszombies.Plants.OtherPlants.*;
 import main.plantsvszombies.Plants.Plant;
@@ -42,7 +43,7 @@ public class Card {
         Plant plant = switch (plantName){
             case "CoffeeBean" -> new CoffeeBean(-1, -1, null);
             case "GraveBuster" -> new GraveBuster(-1, -1, null);
-            default -> Constants.getPlant(-1, -1, plantName, false);
+            default -> Utils.buildPlant(-1, -1, plantName, false);
         };
         return plant.getRechargeTime() * 1000;
     }
@@ -50,11 +51,11 @@ public class Card {
     //generate buttons for plant cards
     private Button cardButton(int index) {
         Button btn = new Button();
-        btn.setGraphic(Constants.setCard(plantName));
+        btn.setGraphic(ImageFactory.createCard(plantName));
         btn.setStyle("-fx-background-color: transparent");
         btn.setOnAction(event -> {
             if (!canChoose) {
-                GlobalState.playWrongClick();
+                SoundManager.playWrongClick();
                 return;
             }
 
@@ -85,7 +86,7 @@ public class Card {
 
     //check recharge logic
     public void rechargeCheck() {
-        double rechargeCheck = (double) (GlobalState.gameTime - lastSelected) / rechargeTime;
+        double rechargeCheck = (double) (Constants.gameTime - lastSelected) / rechargeTime;
         ImageView imageView = (ImageView) btn.getGraphic();
         if (rechargeCheck >= 1) {
             imageView.setEffect(null);
@@ -104,7 +105,7 @@ public class Card {
     }
 
     public void updateLastSelected() {
-        lastSelected = GlobalState.gameTime;
+        lastSelected = Constants.gameTime;
     }
 
     //getters

@@ -2,8 +2,8 @@ package main.plantsvszombies.Zombies;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.GameState.ZombieData;
 
 public class ScreenDoorZombie extends Zombie {
@@ -18,10 +18,10 @@ public class ScreenDoorZombie extends Zombie {
     private final static Image[] DOOR_FRAMES;
 
     static {
-        WALK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", ATTACK_FRAME_COUNT);
-        DOOR_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ScreenDoorZombie/door/frame_", DOOR_FRAME_COUNT);
-        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        DOOR_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/door/frame_", DOOR_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public ScreenDoorZombie(ZombieData data) {
@@ -38,7 +38,7 @@ public class ScreenDoorZombie extends Zombie {
     @Override
     public void updateFreezeTime(){
         if (HP > 100) freezeTime = -5000;
-        else freezeTime = GlobalState.gameTime;
+        else freezeTime = Constants.gameTime;
     }
 
     @Override

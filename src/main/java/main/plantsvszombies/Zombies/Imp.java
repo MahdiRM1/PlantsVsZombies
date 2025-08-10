@@ -1,7 +1,7 @@
 package main.plantsvszombies.Zombies;
 
 import javafx.scene.image.Image;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.GameState.ZombieData;
 
 public class Imp extends Zombie {
@@ -16,10 +16,10 @@ public class Imp extends Zombie {
     private final static Image[] BOOM_DIE_FRAMES;
 
     static {
-        WALK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Attack/frame_", ATTACK_FRAME_COUNT);
-        DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/Imp/Die/frame_", DIE_FRAME_COUNT);
-        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Attack/frame_", ATTACK_FRAME_COUNT);
+        DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Die/frame_", DIE_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public Imp(ZombieData data) {

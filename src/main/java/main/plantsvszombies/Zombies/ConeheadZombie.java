@@ -2,7 +2,7 @@ package main.plantsvszombies.Zombies;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.GameState.ZombieData;
 
 public class ConeheadZombie extends Zombie {
@@ -17,10 +17,10 @@ public class ConeheadZombie extends Zombie {
     private final static Image[] CONE_FRAMES;
 
     static {
-        WALK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/Attack/frame_", ATTACK_FRAME_COUNT);
-        CONE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/ConeheadZombie/cone/frame_", CONE_FRAME_COUNT);
-        BOOM_DIE_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ConeheadZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ConeheadZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        CONE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ConeheadZombie/cone/frame_", CONE_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public ConeheadZombie(ZombieData data) {

@@ -5,8 +5,9 @@ import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Plants.Shroom;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -24,10 +25,10 @@ public class DoomShroom extends BombPlant implements Shroom {
     private static final AudioClip sound;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
-        DOOM_FRAMES = Constants.getArrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
-        sound = Constants.setSound("doomshroom", false);
+        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
+        DOOM_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
+        sound = SoundManager.setSound("doomshroom", false);
     }
 
     public DoomShroom(int row, int col, boolean isSleep) {
@@ -44,7 +45,7 @@ public class DoomShroom extends BombPlant implements Shroom {
     public boolean actionHappens(List<Zombie> zombies) {
         if (isSleep) {
             updateFrame();
-            wakeUpTime = GlobalState.gameTime;
+            wakeUpTime = Constants.gameTime;
             return false;
         }
 
@@ -59,19 +60,19 @@ public class DoomShroom extends BombPlant implements Shroom {
                 String str = timeCreated != wakeUpTime ? "Day" : "Night";
                 picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + str + "Hole1.png"));
                 picture.setLayoutY(picture.getLayoutY() + picture.getFitHeight() / 4);
-                Constants.changeScale(picture, 1);
+                ImageFactory.changeScale(picture, 1);
             }
-        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 12000) {
+        } else if (Math.abs(Constants.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
             picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + time + "Hole2.png"));
-        } else if (Math.abs(GlobalState.gameTime - wakeUpTime) == 22000) die();
+        } else if (Math.abs(Constants.gameTime - wakeUpTime) == 22000) die();
         return false;
     }
 
     @Override
     public void action(List<Zombie> zombies) {
         sound.play();
-        Constants.changeScale(picture, 2);
+        ImageFactory.changeScale(picture, 2);
         picture.setLayoutY(picture.getLayoutY() - picture.getFitHeight() / 4);
         for (Zombie z : zombies) {
             if (Math.abs(z.getRow() - row) <= 2 && Math.abs(z.getCol() - col) <= 2 && z.alive() && !z.isHypnotized())

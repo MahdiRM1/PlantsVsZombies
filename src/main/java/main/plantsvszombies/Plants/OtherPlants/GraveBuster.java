@@ -4,8 +4,9 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Items.Grave;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
@@ -18,8 +19,8 @@ public class GraveBuster extends Plant {
     private static final AudioClip sound;
 
     static {
-        FRAMES = Constants.getArrayImage("Pictures/plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
-        sound = Constants.setSound("gravebusterchomp", false);
+        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
+        sound = SoundManager.setSound("gravebusterchomp", false);
     }
 
     public GraveBuster(int row, int col, Grave grave) {
@@ -28,7 +29,7 @@ public class GraveBuster extends Plant {
         HP = 100;
         rechargeTime = 10;
         this.grave = grave;
-        Constants.changeScale(picture, 1.3);
+        ImageFactory.changeScale(picture, 1.3);
         picture.setLayoutY(picture.getLayoutY() - Constants.TILE_SIZE / 2);
         if (grave != null) sound.play();
     }
@@ -36,9 +37,9 @@ public class GraveBuster extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (Math.abs(GlobalState.gameTime - timeCreated) < 2000)
-            picture.setLayoutY(picture.getLayoutY() + Constants.TILE_SIZE / 200);
-        else if (Math.abs(GlobalState.gameTime - timeCreated) == 2000) {
+        if (Math.abs(Constants.gameTime - timeCreated) < 3000)
+            picture.setLayoutY(picture.getLayoutY() + Constants.TILE_SIZE / 300);
+        else if (Math.abs(Constants.gameTime - timeCreated) == 3000) {
             die();
             return true;
         }

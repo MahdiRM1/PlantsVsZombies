@@ -1,12 +1,11 @@
 package main.plantsvszombies.Plants;
 
 import javafx.scene.media.AudioClip;
-import main.plantsvszombies.Enums.GameMode;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.SoundManager;
 
 public interface Shroom {
 
-    AudioClip wakeUpSound = Constants.setSound("wakeup", false);
+    AudioClip wakeUpSound = SoundManager.setSound("wakeup", false);
 
     void wakeUp();
 

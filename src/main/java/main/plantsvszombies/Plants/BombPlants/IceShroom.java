@@ -5,8 +5,9 @@ import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Plants.Shroom;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -20,9 +21,9 @@ public class IceShroom extends BombPlant implements Shroom {
     private static final AudioClip sound;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
-        sound = Constants.setSound("frozen", false);
+        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
+        sound = SoundManager.setSound("frozen", false);
     }
 
     public IceShroom(int row, int col, boolean isSleep) {
@@ -37,8 +38,8 @@ public class IceShroom extends BombPlant implements Shroom {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (isSleep) wakeUpTime = GlobalState.gameTime;
-        else if (Math.abs(GlobalState.gameTime - wakeUpTime) >= 1500) {
+        if (isSleep) wakeUpTime = Constants.gameTime;
+        else if (Math.abs(Constants.gameTime - wakeUpTime) >= 1500) {
             die();
             return isExploded = true;
         }

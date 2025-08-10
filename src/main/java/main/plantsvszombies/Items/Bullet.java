@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.BulletType;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.*;
 import main.plantsvszombies.Zombies.Zombie;
 
 public class Bullet {
@@ -16,13 +16,13 @@ public class Bullet {
     private final ImageView picture;
     private final BulletType type;
     static {
-        for (int i = 0; i < 4; i++) hit[i] = Constants.setSound("splat" + i, false);
-        for (int i = 0; i < 2; i++) shoot[i] = Constants.setSound("shoot" + i, false);
+        for (int i = 0; i < 4; i++) hit[i] = SoundManager.setSound("splat" + i, false);
+        for (int i = 0; i < 2; i++) shoot[i] = SoundManager.setSound("shoot" + i, false);
     }
 
     public Bullet(int row, int col, BulletType type) {
         this.row = row;
-        picture = Constants.setBulletPicture(row, col, type);
+        picture = ImageFactory.createBulletPicture(row, col, type);
         this.type = type;
         if (type == BulletType.SHROOM_BULLET) shoot[1].play();
         else shoot[0].play();

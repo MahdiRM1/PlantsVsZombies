@@ -4,8 +4,8 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.SunType;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Items.Sun;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
@@ -20,8 +20,8 @@ public class SunFlower extends Plant {
     private static final int GIVE_SUN_FRAME_COUNT = 26;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SunFlower/normal/frame_", NORMAL_FRAME_COUNT);
-        GIVE_SUN_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SunFlower/giveSun/frame_", GIVE_SUN_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/SunFlower/normal/frame_", NORMAL_FRAME_COUNT);
+        GIVE_SUN_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/SunFlower/giveSun/frame_", GIVE_SUN_FRAME_COUNT);
     }
 
     public SunFlower(int row, int col) {
@@ -36,7 +36,7 @@ public class SunFlower extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (Math.abs(GlobalState.gameTime - lastSunTime) == 8800) {
+        if (Math.abs(Constants.gameTime - lastSunTime) == 8800) {
             nowPic = 0;
             frameUpdateTime = 60;
             sunGiving = true;
@@ -45,7 +45,7 @@ public class SunFlower extends Plant {
             frameUpdateTime = 20;
             sunGiving = false;
         }
-        return sunGiving && nowPic == 20 && GlobalState.gameTime % 60 == 0;
+        return sunGiving && nowPic == 20 && Constants.gameTime % 60 == 0;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SunFlower extends Plant {
     }
 
     public Sun action() {
-        lastSunTime = GlobalState.gameTime;
+        lastSunTime = Constants.gameTime;
         return new Sun(SunType.RISEN.setCoordination(row, col));
     }
 

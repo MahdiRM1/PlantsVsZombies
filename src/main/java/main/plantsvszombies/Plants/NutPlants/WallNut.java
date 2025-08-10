@@ -1,7 +1,7 @@
 package main.plantsvszombies.Plants.NutPlants;
 
 import javafx.scene.image.Image;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 
 public class WallNut extends NutPlant {
 
@@ -11,9 +11,9 @@ public class WallNut extends NutPlant {
     private static final Image[] END_LIFE_FRAMES;
 
     static {
-        FULL_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/FullLife/frame_", FRAME_COUNT);
-        HALF_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/HalfLife/frame_", FRAME_COUNT);
-        END_LIFE_FRAMES = Constants.getArrayImage("Pictures/plantPictures/WallNut/EndLife/frame_", FRAME_COUNT);
+        FULL_LIFE_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/WallNut/FullLife/frame_", FRAME_COUNT);
+        HALF_LIFE_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/WallNut/HalfLife/frame_", FRAME_COUNT);
+        END_LIFE_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/WallNut/EndLife/frame_", FRAME_COUNT);
     }
 
     public WallNut(int row, int col) {

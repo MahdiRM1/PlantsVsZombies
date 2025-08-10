@@ -2,7 +2,7 @@ package main.plantsvszombies.GameState;
 
 import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Game.GameLogic;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Items.Card;
 import main.plantsvszombies.Items.Grave;
 import main.plantsvszombies.Plants.Plant;
@@ -31,7 +31,7 @@ public class GameState implements Serializable {
         this.score = score;
         this.mode = mode;
         fogLength = mode.getFogLength();
-        time = GlobalState.gameTime;
+        time = Constants.gameTime;
     }
 
     //saves plant data

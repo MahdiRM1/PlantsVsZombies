@@ -6,8 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.MineState;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.*;
 import main.plantsvszombies.Zombies.Zombie;
 
 public class PotatoMine extends BombPlant {
@@ -23,10 +22,10 @@ public class PotatoMine extends BombPlant {
     private MineState state;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
-        ATTACK_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
-        READY_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
-        sound = Constants.setSound("potato_mine", false);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
+        READY_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
+        sound = SoundManager.setSound("potato_mine", false);
     }
 
     public PotatoMine(int row, int col) {
@@ -40,8 +39,8 @@ public class PotatoMine extends BombPlant {
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if (Math.abs(GlobalState.gameTime - timeCreated) < 10_000) return false;
-        else if (Math.abs(GlobalState.gameTime - timeCreated) == 10_000) setState(MineState.IS_READY);
+        if (Math.abs(Constants.gameTime - timeCreated) < 10_000) return false;
+        else if (Math.abs(Constants.gameTime - timeCreated) == 10_000) setState(MineState.IS_READY);
         else if (state == MineState.IS_READY && nowPic == getImage().length - 1) setState(MineState.READY);
         else if (state == MineState.READY && zombieCollision(zombies)) setState(MineState.EXPLODING);
         else if (state == MineState.EXPLODING && nowPic == getImage().length - 1) {
@@ -49,7 +48,7 @@ public class PotatoMine extends BombPlant {
             return true;
         }
         else if (state == MineState.EXPLODED) {
-            if (GlobalState.gameTime - explosionTime > 1000) die();
+            if (Constants.gameTime - explosionTime > 1000) die();
             return false;
         }
         updateFrame();
@@ -58,7 +57,7 @@ public class PotatoMine extends BombPlant {
 
     private boolean zombieCollision(List<Zombie> zombies){
         for (Zombie z : zombies)
-            if (Constants.checkCollision(layoutX(), z.layoutX(), row, z.getRow()) && !z.isHypnotized())
+            if (Utils.checkCollision(layoutX(), z.layoutX(), row, z.getRow()) && !z.isHypnotized())
                 return true;
         return false;
     }
@@ -80,8 +79,8 @@ public class PotatoMine extends BombPlant {
     @Override
     public void action(List<Zombie> zombies) {
         sound.play();
-        Constants.changeScale(picture, 1.5);
-        explosionTime = GlobalState.gameTime;
+        ImageFactory.changeScale(picture, 1.5);
+        explosionTime = Constants.gameTime;
         for (Zombie z : zombies)
             if (row == z.getRow() && col == z.getCol() && !z.isHypnotized())
                 z.setState(ZombieState.DEAD);

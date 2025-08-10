@@ -6,7 +6,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import main.plantsvszombies.Game.*;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 
 public class Fog {
 
@@ -19,7 +20,7 @@ public class Fog {
 
     public Fog(Pane fogGrid, int fogLength) {
         this.fogLength = fogLength;
-        picture = Constants.setFogPicture(fogLength);
+        picture = ImageFactory.createFogPicture(fogLength);
         minPicX = picture.getLayoutX();
         moveValue = (Constants.SCREEN_WIDTH - minPicX)/59;
         full = new Rectangle(picture.getFitWidth(), picture.getFitHeight());
@@ -30,7 +31,7 @@ public class Fog {
     public void clearFog(int centerRow, int centerCol) {
         Shape clip = (Shape)picture.getClip();
         Circle circle = new Circle(Constants.TILE_SIZE*2);
-        Constants.positionNode(circle, (centerCol + 0.5 - fogLength) * Constants.TILE_SIZE, (centerRow + 1.23) * Constants.TILE_SIZE);
+        ImageFactory.setNodePosition(circle, (centerCol + 0.5 - fogLength) * Constants.TILE_SIZE, (centerRow + 1.23) * Constants.TILE_SIZE);
         Shape clipped = Shape.subtract(clip, circle);
         picture.setClip(clipped);
     }
@@ -41,7 +42,7 @@ public class Fog {
     }
 
     public void updateFog() {
-        long blover = Math.abs(GlobalState.gameTime - bloverTime);
+        long blover = Math.abs(Constants.gameTime - bloverTime);
         if (blover < 10_000) return;
         else move(false);
 

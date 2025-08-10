@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Enums.SunType;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Items.Sun;
 
 public class ScoreBoard {
@@ -34,7 +36,7 @@ public class ScoreBoard {
     }
 
     private void setScoreBoardOnPane() {
-        ImageView board = Constants.setScoreBoardPicture();
+        ImageView board = ImageFactory.createScoreBoardPicture();
         pane.getChildren().add(1, board);
         pane.setLeft(scoreLabel);
     }
@@ -76,7 +78,7 @@ public class ScoreBoard {
     // removes unclicked suns after time window is up
     private void cleanUpSuns() {
         for (Sun sun : suns) {
-            if (Math.abs(sun.getTimeCreated() - GlobalState.gameTime) >= SUN_LIFE_TIME) {
+            if (Math.abs(sun.getTimeCreated() - Constants.gameTime) >= SUN_LIFE_TIME) {
                 removeSunFromPane(sun);
                 break;
             }
@@ -98,7 +100,7 @@ public class ScoreBoard {
 
     // manage fallen sun movement
     private void sunDrop() {
-        if (GlobalState.gameTime % 10000 == 0 && mode == GameMode.DAY) {
+        if (Constants.gameTime % 10000 == 0 && mode == GameMode.DAY) {
             Sun s = new Sun(SunType.BASE_FALLEN);
             addSun(s);
         }

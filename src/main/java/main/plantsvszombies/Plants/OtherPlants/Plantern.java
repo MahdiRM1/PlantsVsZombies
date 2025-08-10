@@ -3,7 +3,7 @@ package main.plantsvszombies.Plants.OtherPlants;
 import java.util.List;
 
 import javafx.scene.image.Image;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Items.Fog;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
@@ -14,7 +14,7 @@ public class Plantern extends Plant {
     private static final Image[] FRAMES;
 
     static {
-        FRAMES = Constants.getArrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);
+        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);
     }
 
     public Plantern(int row, int col) {
