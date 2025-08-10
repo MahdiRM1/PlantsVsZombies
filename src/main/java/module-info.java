@@ -11,4 +11,8 @@ module main.plantsvszombies {
 
     opens main.plantsvszombies to javafx.fxml;
     exports main.plantsvszombies;
+    exports main.plantsvszombies.Game.Tools;
+    opens main.plantsvszombies.Game.Tools to javafx.fxml;
+    exports main.plantsvszombies.Game.PlayModes;
+    opens main.plantsvszombies.Game.PlayModes to javafx.fxml;
 }

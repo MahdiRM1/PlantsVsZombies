@@ -29,6 +29,7 @@ public class Client extends PlayMode implements Runnable{
     }
 
     public void run() {
+        System.out.println("man clientammmmmm");
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -39,7 +40,6 @@ public class Client extends PlayMode implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void connection() {
@@ -47,8 +47,9 @@ public class Client extends PlayMode implements Runnable{
         int port = 5000;
         try {
             socket = new Socket(IP, port);
+            System.out.println("vasl shodam");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());;
         }
     }
 }

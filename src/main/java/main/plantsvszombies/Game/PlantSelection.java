@@ -118,7 +118,7 @@ public class PlantSelection{
         return start;
     }
 
-    private void startGame(){
+    private void startGame() {
         SoundManager.playClickTrack();
         backgroundMusic.stop();
         AudioClip startGame = SoundManager.setSound("readysetplant", false);
