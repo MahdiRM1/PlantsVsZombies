@@ -3,7 +3,7 @@ package main.plantsvszombies.Items;
 import java.util.Random;
 
 import javafx.scene.image.ImageView;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.GameState.GraveData;
 
 public class Grave {
@@ -16,7 +16,7 @@ public class Grave {
         this.row = data.getRow();
         this.col = data.getCol();
         picNumber = data.getPicNumber();
-        picture = Constants.setGravePicture(row, col, picNumber);
+        picture = ImageFactory.createGravePicture(row, col, picNumber);
     }
 
     public Grave(int row, int col) {
@@ -24,7 +24,7 @@ public class Grave {
         this.row = row;
         this.col = col;
         picNumber = rdm.nextInt(5) + 1;
-        picture = Constants.setGravePicture(row, col, picNumber);
+        picture = ImageFactory.createGravePicture(row, col, picNumber);
     }
 
     public int getRow() {

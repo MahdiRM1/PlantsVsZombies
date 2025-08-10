@@ -1,5 +1,6 @@
 package main.plantsvszombies.Game;
 
+import main.plantsvszombies.Game.Tools.Constants;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
@@ -59,7 +60,7 @@ public class GameTimer {
     }
 
     private void flagsMove(){
-        double time = GlobalState.gameTime;
+        double time = Constants.gameTime;
         if (time % 50 != 0) return;
 
         if (time >= 70_000 && time < 71_000) flag1.setLayoutY(flag1.getLayoutY() - 1);
@@ -67,9 +68,10 @@ public class GameTimer {
     }
 
     private double value(){
-        if (GlobalState.gameTime < 20_000) return 0;
-        else if (GlobalState.gameTime < 70_000) return (GlobalState.gameTime - 20_000.0) / 100_000;
-        else if (GlobalState.gameTime < 80_000) return 1.0 / 2;
-        else return (GlobalState.gameTime - 20_000.0) / 120_000;
+        if (Constants.gameTime < 20_000) return 0;
+        else if (Constants.gameTime < 70_000) return (Constants.gameTime - 20_000.0) / 100_000;
+        else if (Constants.gameTime < 80_000) return 1.0 / 2;
+        else if (Constants.gameTime < 140_000) return (Constants.gameTime - 20_000.0) / 120_000;
+        else return 1.0;
     }
 }

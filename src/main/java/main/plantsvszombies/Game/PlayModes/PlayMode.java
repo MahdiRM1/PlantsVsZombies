@@ -4,7 +4,8 @@ import java.util.List;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
-import main.plantsvszombies.Game.*;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Items.Grave;
 import main.plantsvszombies.Zombies.*;
 
@@ -31,9 +32,9 @@ public abstract class PlayMode{
 
     // controls the general timing of zombies entering and attack waves
     protected String timeHandler() {
-        int time = (int) GlobalState.gameTime / 1000;
-        if (GlobalState.gameTime == 20_000) {
-            AudioClip sound = Constants.setSound("awooga", false);
+        int time = (int) Constants.gameTime / 1000;
+        if (Constants.gameTime == 20_000) {
+            AudioClip sound = SoundManager.setSound("awooga", false);
             sound.play();
         }
         if (time <= 20) return "execute no moves";
@@ -56,28 +57,28 @@ public abstract class PlayMode{
 
     // handles the zombie entering
     private String handleZombie(long base, long mode, int zombieTypes) {
-        if (GlobalState.gameTime % base == mode)
+        if (Constants.gameTime % base == mode)
             return (int)(Math.random() * zombieTypes) + "," + (int) (Math.random() * 5);
         return "execute no moves";
     }
 
     // handles the attack waves
     private void wave() {
-        int zombieTypes = GlobalState.gameTime < 100_000 ? 4 : 5;
+        int zombieTypes = Constants.gameTime < 100_000 ? 4 : 5;
         int attackType = zombieTypes - 3;
-        if (GlobalState.gameTime == (long) attackType * 70_000) {
+        if (Constants.gameTime == (long) attackType * 70_000) {
             spawnZombie(5, (int)(Math.random()*5));
-            AudioClip attackWave = Constants.setSound("hugewave", false);
+            AudioClip attackWave = SoundManager.setSound("hugewave", false);
             if (attackType > 1) {
-                attackWave = Constants.setSound("siren", false);
-                AudioClip sound = Constants.setSound("awooga", false);
+                attackWave = SoundManager.setSound("siren", false);
+                AudioClip sound = SoundManager.setSound("awooga", false);
                 sound.play();
                 for (Grave grave : graves) {
                     spawnZombie((int) (Math.random() * 4), grave.getRow(), grave.getCol());
                 }
             }
             attackWave.play();
-        } else if (GlobalState.gameTime % 4000 == 0 || GlobalState.gameTime % 4000 == 200) {
+        } else if (Constants.gameTime % 4000 == 0 || Constants.gameTime % 4000 == 200) {
             for (int i = 0; i < 5; i++) {
                 spawnZombie((int) (Math.random() * zombieTypes), i);
             }
@@ -121,7 +122,7 @@ public abstract class PlayMode{
                 return false;
             }
         }
-        return GlobalState.gameTime >= 155_000;
+        return Constants.gameTime >= 155_000;
     }
 
     public abstract void updateGame();

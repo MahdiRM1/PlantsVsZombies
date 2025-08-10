@@ -4,7 +4,8 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import main.plantsvszombies.Game.*;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Zombies.Zombie;
 
 public abstract class Plant {
@@ -21,8 +22,8 @@ public abstract class Plant {
     public Plant(int row, int col) {
         this.row = row;
         this.col = col;
-        this.timeCreated = GlobalState.gameTime;
-        picture = Constants.setPlantPicture(this.getClass().getSimpleName(), row, col);
+        this.timeCreated = Constants.gameTime;
+        picture = ImageFactory.createPlantPicture(this.getClass().getSimpleName(), row, col);
         frameUpdateTime = 40;
     }
 
@@ -31,7 +32,7 @@ public abstract class Plant {
     }
 
     protected void updateFrame() {
-        if (GlobalState.gameTime % frameUpdateTime != 0) return;
+        if (Constants.gameTime % frameUpdateTime != 0) return;
 
         Image[] frame = getImage();
         nowPic++;

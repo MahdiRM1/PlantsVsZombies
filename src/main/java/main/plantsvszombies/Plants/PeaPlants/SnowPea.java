@@ -2,7 +2,7 @@ package main.plantsvszombies.Plants.PeaPlants;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.BulletType;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 
 public class SnowPea extends PeaPlant {
 
@@ -11,8 +11,8 @@ public class SnowPea extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SnowPea/normal/frame_", FRAME_COUNT);
-        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/SnowPea/shoot/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/SnowPea/normal/frame_", FRAME_COUNT);
+        SHOOT_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/SnowPea/shoot/frame_", FRAME_COUNT);
     }
 
     public SnowPea(int row, int col) {

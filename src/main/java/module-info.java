@@ -7,6 +7,7 @@ module main.plantsvszombies {
     requires java.desktop;
     requires java.sql;
     requires javafx.media;
+    requires jdk.jshell;
 
     opens main.plantsvszombies to javafx.fxml;
     exports main.plantsvszombies;

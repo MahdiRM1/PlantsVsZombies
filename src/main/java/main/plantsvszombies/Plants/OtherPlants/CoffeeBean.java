@@ -4,8 +4,9 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Plants.*;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -20,9 +21,9 @@ public class CoffeeBean extends Plant {
     private static final AudioClip sound;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
-        EAT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
-        sound = Constants.setSound("coffee", false);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
+        EAT_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
+        sound = SoundManager.setSound("coffee", false);
     }
 
     public CoffeeBean(int row, int col, Shroom shroom) {
@@ -37,7 +38,7 @@ public class CoffeeBean extends Plant {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (!isEaten && Math.abs(GlobalState.gameTime - timeCreated) >= 1500) {
+        if (!isEaten && Math.abs(Constants.gameTime - timeCreated) >= 1500) {
             nowPic = 0;
             isEaten = true;
             sound.play();

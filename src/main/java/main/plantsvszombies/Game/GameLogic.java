@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.layout.Pane;
 import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
 import main.plantsvszombies.GameState.GraveData;
 import main.plantsvszombies.GameState.PlantData;
@@ -51,7 +52,7 @@ public class GameLogic {
     private void loadPlants(List<PlantData> plantDataList) {
         for (PlantData data : plantDataList) {
             if (data.getType().equals("CoffeeBean")|| data.getType().equals("GraveBuster")) continue;
-            Plant plant = Constants.getPlant(data.getRow(), data.getCol(), data.getType(), data.isSleep());
+            Plant plant = Utils.buildPlant(data.getRow(), data.getCol(), data.getType(), data.isSleep());
             plant.setHP(data.getHP());
             plants.add(plant);
         }

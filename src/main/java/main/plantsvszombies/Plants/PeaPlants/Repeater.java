@@ -2,7 +2,7 @@ package main.plantsvszombies.Plants.PeaPlants;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.BulletType;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Items.Bullet;
 
 public class Repeater extends PeaPlant {
@@ -13,8 +13,8 @@ public class Repeater extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Repeater/normal/frame_", NORMAL_FRAME_COUNT);
-        SHOOT_FRAMES = Constants.getArrayImage("Pictures/plantPictures/Repeater/shoot/frame_", SHOOT_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Repeater/normal/frame_", NORMAL_FRAME_COUNT);
+        SHOOT_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Repeater/shoot/frame_", SHOOT_FRAME_COUNT);
     }
 
     public Repeater(int row, int col) {

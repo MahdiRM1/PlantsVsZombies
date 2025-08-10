@@ -4,7 +4,7 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 import main.plantsvszombies.Enums.BulletType;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Plants.Shroom;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -16,8 +16,8 @@ public class PuffShroom extends PeaPlant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PuffShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/PuffShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PuffShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PuffShroom/normal/frame_", FRAME_COUNT);
     }
 
     public PuffShroom(int row, int col, boolean isSleep) {

@@ -1,7 +1,7 @@
 package main.plantsvszombies.Plants.PeaPlants;
 
 import main.plantsvszombies.Enums.BulletType;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Items.Bullet;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Plants.Shroom;
@@ -35,13 +35,13 @@ public abstract class PeaPlant extends Plant {
     }
 
     public Bullet action() {
-        if (this instanceof Shroom && Math.abs(lastShoot - GlobalState.gameTime) >= 1200) return shoot();
+        if (this instanceof Shroom && Math.abs(lastShoot - Constants.gameTime) >= 1200) return shoot();
         else if (nowPic == 30) return shoot();
         return null;
     }
 
     protected Bullet shoot() {
-        lastShoot = GlobalState.gameTime;
+        lastShoot = Constants.gameTime;
         return new Bullet(row, col, bulletType);
     }
 }

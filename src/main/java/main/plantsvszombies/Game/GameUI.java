@@ -10,8 +10,6 @@ import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.*;
 import main.plantsvszombies.Game.PlayModes.*;
+import main.plantsvszombies.Game.Tools.*;
 import main.plantsvszombies.GameState.*;
 import main.plantsvszombies.Items.*;
 import main.plantsvszombies.Plants.*;
@@ -89,11 +88,11 @@ public class GameUI {
 
     // manages the start of the game
     public final void startGame() {
-        backgroundMusic = Constants.setSound("gameMusic", true);
-        backgroundMusic.setVolume(GlobalState.music);
+        backgroundMusic = SoundManager.setSound("gameMusic", true);
+        backgroundMusic.setVolume(SoundManager.music);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
-            GlobalState.gameTime += 20;
+            Constants.gameTime += 20;
             updateGame();
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
@@ -106,15 +105,15 @@ public class GameUI {
 
     // initializes the stack pane
     private void initStackPane(HBox cardBar, int score, long time) {
-        borderPane.getChildren().add(Constants.setBackGround(
+        borderPane.getChildren().add(ImageFactory.createBackGround(
                 (mode == GameMode.DAY) ? "backGroundDay" : "backGroundNight"));
         borderPane.setTop(cardBar);
         borderPane.setBottom(map());
         pane.setMouseTransparent(true);
         scoreBoard = new ScoreBoard(borderPane, score, mode);
         for (Grave grave : gameLogic.getGraves()) borderPane.getChildren().add(grave.getPicture());
-        GlobalState.gameTime = time;
-        mainPane.getChildren().addAll(borderPane, pane, buttonsPane());
+        Constants.gameTime = time;
+        mainPane.getChildren().addAll(borderPane, pane, topPane());
     }
 
     // initialized the fog
@@ -158,7 +157,7 @@ public class GameUI {
     // generate mapButtons and control planting visuals
     private Button mapButtons(int row, int col) {
         Button btn = new Button();
-        Constants.sizeNode(btn, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        ImageFactory.setNodeSize(btn, Constants.TILE_SIZE, Constants.TILE_SIZE);
         btn.setStyle("-fx-background-color: transparent");
 
         btn.setOnAction(event -> handleMapClick(row, col, btn));
@@ -176,12 +175,12 @@ public class GameUI {
 
     private void wrongClick(Button btn){
         btn.setStyle("-fx-background-color: rgba(245, 50, 50, 0.6);");
-        GlobalState.playWrongClick();
+        SoundManager.playWrongClick();
     }
 
     private void correctClick(Button btn){
         btn.setStyle("-fx-background-color: rgba(174, 255, 174, 0.7);");
-        GlobalState.playCorrectClick();
+        SoundManager.playCorrectClick();
     }
 
     // handles the planting
@@ -216,33 +215,29 @@ public class GameUI {
         Pane buttons = (Pane) mainPane.getChildren().getLast();
         ImageView shovelBack = ((ImageView) buttons.getChildren().getLast());
         shovelBack.setEffect(null);
-        buttons.getChildren().add(Constants.shovelImage());
+        buttons.getChildren().add(ImageFactory.shovelImage());
         scene.setCursor(Cursor.DEFAULT);
         selectedButton = -1;
     }
 
     // control menu buttons
-    private Pane buttonsPane() {
+    private Pane topPane() {
         Pane buttonsPane = new Pane();
         buttonsPane.setPickOnBounds(false);
 
-        ImageView menu = Constants.setButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
-        menu.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
-            tl.pause();
-            menu();
-        });
-        Constants.positionNode(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
+        ImageView menu = ImageFactory.createButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
+        menu.setOnMouseClicked(event -> menu());
+        ImageFactory.setNodePosition(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
 
-        ImageView shovel = Constants.shovelImage();
-        ImageView shovelBack = Constants.setButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
-        Constants.positionNode(shovelBack, shovel.getLayoutX(), 0);
+        ImageView shovel = ImageFactory.shovelImage();
+        ImageView shovelBack = ImageFactory.createButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
+        ImageFactory.setNodePosition(shovelBack, shovel.getLayoutX(), 0);
 
         Cursor cursor = new ImageCursor(shovel.getImage());
         shovelBack.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
+            SoundManager.playClickTrack();
             shovelButtonClick(shovel, shovelBack, cursor);
-            GlobalState.playShovelClick();
+            SoundManager.playShovelClick();
         });
 
         buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
@@ -270,49 +265,33 @@ public class GameUI {
 
     // generate the menu pane
     private void menu(){
-        AudioClip pause = Constants.setSound("pause", false);
+        tl.pause();
+        AudioClip pause = SoundManager.setSound("pause", false);
         pause.play();
 
-        Pane menuPane = new Pane();
+        Pane menuPane = Utils.createMenu();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView optionImg = new ImageView(new Image("file:Pictures/ui/optionPic.png"));
-        Constants.positionNode(optionImg, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 10);
-        Constants.sizeNode(optionImg, Constants.SCREEN_WIDTH / 2.5, Constants.SCREEN_HEIGHT / 1.25);
-
         ImageView mainMenu = mainMenuBtn("menu");
-        Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.6);
+        ImageFactory.setNodePosition(mainMenu, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.6);
 
         ImageView restart = restartBtn();
-        Constants.positionNode(restart, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.84);
+        ImageFactory.setNodePosition(restart, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.84);
 
-
-        ImageView backToGame = Constants.setButton("BackToGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
-        Constants.positionNode(backToGame, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+        ImageView backToGame = ImageFactory.createButton("BackToGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
+        ImageFactory.setNodePosition(backToGame, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
         backToGame.setOnMouseClicked(e -> {
-            GlobalState.playClickTrack();
+            SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();
-            if (GlobalState.music != backgroundMusic.getVolume()){
+            if (SoundManager.music != backgroundMusic.getVolume()){
                 backgroundMusic.stop();
-                backgroundMusic.setVolume(GlobalState.music);
+                backgroundMusic.setVolume(SoundManager.music);
                 backgroundMusic.play();
             }
             tl.play();
         });
 
-        Slider music = new Slider(0, 1, GlobalState.music);
-        Constants.setSlider(music);
-        music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
-        music.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.music = newVal.doubleValue());
-        Label musicLabel = Constants.setSliderLabel("Music", music);
-
-        Slider volume = new Slider(0, 1, GlobalState.volume);
-        Constants.setSlider(volume);
-        volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
-        volume.valueProperty().addListener((obs, oldVal, newVal) -> GlobalState.volume = newVal.doubleValue());
-        Label volumeLabel = Constants.setSliderLabel("Volume", volume);
-
-        menuPane.getChildren().addAll(optionImg, backToGame, mainMenu, restart, music, musicLabel, volume, volumeLabel);
+        menuPane.getChildren().addAll(backToGame, mainMenu, restart);
         mainPane.getChildren().add(menuPane);
     }
 
@@ -324,7 +303,7 @@ public class GameUI {
         return switch (plantName){
             case "CoffeeBean" -> getCoffeeBean(row, col);
             case "GraveBuster" -> getGraveBuster(row, col);
-            default -> Constants.getPlant(row, col, plantName, mode == GameMode.DAY);
+            default -> Utils.buildPlant(row, col, plantName, mode == GameMode.DAY);
         };
     }
 
@@ -337,9 +316,8 @@ public class GameUI {
 
     // get the grave buster from the selected button
     private GraveBuster getGraveBuster(int row, int col) {
-        for (Grave grave : gameLogic.getGraves()) {
+        for (Grave grave : gameLogic.getGraves())
             if (grave.getRow() == row && grave.getCol() == col) return new GraveBuster(row, col, grave);
-        }
         return null;
     }
 
@@ -393,7 +371,7 @@ public class GameUI {
     // saves the game
     public void save() {
         GameState state = new GameState(gameLogic, cards, scoreBoard.getScore(), mode);
-        Constants.writeState(state);
+        Utils.writeState(state);
     }
 
     // manages win or lose visuals
@@ -409,11 +387,11 @@ public class GameUI {
     private void lose(){
         tl.stop();
         Pane lose = new Pane();
-        AudioClip sound = Constants.setSound("losemusic", false);
+        AudioClip sound = SoundManager.setSound("losemusic", false);
         sound.play();
         ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
-        Constants.sizeNode(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
-        Constants.positionNode(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
+        ImageFactory.setNodeSize(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        ImageFactory.setNodePosition(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
         lose.getChildren().add(loseImage);
         mainPane.getChildren().add(lose);
         finnishAnimation(loseImage);
@@ -427,10 +405,10 @@ public class GameUI {
     // adds the trophy to the screen
     private void addTrophy(){
         Pane trophyPane = new Pane();
-        ImageView trophy = Constants.setButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
-        Constants.positionNode(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
+        ImageView trophy = ImageFactory.createButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
+        ImageFactory.setNodePosition(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
         trophy.setOnMouseClicked(event -> {
-            AudioClip win = Constants.setSound("winmusic", false);
+            AudioClip win = SoundManager.setSound("winmusic", false);
             win.play();
             finnishAnimation(trophy);
         });
@@ -455,14 +433,13 @@ public class GameUI {
     private boolean trophyMove(double minY, ImageView trophy, boolean isRisen){
         double diffY = Math.abs(minY - trophy.getLayoutY());
         if (isRisen) {
-            Constants.positionNode(trophy, trophy.getLayoutX() - 1, trophy.getLayoutY() - diffY / 5);
+            ImageFactory.setNodePosition(trophy, trophy.getLayoutX() - 1, trophy.getLayoutY() - diffY / 5);
             if (diffY < 1) isRisen = false;
-        } else Constants.positionNode(trophy, trophy.getLayoutX() - 0.5, trophy.getLayoutY() + diffY / 5);
+        } else ImageFactory.setNodePosition(trophy, trophy.getLayoutX() - 0.5, trophy.getLayoutY() + diffY / 5);
         return isRisen;
     }
 
     private void finnishAnimation(ImageView image){
-        image.setOnMouseExited(e -> {});
         image.setOnMouseEntered(e -> {});
         image.setOnMouseClicked(e -> {});
         double size = image.getFitHeight();
@@ -485,34 +462,33 @@ public class GameUI {
         pane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         ImageView restart = restartBtn();
-        Constants.positionNode(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
+        ImageFactory.setNodePosition(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
 
         ImageView mainMenu = mainMenuBtn("full");
-        Constants.positionNode(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
+        ImageFactory.setNodePosition(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
 
-        stage.setOnCloseRequest(event -> Constants.deleteSaveData());
-
+        stage.setOnCloseRequest(event -> Utils.deleteSaveData());
         pane.getChildren().addAll(restart, mainMenu);
     }
 
     private ImageView restartBtn(){
-        ImageView restart = Constants.setButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+        ImageView restart = ImageFactory.createButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         restart.setOnMouseClicked(event -> {
-            GlobalState.playClickTrack();
+            SoundManager.playClickTrack();
             new PlantSelection(stage, mode);
         });
         return restart;
     }
 
     private ImageView mainMenuBtn(String state){
-        ImageView mainMenu = Constants.setButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+        ImageView mainMenu = ImageFactory.createButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
         mainMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
-            GlobalState.playClickTrack();
+            SoundManager.playClickTrack();
             new Introduction(stage).firstPage();
 
             if (state.equals("menu")) save();
-            else Constants.deleteSaveData();
+            else Utils.deleteSaveData();
         });
         return mainMenu;
     }

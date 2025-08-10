@@ -10,8 +10,7 @@ import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.BulletType;
 import main.plantsvszombies.Enums.ZombieState;
-import main.plantsvszombies.Game.Constants;
-import main.plantsvszombies.Game.GlobalState;
+import main.plantsvszombies.Game.Tools.*;
 import main.plantsvszombies.GameState.ZombieData;
 import main.plantsvszombies.Items.Bullet;
 import main.plantsvszombies.Plants.Plant;
@@ -38,20 +37,20 @@ public abstract class Zombie {
     private long lastBite;
 
     static {
-        HEAD_FRAMES = Constants.getArrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
-        gulp = Constants.setSound("gulp", false);
-        chomp[0] = Constants.setSound("chomp", false);
-        chomp[1] = Constants.setSound("chompsoft", false);
+        HEAD_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
+        gulp = SoundManager.setSound("gulp", false);
+        chomp[0] = SoundManager.setSound("chomp", false);
+        chomp[1] = SoundManager.setSound("chompsoft", false);
         for (int soundNum = 0; soundNum < 7; soundNum++)
-            groan[soundNum] = Constants.setSound("groan" + soundNum, false);
+            groan[soundNum] = SoundManager.setSound("groan" + soundNum, false);
     }
 
     public Zombie(ZombieData data) {
         this.row = data.getRow();
         picture = new ImageView();
         secondPicture = new ImageView();
-        Constants.setZombiePicture(picture, secondPicture, row, col);
-        Constants.positionNode(picture, data.getPicLayoutX(), picture.getLayoutY());
+        ImageFactory.createZombiePicture(picture, secondPicture, row, col);
+        ImageFactory.setNodePosition(picture, data.getPicLayoutX(), picture.getLayoutY());
         if (data.isHypnotized()) hypnosis();
         else state = ZombieState.WALKING;
         HP = data.getHP();
@@ -62,7 +61,7 @@ public abstract class Zombie {
         this.row = row;
         picture = new ImageView();
         secondPicture = new ImageView();
-        Constants.setZombiePicture(picture, secondPicture, row, col);
+        ImageFactory.createZombiePicture(picture, secondPicture, row, col);
         state = ZombieState.WALKING;
         freezeTime = -5000;
         zombieSound();
@@ -87,11 +86,11 @@ public abstract class Zombie {
     }
 
     public void action() {
-        boolean iceCondition = Math.abs(GlobalState.gameTime - freezeTime) <= 5000;
+        boolean iceCondition = Math.abs(Constants.gameTime - freezeTime) <= 5000;
         int updateFrameTime = iceCondition ? 80 : 40;
-        if (GlobalState.gameTime % updateFrameTime != 0) return;
+        if (Constants.gameTime % updateFrameTime != 0) return;
         if(!hypnotized)
-            picture.setEffect(iceCondition ? Constants.effect(0.6, 0.3, 0.2, 0.1) : null);
+            picture.setEffect(iceCondition ? Utils.effect(0.6, 0.3, 0.2, 0.1) : null);
         updateFrame();
 
         switch (state) {
@@ -99,8 +98,8 @@ public abstract class Zombie {
             case EATING -> eat();
             case DIE, BOOM_DIE -> die();
             case FREEZE -> {
-                if (Math.abs(GlobalState.gameTime - freezeTime) >= 4950) {
-                    freezeTime = GlobalState.gameTime;
+                if (Math.abs(Constants.gameTime - freezeTime) >= 4950) {
+                    freezeTime = Constants.gameTime;
                     state = ZombieState.WALKING;
                 }
             }
@@ -141,18 +140,18 @@ public abstract class Zombie {
     public void walk(boolean hypnotized) {
         int sign = hypnotized ? -1 : 1;
         picture.setLayoutX(picture.getLayoutX() - (sign)*(Constants.TILE_SIZE / (speed * 1000.0 / 40)));
-        col = Constants.getColumnZombie(layoutX());
+        col = Utils.getColumnZombie(layoutX());
     }
 
     private void eat(){
-        if (Math.abs(GlobalState.gameTime - lastBite) < 500) return;
+        if (Math.abs(Constants.gameTime - lastBite) < 500) return;
 
         switch (toEat){
             case Zombie z -> eatZombie(z);
             case Plant p -> eatPlant(p);
             default -> { return; }
         }
-        lastBite = GlobalState.gameTime;
+        lastBite = Constants.gameTime;
     }
 
     private void eatZombie(Zombie zombie){
@@ -183,7 +182,7 @@ public abstract class Zombie {
     // ?checks if a zombie has reached a plant
     private Plant plantCollision(List<Plant> plants) {
         for (Plant plant : plants) {
-            if (Constants.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0)
+            if (Utils.checkCollision(layoutX(), plant.layoutX(), row, plant.getRow()) && plant.getHP() > 0)
                 return plant;
         }
         return null;
@@ -193,7 +192,7 @@ public abstract class Zombie {
     private Zombie zombieCollision(List<Zombie> zombies){
         for (Zombie zombie : zombies) {
             if (alive() && !zombie.isHypnotized()) {
-                if (Constants.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && toEat != zombie) {
+                if (Utils.checkCollision(layoutX(), zombie.layoutX(), row, zombie.getRow()) && toEat != zombie) {
                     zombie.zombieToEat(this);
                     return zombie;
                 }
@@ -237,7 +236,7 @@ public abstract class Zombie {
     public final void hypnosis(){
         picture.setScaleX(-1);
         picture.setLayoutX(picture.getLayoutX() + Constants.ZOMBIE_PIC_WIDTH/5);
-        picture.setEffect(Constants.effect(1, 1, 0.3, 0.3));
+        picture.setEffect(Utils.effect(1, 1, 0.3, 0.3));
         state = ZombieState.WALKING;
         toEat = null;
         hypnotized = true;
@@ -261,7 +260,7 @@ public abstract class Zombie {
     }
 
     public void updateFreezeTime() {
-        freezeTime = GlobalState.gameTime;
+        freezeTime = Constants.gameTime;
     }
 
     protected abstract Image[] getZombiePictures();

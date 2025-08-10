@@ -3,7 +3,8 @@ package main.plantsvszombies.Plants.OtherPlants;
 import java.util.List;
 
 import javafx.scene.image.Image;
-import main.plantsvszombies.Game.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.Plants.*;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -15,8 +16,8 @@ public class HypnoShroom extends Plant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SLEEP_FRAMES = Constants.getArrayImage("Pictures/plantPictures/HypnoShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = Constants.getArrayImage("Pictures/plantPictures/HypnoShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/HypnoShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/HypnoShroom/normal/frame_", FRAME_COUNT);
     }
 
     public HypnoShroom(int row, int col, boolean isSleep) {
@@ -42,7 +43,7 @@ public class HypnoShroom extends Plant implements Shroom {
 
     public void action(List<Zombie> zombies) {
         for (Zombie z : zombies)
-            if (Constants.checkCollision(layoutX(), z.layoutX(), row, z.getRow())){
+            if (Utils.checkCollision(layoutX(), z.layoutX(), row, z.getRow())){
                 z.hypnosis();
                 die();
                 break;
