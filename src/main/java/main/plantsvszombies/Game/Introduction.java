@@ -178,7 +178,8 @@ public class Introduction {
 
         Button btn1 = socketButtons("Client");
         btn1.setOnAction(e -> {
-            PlayMode playMode = new Client("192.168.242.30");
+            PlayMode playMode = new Client();
+            ((Client)playMode).connection("192.168.242.30");
             startGame(GameMode.DAY, playMode);
         });
         ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
@@ -186,14 +187,9 @@ public class Introduction {
         Button btn2 = socketButtons("Server");
         btn2.setOnMouseClicked(e -> {
             MultiServer multiServer = new MultiServer();
+            PlayMode playMode = multiServer.innerConnection();
             Thread thread = new Thread(multiServer);
             thread.start();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
-            PlayMode playMode = new Client("127.0.0.1");
             startGame(GameMode.DAY, playMode);
         });
         ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.9, Constants.SCREEN_HEIGHT/1.65);
