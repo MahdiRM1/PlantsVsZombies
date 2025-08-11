@@ -15,10 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
-import main.plantsvszombies.Game.PlayModes.Client;
-import main.plantsvszombies.Game.PlayModes.DefaultMode;
-import main.plantsvszombies.Game.PlayModes.PlayMode;
-import main.plantsvszombies.Game.PlayModes.Server;
+import main.plantsvszombies.Game.PlayModes.*;
 import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Game.Tools.SoundManager;
@@ -181,22 +178,22 @@ public class Introduction {
 
         Button btn1 = socketButtons("Client");
         btn1.setOnAction(e -> {
-            PlayMode playMode = new Client();
+            PlayMode playMode = new Client("192.168.242.30");
             startGame(GameMode.DAY, playMode);
         });
         ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
 
         Button btn2 = socketButtons("Server");
         btn2.setOnMouseClicked(e -> {
-            Server server = new Server();
-            Thread thread = new Thread(server);
+            MultiServer multiServer = new MultiServer();
+            Thread thread = new Thread(multiServer);
             thread.start();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
-            PlayMode playMode = new Client();
+            PlayMode playMode = new Client("127.0.0.1");
             startGame(GameMode.DAY, playMode);
         });
         ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.9, Constants.SCREEN_HEIGHT/1.65);

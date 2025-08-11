@@ -7,11 +7,11 @@ public class Client extends PlayMode implements Runnable{
     private String serverCommand;
     private Socket socket;
 
-    public Client() {
+    public Client(String IP) {
         super();
         gameState = "playing";
         socket = null;
-        connection();
+        connection(IP);
         serverCommand = "execute no moves";
     }
     @Override
@@ -30,7 +30,6 @@ public class Client extends PlayMode implements Runnable{
 
     public void run() {
         System.out.println("man clientammmmmm");
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -42,8 +41,7 @@ public class Client extends PlayMode implements Runnable{
         }
     }
 
-    private void connection() {
-        String IP = "192.168.223.30";
+    private void connection(String IP) {
         int port = 5000;
         try {
             socket = new Socket(IP, port);
