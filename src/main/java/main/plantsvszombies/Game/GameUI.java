@@ -232,8 +232,8 @@ public class GameUI {
 
     // control menu buttons
     private Pane topPane() {
-        Pane buttonsPane = new Pane();
-        buttonsPane.setPickOnBounds(false);
+        Pane topPane = new Pane();
+        topPane.setPickOnBounds(false);
 
         ImageView menu = ImageFactory.createButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
         menu.setOnMouseClicked(event -> menu());
@@ -250,9 +250,9 @@ public class GameUI {
             SoundManager.playShovelClick();
         });
 
-        buttonsPane.getChildren().addAll(menu, shovelBack, shovel);
-        buttonsPane.getChildren().addAll(timer.get());
-        return buttonsPane;
+        topPane.getChildren().addAll(timer.get());
+        topPane.getChildren().addAll(menu, shovelBack, shovel);
+        return topPane;
     }
 
     // handles the shovel button click
