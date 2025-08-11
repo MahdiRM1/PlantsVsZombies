@@ -27,7 +27,7 @@ public class Server extends PlayMode implements Runnable {
             while (!serverMessage.equals("ready")){
                 serverMessage = in.readLine();
             }
-            while (!allReady);
+            while (!allReady) System.out.println(allReady);
             out.println("allready");
             while (!(serverMessage = in.readLine()).equals("wave")) {
                 out.println(serverMessage);
@@ -35,6 +35,10 @@ public class Server extends PlayMode implements Runnable {
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public void setServerMessage(String serverMessage) {
+        this.serverMessage = serverMessage;
     }
 
     public String getServerMessage() {

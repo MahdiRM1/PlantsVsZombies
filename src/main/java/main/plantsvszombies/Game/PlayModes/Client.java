@@ -64,7 +64,10 @@ public class Client extends PlayMode implements Runnable{
 
     public void waitForPlayers() {
         try{
-            while (!(in.readLine()).equals("allready")) ;
+            do{
+                serverCommand = in.readLine();
+                System.out.println(serverCommand);
+            } while (!"allready".equals(serverCommand)) ;
         }catch (IOException e) {
             System.out.println(e.getMessage());
         }
