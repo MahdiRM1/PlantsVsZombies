@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import main.plantsvszombies.Game.PlayModes.Client;
 import main.plantsvszombies.Game.PlayModes.PlayMode;
 import main.plantsvszombies.Game.Tools.*;
 import javafx.scene.Scene;
@@ -123,6 +124,10 @@ public class PlantSelection{
         backgroundMusic.stop();
         AudioClip startGame = SoundManager.setSound("readysetplant", false);
         startGame.play();
+        if (playMode instanceof Client client) {
+            client.ready();
+            client.waitForPlayers();
+        }
         new GameUI(selectedCards, stage, gameMode, playMode);
     }
 

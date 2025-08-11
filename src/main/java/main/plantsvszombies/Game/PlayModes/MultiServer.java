@@ -14,9 +14,9 @@ public class MultiServer implements Runnable {
         threads = new ArrayList<>();
         try {
             ServerSocket serverSocket = new ServerSocket(5000);
-            for (int i = 0; i < 2 ; i++) {
+            for (int i = 0; i < 1 ; i++) {
                Socket socket = serverSocket.accept();
-                System.out.println("connected");
+                System.out.println("connected: " + socket.getInetAddress());
                Server server = new Server(socket);
                Thread thread = new Thread(server);
                threads.add(thread);
@@ -27,19 +27,38 @@ public class MultiServer implements Runnable {
         }
     }
 
+    public Client innerConnection(){
+        Client client = new Client();
+        client.connection("127.0.0.1");
+        return client;
+    }
 
     @Override
     public void run() {
         System.out.println("It's running");
-        while(true) {
-            for(Thread thread : threads) {
-                thread.start();
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+        for(Thread thread : threads) {
+            thread.start();
+        }
+        while (!checkAllReady()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+        }
+        allReady();
+    }
+
+    public boolean checkAllReady(){
+        for (Server server: servers){
+            if (!server.getServerMessage().equals("ready")) return false;
+        }
+        return true;
+    }
+
+    private void allReady(){
+        for (Server server: servers){
+            server.allReady();
         }
     }
 }

@@ -6,12 +6,13 @@ import java.net.*;
 public class Client extends PlayMode implements Runnable{
     private String serverCommand;
     private Socket socket;
+    PrintWriter out;
+    BufferedReader in;
 
-    public Client(String IP) {
+    public Client() {
         super();
         gameState = "playing";
         socket = null;
-        connection(IP);
         serverCommand = "execute no moves";
     }
     @Override
@@ -31,8 +32,8 @@ public class Client extends PlayMode implements Runnable{
     public void run() {
         System.out.println("man clientammmmmm");
         try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             do {
                 serverCommand = in.readLine();
             } while(!serverCommand.equals("win") && !serverCommand.equals("lose"));
@@ -41,13 +42,25 @@ public class Client extends PlayMode implements Runnable{
         }
     }
 
-    private void connection(String IP) {
+    public void connection(String IP) {
         int port = 5000;
         try {
             socket = new Socket(IP, port);
             System.out.println("vasl shodam");
         } catch (IOException e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void ready(){
+        out.println("ready");
+    }
+
+    public void waitForPlayers() {
+        try{
+            while (!(in.readLine()).equals("allready")) ;
+        }catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
