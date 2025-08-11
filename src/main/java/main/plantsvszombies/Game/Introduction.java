@@ -1,13 +1,11 @@
 package main.plantsvszombies.Game;
 
 import javafx.animation.PauseTransition;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
@@ -21,8 +19,6 @@ import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
-
-import java.awt.*;
 
 public class Introduction {
 
@@ -186,10 +182,16 @@ public class Introduction {
         Button btn2 = socketButtons("Server");
         btn2.setOnMouseClicked(e -> {
             MultiServer multiServer = new MultiServer();
+            Runnable runnable = multiServer::connect;
+            Thread thread1 = new Thread(runnable);
+            thread1.start();
             PlayMode playMode = multiServer.innerConnection();
             Thread thread = new Thread(multiServer);
             thread.start();
             startGame(GameMode.DAY, playMode);
+
+            System.out.println("servers size: " + multiServer.getServers().size());
+            System.out.println("thread size: " + multiServer.getThreads().size());
         });
         ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.9, Constants.SCREEN_HEIGHT/1.65);
 
