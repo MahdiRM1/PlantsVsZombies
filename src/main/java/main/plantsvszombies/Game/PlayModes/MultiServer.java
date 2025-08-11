@@ -28,8 +28,7 @@ public class MultiServer implements Runnable {
     }
 
     public Client innerConnection(){
-        Client client = new Client();
-        client.connection("127.0.0.1");
+        Client client = new Client("127.0.0.1");
         return client;
     }
 
