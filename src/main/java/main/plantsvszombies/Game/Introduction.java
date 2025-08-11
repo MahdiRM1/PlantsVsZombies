@@ -4,12 +4,14 @@ import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
@@ -22,6 +24,8 @@ import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
+
+import java.awt.*;
 
 public class Introduction {
 
@@ -153,7 +157,7 @@ public class Introduction {
 
     private void handAnimation(StackPane mainPane, String mode){
         ImageView hand = new ImageView(new Image("file:Pictures/ui/handGif.gif"));
-        Pane pane = (Pane)(mainPane.getChildren().getLast());
+        Pane pane = new Pane();
         double size = Constants.SCREEN_HEIGHT / 2;
         ImageFactory.setNodePosition(hand, Constants.SCREEN_WIDTH / 3 , Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodeSize(hand, size, size);
@@ -168,17 +172,19 @@ public class Introduction {
             else modeSelection();
         });
         pause.play();
+        mainPane.getChildren().add(pane);
     }
 
     private void multiPlayerMode(StackPane mainPane){
         Pane pane = new Pane();
-        HBox box = socketBox();
+        socketBox(pane);
 
         Button btn1 = socketButtons("Client");
         btn1.setOnAction(e -> {
             PlayMode playMode = new Client();
             startGame(GameMode.DAY, playMode);
         });
+        ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
 
         Button btn2 = socketButtons("Server");
         btn2.setOnMouseClicked(e -> {
@@ -193,34 +199,35 @@ public class Introduction {
             PlayMode playMode = new Client();
             startGame(GameMode.DAY, playMode);
         });
+        ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.9, Constants.SCREEN_HEIGHT/1.65);
 
-        box.getChildren().addAll(btn1, btn2);
 
-        pane.getChildren().addAll(box);
+        pane.getChildren().addAll(btn1, btn2);
         mainPane.getChildren().add(pane);
     }
 
-    private HBox socketBox(){
-        HBox box = new HBox(Constants.SCREEN_WIDTH / 20);
-        box.setPrefSize(Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
-        box.setAlignment(Pos.CENTER);
-        box.setStyle(
-            "-fx-background-color:rgb(150, 150, 0); " +
-            "-fx-background-radius: 15px; " +
-            "-fx-padding: 20px; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);"
-        );
-        box.setLayoutX(Constants.SCREEN_WIDTH / 3);
-        box.setLayoutY(Constants.SCREEN_HEIGHT / 4);
-        return box;
+    private void socketBox(Pane pane){
+        ImageView chooseRole = new ImageView(new Image("file:Pictures/ui/dialog_topleft.png"));
+        chooseRole.setFitWidth(Constants.SCREEN_WIDTH/3);
+        chooseRole.setFitHeight(Constants.SCREEN_HEIGHT/2);
+        chooseRole.setLayoutX(Constants.SCREEN_WIDTH/3);
+        chooseRole.setLayoutY(Constants.SCREEN_HEIGHT/4);
+        Label label = new Label("Choose Role");
+        label.setLayoutX(Constants.SCREEN_WIDTH/2.5);
+        label.setLayoutY(Constants.SCREEN_HEIGHT/2.5);
+        label.setTextFill(Color.GREEN);
+        pane.getChildren().addAll(chooseRole, label);
     }
 
     private Button socketButtons(String str){
         Button btn = new Button(str);
-        btn.setPrefSize(Constants.SCREEN_WIDTH / 8, Constants.SCREEN_WIDTH / 8);
         btn.setStyle(
-            "-fx-background-color:rgb(50, 50, 50); " +
+            "-fx-background-image: url('file:Pictures/ui/Button.png');" +
+            "-fx-background-size: cover;" +
+            "-fx-background-color: transparent;" +
             "-fx-background-radius: 10px; " +
+            "-fx-pref-Width : " + Constants.SCREEN_WIDTH / 10 +"px;" +
+            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 15 +"px;" +
             "-fx-text-fill: rgb(0, 150, 0);" +
             "-fx-font-size: 25px;"+
             "-fx-padding: 20px; " +
