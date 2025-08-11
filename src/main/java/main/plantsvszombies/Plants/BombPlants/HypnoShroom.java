@@ -1,4 +1,4 @@
-package main.plantsvszombies.Plants.OtherPlants;
+package main.plantsvszombies.Plants.BombPlants;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.Plants.*;
 import main.plantsvszombies.Zombies.Zombie;
 
-public class HypnoShroom extends Plant implements Shroom {
+public class HypnoShroom extends BombPlant implements Shroom {
 
     private boolean isSleep;
     private static final int FRAME_COUNT = 20;
@@ -37,8 +37,7 @@ public class HypnoShroom extends Plant implements Shroom {
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (isSleep) return false;
-        return HP == 1;
+        return !isSleep && Math.abs(HP - 1.0) < 0.5;
     }
 
     public void action(List<Zombie> zombies) {
