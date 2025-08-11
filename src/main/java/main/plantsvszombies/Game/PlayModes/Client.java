@@ -9,11 +9,19 @@ public class Client extends PlayMode implements Runnable{
     PrintWriter out;
     BufferedReader in;
 
-    public Client() {
+    public Client(String IP) {
         super();
         gameState = "playing";
         socket = null;
         serverCommand = "execute no moves";
+        connection(IP);
+        try {
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void updateGame() {
@@ -32,8 +40,6 @@ public class Client extends PlayMode implements Runnable{
     public void run() {
         System.out.println("man clientammmmmm");
         try {
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             do {
                 serverCommand = in.readLine();
             } while(!serverCommand.equals("win") && !serverCommand.equals("lose"));
@@ -42,7 +48,7 @@ public class Client extends PlayMode implements Runnable{
         }
     }
 
-    public void connection(String IP) {
+    private void connection(String IP) {
         int port = 5000;
         try {
             socket = new Socket(IP, port);

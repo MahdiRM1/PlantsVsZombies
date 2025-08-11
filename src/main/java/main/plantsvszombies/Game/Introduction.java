@@ -178,8 +178,7 @@ public class Introduction {
 
         Button btn1 = socketButtons("Client");
         btn1.setOnAction(e -> {
-            PlayMode playMode = new Client();
-            ((Client)playMode).connection("192.168.242.30");
+            PlayMode playMode = new Client("192.168.242.30");
             startGame(GameMode.DAY, playMode);
         });
         ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
