@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import main.plantsvszombies.Game.PlayModes.Client;
-import main.plantsvszombies.Game.PlayModes.PlayMode;
-import main.plantsvszombies.Game.Tools.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -18,6 +15,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.PlayModes.Client;
+import main.plantsvszombies.Game.PlayModes.PlayMode;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
+import main.plantsvszombies.Game.Tools.Utils;
 
 public class PlantSelection{
     private final List<String> selectedCards = new ArrayList<>();
@@ -36,6 +39,7 @@ public class PlantSelection{
         music();
         createPane();
         Scene scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
         stage.setScene(scene);
     }
 
@@ -50,9 +54,9 @@ public class PlantSelection{
         pane.getChildren().add(ImageFactory.createBackGround(
                 (gameMode == GameMode.DAY) ? "plantSelectionDay" : "plantSelectionNight"));
 
-        ImageView menu = ImageFactory.createButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
+        Button menu = Utils.createMenuButton("MENU", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
         menu.setOnMouseClicked(event -> menu());
-        ImageFactory.setNodePosition(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
+        ImageFactory.setNodePosition(menu, Constants.SCREEN_WIDTH - menu.getPrefWidth(), 0);
 
         cardBar = new HBox(0);
         ImageFactory.setNodePosition(cardBar, Constants.CARD_BAR_X, Constants.CARD_BAR_Y);
@@ -92,23 +96,21 @@ public class PlantSelection{
         return new HBox[]{box1, box2, box3, box4};
     }
 
-    private ImageView startGameBtn() {
-        Image letsRock1 = new Image("file:Pictures/ui/LetsRock1.png");
-        Image letsRock2 = new Image("file:Pictures/ui/LetsRock2.png");
-        ImageView start = new ImageView(letsRock1);
-        ImageFactory.setNodeSize(start, Constants.SCREEN_WIDTH / 7.5, Constants.SCREEN_HEIGHT / 16);
-        ImageFactory.setNodePosition(start, Constants.SCREEN_WIDTH / 5.65, Constants.SCREEN_HEIGHT / 1.122);
+    private Button startGameBtn() {
+        Button start = Utils.createButton("Let's Rock", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 14);
+        ImageFactory.setNodePosition(start, Constants.SCREEN_WIDTH / 5.7, Constants.SCREEN_HEIGHT / 1.126);
+        start.setStyle("-fx-text-fill: rgba(50, 50, 50, 0.7);");
 
         start.setOnMouseEntered(event -> {
             if (selectedCards.size() != 6) return;
 
-            start.setImage(letsRock2);
-            ImageFactory.changeScale(start, 1.05);
+            start.setStyle("-fx-text-fill: #CF9929;");
+            ImageFactory.changeScale(start, 1.1);
         });
         start.setOnMouseExited(event -> {
             if (selectedCards.size() != 6) return;
 
-            start.setImage(letsRock1);
+            start.setStyle("-fx-text-fill: rgba(50, 50, 50, 0.7);");
             ImageFactory.changeScale(start, 1);
         });
         start.setOnMouseClicked(event -> {
@@ -188,15 +190,15 @@ public class PlantSelection{
         Pane menuPane = Utils.createMenu();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView mainMenu = mainMenuBtn();
-        ImageView backToGame = backToGame();
+        Button mainMenu = mainMenuBtn();
+        Button backToGame = backToGame();
 
         menuPane.getChildren().addAll(backToGame, mainMenu);
         mainPane.getChildren().add(menuPane);
     }
 
-    private ImageView mainMenuBtn(){
-        ImageView mainMenu = ImageFactory.createButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+    private Button mainMenuBtn(){
+        Button mainMenu = Utils.createMenuButton("MAIN MENU", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
         ImageFactory.setNodePosition(mainMenu, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.6);
         mainMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
@@ -206,9 +208,8 @@ public class PlantSelection{
         return mainMenu;
     }
 
-    private ImageView backToGame(){
-        ImageView backToGame = ImageFactory.createButton("BackToGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
-        ImageFactory.setNodePosition(backToGame, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+    private Button backToGame(){
+        Button backToGame = Utils.submitButton("Back To Game");
         backToGame.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();

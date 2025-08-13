@@ -25,7 +25,6 @@ public class ConeheadZombie extends Zombie {
 
     public ConeheadZombie(ZombieData data) {
         super(data);
-        HP = 200;
         speed = 5;
     }
 

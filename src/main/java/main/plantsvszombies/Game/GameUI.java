@@ -21,16 +21,31 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import main.plantsvszombies.Enums.*;
-import main.plantsvszombies.Game.PlayModes.*;
-import main.plantsvszombies.Game.Tools.*;
-import main.plantsvszombies.GameState.*;
-import main.plantsvszombies.Items.*;
-import main.plantsvszombies.Plants.*;
-import main.plantsvszombies.Plants.BombPlants.*;
-import main.plantsvszombies.Plants.OtherPlants.*;
-import main.plantsvszombies.Plants.PeaPlants.*;
-import main.plantsvszombies.Zombies.*;
+import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.PlayModes.Client;
+import main.plantsvszombies.Game.PlayModes.DefaultMode;
+import main.plantsvszombies.Game.PlayModes.PlayMode;
+import main.plantsvszombies.Game.Tools.Constants;
+import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
+import main.plantsvszombies.Game.Tools.Utils;
+import main.plantsvszombies.GameState.CardData;
+import main.plantsvszombies.GameState.GameState;
+import main.plantsvszombies.Items.Bullet;
+import main.plantsvszombies.Items.Card;
+import main.plantsvszombies.Items.Fog;
+import main.plantsvszombies.Items.Grave;
+import main.plantsvszombies.Plants.BombPlants.BombPlant;
+import main.plantsvszombies.Plants.BombPlants.DoomShroom;
+import main.plantsvszombies.Plants.OtherPlants.Blover;
+import main.plantsvszombies.Plants.OtherPlants.CoffeeBean;
+import main.plantsvszombies.Plants.OtherPlants.GraveBuster;
+import main.plantsvszombies.Plants.OtherPlants.Plantern;
+import main.plantsvszombies.Plants.OtherPlants.SunFlower;
+import main.plantsvszombies.Plants.PeaPlants.PeaPlant;
+import main.plantsvszombies.Plants.Plant;
+import main.plantsvszombies.Plants.Shroom;
+import main.plantsvszombies.Zombies.Zombie;
 
 public class GameUI {
 
@@ -108,6 +123,7 @@ public class GameUI {
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> save());
         stage.show();
@@ -235,9 +251,9 @@ public class GameUI {
         Pane topPane = new Pane();
         topPane.setPickOnBounds(false);
 
-        ImageView menu = ImageFactory.createButton("MenuBtn", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
+        Button menu = Utils.createMenuButton("MENU", Constants.SCREEN_WIDTH / 9.4, Constants.SCREEN_HEIGHT / 16);
         menu.setOnMouseClicked(event -> menu());
-        ImageFactory.setNodePosition(menu, Constants.SCREEN_WIDTH - menu.getFitWidth(), 0);
+        ImageFactory.setNodePosition(menu, Constants.SCREEN_WIDTH - menu.getPrefWidth(), 0);
 
         ImageView shovel = ImageFactory.shovelImage();
         ImageView shovelBack = ImageFactory.createButton("shovelBack", shovel.getFitWidth(), shovel.getFitHeight());
@@ -282,14 +298,13 @@ public class GameUI {
         Pane menuPane = Utils.createMenu();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView mainMenu = mainMenuBtn("menu");
+        Button mainMenu = mainMenuBtn("menu");
         ImageFactory.setNodePosition(mainMenu, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.6);
 
-        ImageView restart = restartBtn();
+        Button restart = restartBtn();
         ImageFactory.setNodePosition(restart, Constants.SCREEN_WIDTH / 2.48, Constants.SCREEN_HEIGHT / 1.84);
 
-        ImageView backToGame = ImageFactory.createButton("BackToGame", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
-        ImageFactory.setNodePosition(backToGame, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+        Button backToGame = Utils.submitButton("Back To Game");
         backToGame.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();
@@ -471,27 +486,28 @@ public class GameUI {
         backgroundMusic.stop();
         pane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
-        ImageView restart = restartBtn();
+        Button restart = restartBtn();
         ImageFactory.setNodePosition(restart, Constants.SCREEN_WIDTH / 1.9, Constants.SCREEN_HEIGHT / 1.3);
 
-        ImageView mainMenu = mainMenuBtn("full");
+        Button mainMenu = mainMenuBtn("full");
         ImageFactory.setNodePosition(mainMenu, Constants.SCREEN_WIDTH / 3.8, Constants.SCREEN_HEIGHT / 1.3);
 
         stage.setOnCloseRequest(event -> Utils.deleteSaveData());
         pane.getChildren().addAll(restart, mainMenu);
     }
 
-    private ImageView restartBtn(){
-        ImageView restart = ImageFactory.createButton("Restart", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+    private Button restartBtn(){
+        Button restart = Utils.createMenuButton("RESTART LEVEL", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
         restart.setOnMouseClicked(event -> {
             SoundManager.playClickTrack();
+            backgroundMusic.stop();
             new PlantSelection(stage, mode, new DefaultMode());
         });
         return restart;
     }
 
-    private ImageView mainMenuBtn(String state){
-        ImageView mainMenu = ImageFactory.createButton("MainMenuBtn", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 12);
+    private Button mainMenuBtn(String state){
+        Button mainMenu = Utils.createMenuButton("MAIN MENU", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
         mainMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
             SoundManager.playClickTrack();

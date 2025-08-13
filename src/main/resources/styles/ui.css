@@ -1,0 +1,47 @@
+.menuBtn{
+    -fx-background-image: url('file:Pictures/ui/Button.png'); 
+    -fx-background-repeat: no-repeat; 
+    -fx-background-size: 100% 100%; 
+    -fx-background-position: center; 
+    -fx-background-color: transparent;
+    -fx-text-fill: #00cc00; 
+    -fx-alignment: center;
+}
+
+.submitBtn {
+    -fx-background-image: url('file:Pictures/ui/submitBtn.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: #00cc00;
+    -fx-alignment: center;
+}
+
+.btns {
+    -fx-background-image: url('file:Pictures/ui/btn.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: #CF9929;
+    -fx-alignment: center;
+}
+
+.slider .track{
+    -fx-background-color: rgba(30, 30, 30, 0.7);
+    -fx-pref-Height : 10px;
+    -fx-background-radius: 10;
+}
+
+.slider .thumb{
+    -fx-background-image: url('file:Pictures/ui/sound.png'); 
+    -fx-background-size: cover; 
+    -fx-background-color: transparent; 
+    -fx-pref-Height : 50px; 
+    -fx-pref-Width : 50px
+}
+
+.menuBtn .text, .submitBtn .text{
+    -fx-effect: dropshadow(one-pass-box, black, 5, 1, 0, 0);
+}

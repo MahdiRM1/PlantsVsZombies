@@ -25,7 +25,6 @@ public class OriginalZombie extends Zombie {
 
     public OriginalZombie(ZombieData data) {
         super(data);
-        HP = 100;
         speed = 5;
     }
 

@@ -7,9 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Enums.SunType;
 import main.plantsvszombies.Game.Tools.Constants;
@@ -43,9 +41,9 @@ public class ScoreBoard {
 
     private Label createScoreLabel() {
         Label scoreLabel = new Label(score + "");
-        Font font = Font.font("Arial", FontWeight.BOLD, Constants.SCREEN_HEIGHT / 25.6);
+        Font font = Font.loadFont("file:src/main/resources/fonts/BreakdownPG.otf", 40);
         scoreLabel.setFont(font);
-        scoreLabel.setTextFill(Color.BLACK);
+        scoreLabel.setStyle("-fx-text-fill: rgb(25, 25, 25);");
         scoreLabel.setPadding(new Insets(-Constants.SCREEN_HEIGHT / 30, 0, 0, Constants.SCREEN_WIDTH / 26.3));
         return scoreLabel;
     }
