@@ -24,7 +24,6 @@ public class Imp extends Zombie {
 
     public Imp(ZombieData data) {
         super(data);
-        HP = 50;
         speed = 3;
     }
 

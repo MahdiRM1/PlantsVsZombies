@@ -2,6 +2,7 @@ package main.plantsvszombies.Game.Tools;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.plantsvszombies.Enums.BulletType;
@@ -110,6 +111,7 @@ public class ImageFactory {
     public static void setNodeSize(Node node, double width, double height){
         switch (node){
             case Button btn -> btn.setPrefSize(width, height);
+            case Label label -> label.setPrefSize(width, height);
             case ImageView imageView -> {
                 imageView.setFitWidth(width);
                 imageView.setFitHeight(height);

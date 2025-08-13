@@ -1,6 +1,7 @@
 package main.plantsvszombies.Game;
 
 import javafx.animation.PauseTransition;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,11 +10,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
-import main.plantsvszombies.Game.PlayModes.*;
+import main.plantsvszombies.Game.PlayModes.Client;
+import main.plantsvszombies.Game.PlayModes.DefaultMode;
+import main.plantsvszombies.Game.PlayModes.PlayMode;
 import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Game.Tools.SoundManager;
@@ -37,6 +41,7 @@ public class Introduction {
 
     public void firstPage() {
         Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
         stage.setScene(scene);
         stage.show();
     }
@@ -52,7 +57,7 @@ public class Introduction {
 
         ImageView socket = ImageFactory.createButton("Multiplayer", Constants.SCREEN_WIDTH / 2.7, Constants.SCREEN_HEIGHT / 4.35);
         ImageFactory.setNodePosition(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
-        socket.setOnMouseClicked(event -> handAnimation(mainPane, "socket"));
+        socket.setOnMouseClicked(event -> multiPlayerMode(mainPane));
 
         ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
         ImageFactory.setNodeSize(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
@@ -91,7 +96,7 @@ public class Introduction {
         SoundManager.playClickTrack();
         
         ImageView backGround = ImageFactory.createBackGround("help");
-        ImageView mainmenu = ImageFactory.createButton("mainmenuhelp", Constants.SCREEN_WIDTH / 6 , Constants.SCREEN_HEIGHT / 12);
+        Button mainmenu = Utils.createButton("main menu", Constants.SCREEN_WIDTH / 6 , Constants.SCREEN_HEIGHT / 12);
         ImageFactory.setNodePosition(mainmenu, Constants.SCREEN_WIDTH / 2.4, Constants.SCREEN_HEIGHT / 1.25);
         mainmenu.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
@@ -103,37 +108,29 @@ public class Introduction {
     }
 
     private void checkQuit(StackPane mainPane){
-        Pane quitPage = new Pane();
         SoundManager.playClickTrack();
 
-        ImageView quitImg = new ImageView(new Image("file:Pictures/ui/quitPic.png"));
-        ImageFactory.setNodePosition(quitImg, Constants.SCREEN_WIDTH / 3.2, Constants.SCREEN_HEIGHT / 4);
-        ImageFactory.setNodeSize(quitImg, Constants.SCREEN_WIDTH / 2.6, Constants.SCREEN_HEIGHT / 2);
-
-        ImageView quit = ImageFactory.createButton("quitBtn", Constants.SCREEN_WIDTH / 6.7, Constants.SCREEN_HEIGHT / 13.5);
-        ImageFactory.setNodePosition(quit, Constants.SCREEN_WIDTH / 2.9, Constants.SCREEN_HEIGHT / 1.58);
+        Button quit = Utils.createMenuButton("QUIT", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
         quit.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             stage.close();
         });
 
-        ImageView cancel = ImageFactory.createButton("cancel", Constants.SCREEN_WIDTH / 6.7, Constants.SCREEN_HEIGHT / 13.5);
-        ImageFactory.setNodePosition(cancel, Constants.SCREEN_WIDTH / 1.95, Constants.SCREEN_HEIGHT / 1.58);
+        Button cancel = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
         cancel.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();
         });
 
-        quitPage.getChildren().addAll(quitImg, quit, cancel);
-        mainPane.getChildren().add(quitPage);
+        String phrase = "Wait\n\nAre You Sure You Wish To\nQuit The Game?";
+        chooseRole(mainPane, quit, cancel, phrase);
     }
 
     private void option(StackPane pane){
         SoundManager.playClickTrack();
         Pane option = Utils.createMenu();
 
-        ImageView OK = ImageFactory.createButton("OK", Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7.5);
-        ImageFactory.setNodePosition(OK, Constants.SCREEN_WIDTH / 2.97, Constants.SCREEN_HEIGHT / 1.34);
+        Button OK = Utils.submitButton("OK");
         OK.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             pane.getChildren().removeLast();
@@ -160,76 +157,67 @@ public class Introduction {
         laugh.play();
         PauseTransition pause = new PauseTransition(Duration.millis(4000));
         pause.setOnFinished(e -> {
-            if (mode.equals("load")) load();
-            else if (mode.equals("socket")) multiPlayerMode(mainPane);
-            else modeSelection();
+            switch (mode) {
+                case "load" -> load();
+                case "socket" -> multiPlayerMode(mainPane);
+                default ->  modeSelection();
+            }
         });
         pause.play();
         mainPane.getChildren().add(pane);
     }
 
     private void multiPlayerMode(StackPane mainPane){
-        Pane pane = new Pane();
-        socketBox(pane);
-
-        Button btn1 = socketButtons("Client");
+        Button btn1 = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         btn1.setOnAction(e -> {
             PlayMode playMode = new Client("192.168.242.30");
             startGame(GameMode.DAY, playMode);
         });
-        ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
 
-        Button btn2 = socketButtons("Server");
+        Button btn2 = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
         btn2.setOnMouseClicked(e -> {
-            MultiServer multiServer = new MultiServer();
-            Runnable runnable = multiServer::connect;
-            Thread thread1 = new Thread(runnable);
-            thread1.start();
-            PlayMode playMode = multiServer.innerConnection();
-            Thread thread = new Thread(multiServer);
-            thread.start();
-            startGame(GameMode.DAY, playMode);
-
-            System.out.println("servers size: " + multiServer.getServers().size());
-            System.out.println("thread size: " + multiServer.getThreads().size());
+//            MultiServer multiServer = new MultiServer();
+//            Runnable runnable = multiServer::connect;
+//            Thread thread1 = new Thread(runnable);
+//            thread1.start();
+//            PlayMode playMode = multiServer.innerConnection();
+//            Thread thread = new Thread(multiServer);
+//            thread.setPriority(10);
+//            thread.start();
+//            startGame(GameMode.DAY, playMode);
         });
-        ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.9, Constants.SCREEN_HEIGHT/1.65);
 
+        String phrase = "MultiPlayer\n\nChoose your role in \nthe game";
+        chooseRole(mainPane, btn1, btn2, phrase);
+    }
+
+    private void chooseRole(StackPane mainPane, Button btn1, Button btn2, String str){
+        Pane pane = new Pane();
+        chooseBox(pane, str);
+
+        ImageFactory.setNodePosition(btn1, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/1.65);
+        ImageFactory.setNodePosition(btn2, Constants.SCREEN_WIDTH/1.95, Constants.SCREEN_HEIGHT/1.65);
 
         pane.getChildren().addAll(btn1, btn2);
         mainPane.getChildren().add(pane);
     }
 
-    private void socketBox(Pane pane){
+    private void chooseBox(Pane pane, String text){
         ImageView chooseRole = new ImageView(new Image("file:Pictures/ui/dialog_topleft.png"));
-        chooseRole.setFitWidth(Constants.SCREEN_WIDTH/3);
-        chooseRole.setFitHeight(Constants.SCREEN_HEIGHT/2);
-        chooseRole.setLayoutX(Constants.SCREEN_WIDTH/3);
-        chooseRole.setLayoutY(Constants.SCREEN_HEIGHT/4);
-        Label label = new Label("Choose Role");
-        label.setLayoutX(Constants.SCREEN_WIDTH/2.5);
-        label.setLayoutY(Constants.SCREEN_HEIGHT/2.5);
-        label.setTextFill(Color.GREEN);
-        pane.getChildren().addAll(chooseRole, label);
-    }
-
-    private Button socketButtons(String str){
-        Button btn = new Button(str);
-        btn.setStyle(
-            "-fx-background-image: url('file:Pictures/ui/Button.png');" +
-            "-fx-background-size: cover;" +
-            "-fx-background-color: transparent;" +
-            "-fx-background-radius: 10px; " +
-            "-fx-pref-Width : " + Constants.SCREEN_WIDTH / 10 +"px;" +
-            "-fx-pref-Height : " + Constants.SCREEN_HEIGHT / 15 +"px;" +
-            "-fx-text-fill: rgb(0, 150, 0);" +
-            "-fx-font-size: 25px;"+
-            "-fx-padding: 20px; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);"
+        ImageFactory.setNodePosition(chooseRole, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/4);
+        ImageFactory.setNodeSize(chooseRole, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
+        Label label = new Label(text);
+        ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/2.5, Constants.SCREEN_HEIGHT / 2.5);
+        ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/5.25, Constants.SCREEN_HEIGHT/8);
+        Font font = Font.loadFont("file:src/main/resources/fonts/BreakdownPG.otf", 30);
+        label.setFont(font);
+        label.setStyle(
+                "-fx-text-fill: rgb(214, 178, 94);" +
+                "-fx-effect: dropshadow(one-pass-box, black, 5, 1, 0, 0);"
         );
-        btn.setOnMouseEntered(e -> ImageFactory.changeScale(btn, 1.1));
-        btn.setOnMouseExited(e -> ImageFactory.changeScale(btn, 1));
-        return btn;
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setAlignment(Pos.CENTER);
+        pane.getChildren().addAll(chooseRole, label);
     }
 
     private void load() {

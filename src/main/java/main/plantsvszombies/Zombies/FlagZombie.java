@@ -25,7 +25,6 @@ public class FlagZombie extends Zombie{
     public FlagZombie(ZombieData data){
         super(data);
         speed = 4;
-        HP = 100;
     }
 
     public FlagZombie(int row, int col){
