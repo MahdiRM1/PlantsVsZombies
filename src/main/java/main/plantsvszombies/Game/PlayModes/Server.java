@@ -7,10 +7,10 @@ public class Server implements Runnable {
 
     private String serverMessage;
     private final Socket socket;
-    BufferedReader in;
-    PrintWriter out;
-    boolean allReady = false;
-    String gameState = "playing";
+    private final BufferedReader in;
+    private final PrintWriter out;
+    private boolean allReady = false;
+    private String gameState = "playing";
 
     public Server(Socket socket) {
         serverMessage = "not ready";
@@ -73,5 +73,9 @@ public class Server implements Runnable {
 
     public String getGameState() {
         return gameState;
+    }
+
+    public String getInetAddress(){
+        return socket.getInetAddress().toString();
     }
 }

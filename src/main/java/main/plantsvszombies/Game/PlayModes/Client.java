@@ -10,8 +10,8 @@ public class Client extends PlayMode implements Runnable {
 
     private String serverCommand;
     private Socket socket;
-    PrintWriter out;
-    BufferedReader in;
+    private final PrintWriter out;
+    private final BufferedReader in;
 
     public Client(String IP) {
         super();
