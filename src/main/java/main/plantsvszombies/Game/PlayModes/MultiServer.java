@@ -10,10 +10,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MultiServer extends PlayMode implements Runnable {
 
-    String serverCommand;
-    List<Server> servers;
-    List<Thread> threads;
-    ServerSocket serverSocket;
+    private String serverCommand;
+    private final List<Server> servers;
+    private final List<Thread> threads;
+    private ServerSocket serverSocket;
 
     public MultiServer() {
         try {
@@ -23,26 +23,22 @@ public class MultiServer extends PlayMode implements Runnable {
         }
         servers = new CopyOnWriteArrayList<>();
         threads = new CopyOnWriteArrayList<>();
-        for (int i = 0; i < 1; i++) {
-            connect();
-        }
     }
 
     public void connect() {
         try {
-            Socket socket = serverSocket.accept();
-            System.out.println("connected: " + socket.getInetAddress());
-            Server server = new Server(socket);
-            Thread thread = new Thread(server);
-            threads.add(thread);
-            servers.add(server);
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("connected: " + socket.getInetAddress());
+                Server server = new Server(socket);
+                Thread thread = new Thread(server);
+                threads.add(thread);
+                servers.add(server);
+                if (server.getInetAddress().equals("127.0.0.1")) break;
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public Client innerConnection() {
-        return new Client("127.0.0.1");
     }
 
     @Override

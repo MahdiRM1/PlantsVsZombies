@@ -36,6 +36,7 @@ public class Introduction {
 
     private final Stage stage;
     private static final AudioClip backgroundMusic;
+    private GameMode mode;
 
     static {
         backgroundMusic = SoundManager.setSound("introMusic", true);
@@ -131,7 +132,7 @@ public class Introduction {
         });
 
         String phrase = "Wait\n\nAre You Sure You Wish To\nQuit The Game?";
-        chooseRole(mainPane, quit, cancel, phrase);
+        chooseRole(mainPane, cancel, quit, phrase);
     }
 
     private void option(StackPane pane){
@@ -176,57 +177,100 @@ public class Introduction {
     }
 
     private void multiPlayerMode(StackPane mainPane){
-        Button btn1 = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        btn1.setOnAction(e -> clientMode(mainPane));
+        Button client = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        client.setOnAction(e -> clientMode(mainPane));
 
-        Button btn2 = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
-        btn2.setOnMouseClicked(e -> showIp(mainPane));
+        Button server = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
+        server.setOnMouseClicked(e -> serverModeSelection(mainPane));
 
         String phrase = "MultiPlayer\n\nChoose your role in \nthe game";
-        chooseRole(mainPane, btn1, btn2, phrase);
+        chooseRole(mainPane, client, server, phrase);
     }
 
-    private void showIp(StackPane mainPane){
+    private void serverModeSelection(StackPane mainPane){
         mainPane.getChildren().removeLast();
-        Button btn1 = Utils.createMenuButton("ACCEPT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        btn1.setOnMouseClicked(e -> serverMode());
+        Button day = Utils.createMenuButton("DAY", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        day.setOnMouseClicked(e -> {
+            mode = GameMode.DAY;
+            serverMode(mainPane);
+        });
 
-        Button btn2 = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        btn2.setOnMouseClicked(e -> mainPane.getChildren().removeLast());
+        Button night = Utils.createMenuButton("NIGHT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        night.setOnMouseClicked(e -> {
+            mode = GameMode.NIGHT;
+            serverMode(mainPane);
+        });
+
+        String phrase = "mode selection\n\nPlease select game mode";
+        chooseRole(mainPane, night, day, phrase);
+    }
+
+    private void serverMode(StackPane mainPane){
+        MultiServer multiServer = serverModeLogic();
+        serverModeUI(mainPane, multiServer);
+    }
+
+    private MultiServer serverModeLogic(){
+        MultiServer multiServer = new MultiServer();
+        Runnable runnable = multiServer::connect;
+        Thread thread = new Thread(runnable);
+        thread.start();
+        return multiServer;
+    }
+
+    private void serverModeUI(StackPane mainPane, MultiServer multiServer){
+        mainPane.getChildren().removeLast();
+        Button accept = Utils.createMenuButton("ACCEPT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        accept.setOnMouseClicked(e -> serverStart(multiServer));
+
+        Button cancel = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        cancel.setOnMouseClicked(e -> mainPane.getChildren().removeLast());
 
         String phrase = "IP:\n" + Ip();
-        chooseRole(mainPane, btn1, btn2, phrase);
+        chooseRole(mainPane, cancel, accept, phrase);
+    }
+
+    private void serverStart(MultiServer multiServer){
+        Client client = new Client("127.0.0.1");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Thread thread = new Thread(multiServer);
+        thread.start();
+        startGame(mode, client);
     }
 
     private void clientMode(StackPane mainPane){
         mainPane.getChildren().removeLast();
-        TextField nameField = new TextField();
-        nameField.setPromptText("Enter IP");
-        nameField.getStyleClass().add("btns");
-        Font font = Font.loadFont("file:src/main/resources/fonts/Coold.ttf", 30);
-        nameField.setFont(font);
-        nameField.setPrefSize(Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+
+        Button cancel = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        cancel.setOnAction(e -> mainPane.getChildren().removeLast());
+
+        TextField textField = field();
 
         Button submit = Utils.createMenuButton("SUBMIT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         submit.setOnAction(e -> {
-            PlayMode playMode = new Client(nameField.getText());
+            PlayMode playMode = new Client(textField.getText());
             startGame(GameMode.DAY, playMode);
         });
 
-        String phrase = "Please get IP";
-        chooseRole(mainPane, nameField, submit, phrase);
+        String phrase = "Please get IP\n\n.";
+        chooseRole(mainPane, cancel, submit, phrase);
+
+        ((Pane)(mainPane.getChildren().getLast())).getChildren().add(textField);
     }
 
-    private void serverMode(){
-        MultiServer multiServer = new MultiServer();
-        Runnable runnable = multiServer::connect;
-        Thread thread1 = new Thread(runnable);
-        thread1.start();
-        PlayMode playMode = multiServer.innerConnection();
-        Thread thread = new Thread(multiServer);
-        thread.setPriority(10);
-        thread.start();
-        startGame(GameMode.DAY, playMode);
+    private TextField field(){
+        TextField textField = new TextField();
+        textField.setPromptText("Enter IP");
+        textField.getStyleClass().add("TextField");
+        Font font = Font.loadFont("file:src/main/resources/fonts/Coold.ttf", 30);
+        textField.setFont(font);
+        textField.setPrefSize(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/15);
+        ImageFactory.setNodePosition(textField, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/2.1);
+        return textField;
     }
 
     private void chooseRole(StackPane mainPane, Node btn1, Node btn2, String str){
