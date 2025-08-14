@@ -3,9 +3,10 @@ package main.plantsvszombies.Game.PlayModes;
 import java.io.*;
 import java.net.*;
 
-public class Server extends PlayMode implements Runnable {
+public class Server implements Runnable {
+
     private String serverMessage;
-    private Socket socket;
+    private final Socket socket;
     BufferedReader in;
     PrintWriter out;
     boolean allReady = false;
@@ -13,10 +14,10 @@ public class Server extends PlayMode implements Runnable {
     public Server(Socket socket) {
         serverMessage = "not ready";
         this.socket = socket;
-        try{
+        try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-        }catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException();
         }
     }
@@ -24,33 +25,53 @@ public class Server extends PlayMode implements Runnable {
     @Override
     public void run() {
         try {
-            while (!serverMessage.equals("ready")){
+            while (!serverMessage.equals("ready")) {
                 serverMessage = in.readLine();
+                Thread.sleep(10);
             }
-            while (!allReady) System.out.println(allReady);
+            while (!allReady) {
+                Thread.sleep(10);
+            }
             out.println("allready");
-            while (!(serverMessage = in.readLine()).equals("wave")) {
-                out.println(serverMessage);
+            out.flush();
+            while (!serverMessage.equals("wave")) {
+//                out.println(serverMessage);
+//                out.flush();
+//                Thread.sleep(20);
             }
-        } catch (IOException e){
+        } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
+        } finally {
+            cleanup();
         }
     }
 
     public void setServerMessage(String serverMessage) {
         this.serverMessage = serverMessage;
+        out.println(serverMessage);
     }
 
-    public String getServerMessage() {
+    public synchronized String getServerMessage() {
         return serverMessage;
     }
 
-    public void allReady(){
+    public void allReady() {
         allReady = true;
     }
 
-    @Override
-    public void updateGame() {}
-    @Override
-    public String WinOrLose() {return "";}
+    private void cleanup() {
+        try {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Cleanup error: " + e.getMessage());
+        }
+    }
 }
