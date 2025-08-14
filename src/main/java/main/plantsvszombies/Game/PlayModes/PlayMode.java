@@ -81,7 +81,6 @@ public abstract class PlayMode {
     protected String normalWave(int zombieTypes){
         String waveStr = "wave ";
         for (int i = 0; i < 10; i++) waveStr += (int) (Math.random() * zombieTypes) + ",";
-        System.out.println(waveStr);
         return waveStr;
     }
 
@@ -162,11 +161,8 @@ public abstract class PlayMode {
     }
 
     protected String checkGameState() {
-        if (checkWin()) {
-            return "win"; 
-        }else if (checkLose()) {
-            return "lose";
-        }
+        if (checkWin()) return "win";
+        else if (checkLose()) return "lose";
         return "playing";
     }
 

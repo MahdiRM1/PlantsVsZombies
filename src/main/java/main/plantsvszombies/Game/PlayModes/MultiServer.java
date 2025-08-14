@@ -67,10 +67,31 @@ public class MultiServer extends PlayMode implements Runnable {
     }
 
     private void updateServers() {
-        System.out.println("server: " + serverCommand + ", " + Constants.gameTime);
-        for (Server server : servers) {
+        for (Server server : servers)
+            if (!server.getGameState().equals("playing")){
+                informServers(server.getGameState());
+                servers.remove(server);
+                break;
+            }
+        for (Server server : servers)
             server.setServerMessage(serverCommand);
-        }
+    }
+
+    private void informServers(String state){
+        int player = isFinish();
+        if (player == -1) return;
+        if (state.equals("win")) servers.get(player).setServerMessage("lose");
+        else servers.get(player).setServerMessage("win");
+    }
+
+    private int isFinish(){
+        int player = -1;
+        for (int i = 0; i < servers.size(); i++)
+            if (servers.get(i).getGameState().equals("playing")) {
+                if (player == -1) player = i;
+                else return -1;
+            }
+        return player;
     }
 
     public boolean checkAllReady() {
@@ -90,9 +111,7 @@ public class MultiServer extends PlayMode implements Runnable {
 
     private void cleanup() {
         try {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-            }
+            if (serverSocket != null && !serverSocket.isClosed()) serverSocket.close();
         } catch (IOException e) {
             System.out.println("Shutdown error: " + e.getMessage());
         }

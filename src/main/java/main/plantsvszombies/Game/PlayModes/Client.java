@@ -36,10 +36,8 @@ public class Client extends PlayMode implements Runnable {
 
     @Override
     public String WinOrLose() {
-        if (!gameState.equals("playing")) {
-            return gameState;
-        }
-        return checkGameState();
+        if (!gameState.equals("playing")) return gameState;
+        return gameState = checkGameState();
     }
 
     public void run() {
@@ -50,6 +48,7 @@ public class Client extends PlayMode implements Runnable {
                     break;
                 }
                 serverCommand = command;
+                out.println(gameState);
 
                 Thread.sleep(10);
             } while (!serverCommand.equals("win") && !serverCommand.equals("lose"));
