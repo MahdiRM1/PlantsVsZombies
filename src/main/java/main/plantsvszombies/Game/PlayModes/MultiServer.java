@@ -108,11 +108,19 @@ public class MultiServer extends PlayMode implements Runnable {
     }
 
     @Override
-    // handles the zombie entering
-    protected String handleZombie(long base, long mode, int zombieTypes) {
-        if (Math.abs(Constants.gameTime % base - mode) < 500) {
+    protected String handleZombie(long base, int zombieTypes) {
+        if (Math.abs(Constants.gameTime % base - 1000) < 500) {
             return (int) (Math.random() * zombieTypes) + "," + (int) (Math.random() * 5);
         }
+        return "execute no moves";
+    }
+
+    @Override
+    protected String wave() {
+        int zombieTypes = Constants.gameTime < 100_000 ? 4 : 5;
+        int attackType = zombieTypes - 3;
+        if (Constants.gameTime - (long) attackType * 70_000 < 1000) return finalWave(attackType);
+        else if (Math.abs(Constants.gameTime % 4000 - 1000) < 500) return normalWave(zombieTypes);
         return "execute no moves";
     }
 }

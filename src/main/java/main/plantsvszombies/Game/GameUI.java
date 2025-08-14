@@ -105,9 +105,11 @@ public class GameUI {
             cards.add(new Card(plantsName.get(i), i));
         }
 //        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 0);
+        initStackPane(cardBar(), 1000, 130000);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
+        AudioClip startGame = SoundManager.setSound("readysetplant", false);
+        startGame.play();
         startGame();
     }
 
@@ -498,7 +500,7 @@ public class GameUI {
 
     private Button restartBtn(){
         Button restart = Utils.createMenuButton("RESTART LEVEL", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
-        restart.setOnMouseClicked(event -> {
+        restart.setOnMouseClicked(GameUIevent -> {
             SoundManager.playClickTrack();
             backgroundMusic.stop();
             new PlantSelection(stage, mode, new DefaultMode());
