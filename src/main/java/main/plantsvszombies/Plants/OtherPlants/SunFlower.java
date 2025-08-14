@@ -29,14 +29,14 @@ public class SunFlower extends Plant {
         price = 50;
         HP = 100;
         rechargeTime = 10;
-        lastSunTime = timeCreated;
+        lastSunTime = Constants.gameTime;
         frameUpdateTime = 20;
     }
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
         updateFrame();
-        if (Math.abs(Constants.gameTime - lastSunTime) == 8800) {
+        if (Math.abs(Constants.gameTime - lastSunTime) >= 8800 && !sunGiving) {
             nowPic = 0;
             frameUpdateTime = 60;
             sunGiving = true;

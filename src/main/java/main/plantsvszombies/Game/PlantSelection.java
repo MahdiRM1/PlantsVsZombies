@@ -124,8 +124,6 @@ public class PlantSelection{
     private void startGame() {
         SoundManager.playClickTrack();
         backgroundMusic.stop();
-        AudioClip startGame = SoundManager.setSound("readysetplant", false);
-        startGame.play();
         if (playMode instanceof Client client) {
             client.ready();
             client.waitForPlayers();

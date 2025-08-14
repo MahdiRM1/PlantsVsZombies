@@ -27,16 +27,11 @@ public abstract class PlayMode {
 
     protected void action(String str) {
         switch (str.toLowerCase()) {
-            case ("win"), ("lose") ->
-                gameState = str;
-            case ("wave") ->
-                wave();
-            case ("execute no moves") -> {
-            }
+            case ("win"), ("lose") -> gameState = str;
+            case ("execute no moves") -> {}
             default -> {
-                if (str.contains(",")) {
-                    addZombie(str);
-                }
+                if (str.contains("wave")) handleWave(str);
+                else if (str.contains(",")) addZombie(str);
             }
         }
     }
@@ -49,13 +44,13 @@ public abstract class PlayMode {
             sound.play();
         }
         if (time < 20) return "execute no moves";
-        else if (time < 40) return handleZombie(5000, 1000, 1);
-        else if (time < 60) return handleZombie(4000, 0, 2);
+        else if (time < 40) return handleZombie(5000, 1);
+        else if (time < 60) return handleZombie(4000, 2);
         else if (time < 70);
-        else if (time < 80) return "wave";
-        else if (time < 130) return handleZombie(3000, 0, 4);
+        else if (time < 80) return wave();
+        else if (time < 130) return handleZombie(3000, 4);
         else if (time < 140);
-        else if (time < 155) return "wave";
+        else if (time < 155) return wave();
         return "execute no moves";
     }
 
@@ -67,34 +62,57 @@ public abstract class PlayMode {
     }
 
     // handles the zombie entering
-    protected String handleZombie(long base, long mode, int zombieTypes) {
-        if (Constants.gameTime % base == mode) {
+    protected String handleZombie(long base, int zombieTypes) {
+        if (Constants.gameTime % base == 1000) {
             return (int) (Math.random() * zombieTypes) + "," + (int) (Math.random() * 5);
         }
         return "execute no moves";
     }
 
     // handles the attack waves
-    private void wave() {
+    protected String wave() {
         int zombieTypes = Constants.gameTime < 100_000 ? 4 : 5;
         int attackType = zombieTypes - 3;
-        if (Constants.gameTime == (long) attackType * 70_000) {
-            spawnZombie(5, (int) (Math.random() * 5));
-            AudioClip attackWave = SoundManager.setSound("hugewave", false);
-            if (attackType > 1) {
-                attackWave = SoundManager.setSound("siren", false);
-                AudioClip sound = SoundManager.setSound("awooga", false);
-                sound.play();
-                for (Grave grave : graves) {
-                    spawnZombie((int) (Math.random() * 4), grave.getRow(), grave.getCol());
-                }
-            }
-            attackWave.play();
-        } else if (Constants.gameTime % 4000 == 0 || Constants.gameTime % 4000 == 200) {
-            for (int i = 0; i < 5; i++) {
-                spawnZombie((int) (Math.random() * zombieTypes), i);
-            }
+        if (Constants.gameTime == (long) attackType * 70_000) return finalWave(attackType);
+        else if (Constants.gameTime % 4000 == 0) return normalWave(zombieTypes);
+        return "execute no moves";
+    }
+
+    protected String normalWave(int zombieTypes){
+        String waveStr = "wave ";
+        for (int i = 0; i < 10; i++) waveStr += (int) (Math.random() * zombieTypes) + ",";
+        System.out.println(waveStr);
+        return waveStr;
+    }
+
+    protected String finalWave(int attackType){
+        String waveStr = "finalwave 5," + (int) (Math.random() * 5);
+        AudioClip attackWave = SoundManager.setSound("hugewave", false);
+        if (attackType > 1) {
+            attackWave = SoundManager.setSound("siren", false);
+            AudioClip sound = SoundManager.setSound("awooga", false);
+            sound.play();
+            for (int i = 0; i < 8; i++) waveStr += "," + (int) (Math.random() * 5);
         }
+        attackWave.play();
+        return waveStr;
+    }
+
+    private void handleWave(String str){
+        if (str.contains("finalwave")) handleFinalWave(str);
+        else {
+            str = str.substring(5);
+            String[] parts = str.split(",");
+            for (int i = 0; i < 10; i++) spawnZombie(Integer.parseInt(parts[i]), i % 5);
+        }
+    }
+
+    private void handleFinalWave(String str){
+        str = str.substring(10);
+        String[] parts = str.split(",");
+        spawnZombie(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+        for (int i = 0; i < graves.size(); i++) spawnZombie(Integer.parseInt(parts[i+2]),
+                graves.get(i).getRow(), graves.get(i).getCol());
     }
 
     // spawns a zombie

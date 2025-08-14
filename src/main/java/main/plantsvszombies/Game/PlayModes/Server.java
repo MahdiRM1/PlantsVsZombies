@@ -34,11 +34,7 @@ public class Server implements Runnable {
             }
             out.println("allready");
             out.flush();
-            while (!serverMessage.equals("wave")) {
-//                out.println(serverMessage);
-//                out.flush();
-//                Thread.sleep(20);
-            }
+            while (true);
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         } finally {
