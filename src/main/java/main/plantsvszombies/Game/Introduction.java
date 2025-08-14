@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Game.PlayModes.Client;
 import main.plantsvszombies.Game.PlayModes.DefaultMode;
+import main.plantsvszombies.Game.PlayModes.MultiServer;
 import main.plantsvszombies.Game.PlayModes.PlayMode;
 import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Game.Tools.ImageFactory;
@@ -170,21 +171,21 @@ public class Introduction {
     private void multiPlayerMode(StackPane mainPane){
         Button btn1 = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         btn1.setOnAction(e -> {
-            PlayMode playMode = new Client("192.168.242.30");
+            PlayMode playMode = new Client("192.168.1.103");
             startGame(GameMode.DAY, playMode);
         });
 
         Button btn2 = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
         btn2.setOnMouseClicked(e -> {
-//            MultiServer multiServer = new MultiServer();
-//            Runnable runnable = multiServer::connect;
-//            Thread thread1 = new Thread(runnable);
-//            thread1.start();
-//            PlayMode playMode = multiServer.innerConnection();
-//            Thread thread = new Thread(multiServer);
-//            thread.setPriority(10);
-//            thread.start();
-//            startGame(GameMode.DAY, playMode);
+            MultiServer multiServer = new MultiServer();
+            Runnable runnable = multiServer::connect;
+            Thread thread1 = new Thread(runnable);
+            thread1.start();
+            PlayMode playMode = multiServer.innerConnection();
+            Thread thread = new Thread(multiServer);
+            thread.setPriority(10);
+            thread.start();
+            startGame(GameMode.DAY, playMode);
         });
 
         String phrase = "MultiPlayer\n\nChoose your role in \nthe game";

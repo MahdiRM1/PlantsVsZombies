@@ -1,30 +1,34 @@
 package main.plantsvszombies.Game.PlayModes;
 
-import java.io.*;
-import java.net.*;
-import java.util.ArrayList;
+import main.plantsvszombies.Game.Tools.Constants;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MultiServer extends PlayMode implements Runnable {
+
     String serverCommand;
     List<Server> servers;
     List<Thread> threads;
     ServerSocket serverSocket;
 
-    public MultiServer () {
+    public MultiServer() {
         try {
             serverSocket = new ServerSocket(5000);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        servers = new ArrayList<>();
-        threads = new ArrayList<>();
+        servers = new CopyOnWriteArrayList<>();
+        threads = new CopyOnWriteArrayList<>();
         for (int i = 0; i < 1; i++) {
             connect();
         }
     }
 
-    public void connect(){
+    public void connect() {
         try {
             Socket socket = serverSocket.accept();
             System.out.println("connected: " + socket.getInetAddress());
@@ -32,61 +36,83 @@ public class MultiServer extends PlayMode implements Runnable {
             Thread thread = new Thread(server);
             threads.add(thread);
             servers.add(server);
-        }catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public Client innerConnection(){
-        Client client = new Client("127.0.0.1");
-        return client;
+    public Client innerConnection() {
+        return new Client("127.0.0.1");
     }
 
     @Override
     public void run() {
-        System.out.println("It's running");
-        for(Thread thread : threads) {
+        for (Thread thread : threads) {
             thread.start();
         }
-        while (!checkAllReady()) {
-            try {
+        try{
+            while (!checkAllReady()) Thread.sleep(100);
+            allReady();
+            Thread.sleep(100);
+            do {
+                serverCommand = timeHandler();
+                updateServers();
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            } while (!serverCommand.equals("win") && !serverCommand.equals("lose"));
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        } finally {
+            cleanup();
         }
-        allReady();
-        while (!(serverCommand = timeHandler()).equals("wave")) updateServers();
     }
 
-    private void updateServers(){
-        for (Server server: servers) server.setServerMessage(serverCommand);
+    private void updateServers() {
+        System.out.println("server: " + serverCommand + ", " + Constants.gameTime);
+        for (Server server : servers) {
+            server.setServerMessage(serverCommand);
+        }
     }
 
-    public boolean checkAllReady(){
-        for (Server server: servers){
-            if (!server.getServerMessage().equals("ready")) return false;
+    public boolean checkAllReady() {
+        for (Server server : servers) {
+            if (!server.getServerMessage().equals("ready")) {
+                return false;
+            }
         }
         return true;
     }
 
-    private void allReady(){
-        for (Server server: servers){
+    private void allReady() {
+        for (Server server : servers) {
             server.allReady();
         }
     }
 
-    public List<Server> getServers() {
-        return servers;
+    private void cleanup() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Shutdown error: " + e.getMessage());
+        }
     }
 
-    public List<Thread> getThreads() {
-        return threads;
+    @Override
+    public void updateGame() {
     }
 
+    @Override
+    public String WinOrLose() {
+        return "";
+    }
 
     @Override
-    public void updateGame() {}
-    @Override
-    public String WinOrLose() {return "";}
+    // handles the zombie entering
+    protected String handleZombie(long base, long mode, int zombieTypes) {
+        if (Math.abs(Constants.gameTime % base - mode) < 500) {
+            return (int) (Math.random() * zombieTypes) + "," + (int) (Math.random() * 5);
+        }
+        return "execute no moves";
+    }
 }
