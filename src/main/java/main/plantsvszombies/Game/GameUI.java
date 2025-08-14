@@ -105,7 +105,7 @@ public class GameUI {
             cards.add(new Card(plantsName.get(i), i));
         }
 //        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 130000);
+        initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
         AudioClip startGame = SoundManager.setSound("readysetplant", false);
