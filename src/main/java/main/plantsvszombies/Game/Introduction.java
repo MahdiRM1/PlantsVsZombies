@@ -2,9 +2,11 @@ package main.plantsvszombies.Game;
 
 import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -24,6 +26,11 @@ import main.plantsvszombies.Game.Tools.ImageFactory;
 import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
+
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 public class Introduction {
 
@@ -170,29 +177,59 @@ public class Introduction {
 
     private void multiPlayerMode(StackPane mainPane){
         Button btn1 = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        btn1.setOnAction(e -> {
-            PlayMode playMode = new Client("192.168.1.103");
-            startGame(GameMode.DAY, playMode);
-        });
+        btn1.setOnAction(e -> clientMode(mainPane));
 
         Button btn2 = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
-        btn2.setOnMouseClicked(e -> {
-            MultiServer multiServer = new MultiServer();
-            Runnable runnable = multiServer::connect;
-            Thread thread1 = new Thread(runnable);
-            thread1.start();
-            PlayMode playMode = multiServer.innerConnection();
-            Thread thread = new Thread(multiServer);
-            thread.setPriority(10);
-            thread.start();
-            startGame(GameMode.DAY, playMode);
-        });
+        btn2.setOnMouseClicked(e -> showIp(mainPane));
 
         String phrase = "MultiPlayer\n\nChoose your role in \nthe game";
         chooseRole(mainPane, btn1, btn2, phrase);
     }
 
-    private void chooseRole(StackPane mainPane, Button btn1, Button btn2, String str){
+    private void showIp(StackPane mainPane){
+        mainPane.getChildren().removeLast();
+        Button btn1 = Utils.createMenuButton("ACCEPT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        btn1.setOnMouseClicked(e -> serverMode());
+
+        Button btn2 = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        btn2.setOnMouseClicked(e -> mainPane.getChildren().removeLast());
+
+        String phrase = "IP:\n" + Ip();
+        chooseRole(mainPane, btn1, btn2, phrase);
+    }
+
+    private void clientMode(StackPane mainPane){
+        mainPane.getChildren().removeLast();
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter IP");
+        nameField.getStyleClass().add("btns");
+        Font font = Font.loadFont("file:src/main/resources/fonts/Coold.ttf", 30);
+        nameField.setFont(font);
+        nameField.setPrefSize(Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+
+        Button submit = Utils.createMenuButton("SUBMIT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        submit.setOnAction(e -> {
+            PlayMode playMode = new Client(nameField.getText());
+            startGame(GameMode.DAY, playMode);
+        });
+
+        String phrase = "Please get IP";
+        chooseRole(mainPane, nameField, submit, phrase);
+    }
+
+    private void serverMode(){
+        MultiServer multiServer = new MultiServer();
+        Runnable runnable = multiServer::connect;
+        Thread thread1 = new Thread(runnable);
+        thread1.start();
+        PlayMode playMode = multiServer.innerConnection();
+        Thread thread = new Thread(multiServer);
+        thread.setPriority(10);
+        thread.start();
+        startGame(GameMode.DAY, playMode);
+    }
+
+    private void chooseRole(StackPane mainPane, Node btn1, Node btn2, String str){
         Pane pane = new Pane();
         chooseBox(pane, str);
 
@@ -201,6 +238,25 @@ public class Introduction {
 
         pane.getChildren().addAll(btn1, btn2);
         mainPane.getChildren().add(pane);
+    }
+
+    private String Ip(){
+        try {
+            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+            while (nets.hasMoreElements()) {
+                NetworkInterface nif = nets.nextElement();
+                if (nif.isUp() && !nif.isLoopback() && !nif.isVirtual()) {
+                    Enumeration<InetAddress> addresses = nif.getInetAddresses();
+                    while (addresses.hasMoreElements()) {
+                        InetAddress addr = addresses.nextElement();
+                        if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) return addr.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void chooseBox(Pane pane, String text){
