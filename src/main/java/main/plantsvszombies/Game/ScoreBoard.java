@@ -41,7 +41,7 @@ public class ScoreBoard {
 
     private Label createScoreLabel() {
         Label scoreLabel = new Label(score + "");
-        Font font = Font.loadFont("file:src/main/resources/fonts/BreakdownPG.otf", 40);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 40);
         scoreLabel.setFont(font);
         scoreLabel.setStyle("-fx-text-fill: rgb(25, 25, 25);");
         scoreLabel.setPadding(new Insets(-Constants.SCREEN_HEIGHT / 30, 0, 0, Constants.SCREEN_WIDTH / 26.3));

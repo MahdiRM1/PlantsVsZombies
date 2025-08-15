@@ -19,7 +19,7 @@ public class Blover extends Plant {
 
 
     static {
-        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Blover/normal/frame_", FRAME_COUNT);
+        FRAMES = ImageFactory.arrayImage("plantPictures/Blover/normal/frame_", FRAME_COUNT);
         sound = SoundManager.setSound("blover", false);
     }
 

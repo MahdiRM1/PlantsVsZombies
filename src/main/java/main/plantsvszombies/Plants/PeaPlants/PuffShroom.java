@@ -16,8 +16,8 @@ public class PuffShroom extends PeaPlant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PuffShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PuffShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/PuffShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/PuffShroom/normal/frame_", FRAME_COUNT);
     }
 
     public PuffShroom(int row, int col, boolean isSleep) {

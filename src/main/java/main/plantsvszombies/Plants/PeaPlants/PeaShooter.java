@@ -11,8 +11,8 @@ public class PeaShooter extends PeaPlant {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PeaShooter/normal/frame_", FRAME_COUNT);
-        SHOOT_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PeaShooter/shoot/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/PeaShooter/normal/frame_", FRAME_COUNT);
+        SHOOT_FRAMES = ImageFactory.arrayImage("plantPictures/PeaShooter/shoot/frame_", FRAME_COUNT);
     }
 
     public PeaShooter(int row, int col) {

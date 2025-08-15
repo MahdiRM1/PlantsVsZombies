@@ -18,10 +18,10 @@ public class BucketheadZombie extends Zombie {
 
 
     static {
-        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BucketheadZombie/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BucketheadZombie/Attack/frame_", ATTACK_FRAME_COUNT);
-        BUCKET_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BucketheadZombie/bucket/frame_", BUCKET_FRAME_COUNT);
-        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("ZombiePicture/BucketheadZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("ZombiePicture/BucketheadZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        BUCKET_FRAMES = ImageFactory.arrayImage("ZombiePicture/BucketheadZombie/bucket/frame_", BUCKET_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public BucketheadZombie(ZombieData data) {

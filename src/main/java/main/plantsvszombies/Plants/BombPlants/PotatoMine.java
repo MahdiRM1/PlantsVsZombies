@@ -22,9 +22,9 @@ public class PotatoMine extends BombPlant {
     private MineState state;
 
     static {
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
-        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
-        READY_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
+        READY_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
         sound = SoundManager.setSound("potato_mine", false);
     }
 

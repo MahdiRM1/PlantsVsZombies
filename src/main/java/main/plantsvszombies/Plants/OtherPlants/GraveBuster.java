@@ -19,7 +19,7 @@ public class GraveBuster extends Plant {
     private static final AudioClip sound;
 
     static {
-        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
+        FRAMES = ImageFactory.arrayImage("plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
         sound = SoundManager.setSound("gravebusterchomp", false);
     }
 

@@ -125,7 +125,7 @@ public class GameUI {
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
-        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
+        scene.getStylesheets().add(ImageFactory.class.getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> save());
         stage.show();
@@ -416,7 +416,7 @@ public class GameUI {
         Pane lose = new Pane();
         AudioClip sound = SoundManager.setSound("losemusic", false);
         sound.play();
-        ImageView loseImage = new ImageView(new Image("file:Pictures/ui/LosePage.png"));
+        ImageView loseImage = new ImageView(new Image(getClass().getResource("/Pictures/ui/LosePage.png").toExternalForm()));
         ImageFactory.setNodeSize(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
         ImageFactory.setNodePosition(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
         lose.getChildren().add(loseImage);

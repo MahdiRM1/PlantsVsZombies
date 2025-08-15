@@ -16,10 +16,10 @@ public class FlagZombie extends Zombie{
     private final static Image[] BOOM_DIE_FRAMES;
 
     static{
-        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/FlagZombie/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/FlagZombie/Attack/frame_", ATTACK_FRAME_COUNT);
-        DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/OriginalZombie/Die/frame_", DIE_FRAME_COUNT);
-        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("ZombiePicture/FlagZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("ZombiePicture/FlagZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/OriginalZombie/Die/frame_", DIE_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public FlagZombie(ZombieData data){

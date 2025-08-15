@@ -21,8 +21,8 @@ public class IceShroom extends BombPlant implements Shroom {
     private static final AudioClip sound;
 
     static {
-        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
         sound = SoundManager.setSound("frozen", false);
     }
 
