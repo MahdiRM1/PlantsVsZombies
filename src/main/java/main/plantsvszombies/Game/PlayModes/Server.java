@@ -1,5 +1,7 @@
 package main.plantsvszombies.Game.PlayModes;
 
+import main.plantsvszombies.Enums.GameMode;
+
 import java.io.*;
 import java.net.*;
 
@@ -12,12 +14,14 @@ public class Server implements Runnable {
     private boolean allReady = false;
     private String gameState = "playing";
 
-    public Server(Socket socket) {
+    public Server(Socket socket, GameMode mode) {
         serverMessage = "not ready";
         this.socket = socket;
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(mode.toString());
+            out.flush();
         } catch (IOException e) {
             System.out.println("line 22 Server: " + e.getMessage());
             throw new RuntimeException();
