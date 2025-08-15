@@ -499,6 +499,7 @@ public class GameUI {
     private Button restartBtn(){
         Button restart = Utils.createMenuButton("RESTART LEVEL", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
         restart.setOnMouseClicked(GameUIevent -> {
+            if (playMode instanceof Client) return;
             SoundManager.playClickTrack();
             backgroundMusic.stop();
             new PlantSelection(stage, mode, new DefaultMode());
