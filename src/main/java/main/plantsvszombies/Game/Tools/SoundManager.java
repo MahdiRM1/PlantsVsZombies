@@ -1,6 +1,5 @@
 package main.plantsvszombies.Game.Tools;
 
-import javafx.animation.Timeline;
 import javafx.scene.media.AudioClip;
 
 public class SoundManager {
@@ -16,12 +15,11 @@ public class SoundManager {
     private static final AudioClip hover = new AudioClip(SoundManager.class.getResource("/Audio/ceramic.mp3").toExternalForm());
 
     public static void playSound(String name){
-        setSound(name, false).play();
+        setSound(name).play();
     }
 
-    public static AudioClip setSound(String name, boolean repeat){
+    public static AudioClip setSound(String name){
         AudioClip sound = new AudioClip(SoundManager.class.getResource("/Audio/" + name + ".mp3").toExternalForm());
-        if (repeat) sound.setCycleCount(Timeline.INDEFINITE);
         sound.setVolume(volume);
         return sound;
     }

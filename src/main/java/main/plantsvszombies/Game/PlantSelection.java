@@ -15,7 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -32,7 +33,7 @@ public class PlantSelection{
     private final GameMode gameMode;
     private final Stage stage;
     private final StackPane mainPane;
-    private AudioClip backgroundMusic;
+    private MediaPlayer backgroundMusic;
     private HBox cardBar;
     private final PlayMode playMode;
 
@@ -49,7 +50,7 @@ public class PlantSelection{
     }
 
     private void music(){
-        backgroundMusic = new AudioClip(getClass().getResource("/Audio/LookupattheSky.mp3").toExternalForm());
+        backgroundMusic = new MediaPlayer(new Media(getClass().getResource("/Audio/LookupattheSky.mp3").toExternalForm()));
         backgroundMusic.setVolume(SoundManager.music);
         backgroundMusic.setCycleCount(-1);
         backgroundMusic.play();
@@ -139,14 +140,23 @@ public class PlantSelection{
             Thread thread = new Thread(runnable);
             thread.start();
 
-            waitAnim();
+            waitAnimation();
         }
         else new GameUI(selectedCards, stage, gameMode, playMode);
     }
 
-    private void waitAnim(){
+    private void waitAnimation(){
         ImageView loading = ImageFactory.createBackGround("loading");
         Pane pane = new Pane();
+        ImageView waiting = new ImageView(new Image(getClass().getResource("/Pictures/ui/loading.gif").toExternalForm()));
+        ImageFactory.setNodeSize(waiting, Constants.SCREEN_WIDTH/5, Constants.SCREEN_WIDTH/5);
+        ImageFactory.setNodePosition(waiting, Constants.SCREEN_WIDTH/2.5, Constants.SCREEN_HEIGHT/4);
+        pane.getChildren().addAll(loading, waiting, waitLabel());
+        backgroundMusic.stop();
+        stage.getScene().setRoot(pane);
+    }
+
+    private Label waitLabel(){
         Label label = new Label("Wait For Other Players");
         ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
@@ -158,10 +168,7 @@ public class PlantSelection{
         );
         label.setTextAlignment(TextAlignment.CENTER);
         label.setAlignment(Pos.CENTER);
-        pane.getChildren().addAll(loading, label);
-        backgroundMusic.stop();
-        SoundManager.playSound("evillaugh");
-        stage.getScene().setRoot(pane);
+        return label;
     }
 
     private Button getCardButton(String plantName) {
@@ -243,11 +250,7 @@ public class PlantSelection{
         backToGame.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();
-            if (SoundManager.music != backgroundMusic.getVolume()){
-                backgroundMusic.stop();
-                backgroundMusic.setVolume(SoundManager.music);
-                backgroundMusic.play();
-            }
+            backgroundMusic.setVolume(SoundManager.music);
         });
         return backToGame;
     }

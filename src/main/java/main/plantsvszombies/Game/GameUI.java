@@ -18,7 +18,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.plantsvszombies.Enums.GameMode;
@@ -56,14 +57,14 @@ public class GameUI {
     private final Pane pane = new Pane();
     private final Stage stage;
     private final GameMode mode;
-    private PlayMode playMode;
+    private final PlayMode playMode;
     private final GameTimer timer;
     private ScoreBoard scoreBoard;
     private Timeline tl;
     private Scene scene;
     public static int selectedButton = -1;
     private Fog fog;
-    private AudioClip backgroundMusic;
+    private MediaPlayer backgroundMusic;
 
     // constructor: to load the previously saved game
     public GameUI(Stage stage, GameState state) {
@@ -114,7 +115,7 @@ public class GameUI {
 
     // manages the start of the game
     public final void startGame() {
-        backgroundMusic = SoundManager.setSound("gameMusic", true);
+        backgroundMusic = new MediaPlayer(new Media(getClass().getResource("/Audio/gameMusic.mp3").toExternalForm()));
         backgroundMusic.setVolume(SoundManager.music);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
@@ -308,11 +309,7 @@ public class GameUI {
         backToGame.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             mainPane.getChildren().removeLast();
-            if (SoundManager.music != backgroundMusic.getVolume()){
-                backgroundMusic.stop();
-                backgroundMusic.setVolume(SoundManager.music);
-                backgroundMusic.play();
-            }
+            backgroundMusic.setVolume(SoundManager.music);
             tl.play();
         });
 
