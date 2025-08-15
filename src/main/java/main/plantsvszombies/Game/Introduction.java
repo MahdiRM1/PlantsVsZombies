@@ -268,7 +268,7 @@ public class Introduction {
         TextField textField = new TextField();
         textField.setPromptText("Enter IP");
         textField.getStyleClass().add("TextField");
-        Font font = Font.loadFont(getClass().getResource("/fonts/Coold.ttf").toExternalForm(), 30);
+        Font font = Font.loadFont(getClass().getResource("/fonts/Coold.ttf").toExternalForm(), Constants.SCREEN_HEIGHT/36);
         textField.setFont(font);
         textField.setPrefSize(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/15);
         ImageFactory.setNodePosition(textField, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/2.1);
@@ -313,7 +313,7 @@ public class Introduction {
         Label label = new Label(text);
         ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/2.5, Constants.SCREEN_HEIGHT / 2.5);
         ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/5.25, Constants.SCREEN_HEIGHT/8);
-        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 30);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/36);
         label.setFont(font);
         label.setStyle(
                 "-fx-text-fill: rgb(214, 178, 94);" +

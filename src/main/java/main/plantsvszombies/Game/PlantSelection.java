@@ -160,7 +160,7 @@ public class PlantSelection{
         Label label = new Label("Wait For Other Players");
         ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2);
-        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 60);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/18);
         label.setFont(font);
         label.setStyle(
             "-fx-text-fill: rgb(214, 178, 94);" +
