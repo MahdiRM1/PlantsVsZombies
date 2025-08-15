@@ -31,7 +31,7 @@ public class OriginalZombie extends Zombie {
     public OriginalZombie(int row, int col) {
         super(row, col);
         HP = 100;
-        speed = 5;
+        speed = 1;
     }
 
     public static Image[] getimages(ZombieState state) {
