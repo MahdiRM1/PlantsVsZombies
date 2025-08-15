@@ -68,7 +68,7 @@ public class Server implements Runnable {
         allReady = true;
     }
 
-    private void cleanup() {
+    public void cleanup() {
         try {
             if (in != null) in.close();
             if (out != null) out.close();
