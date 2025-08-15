@@ -50,7 +50,7 @@ public class Introduction {
 
     public void firstPage() {
         Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
-        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
+        scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }
@@ -68,7 +68,7 @@ public class Introduction {
         ImageFactory.setNodePosition(socket, Constants.SCREEN_WIDTH / 1.98, Constants.SCREEN_HEIGHT / 3.1);
         socket.setOnMouseClicked(event -> multiPlayerMode(mainPane));
 
-        ImageView loadGame = new ImageView(new Image("file:Pictures/ui/LoadGame.png"));
+        ImageView loadGame = new ImageView(new Image(getClass().getResource("/Pictures/ui/LoadGame.png").toExternalForm()));
         ImageFactory.setNodeSize(loadGame, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 4.8);
         ImageFactory.setNodePosition(loadGame, Constants.SCREEN_WIDTH / 1.94, Constants.SCREEN_HEIGHT / 2);
         if (Utils.dataExists()) {
@@ -155,7 +155,7 @@ public class Introduction {
     }
 
     private void handAnimation(StackPane mainPane, String mode){
-        ImageView hand = new ImageView(new Image("file:Pictures/ui/handGif.gif"));
+        ImageView hand = new ImageView(new Image(getClass().getResource("/Pictures/ui/handGif.gif").toExternalForm()));
         Pane pane = new Pane();
         double size = Constants.SCREEN_HEIGHT / 2;
         ImageFactory.setNodePosition(hand, Constants.SCREEN_WIDTH / 3 , Constants.SCREEN_HEIGHT / 2);
@@ -266,7 +266,7 @@ public class Introduction {
         TextField textField = new TextField();
         textField.setPromptText("Enter IP");
         textField.getStyleClass().add("TextField");
-        Font font = Font.loadFont("file:src/main/resources/fonts/Coold.ttf", 30);
+        Font font = Font.loadFont(getClass().getResource("/fonts/Coold.ttf").toExternalForm(), 30);
         textField.setFont(font);
         textField.setPrefSize(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/15);
         ImageFactory.setNodePosition(textField, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/2.1);
@@ -304,13 +304,13 @@ public class Introduction {
     }
 
     private void chooseBox(Pane pane, String text){
-        ImageView chooseRole = new ImageView(new Image("file:Pictures/ui/dialog_topleft.png"));
+        ImageView chooseRole = new ImageView(new Image(getClass().getResource("/Pictures/ui/dialog_topleft.png").toExternalForm()));
         ImageFactory.setNodePosition(chooseRole, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/4);
         ImageFactory.setNodeSize(chooseRole, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
         Label label = new Label(text);
         ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/2.5, Constants.SCREEN_HEIGHT / 2.5);
         ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/5.25, Constants.SCREEN_HEIGHT/8);
-        Font font = Font.loadFont("file:src/main/resources/fonts/BreakdownPG.otf", 30);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 30);
         label.setFont(font);
         label.setStyle(
                 "-fx-text-fill: rgb(214, 178, 94);" +
@@ -337,7 +337,7 @@ public class Introduction {
         day.setOnMouseClicked(e -> startGame(GameMode.DAY, new DefaultMode()));
 
         double sizePlant = Constants.SCREEN_HEIGHT / 6.3;
-        ImageView plant = new ImageView(new Image("file:Pictures/plantPictures/SunFlower/gif.gif"));
+        ImageView plant = new ImageView(new Image(getClass().getResource("/Pictures/plantPictures/SunFlower/gif.gif").toExternalForm()));
         ImageFactory.setNodeSize(plant, sizePlant, sizePlant);
         ImageFactory.setNodePosition(plant, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3.7);
 
@@ -345,7 +345,7 @@ public class Introduction {
         ImageFactory.setNodePosition(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);
         night.setOnMouseClicked(e -> startGame(GameMode.NIGHT, new DefaultMode()));
 
-        ImageView zombie = new ImageView(new Image("file:Pictures/ZombiePicture/OriginalZombie/gif.gif"));
+        ImageView zombie = new ImageView(new Image(getClass().getResource("/Pictures/ZombiePicture/OriginalZombie/gif.gif").toExternalForm()));
         ImageFactory.setNodeSize(zombie, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
         ImageFactory.setNodePosition(zombie, Constants.SCREEN_WIDTH / 1.68, Constants.SCREEN_HEIGHT / 3.9);
 

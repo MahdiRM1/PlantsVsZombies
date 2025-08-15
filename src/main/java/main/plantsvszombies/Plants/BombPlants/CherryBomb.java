@@ -18,8 +18,8 @@ public class CherryBomb extends BombPlant {
     private static final AudioClip sound;
 
     static {
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CherryBomb/normal/frame_", NORMAL_FRAME_COUNT);
-        EXPLOSION_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CherryBomb/boom/frame_", EXPLOSION_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/CherryBomb/normal/frame_", NORMAL_FRAME_COUNT);
+        EXPLOSION_FRAMES = ImageFactory.arrayImage("plantPictures/CherryBomb/boom/frame_", EXPLOSION_FRAME_COUNT);
         sound = SoundManager.setSound("cherrybomb", false);
     }
 

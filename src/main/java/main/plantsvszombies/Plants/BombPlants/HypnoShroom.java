@@ -16,8 +16,8 @@ public class HypnoShroom extends BombPlant implements Shroom {
     private static final Image[] NORMAL_FRAMES;
 
     static {
-        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/HypnoShroom/sleep/frame_", FRAME_COUNT);
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/HypnoShroom/normal/frame_", FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/HypnoShroom/sleep/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/HypnoShroom/normal/frame_", FRAME_COUNT);
     }
 
     public HypnoShroom(int row, int col, boolean isSleep) {

@@ -25,9 +25,9 @@ public class DoomShroom extends BombPlant implements Shroom {
     private static final AudioClip sound;
 
     static {
-        SLEEP_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
-        DOOM_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
+        SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
+        DOOM_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
         sound = SoundManager.setSound("doomshroom", false);
     }
 
@@ -58,13 +58,13 @@ public class DoomShroom extends BombPlant implements Shroom {
             } else if (nowPic >= getImage().length - 1) {
                 finishAnimation = true;
                 String str = timeCreated != wakeUpTime ? "Day" : "Night";
-                picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + str + "Hole1.png"));
+                picture.setImage(new Image(getClass().getResource("/plantPictures/DoomShroom/" + str + "Hole1.png").toExternalForm()));
                 picture.setLayoutY(picture.getLayoutY() + picture.getFitHeight() / 4);
                 ImageFactory.changeScale(picture, 1);
             }
         } else if (Math.abs(Constants.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
-            picture.setImage(new Image("file:Pictures/plantPictures/DoomShroom/" + time + "Hole2.png"));
+            picture.setImage(new Image(getClass().getResource("/plantPictures/DoomShroom/" + time + "Hole1.png").toExternalForm()));
         } else if (Math.abs(Constants.gameTime - wakeUpTime) == 22000) die();
         return false;
     }

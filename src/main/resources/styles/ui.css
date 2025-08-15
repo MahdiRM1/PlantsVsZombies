@@ -1,5 +1,5 @@
 .menuBtn{
-    -fx-background-image: url('file:Pictures/ui/Button.png'); 
+    -fx-background-image: url('../Pictures/ui/Button.png'); 
     -fx-background-repeat: no-repeat; 
     -fx-background-size: 100% 100%; 
     -fx-background-position: center; 
@@ -9,7 +9,7 @@
 }
 
 .submitBtn {
-    -fx-background-image: url('file:Pictures/ui/submitBtn.png');
+    -fx-background-image: url('../Pictures/ui/submitBtn.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;
     -fx-background-position: center;
@@ -19,7 +19,7 @@
 }
 
 .btns {
-    -fx-background-image: url('file:Pictures/ui/btn.png');
+    -fx-background-image: url('../Pictures/ui/btn.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;
     -fx-background-position: center;
@@ -29,7 +29,7 @@
 }
 
 .TextField {
-    -fx-background-image: url('file:Pictures/ui/textField.png');
+    -fx-background-image: url('../Pictures/ui/TextField.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;
     -fx-background-position: center;
@@ -45,7 +45,7 @@
 }
 
 .slider .thumb{
-    -fx-background-image: url('file:Pictures/ui/sound.png'); 
+    -fx-background-image: url('../Pictures/ui/sound.png'); 
     -fx-background-size: cover; 
     -fx-background-color: transparent; 
     -fx-pref-Height : 50px; 

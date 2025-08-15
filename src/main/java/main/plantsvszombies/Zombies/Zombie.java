@@ -37,7 +37,7 @@ public abstract class Zombie {
     private long lastBite;
 
     static {
-        HEAD_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
+        HEAD_FRAMES = ImageFactory.arrayImage("ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
         gulp = SoundManager.setSound("gulp", false);
         chomp[0] = SoundManager.setSound("chomp", false);
         chomp[1] = SoundManager.setSound("chompsoft", false);

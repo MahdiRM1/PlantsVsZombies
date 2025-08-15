@@ -21,7 +21,7 @@ public class GameTimer {
     }
 
     private ImageView timeBar(String str){
-        ImageView timeBar = new ImageView(new Image("file:Pictures/ui/"+ str + ".png"));
+        ImageView timeBar = new ImageView(new Image(getClass().getResource("/Pictures/ui/" + str + ".png").toExternalForm()));
         timeBar.setLayoutX(Constants.SCREEN_WIDTH / 1.25);
         timeBar.setLayoutY(Constants.SCREEN_HEIGHT / 1.09);
         timeBar.setFitWidth(Constants.SCREEN_WIDTH / 7);
@@ -31,7 +31,7 @@ public class GameTimer {
     }
 
     private ImageView headPicture(){
-        ImageView head = new ImageView(new Image("file:Pictures/ui/flagZombieHead.png"));
+        ImageView head = new ImageView(new Image(getClass().getResource("/Pictures/ui/flagZombieHead.png").toExternalForm()));
         head.setLayoutX(Constants.SCREEN_WIDTH / 1.25);
         head.setLayoutY(Constants.SCREEN_HEIGHT / 1.1);
         head.setFitWidth(Constants.TILE_SIZE / 3);
@@ -40,7 +40,7 @@ public class GameTimer {
     }
 
     private ImageView flag(int num){
-        ImageView flag = new ImageView(new Image("file:Pictures/ui/FlagMeterParts.png"));
+        ImageView flag = new ImageView(new Image(getClass().getResource("/Pictures/ui/FlagMeterParts.png").toExternalForm()));
         flag.setLayoutX(Constants.SCREEN_WIDTH / 1.25 + num * (full.getFitWidth() / 2.1));
         flag.setLayoutY(Constants.SCREEN_HEIGHT / 1.12);
         flag.setFitWidth(Constants.TILE_SIZE / 4);

@@ -18,10 +18,10 @@ public class ScreenDoorZombie extends Zombie {
     private final static Image[] DOOR_FRAMES;
 
     static {
-        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/Attack/frame_", ATTACK_FRAME_COUNT);
-        DOOR_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/ScreenDoorZombie/door/frame_", DOOR_FRAME_COUNT);
-        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("ZombiePicture/ScreenDoorZombie/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("ZombiePicture/ScreenDoorZombie/Attack/frame_", ATTACK_FRAME_COUNT);
+        DOOR_FRAMES = ImageFactory.arrayImage("ZombiePicture/ScreenDoorZombie/door/frame_", DOOR_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public ScreenDoorZombie(ZombieData data) {

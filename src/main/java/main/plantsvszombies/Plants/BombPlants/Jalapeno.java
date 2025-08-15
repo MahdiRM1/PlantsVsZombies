@@ -18,8 +18,8 @@ public class Jalapeno extends BombPlant {
     private static final AudioClip sound;
 
     static {
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
-        EXPLOSION_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
+        EXPLOSION_FRAMES = ImageFactory.arrayImage("plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
         sound = SoundManager.setSound("jalapeno", false);
     }
 

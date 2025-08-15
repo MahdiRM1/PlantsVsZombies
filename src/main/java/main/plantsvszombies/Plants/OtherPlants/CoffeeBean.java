@@ -21,8 +21,8 @@ public class CoffeeBean extends Plant {
     private static final AudioClip sound;
 
     static {
-        NORMAL_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
-        EAT_FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
+        NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
+        EAT_FRAMES = ImageFactory.arrayImage("plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
         sound = SoundManager.setSound("coffee", false);
     }
 

@@ -39,13 +39,14 @@ public class PlantSelection{
         music();
         createPane();
         Scene scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
-        scene.getStylesheets().add("file:src/main/resources/styles/ui.css");
+        scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
     }
 
     private void music(){
-        backgroundMusic = new AudioClip("file:Audio/LookupattheSky.mp3");
+        backgroundMusic = new AudioClip(getClass().getResource("/Audio/LookupattheSky.mp3").toExternalForm());
         backgroundMusic.setVolume(SoundManager.music);
+        backgroundMusic.setCycleCount(-1);
         backgroundMusic.play();
     }
 
@@ -172,7 +173,7 @@ public class PlantSelection{
         String[] zombieTypes = {"OriginalZombie", "ConeheadZombie", "ScreenDoorZombie", "BucketheadZombie", "Imp"};
         String chosen = zombieTypes[z];
 
-        ImageView image = new ImageView(new Image("file:Pictures/ZombiePicture/" + chosen + "/gif.gif"));
+        ImageView image = new ImageView(new Image(getClass().getResource("/Pictures/ZombiePicture/" + chosen + "/gif.gif").toExternalForm()));
         ImageFactory.setNodeSize(image, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
         ImageFactory.setNodePosition(image,
                 Constants.SCREEN_WIDTH / 1.5 + rdm.nextDouble(Constants.SCREEN_WIDTH / 4),

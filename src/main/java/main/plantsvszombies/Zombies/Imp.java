@@ -16,10 +16,10 @@ public class Imp extends Zombie {
     private final static Image[] BOOM_DIE_FRAMES;
 
     static {
-        WALK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Walk/frame_", WALK_FRAME_COUNT);
-        ATTACK_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Attack/frame_", ATTACK_FRAME_COUNT);
-        DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/Imp/Die/frame_", DIE_FRAME_COUNT);
-        BOOM_DIE_FRAMES = ImageFactory.arrayImage("Pictures/ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
+        WALK_FRAMES = ImageFactory.arrayImage("ZombiePicture/Imp/Walk/frame_", WALK_FRAME_COUNT);
+        ATTACK_FRAMES = ImageFactory.arrayImage("ZombiePicture/Imp/Attack/frame_", ATTACK_FRAME_COUNT);
+        DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/Imp/Die/frame_", DIE_FRAME_COUNT);
+        BOOM_DIE_FRAMES = ImageFactory.arrayImage("ZombiePicture/BoomDie/frame_", BOOM_DIE_FRAME_COUNT);
     }
 
     public Imp(ZombieData data) {

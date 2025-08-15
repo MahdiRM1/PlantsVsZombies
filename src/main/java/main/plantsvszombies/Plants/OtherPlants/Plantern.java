@@ -14,7 +14,7 @@ public class Plantern extends Plant {
     private static final Image[] FRAMES;
 
     static {
-        FRAMES = ImageFactory.arrayImage("Pictures/plantPictures/Plantern/normal/frame_", FRAME_COUNT);
+        FRAMES = ImageFactory.arrayImage("plantPictures/Plantern/normal/frame_", FRAME_COUNT);
     }
 
     public Plantern(int row, int col) {
