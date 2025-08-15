@@ -293,7 +293,7 @@ public class GameUI {
 
     // generate the menu pane
     private void menu(){
-        tl.pause();
+        if (!(playMode instanceof Client)) tl.pause();
         SoundManager.playSound("pause");
 
         Pane menuPane = Utils.createMenu();

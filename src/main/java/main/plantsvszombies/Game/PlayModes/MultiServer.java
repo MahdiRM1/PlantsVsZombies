@@ -109,9 +109,10 @@ public class MultiServer extends PlayMode implements Runnable {
         }
     }
 
-    private void cleanup() {
+    public void cleanup() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) serverSocket.close();
+            for (Server server : servers) server.cleanup();
         } catch (IOException e) {
             System.out.println("line 115 MultiServer: " + e.getMessage());
             throw new RuntimeException();
@@ -142,5 +143,9 @@ public class MultiServer extends PlayMode implements Runnable {
         if (Constants.gameTime - (long) attackType * 70_000 < 1000) return finalWave(attackType);
         else if (Math.abs(Constants.gameTime % 4000 - 1000) < 500) return normalWave(zombieTypes);
         return "execute no moves";
+    }
+
+    public List<Server> getServers() {
+        return servers;
     }
 }

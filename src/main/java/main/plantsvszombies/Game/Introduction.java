@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
@@ -198,32 +197,36 @@ public class Introduction {
             serverMode(mainPane);
         });
 
-        String phrase = "mode selection\n\nPlease select game mode";
+        String phrase = "mode selection\n select game mode";
         chooseRole(mainPane, night, day, phrase);
     }
 
     private void serverMode(StackPane mainPane){
-        MultiServer multiServer = serverModeLogic();
-        serverModeUI(mainPane, multiServer);
-    }
-
-    private MultiServer serverModeLogic(){
         MultiServer multiServer = new MultiServer(mode);
         Runnable runnable = multiServer::connect;
         Thread thread = new Thread(runnable);
         thread.start();
-        return multiServer;
+        serverModeUI(mainPane, multiServer, thread);
     }
 
-    private void serverModeUI(StackPane mainPane, MultiServer multiServer){
+    private void serverModeUI(StackPane mainPane, MultiServer multiServer, Thread thread){
         mainPane.getChildren().removeLast();
         Button accept = Utils.createMenuButton("ACCEPT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        accept.setOnMouseClicked(e -> serverStart(multiServer));
+        accept.setOnMouseClicked(e -> {
+            if (!multiServer.getServers().isEmpty()) serverStart(multiServer);
+        });
+        accept.setOnMouseEntered(e -> {
+            if (!multiServer.getServers().isEmpty()) ImageFactory.changeScale(accept, 1.1);
+        });
 
         Button cancel = Utils.createMenuButton("CANCEL", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
-        cancel.setOnMouseClicked(e -> mainPane.getChildren().removeLast());
+        cancel.setOnMouseClicked(e -> {
+            thread.interrupt();
+            multiServer.cleanup();
+            mainPane.getChildren().removeLast();
+        });
 
-        String phrase = "IP:\n" + Ip();
+        String phrase = "Enter the IP in the client\n textfield.\n\n" + Ip();
         chooseRole(mainPane, cancel, accept, phrase);
     }
 
