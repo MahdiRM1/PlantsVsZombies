@@ -1,5 +1,8 @@
 package main.plantsvszombies.Game.PlayModes;
 
+import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.GameUI;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +15,7 @@ public class Client extends PlayMode implements Runnable {
     private Socket socket;
     private final PrintWriter out;
     private final BufferedReader in;
+    private GameMode gameMode;
 
     public Client(String IP) {
         super();
@@ -21,6 +25,7 @@ public class Client extends PlayMode implements Runnable {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            mode();
         } catch (IOException e) {
             System.out.println("line 25 Client: " + e.getMessage());
             throw new RuntimeException(e);
@@ -81,8 +86,9 @@ public class Client extends PlayMode implements Runnable {
         try {
             do {
                 serverCommand = in.readLine();
+                Thread.sleep(100);
             } while (!serverCommand.equals("allready"));
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.out.println("line 85 Client: " + e.getMessage());
             throw new RuntimeException();
         }
@@ -97,5 +103,16 @@ public class Client extends PlayMode implements Runnable {
             System.out.println("line 57 Client: " + e.getMessage());
             throw new RuntimeException();
         }
+    }
+
+    private void mode() throws IOException{
+        String msg = "mode";
+        while (msg.equals("mode")) msg = in.readLine();
+        if (msg.equals("NIGHT")) gameMode = GameMode.NIGHT;
+        else gameMode = GameMode.DAY;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
     }
 }

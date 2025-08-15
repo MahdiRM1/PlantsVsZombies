@@ -1,5 +1,6 @@
 package main.plantsvszombies.Game.PlayModes;
 
+import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Game.Tools.Constants;
 
 import java.io.IOException;
@@ -7,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MultiServer extends PlayMode implements Runnable {
 
@@ -15,8 +15,10 @@ public class MultiServer extends PlayMode implements Runnable {
     private final List<Server> servers;
     private final List<Thread> threads;
     private final ServerSocket serverSocket;
+    private final GameMode mode;
 
-    public MultiServer() {
+    public MultiServer(GameMode mode) {
+        this.mode = mode;
         try {
             serverSocket = new ServerSocket(5000);
         } catch (IOException e) {
@@ -32,7 +34,7 @@ public class MultiServer extends PlayMode implements Runnable {
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("connected: " + socket.getInetAddress());
-                Server server = new Server(socket);
+                Server server = new Server(socket, mode);
                 Thread thread = new Thread(server);
                 threads.add(thread);
                 servers.add(server);

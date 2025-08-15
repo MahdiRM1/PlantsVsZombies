@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -13,6 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import main.plantsvszombies.Enums.GameMode;
 import main.plantsvszombies.Game.PlayModes.Client;
@@ -127,9 +132,36 @@ public class PlantSelection{
         backgroundMusic.stop();
         if (playMode instanceof Client client) {
             client.ready();
-            client.waitForPlayers();
+            Runnable runnable = () -> {
+                client.waitForPlayers();
+                Platform.runLater(() -> new GameUI(selectedCards, stage, gameMode, playMode));
+            };
+            Thread thread = new Thread(runnable);
+            thread.start();
+
+            waitAnim();
         }
-        new GameUI(selectedCards, stage, gameMode, playMode);
+        else new GameUI(selectedCards, stage, gameMode, playMode);
+    }
+
+    private void waitAnim(){
+        ImageView loading = ImageFactory.createBackGround("loading");
+        Pane pane = new Pane();
+        Label label = new Label("Wait For Other Players");
+        ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT / 2);
+        ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 60);
+        label.setFont(font);
+        label.setStyle(
+            "-fx-text-fill: rgb(214, 178, 94);" +
+            "-fx-effect: dropshadow(one-pass-box, black, 5, 1, 0, 0);"
+        );
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setAlignment(Pos.CENTER);
+        pane.getChildren().addAll(loading, label);
+        backgroundMusic.stop();
+        SoundManager.playSound("evillaugh");
+        stage.getScene().setRoot(pane);
     }
 
     private Button getCardButton(String plantName) {

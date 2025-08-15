@@ -162,8 +162,7 @@ public class Introduction {
         ImageFactory.setNodeSize(hand, size, size);
         pane.getChildren().add(hand);
         backgroundMusic.stop();
-        AudioClip laugh = SoundManager.setSound("evillaugh", false);
-        laugh.play();
+        SoundManager.playSound("evillaugh");
         PauseTransition pause = new PauseTransition(Duration.millis(4000));
         pause.setOnFinished(e -> {
             switch (mode) {
@@ -211,7 +210,7 @@ public class Introduction {
     }
 
     private MultiServer serverModeLogic(){
-        MultiServer multiServer = new MultiServer();
+        MultiServer multiServer = new MultiServer(mode);
         Runnable runnable = multiServer::connect;
         Thread thread = new Thread(runnable);
         thread.start();
@@ -233,7 +232,7 @@ public class Introduction {
     private void serverStart(MultiServer multiServer){
         Client client = new Client("127.0.0.1");
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             System.out.println("line 238 introduction: " + e.getMessage());
             throw new RuntimeException();
@@ -253,9 +252,9 @@ public class Introduction {
 
         Button submit = Utils.createMenuButton("SUBMIT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         submit.setOnAction(e -> {
-            PlayMode playMode = new Client(textField.getText());
-            mode = GameMode.DAY;
-            startGame(playMode);
+            Client client = new Client(textField.getText());
+            mode = client.getGameMode();
+            startGame(client);
         });
 
         String phrase = "Please get IP\n\n.";
