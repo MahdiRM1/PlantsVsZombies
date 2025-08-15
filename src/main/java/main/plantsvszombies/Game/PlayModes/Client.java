@@ -1,7 +1,6 @@
 package main.plantsvszombies.Game.PlayModes;
 
 import main.plantsvszombies.Enums.GameMode;
-import main.plantsvszombies.Game.GameUI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
