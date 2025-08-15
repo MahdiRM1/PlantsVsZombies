@@ -56,7 +56,7 @@ public class MultiServer extends PlayMode implements Runnable {
             do {
                 serverCommand = timeHandler();
                 updateServers();
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } while (!serverCommand.equals("win") && !serverCommand.equals("lose"));
         } catch (InterruptedException e){
             System.out.println("line 61 MultiServer: " + e.getMessage());
@@ -130,7 +130,7 @@ public class MultiServer extends PlayMode implements Runnable {
 
     @Override
     protected String handleZombie(long base, int zombieTypes) {
-        if (Math.abs(Constants.gameTime % base - 1000) < 500) {
+        if (Math.abs(Constants.gameTime % base - 1000) < 50) {
             return (int) (Math.random() * zombieTypes) + "," + (int) (Math.random() * 5);
         }
         return "execute no moves";
@@ -140,8 +140,8 @@ public class MultiServer extends PlayMode implements Runnable {
     protected String wave() {
         int zombieTypes = Constants.gameTime < 100_000 ? 4 : 5;
         int attackType = zombieTypes - 3;
-        if (Constants.gameTime - (long) attackType * 70_000 < 1000) return finalWave(attackType);
-        else if (Math.abs(Constants.gameTime % 4000 - 1000) < 500) return normalWave(zombieTypes);
+        if (Constants.gameTime - (long) attackType * 70_000 < 100) return finalWave(attackType);
+        else if (Math.abs(Constants.gameTime % 4000 - 1000) < 50) return normalWave(zombieTypes);
         return "execute no moves";
     }
 

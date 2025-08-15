@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -105,8 +106,7 @@ public class GameUI {
         for (int i = 0; i < plantsName.size(); i++) {
             cards.add(new Card(plantsName.get(i), i));
         }
-//        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
-        initStackPane(cardBar(), 1000, 0);
+        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
         SoundManager.playSound("readysetplant");
@@ -409,7 +409,11 @@ public class GameUI {
     private void lose(){
         tl.stop();
         Pane lose = new Pane();
+        backgroundMusic.stop();
         SoundManager.playSound("losemusic");
+        PauseTransition pauseTransition = new PauseTransition(Duration.millis(4000));
+        pauseTransition.play();
+        pauseTransition.setOnFinished(e -> SoundManager.playSound("scream"));
 
         ImageView loseImage = new ImageView(new Image(getClass().getResource("/Pictures/ui/LosePage.png").toExternalForm()));
         ImageFactory.setNodeSize(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);

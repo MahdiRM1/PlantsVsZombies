@@ -158,8 +158,8 @@ public class PlantSelection{
 
     private Label waitLabel(){
         Label label = new Label("Wait For Other Players");
-        ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT / 2);
-        ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/3, Constants.SCREEN_HEIGHT/2);
+        ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT / 2);
+        ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2);
         Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 60);
         label.setFont(font);
         label.setStyle(
