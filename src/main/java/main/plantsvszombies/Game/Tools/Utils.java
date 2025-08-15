@@ -93,7 +93,7 @@ public class Utils {
         Label label = new Label(str);
         label.setLayoutX(Constants.SCREEN_WIDTH / 2.75);
         label.setLayoutY(slider.getLayoutY());
-        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), 40);
+        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/27);
         label.setFont(font);
         label.setStyle("-fx-text-fill: rgb(25, 25, 25);");
         return label;
@@ -173,7 +173,7 @@ public class Utils {
 
     public static Button createMenuButton(String text, double width, double height) {
         Button btn = new Button(text);
-        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/Coold.ttf").toExternalForm(), 30);
+        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/Coold.ttf").toExternalForm(), Constants.SCREEN_HEIGHT/36);
         btn.setFont(font);
         btn.getStyleClass().add("menuBtn");
         ImageFactory.setNodeSize(btn, width, height);
@@ -184,7 +184,7 @@ public class Utils {
 
     public static Button createButton(String text, double width, double height) {
         Button btn = new Button(text);
-        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), 35);
+        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/30);
         btn.setFont(font);
         btn.getStyleClass().add("btns");
         ImageFactory.setNodeSize(btn, width, height);
@@ -195,7 +195,7 @@ public class Utils {
 
     public static Button submitButton(String text) {
         Button btn = new Button(text);
-        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), 75);
+        Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/14.4);
         btn.setFont(font);
         btn.getStyleClass().add("submitBtn");
         ImageFactory.setNodeSize(btn, Constants.SCREEN_WIDTH / 3, Constants.SCREEN_HEIGHT / 7);
