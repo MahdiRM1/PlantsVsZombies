@@ -18,7 +18,7 @@ public class Sun {
     public static final AudioClip sound;
 
     static {
-        sound = SoundManager.setSound("points", false);
+        sound = SoundManager.setSound("points");
     }
 
     public Sun(SunType type) {

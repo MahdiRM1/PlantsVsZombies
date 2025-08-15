@@ -16,8 +16,8 @@ public class Bullet {
     private final ImageView picture;
     private final BulletType type;
     static {
-        for (int i = 0; i < 4; i++) hit[i] = SoundManager.setSound("splat" + i, false);
-        for (int i = 0; i < 2; i++) shoot[i] = SoundManager.setSound("shoot" + i, false);
+        for (int i = 0; i < 4; i++) hit[i] = SoundManager.setSound("splat" + i);
+        for (int i = 0; i < 2; i++) shoot[i] = SoundManager.setSound("shoot" + i);
     }
 
     public Bullet(int row, int col, BulletType type) {

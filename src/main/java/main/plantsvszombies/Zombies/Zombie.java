@@ -38,11 +38,11 @@ public abstract class Zombie {
 
     static {
         HEAD_FRAMES = ImageFactory.arrayImage("ZombiePicture/OriginalZombie/head/frame_", HEAD_FRAME_COUNT);
-        gulp = SoundManager.setSound("gulp", false);
-        chomp[0] = SoundManager.setSound("chomp", false);
-        chomp[1] = SoundManager.setSound("chompsoft", false);
+        gulp = SoundManager.setSound("gulp");
+        chomp[0] = SoundManager.setSound("chomp");
+        chomp[1] = SoundManager.setSound("chompsoft");
         for (int soundNum = 0; soundNum < 7; soundNum++)
-            groan[soundNum] = SoundManager.setSound("groan" + soundNum, false);
+            groan[soundNum] = SoundManager.setSound("groan" + soundNum);
     }
 
     public Zombie(ZombieData data) {

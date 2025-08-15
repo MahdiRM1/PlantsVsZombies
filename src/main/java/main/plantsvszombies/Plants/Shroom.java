@@ -5,7 +5,7 @@ import main.plantsvszombies.Game.Tools.SoundManager;
 
 public interface Shroom {
 
-    AudioClip wakeUpSound = SoundManager.setSound("wakeup", false);
+    AudioClip wakeUpSound = SoundManager.setSound("wakeup");
 
     void wakeUp();
 

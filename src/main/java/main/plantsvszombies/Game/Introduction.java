@@ -12,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -35,11 +37,11 @@ import java.util.Enumeration;
 public class Introduction {
 
     private final Stage stage;
-    private static final AudioClip backgroundMusic;
+    private static final MediaPlayer backgroundMusic;
     private GameMode mode;
 
     static {
-        backgroundMusic = SoundManager.setSound("introMusic", true);
+        backgroundMusic = new MediaPlayer(new Media(Introduction.class.getResource("/Audio/introMusic.mp3").toExternalForm()));
     }
 
     public Introduction(Stage stage) {
@@ -143,11 +145,7 @@ public class Introduction {
         OK.setOnMouseClicked(e -> {
             SoundManager.playClickTrack();
             pane.getChildren().removeLast();
-            if (SoundManager.music != backgroundMusic.getVolume()){
-                backgroundMusic.stop();
-                backgroundMusic.setVolume(SoundManager.music);
-                backgroundMusic.play();
-            }
+            backgroundMusic.setVolume(SoundManager.music);
         });
 
         option.getChildren().add(OK);
