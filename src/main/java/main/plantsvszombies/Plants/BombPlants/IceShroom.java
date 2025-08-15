@@ -18,12 +18,10 @@ public class IceShroom extends BombPlant implements Shroom {
     private static final int FRAME_COUNT = 17;
     private static final Image[] SLEEP_FRAMES;
     private static final Image[] NORMAL_FRAMES;
-    private static final AudioClip sound;
 
     static {
         SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/IceShroom/sleep/frame_", FRAME_COUNT);
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/IceShroom/normal/frame_", FRAME_COUNT);
-        sound = SoundManager.setSound("frozen", false);
     }
 
     public IceShroom(int row, int col, boolean isSleep) {
@@ -48,7 +46,7 @@ public class IceShroom extends BombPlant implements Shroom {
 
     @Override
     public void action(List<Zombie> zombies) {
-        sound.play();
+        SoundManager.playSound("frozen");
         for (Zombie z : zombies) {
             if (z.alive() && !z.isHypnotized()){
                 z.setState(ZombieState.FREEZE);

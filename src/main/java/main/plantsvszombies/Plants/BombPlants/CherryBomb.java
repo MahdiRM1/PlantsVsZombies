@@ -15,12 +15,10 @@ public class CherryBomb extends BombPlant {
     private static final Image[] EXPLOSION_FRAMES;
     private static final int NORMAL_FRAME_COUNT = 50;
     private static final int EXPLOSION_FRAME_COUNT = 13;
-    private static final AudioClip sound;
 
     static {
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/CherryBomb/normal/frame_", NORMAL_FRAME_COUNT);
         EXPLOSION_FRAMES = ImageFactory.arrayImage("plantPictures/CherryBomb/boom/frame_", EXPLOSION_FRAME_COUNT);
-        sound = SoundManager.setSound("cherrybomb", false);
     }
 
     public CherryBomb(int row, int col) {
@@ -38,7 +36,7 @@ public class CherryBomb extends BombPlant {
 
     @Override
     public void action(List<Zombie> zombies) {
-        sound.play();
+        SoundManager.playSound("cherrybomb");
         frameUpdateTime = 40;
         picture.setImage(EXPLOSION_FRAMES[0]);
         ImageFactory.changeScale(picture, 2.5);

@@ -15,12 +15,10 @@ public class Blover extends Plant {
 
     private static final int FRAME_COUNT = 59;
     private static final Image[] FRAMES;
-    private static final AudioClip sound;
 
 
     static {
         FRAMES = ImageFactory.arrayImage("plantPictures/Blover/normal/frame_", FRAME_COUNT);
-        sound = SoundManager.setSound("blover", false);
     }
 
     public Blover(int row, int col) {
@@ -28,7 +26,7 @@ public class Blover extends Plant {
         price = 100;
         HP = 100;
         rechargeTime = 30;
-        if (row != -1) sound.play();
+        if (row != -1) SoundManager.playSound("blover");
     }
 
     @Override

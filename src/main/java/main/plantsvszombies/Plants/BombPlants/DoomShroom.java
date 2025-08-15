@@ -22,13 +22,11 @@ public class DoomShroom extends BombPlant implements Shroom {
     private static final Image[] SLEEP_FRAMES;
     private static final Image[] NORMAL_FRAMES;
     private static final Image[] DOOM_FRAMES;
-    private static final AudioClip sound;
 
     static {
         SLEEP_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/sleep/frame_", SLEEP_FRAME_COUNT);
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/normal/frame_", NORMAL_FRAME_COUNT);
         DOOM_FRAMES = ImageFactory.arrayImage("plantPictures/DoomShroom/doom/frame_", DOOM_FRAME_COUNT);
-        sound = SoundManager.setSound("doomshroom", false);
     }
 
     public DoomShroom(int row, int col, boolean isSleep) {
@@ -71,7 +69,7 @@ public class DoomShroom extends BombPlant implements Shroom {
 
     @Override
     public void action(List<Zombie> zombies) {
-        sound.play();
+        SoundManager.playSound("doomshroom");
         ImageFactory.changeScale(picture, 2);
         picture.setLayoutY(picture.getLayoutY() - picture.getFitHeight() / 4);
         for (Zombie z : zombies) {

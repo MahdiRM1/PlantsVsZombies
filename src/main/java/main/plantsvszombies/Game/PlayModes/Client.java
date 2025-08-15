@@ -22,6 +22,7 @@ public class Client extends PlayMode implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
+            System.out.println("line 25 Client: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -51,8 +52,10 @@ public class Client extends PlayMode implements Runnable {
                 out.println(gameState);
 
                 Thread.sleep(10);
-            } while (!serverCommand.equals("win") && !serverCommand.equals("lose"));
+            } while (!serverCommand.equals("win") && !serverCommand.equals("lose") &&
+                !gameState.equals("win") && !gameState.equals("lose"));
         } catch (IOException | InterruptedException e) {
+            System.out.println("line 57 Client: " + e.getMessage());
             throw new RuntimeException(e);
         } finally {
             cleanup();
@@ -64,7 +67,8 @@ public class Client extends PlayMode implements Runnable {
         try {
             socket = new Socket(IP, port);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("line 57 Client: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -79,23 +83,19 @@ public class Client extends PlayMode implements Runnable {
                 serverCommand = in.readLine();
             } while (!serverCommand.equals("allready"));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("line 85 Client: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 
     private void cleanup() {
         try {
-            if (out != null) {
-                out.close();
-            }
-            if (in != null) {
-                in.close();
-            }
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
-            }
+            if (out != null) out.close();
+            if (in != null) in.close();
+            if (socket != null && !socket.isClosed()) socket.close();
         } catch (IOException e) {
-            System.out.println("Cleanup error: " + e.getMessage());
+            System.out.println("line 57 Client: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 }

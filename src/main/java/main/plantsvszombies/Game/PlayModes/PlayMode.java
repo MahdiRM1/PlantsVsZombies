@@ -39,10 +39,7 @@ public abstract class PlayMode {
     // controls the general timing of zombies entering and attack waves
     protected String timeHandler() {
         int time = (int) Constants.gameTime / 1000;
-        if (Constants.gameTime == 20_000) {
-            AudioClip sound = SoundManager.setSound("awooga", false);
-            sound.play();
-        }
+        if (Constants.gameTime == 20_000) SoundManager.playSound("awooga");
         if (time < 20) return "execute no moves";
         else if (time < 40) return handleZombie(5000, 1);
         else if (time < 60) return handleZombie(4000, 2);
@@ -86,14 +83,12 @@ public abstract class PlayMode {
 
     protected String finalWave(int attackType){
         String waveStr = "finalwave 5," + (int) (Math.random() * 5);
-        AudioClip attackWave = SoundManager.setSound("hugewave", false);
         if (attackType > 1) {
-            attackWave = SoundManager.setSound("siren", false);
-            AudioClip sound = SoundManager.setSound("awooga", false);
-            sound.play();
+            SoundManager.playSound("siren");
+            SoundManager.playSound("awooga");
             for (int i = 0; i < 8; i++) waveStr += "," + (int) (Math.random() * 5);
         }
-        attackWave.play();
+        else SoundManager.playSound("hugewave");
         return waveStr;
     }
 

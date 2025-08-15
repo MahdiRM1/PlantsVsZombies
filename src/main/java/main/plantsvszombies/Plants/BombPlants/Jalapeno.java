@@ -15,12 +15,10 @@ public class Jalapeno extends BombPlant {
     private static final Image[] NORMAL_FRAMES;
     private static final Image[] EXPLOSION_FRAMES;
     private static final int FRAME_COUNT = 13;
-    private static final AudioClip sound;
 
     static {
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/Jalapeno/normal/frame_", FRAME_COUNT);
         EXPLOSION_FRAMES = ImageFactory.arrayImage("plantPictures/Jalapeno/attack/frame_", FRAME_COUNT);
-        sound = SoundManager.setSound("jalapeno", false);
     }
 
     public Jalapeno(int row, int col) {
@@ -37,7 +35,7 @@ public class Jalapeno extends BombPlant {
 
     @Override
     public void action(List<Zombie> zombies) {
-        sound.play();
+        SoundManager.playSound("jalapeno");
         picture.setImage(EXPLOSION_FRAMES[0]);
         ImageFactory.setNodeSize(picture, Constants.TILE_SIZE * 9, picture.getFitHeight());
         ImageFactory.setNodePosition(picture, Constants.SCREEN_WIDTH / 4.9, picture.getLayoutY());
