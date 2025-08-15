@@ -16,11 +16,9 @@ public class GraveBuster extends Plant {
     private final Grave grave;
     private static final Image[] FRAMES;
     private static final int FRAME_COUNT = 28;
-    private static final AudioClip sound;
 
     static {
         FRAMES = ImageFactory.arrayImage("plantPictures/GraveBuster/normal/frame_", FRAME_COUNT);
-        sound = SoundManager.setSound("gravebusterchomp", false);
     }
 
     public GraveBuster(int row, int col, Grave grave) {
@@ -31,7 +29,7 @@ public class GraveBuster extends Plant {
         this.grave = grave;
         ImageFactory.changeScale(picture, 1.3);
         picture.setLayoutY(picture.getLayoutY() - Constants.TILE_SIZE / 2);
-        if (grave != null) sound.play();
+        if (grave != null) SoundManager.playSound("gravebusterchomp");
     }
 
     @Override

@@ -108,8 +108,7 @@ public class GameUI {
         initStackPane(cardBar(), 1000, 0);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
-        AudioClip startGame = SoundManager.setSound("readysetplant", false);
-        startGame.play();
+        SoundManager.playSound("readysetplant");
         startGame();
     }
 
@@ -294,8 +293,7 @@ public class GameUI {
     // generate the menu pane
     private void menu(){
         tl.pause();
-        AudioClip pause = SoundManager.setSound("pause", false);
-        pause.play();
+        SoundManager.playSound("pause");
 
         Pane menuPane = Utils.createMenu();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
@@ -414,8 +412,8 @@ public class GameUI {
     private void lose(){
         tl.stop();
         Pane lose = new Pane();
-        AudioClip sound = SoundManager.setSound("losemusic", false);
-        sound.play();
+        SoundManager.playSound("losemusic");
+
         ImageView loseImage = new ImageView(new Image(getClass().getResource("/Pictures/ui/LosePage.png").toExternalForm()));
         ImageFactory.setNodeSize(loseImage, Constants.TILE_SIZE, Constants.TILE_SIZE);
         ImageFactory.setNodePosition(loseImage, (Constants.SCREEN_WIDTH - Constants.TILE_SIZE)/2, (Constants.SCREEN_HEIGHT - Constants.TILE_SIZE)/2);
@@ -435,8 +433,7 @@ public class GameUI {
         ImageView trophy = ImageFactory.createButton("Trophy", Constants.TILE_SIZE, Constants.TILE_SIZE);
         ImageFactory.setNodePosition(trophy, Constants.SCREEN_WIDTH/1.8, Constants.SCREEN_HEIGHT/2.5);
         trophy.setOnMouseClicked(event -> {
-            AudioClip win = SoundManager.setSound("winmusic", false);
-            win.play();
+            SoundManager.playSound("winmusic");
             finnishAnimation(trophy);
         });
         trophyTl(trophy);

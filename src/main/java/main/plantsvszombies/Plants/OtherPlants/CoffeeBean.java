@@ -18,12 +18,10 @@ public class CoffeeBean extends Plant {
     private static final Image[] EAT_FRAMES;
     private static final int NORMAL_FRAMES_COUNT = 9;
     private static final int EAT_FRAMES_COUNT = 14;
-    private static final AudioClip sound;
 
     static {
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/CoffeeBean/normal/frame_", NORMAL_FRAMES_COUNT);
         EAT_FRAMES = ImageFactory.arrayImage("plantPictures/CoffeeBean/eat/frame_", EAT_FRAMES_COUNT);
-        sound = SoundManager.setSound("coffee", false);
     }
 
     public CoffeeBean(int row, int col, Shroom shroom) {
@@ -41,7 +39,7 @@ public class CoffeeBean extends Plant {
         if (!isEaten && Math.abs(Constants.gameTime - timeCreated) >= 1500) {
             nowPic = 0;
             isEaten = true;
-            sound.play();
+            SoundManager.playSound("coffee");
         } else if (isEaten && nowPic >= getImage().length - 1) {
             die();
             return true;

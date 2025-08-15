@@ -17,7 +17,6 @@ public class PotatoMine extends BombPlant {
     private static final int FRAME_COUNT = 30;
     private static final int ATTACK_FRAME_COUNT = 21;
     private static final int READY_FRAME_COUNT = 16;
-    private static final AudioClip sound;
     private long explosionTime;
     private MineState state;
 
@@ -25,7 +24,6 @@ public class PotatoMine extends BombPlant {
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/normal/frame_", FRAME_COUNT);
         ATTACK_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/attack/frame_", ATTACK_FRAME_COUNT);
         READY_FRAMES = ImageFactory.arrayImage("plantPictures/PotatoMine/ready/frame_", READY_FRAME_COUNT);
-        sound = SoundManager.setSound("potato_mine", false);
     }
 
     public PotatoMine(int row, int col) {
@@ -78,7 +76,7 @@ public class PotatoMine extends BombPlant {
 
     @Override
     public void action(List<Zombie> zombies) {
-        sound.play();
+        SoundManager.playSound("potato_mine");
         ImageFactory.changeScale(picture, 1.5);
         explosionTime = Constants.gameTime;
         for (Zombie z : zombies)

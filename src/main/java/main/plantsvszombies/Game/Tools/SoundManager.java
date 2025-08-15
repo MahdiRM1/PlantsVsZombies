@@ -13,6 +13,11 @@ public class SoundManager {
     private static final AudioClip wrongClick = new AudioClip(SoundManager.class.getResource("/Audio/buzzer.mp3").toExternalForm());
     private static final AudioClip correctClick = new AudioClip(SoundManager.class.getResource("/Audio/plant.mp3").toExternalForm());
     private static final AudioClip shovelClick = new AudioClip(SoundManager.class.getResource("/Audio/shovel.mp3").toExternalForm());
+    private static final AudioClip hover = new AudioClip(SoundManager.class.getResource("/Audio/ceramic.mp3").toExternalForm());
+
+    public static void playSound(String name){
+        setSound(name, false).play();
+    }
 
     public static AudioClip setSound(String name, boolean repeat){
         AudioClip sound = new AudioClip(SoundManager.class.getResource("/Audio/" + name + ".mp3").toExternalForm());
@@ -39,5 +44,10 @@ public class SoundManager {
     public static void playShovelClick(){
         shovelClick.setVolume(volume);
         shovelClick.play();
+    }
+
+    public static void playHover(){
+        hover.setVolume(volume);
+        hover.play();
     }
 }

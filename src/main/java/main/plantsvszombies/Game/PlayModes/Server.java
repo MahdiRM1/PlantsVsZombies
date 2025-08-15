@@ -19,6 +19,7 @@ public class Server implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
+            System.out.println("line 22 Server: " + e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -30,14 +31,15 @@ public class Server implements Runnable {
                 serverMessage = in.readLine();
                 Thread.sleep(10);
             }
-            while (!allReady) {
-                Thread.sleep(10);
-            }
+            while (!allReady) Thread.sleep(10);
+
             out.println("allready");
             out.flush();
+
             while (!gameState.equals("win") && !gameState.equals("lose"));
         } catch (IOException | InterruptedException e) {
-            System.out.println(e.getMessage());
+            System.out.println("line 41 Server: " + e.getMessage());
+            throw new RuntimeException();
         } finally {
             cleanup();
         }
@@ -49,7 +51,8 @@ public class Server implements Runnable {
         try {
             gameState = in.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("line 54 Server: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -67,7 +70,8 @@ public class Server implements Runnable {
             if (out != null) out.close();
             if (socket != null && !socket.isClosed()) socket.close();
         } catch (IOException e) {
-            System.out.println("Cleanup error: " + e.getMessage());
+            System.out.println("line 73 Server: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 

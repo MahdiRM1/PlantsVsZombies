@@ -183,8 +183,7 @@ public class PlantSelection{
 
     // generate the menu pane
     private void menu(){
-        AudioClip pause = SoundManager.setSound("pause", false);
-        pause.play();
+        SoundManager.playSound("pause");
 
         Pane menuPane = Utils.createMenu();
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");

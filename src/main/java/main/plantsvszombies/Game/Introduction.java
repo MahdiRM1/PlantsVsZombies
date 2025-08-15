@@ -235,11 +235,12 @@ public class Introduction {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("line 238 introduction: " + e.getMessage());
+            throw new RuntimeException();
         }
         Thread thread = new Thread(multiServer);
         thread.start();
-        startGame(mode, client);
+        startGame(client);
     }
 
     private void clientMode(StackPane mainPane){
@@ -253,7 +254,8 @@ public class Introduction {
         Button submit = Utils.createMenuButton("SUBMIT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         submit.setOnAction(e -> {
             PlayMode playMode = new Client(textField.getText());
-            startGame(GameMode.DAY, playMode);
+            mode = GameMode.DAY;
+            startGame(playMode);
         });
 
         String phrase = "Please get IP\n\n.";
@@ -298,7 +300,8 @@ public class Introduction {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("line 301 introduction: " + e.getMessage());
+            throw new RuntimeException();
         }
         return null;
     }
@@ -334,7 +337,10 @@ public class Introduction {
 
         ImageView day = ImageFactory.createButton("DayMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodePosition(day, Constants.SCREEN_WIDTH / 4, Constants.SCREEN_HEIGHT / 4);
-        day.setOnMouseClicked(e -> startGame(GameMode.DAY, new DefaultMode()));
+        day.setOnMouseClicked(e -> {
+            mode = GameMode.DAY;
+            startGame(new DefaultMode());
+        });
 
         double sizePlant = Constants.SCREEN_HEIGHT / 6.3;
         ImageView plant = new ImageView(new Image(getClass().getResource("/Pictures/plantPictures/SunFlower/gif.gif").toExternalForm()));
@@ -343,7 +349,10 @@ public class Introduction {
 
         ImageView night = ImageFactory.createButton("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodePosition(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);
-        night.setOnMouseClicked(e -> startGame(GameMode.NIGHT, new DefaultMode()));
+        night.setOnMouseClicked(e -> {
+            mode = GameMode.NIGHT;
+            startGame(new DefaultMode());
+        });
 
         ImageView zombie = new ImageView(new Image(getClass().getResource("/Pictures/ZombiePicture/OriginalZombie/gif.gif").toExternalForm()));
         ImageFactory.setNodeSize(zombie, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
@@ -354,7 +363,7 @@ public class Introduction {
         stage.setScene(scene);
     }
 
-    private void startGame(GameMode mode, PlayMode playMode){
+    private void startGame(PlayMode playMode){
         SoundManager.playClickTrack();
         backgroundMusic.stop();
         new PlantSelection(stage, mode, playMode);

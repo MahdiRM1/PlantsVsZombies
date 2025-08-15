@@ -125,7 +125,7 @@ public class ImageFactory {
         ImageView imageView = new ImageView(new Image(ImageFactory.class.getResource("/Pictures/ui/" + text + ".png").toExternalForm()));
         setNodeSize(imageView, width, height);
         imageView.setOnMouseEntered(e -> {
-            SoundManager.setSound("ceramic", false).play();
+            SoundManager.playHover();
             changeScale(imageView, 1.05);
         });
         imageView.setOnMouseExited(e -> changeScale(imageView, 1));

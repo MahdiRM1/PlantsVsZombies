@@ -5,6 +5,7 @@ import main.plantsvszombies.Game.Tools.Constants;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -13,16 +14,17 @@ public class MultiServer extends PlayMode implements Runnable {
     private String serverCommand;
     private final List<Server> servers;
     private final List<Thread> threads;
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
 
     public MultiServer() {
         try {
             serverSocket = new ServerSocket(5000);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("line 22 MultiServer: " + e.getMessage());
+            throw new RuntimeException();
         }
-        servers = new CopyOnWriteArrayList<>();
-        threads = new CopyOnWriteArrayList<>();
+        servers = new ArrayList<>();
+        threads = new ArrayList<>();
     }
 
     public void connect() {
@@ -37,15 +39,14 @@ public class MultiServer extends PlayMode implements Runnable {
                 if (server.getInetAddress().equals("127.0.0.1")) break;
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("line 41 MultiServer: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 
     @Override
     public void run() {
-        for (Thread thread : threads) {
-            thread.start();
-        }
+        for (Thread thread : threads) thread.start();
         try{
             while (!checkAllReady()) Thread.sleep(100);
             allReady();
@@ -56,7 +57,8 @@ public class MultiServer extends PlayMode implements Runnable {
                 Thread.sleep(1000);
             } while (!serverCommand.equals("win") && !serverCommand.equals("lose"));
         } catch (InterruptedException e){
-            System.out.println(e.getMessage());
+            System.out.println("line 61 MultiServer: " + e.getMessage());
+            throw new RuntimeException();
         } finally {
             cleanup();
         }
@@ -109,7 +111,8 @@ public class MultiServer extends PlayMode implements Runnable {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) serverSocket.close();
         } catch (IOException e) {
-            System.out.println("Shutdown error: " + e.getMessage());
+            System.out.println("line 115 MultiServer: " + e.getMessage());
+            throw new RuntimeException();
         }
     }
 
