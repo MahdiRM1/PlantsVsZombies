@@ -117,6 +117,7 @@ public class GameUI {
     public final void startGame() {
         backgroundMusic = new MediaPlayer(new Media(getClass().getResource("/Audio/gameMusic.mp3").toExternalForm()));
         backgroundMusic.setVolume(SoundManager.music);
+        backgroundMusic.setCycleCount(-1);
         backgroundMusic.play();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             Constants.gameTime += 20;
@@ -127,7 +128,7 @@ public class GameUI {
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         scene.getStylesheets().add(ImageFactory.class.getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
-        stage.setOnCloseRequest(e -> save());
+        stage.setOnCloseRequest(e -> {if (playMode instanceof Client) save();});
         stage.show();
     }
 
@@ -498,8 +499,11 @@ public class GameUI {
 
     private Button restartBtn(){
         Button restart = Utils.createMenuButton("RESTART LEVEL", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 15);
-        restart.setOnMouseClicked(GameUIevent -> {
-            if (playMode instanceof Client) return;
+        if (playMode instanceof Client) {
+            restart.setOnMouseClicked(e -> {});
+            restart.setOnMouseEntered(e -> {});
+        }
+        restart.setOnMouseClicked(event -> {
             SoundManager.playClickTrack();
             backgroundMusic.stop();
             new PlantSelection(stage, mode, new DefaultMode());
@@ -512,10 +516,10 @@ public class GameUI {
         mainMenu.setOnMouseClicked(event -> {
             backgroundMusic.stop();
             SoundManager.playClickTrack();
-            new Introduction(stage).firstPage();
-
             if (state.equals("menu")) save();
             else Utils.deleteSaveData();
+
+            new Introduction(stage).firstPage();
         });
         return mainMenu;
     }
