@@ -128,7 +128,7 @@ public class GameUI {
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         scene.getStylesheets().add(ImageFactory.class.getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
-        stage.setOnCloseRequest(e -> {if (playMode instanceof Client) save();});
+        stage.setOnCloseRequest(e -> {if (!(playMode instanceof Client)) save();});
         stage.show();
     }
 
