@@ -56,13 +56,13 @@ public class DoomShroom extends BombPlant implements Shroom {
             } else if (nowPic >= getImage().length - 1) {
                 finishAnimation = true;
                 String str = timeCreated != wakeUpTime ? "Day" : "Night";
-                picture.setImage(new Image(getClass().getResource("/plantPictures/DoomShroom/" + str + "Hole1.png").toExternalForm()));
+                picture.setImage(new Image(getClass().getResource("/Pictures/plantPictures/DoomShroom/" + str + "Hole1.png").toExternalForm()));
                 picture.setLayoutY(picture.getLayoutY() + picture.getFitHeight() / 4);
                 ImageFactory.changeScale(picture, 1);
             }
         } else if (Math.abs(Constants.gameTime - wakeUpTime) == 12000) {
             String time = timeCreated != wakeUpTime ? "Day" : "Night";
-            picture.setImage(new Image(getClass().getResource("/plantPictures/DoomShroom/" + time + "Hole1.png").toExternalForm()));
+            picture.setImage(new Image(getClass().getResource("/Pictures/plantPictures/DoomShroom/" + time + "Hole2.png").toExternalForm()));
         } else if (Math.abs(Constants.gameTime - wakeUpTime) == 22000) die();
         return false;
     }
