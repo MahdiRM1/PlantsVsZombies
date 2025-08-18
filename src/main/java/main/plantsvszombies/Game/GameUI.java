@@ -360,6 +360,7 @@ public class GameUI {
     // removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages() {
         for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().remove(plantToRemove.getPicture());
+        for (LawnCleaner lc : gameLogic.LCToRemove()) pane.getChildren().remove(lc.getPicture());
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().removeAll(zombie.getPicture(), zombie.getSecondPicture());
     }
