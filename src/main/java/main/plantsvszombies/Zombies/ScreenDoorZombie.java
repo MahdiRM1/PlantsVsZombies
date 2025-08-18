@@ -43,11 +43,10 @@ public class ScreenDoorZombie extends Zombie {
 
     @Override
     protected Image[] getZombiePictures(){
-        if (HP <= 100) return OriginalZombie.getimages(state);
+        if (HP <= 100 || !this.alive()) return OriginalZombie.getimages(state);
         return switch (state){
             case WALKING -> WALK_FRAMES;
             case EATING -> ATTACK_FRAMES;
-            case BOOM_DIE -> BOOM_DIE_FRAMES;
             default -> null;
         };
     }

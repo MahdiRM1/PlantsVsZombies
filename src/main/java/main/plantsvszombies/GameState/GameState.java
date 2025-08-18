@@ -5,6 +5,7 @@ import main.plantsvszombies.Game.GameLogic;
 import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Items.Card;
 import main.plantsvszombies.Items.Grave;
+import main.plantsvszombies.Items.LawnCleaner;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -18,6 +19,7 @@ public class GameState implements Serializable {
     private final List<ZombieData> zombies = new ArrayList<>();
     private final List<CardData> cards = new ArrayList<>();
     private final List<GraveData> graves = new ArrayList<>();
+    private final List<Integer> lawnCleaners = new ArrayList<>();
     private final int score;
     private final long time;
     private final GameMode mode;
@@ -28,6 +30,7 @@ public class GameState implements Serializable {
         setZombieData(logic.getZombies());
         setCardData(cards);
         setGraveData(logic.getGraves());
+        setLawnCleanerData(logic.getLawnCleaners());
         this.score = score;
         this.mode = mode;
         fogLength = mode.getFogLength();
@@ -65,6 +68,10 @@ public class GameState implements Serializable {
         }
     }
 
+    private void setLawnCleanerData(List<LawnCleaner> lawnCleaners){
+        for (LawnCleaner lc: lawnCleaners) this.lawnCleaners.add(lc.getRow());
+    }
+
     //getters
     public List<PlantData> getPlants() {
         return plants;
@@ -80,6 +87,10 @@ public class GameState implements Serializable {
 
     public List<GraveData> getGraves() {
         return graves;
+    }
+
+    public List<Integer> getLawnCleaners() {
+        return lawnCleaners;
     }
 
     public int getScore() {
