@@ -21,18 +21,31 @@ public class GameLogic {
     private final List<Zombie> zombies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Grave> graves = new ArrayList<>();
+    private final List<LawnCleaner> lawnCleaners = new ArrayList<>();
 
     // constructor: to load the previously saved game
     public GameLogic(GameState state) {
         loadPlants(state.getPlants());
         loadZombies(state.getZombies());
         loadGraves(state.getGraves());
+        loadLawnCleaners(state.getLawnCleaners());
     }
 
     // constructor: to start a new game
     public GameLogic(GameMode mode) {
+        makeLawnCLeaners();
         if (mode == GameMode.NIGHT) {
             makeGraves();
+        }
+    }
+
+    private void makeLawnCLeaners(){
+        ArrayList<Integer> rows = new ArrayList<>();
+        while(rows.size() < 3){
+            int row = (int)(Math.random() * 5);
+            if (rows.contains(row)) continue;
+            lawnCleaners.add(new LawnCleaner(row));
+            rows.add(row);
         }
     }
 
@@ -76,6 +89,10 @@ public class GameLogic {
     // generates the graves list to reload a saved game
     private void loadGraves(List<GraveData> graveDataList) {
         for (GraveData data : graveDataList) graves.add(new Grave(data));
+    }
+
+    private void loadLawnCleaners(List<Integer> lcData){
+        for (Integer row: lcData) lawnCleaners.add(new LawnCleaner(row));
     }
 
     // checks if the plant is plantable
@@ -144,6 +161,7 @@ public class GameLogic {
     public void updateGame() {
         for (Zombie z : zombies) z.action();
         for (Bullet b : bullets) b.move();
+        for (LawnCleaner lc : lawnCleaners) lc.action(zombies);
         setZombieState();
     }
 
@@ -173,6 +191,10 @@ public class GameLogic {
             if (grave.getRow() == row && grave.getCol() == col) return grave;
         }
         return null;
+    }
+
+    public List<LawnCleaner> getLawnCleaners() {
+        return lawnCleaners;
     }
 
     public List<Zombie> getZombies() {

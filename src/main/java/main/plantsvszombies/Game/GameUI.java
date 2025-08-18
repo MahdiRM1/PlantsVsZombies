@@ -33,10 +33,7 @@ import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.CardData;
 import main.plantsvszombies.GameState.GameState;
-import main.plantsvszombies.Items.Bullet;
-import main.plantsvszombies.Items.Card;
-import main.plantsvszombies.Items.Fog;
-import main.plantsvszombies.Items.Grave;
+import main.plantsvszombies.Items.*;
 import main.plantsvszombies.Plants.BombPlants.BombPlant;
 import main.plantsvszombies.Plants.BombPlants.DoomShroom;
 import main.plantsvszombies.Plants.OtherPlants.Blover;
@@ -119,6 +116,7 @@ public class GameUI {
         backgroundMusic.setVolume(SoundManager.music);
         backgroundMusic.setCycleCount(-1);
         backgroundMusic.play();
+        lawnCleaners();
         tl = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             Constants.gameTime += 20;
             updateGame();
@@ -128,7 +126,7 @@ public class GameUI {
         scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
         scene.getStylesheets().add(ImageFactory.class.getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
-        stage.setOnCloseRequest(e -> {if (playMode instanceof Client) save();});
+        stage.setOnCloseRequest(e -> {if (!(playMode instanceof Client)) save();});
         stage.show();
     }
 
@@ -152,6 +150,10 @@ public class GameUI {
         fog = new Fog(fogGrid, fogLength);
         mainPane.getChildren().add(2, fogGrid);
         mode.setFogLength(fogLength);
+    }
+
+    private void lawnCleaners(){
+        for (LawnCleaner lc: gameLogic.getLawnCleaners()) pane.getChildren().add(lc.getPicture());
     }
 
     // generate card bar
