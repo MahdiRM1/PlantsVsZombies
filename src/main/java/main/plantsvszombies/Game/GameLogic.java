@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.layout.Pane;
 import main.plantsvszombies.Enums.GameMode;
+import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Game.Tools.Utils;
 import main.plantsvszombies.GameState.GameState;
 import main.plantsvszombies.GameState.GraveData;
@@ -142,6 +143,20 @@ public class GameLogic {
         List<Zombie> died = new ArrayList<>();
         for (Zombie zombie : zombies) {
             if (zombie.checkDied()) died.add(zombie);
+        }
+
+        zombies.removeAll(died);
+        return died;
+    }
+
+    // finds and removes dead lawnCleaners
+    public List<LawnCleaner> LCToRemove() {
+        List<LawnCleaner> died = new ArrayList<>();
+        for (LawnCleaner lc : lawnCleaners) {
+            if (lc.getPicture().getLayoutX() > Constants.SCREEN_WIDTH) {
+                lawnCleaners.remove(lc);
+                died.add(lc);
+            }
         }
 
         zombies.removeAll(died);
