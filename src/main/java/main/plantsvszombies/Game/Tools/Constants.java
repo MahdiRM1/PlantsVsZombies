@@ -9,9 +9,9 @@ public final class Constants {
     public static long gameTime = 0;
 
     public static final double SCREEN_WIDTH = Screen.getPrimary().getVisualBounds().getWidth();
-    public static final double SCREEN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
+    public static final double SCREEN_HEIGHT = SCREEN_WIDTH * 9 / 16;
 
-    public static final double TILE_SIZE = SCREEN_HEIGHT / 7.1;
+    public static final double TILE_SIZE = SCREEN_HEIGHT / 7.3;
     public static final double ZOMBIE_PIC_HEIGHT = SCREEN_HEIGHT / 4.2;
     public static final double ZOMBIE_PIC_WIDTH = SCREEN_WIDTH / 10;
     public static final double BULLET_SIZE = SCREEN_HEIGHT / 24.5;

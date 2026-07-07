@@ -10,7 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
@@ -19,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import main.plantsvszombies.Enums.SunType;
 import main.plantsvszombies.GameState.GameState;
 import main.plantsvszombies.Plants.BombPlants.CherryBomb;
@@ -58,7 +61,7 @@ public class Utils {
         return colorAdjust;
     }
 
-    public static Pane createMenu(){
+    public static Pane createMenu(Stage stage){
         Pane menuPane = new Pane();
 
         ImageView optionImg = new ImageView(new Image(Utils.class.getResource("/Pictures/ui/optionPic.png").toExternalForm()));
@@ -70,16 +73,22 @@ public class Utils {
         music.setLayoutY(Constants.SCREEN_HEIGHT / 3);
         music.valueProperty().addListener((obs, oldVal, newVal)
                 -> SoundManager.music = newVal.doubleValue());
-        Label musicLabel = sliderLabel("MUSIC", music);
+        Label musicLabel = sliderLabel("MUSIC", music, Constants.SCREEN_WIDTH / 2.75);
 
         Slider volume = new Slider(0, 1, SoundManager.volume);
         styleSlider(volume);
         volume.setLayoutY(Constants.SCREEN_HEIGHT / 3 + Constants.SCREEN_HEIGHT / 10);
         volume.valueProperty().addListener((obs, oldVal, newVal)
                 -> SoundManager.volume = newVal.doubleValue());
-        Label volumeLabel = sliderLabel("VOLUME", volume);
+        Label volumeLabel = sliderLabel("VOLUME", volume, Constants.SCREEN_WIDTH / 2.75);
 
-        menuPane.getChildren().addAll(optionImg, music, musicLabel, volume, volumeLabel);
+        CheckBox fullScreen = new CheckBox();
+//        ImageFactory.setNodeSize(fullScreen, Constants.TILE_SIZE/5, Constants.TILE_SIZE/5);
+        ImageFactory.setNodePosition(fullScreen, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2);
+        fullScreen.setOnAction(e -> stage.setFullScreen(!stage.isFullScreen()));
+        fullScreen.getStyleClass().add("gameCheckBox");
+        Label fullScreenLabel = sliderLabel("FULL SCREEN", fullScreen, Constants.SCREEN_WIDTH / 2.6);
+        menuPane.getChildren().addAll(optionImg, music, musicLabel, volume, volumeLabel, fullScreen, fullScreenLabel);
         return menuPane;
     }
 
@@ -89,9 +98,9 @@ public class Utils {
         slider.getStyleClass().add("slider");
     }
 
-    private static Label sliderLabel(String str, Slider slider){
+    private static Label sliderLabel(String str, Node slider, double posX){
         Label label = new Label(str);
-        label.setLayoutX(Constants.SCREEN_WIDTH / 2.75);
+        label.setLayoutX(posX);
         label.setLayoutY(slider.getLayoutY());
         Font font = Font.loadFont(SoundManager.class.getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/27);
         label.setFont(font);

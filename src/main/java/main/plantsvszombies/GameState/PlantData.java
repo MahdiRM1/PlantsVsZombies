@@ -7,12 +7,14 @@ import java.io.Serializable;
 
 public class PlantData implements Serializable {
 
+    private final long timeCreated;
     private final String type;
     private final int row, col;
     private final double HP;
     private final boolean isSleep;
 
     public PlantData(Plant plant) {
+        timeCreated = plant.getTimeCreated();
         type = plant.getClass().getSimpleName();
         row = plant.getRow();
         col = plant.getCol();
@@ -34,6 +36,10 @@ public class PlantData implements Serializable {
 
     public double getHP() {
         return HP;
+    }
+
+    public long getTimeCreated() {
+        return timeCreated;
     }
 
     public boolean isSleep() {

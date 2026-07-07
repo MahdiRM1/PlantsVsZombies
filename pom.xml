@@ -71,15 +71,16 @@
           <execution>
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
-            <configuration>
-              <mainClass>main.plantsvszombies/main.plantsvszombies.HelloApplication</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
-              <noManPages>true</noManPages>
-              <stripDebug>true</stripDebug>
-              <noHeaderFiles>true</noHeaderFiles>
-            </configuration>
+              <configuration>
+                  <mainClass>main.plantsvszombies/main.plantsvszombies.PvsZ</mainClass>
+                  <launcher>PlantsVsZombies</launcher>
+                  <jlinkZipName>PlantsVsZombies</jlinkZipName>
+                  <jlinkImageName>PlantsVsZombies</jlinkImageName>
+                  <stripDebug>true</stripDebug>
+                  <noHeaderFiles>true</noHeaderFiles>
+                  <noManPages>true</noManPages>
+                  <jpackageImageName>PlantsVsZombies</jpackageImageName>
+              </configuration>
           </execution>
         </executions>
       </plugin>

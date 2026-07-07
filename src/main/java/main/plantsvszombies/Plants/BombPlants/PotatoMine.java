@@ -3,7 +3,6 @@ package main.plantsvszombies.Plants.BombPlants;
 import java.util.List;
 
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.MineState;
 import main.plantsvszombies.Enums.ZombieState;
 import main.plantsvszombies.Game.Tools.*;
@@ -37,12 +36,14 @@ public class PotatoMine extends BombPlant {
 
     @Override
     public boolean actionHappens(List<Zombie> zombies) {
-        if (Math.abs(Constants.gameTime - timeCreated) < 10_000) return false;
-        else if (Math.abs(Constants.gameTime - timeCreated) == 10_000) setState(MineState.IS_READY);
-        else if (state == MineState.IS_READY && nowPic == getImage().length - 1) setState(MineState.READY);
-        else if (state == MineState.READY && zombieCollision(zombies)) setState(MineState.EXPLODING);
+        double time = Math.abs(Constants.gameTime - timeCreated);
+
+        if (time < 10_000) return false;
+        else if (state == MineState.NOT_READY) setState(MineState.IS_READY, time == 10_000);
+        else if (state == MineState.IS_READY && nowPic == getImage().length - 1) setState(MineState.READY, false);
+        else if (state == MineState.READY && zombieCollision(zombies)) setState(MineState.EXPLODING, true);
         else if (state == MineState.EXPLODING && nowPic == getImage().length - 1) {
-            setState(MineState.EXPLODED);
+            setState(MineState.EXPLODED, true);
             return true;
         }
         else if (state == MineState.EXPLODED) {
@@ -60,8 +61,12 @@ public class PotatoMine extends BombPlant {
         return false;
     }
 
-    private void setState(MineState state){
+    private void setState(MineState state, boolean reset){
         this.state = state;
+        if (reset) reset_pics();
+    }
+
+    private void reset_pics(){
         nowPic = 0;
     }
 

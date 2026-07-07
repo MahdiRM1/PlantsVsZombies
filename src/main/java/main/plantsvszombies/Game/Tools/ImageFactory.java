@@ -19,7 +19,7 @@ public class ImageFactory {
 
     public static ImageView createBackGround(String str) {
         return createImageView("backGround/" + str + ".jpg",
-                Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+                Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
     }
 
     public static ImageView createCard(String plantName) {

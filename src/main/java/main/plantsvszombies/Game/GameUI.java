@@ -123,7 +123,7 @@ public class GameUI {
         }));
         tl.setCycleCount(Timeline.INDEFINITE);
         tl.play();
-        scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         scene.getStylesheets().add(ImageFactory.class.getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {if (!(playMode instanceof Client)) save();});
@@ -181,7 +181,7 @@ public class GameUI {
             for (int col = 0; col < Constants.COLS; col++)
                 grid.add(mapButtons(row, col), col, row);
 
-        grid.setPadding(new Insets(0, 0, Constants.SCREEN_WIDTH / 30, Constants.SCREEN_HEIGHT / 2.6));
+        grid.setPadding(new Insets(0, 0, Constants.SCREEN_HEIGHT/10, Constants.SCREEN_WIDTH / 5));
         return grid;
     }
 
@@ -299,7 +299,7 @@ public class GameUI {
         if (!(playMode instanceof Client)) tl.pause();
         SoundManager.playSound("pause");
 
-        Pane menuPane = Utils.createMenu();
+        Pane menuPane = Utils.createMenu(stage);
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         Button mainMenu = mainMenuBtn("menu");
