@@ -50,7 +50,7 @@ public class Introduction {
     }
 
     public void firstPage() {
-        Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        Scene scene = new Scene(MainMenuPane(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
@@ -84,16 +84,16 @@ public class Introduction {
             loadGame.setOnMouseClicked(event -> SoundManager.playWrongClick());
         }
 
-        ImageView quit = ImageFactory.createButton("Quit", Constants.SCREEN_WIDTH / 8.5, Constants.SCREEN_HEIGHT / 5.5);
-        ImageFactory.setNodePosition(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.405);
+        ImageView quit = ImageFactory.createButton("Quit", Constants.SCREEN_WIDTH / 8.8, Constants.SCREEN_HEIGHT / 6);
+        ImageFactory.setNodePosition(quit, Constants.SCREEN_WIDTH / 1.14, Constants.SCREEN_HEIGHT / 1.35);
         quit.setOnMouseClicked(event -> checkQuit(mainPane));
 
-        ImageView help = ImageFactory.createButton("help", Constants.SCREEN_WIDTH / 8.4, Constants.SCREEN_HEIGHT / 4);
-        ImageFactory.setNodePosition(help, Constants.SCREEN_WIDTH / 1.28, Constants.SCREEN_HEIGHT / 1.54);
+        ImageView help = ImageFactory.createButton("help", Constants.SCREEN_WIDTH / 8.8, Constants.SCREEN_HEIGHT / 4.4);
+        ImageFactory.setNodePosition(help, Constants.SCREEN_WIDTH / 1.265, Constants.SCREEN_HEIGHT / 1.43);
         help.setOnMouseClicked(e -> helpPage(mainPane));
 
-        ImageView options = ImageFactory.createButton("option", Constants.SCREEN_WIDTH / 6.55, Constants.SCREEN_HEIGHT / 5.4);
-        ImageFactory.setNodePosition(options, Constants.SCREEN_WIDTH / 1.47, Constants.SCREEN_HEIGHT / 1.475);
+        ImageView options = ImageFactory.createButton("option", Constants.SCREEN_WIDTH / 8, Constants.SCREEN_HEIGHT / 6);
+        ImageFactory.setNodePosition(options, Constants.SCREEN_WIDTH / 1.44, Constants.SCREEN_HEIGHT / 1.4);
         options.setOnMouseClicked(e -> option(mainPane));
 
         pane.getChildren().addAll(adventure, socket, loadGame, quit, options, help);
@@ -132,13 +132,13 @@ public class Introduction {
             mainPane.getChildren().removeLast();
         });
 
-        String phrase = "Wait\n\nAre You Sure You Wish To\nQuit The Game?";
+        String phrase = "Wait\nAre You Sure You Wish To\nQuit The Game?";
         chooseRole(mainPane, cancel, quit, phrase);
     }
 
     private void option(StackPane pane){
         SoundManager.playClickTrack();
-        Pane option = Utils.createMenu();
+        Pane option = Utils.createMenu(stage);
 
         Button OK = Utils.submitButton("OK");
         OK.setOnMouseClicked(e -> {
@@ -173,13 +173,13 @@ public class Introduction {
     }
 
     private void multiPlayerMode(StackPane mainPane){
-        Button client = Utils.createMenuButton("CLIENT", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
+        Button client = Utils.createMenuButton("JOIN", Constants.SCREEN_WIDTH/9, Constants.SCREEN_HEIGHT/15);
         client.setOnAction(e -> clientMode(mainPane));
 
-        Button server = Utils.createMenuButton("SERVER", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
+        Button server = Utils.createMenuButton("CREATE", Constants.SCREEN_WIDTH / 9, Constants.SCREEN_HEIGHT / 15);
         server.setOnMouseClicked(e -> serverModeSelection(mainPane));
 
-        String phrase = "MultiPlayer\n\nChoose your role in \nthe game";
+        String phrase = "MultiPlayer\n\nChoose an option";
         chooseRole(mainPane, client, server, phrase);
     }
 
@@ -226,7 +226,7 @@ public class Introduction {
             mainPane.getChildren().removeLast();
         });
 
-        String phrase = "Enter the IP in the client\n textfield.\n\n" + Ip();
+        String phrase = "Enter the IP in the\n client textfield.\n" + Ip();
         chooseRole(mainPane, cancel, accept, phrase);
     }
 
@@ -268,7 +268,7 @@ public class Introduction {
         TextField textField = new TextField();
         textField.setPromptText("Enter IP");
         textField.getStyleClass().add("TextField");
-        Font font = Font.loadFont(getClass().getResource("/fonts/Coold.ttf").toExternalForm(), Constants.SCREEN_HEIGHT/36);
+        Font font = Font.loadFont(getClass().getResource("/fonts/Coold.ttf").toExternalForm(), 30);
         textField.setFont(font);
         textField.setPrefSize(Constants.SCREEN_WIDTH/4, Constants.SCREEN_HEIGHT/15);
         ImageFactory.setNodePosition(textField, Constants.SCREEN_WIDTH/2.7, Constants.SCREEN_HEIGHT/2.1);
@@ -313,7 +313,7 @@ public class Introduction {
         Label label = new Label(text);
         ImageFactory.setNodePosition(label, Constants.SCREEN_WIDTH/2.5, Constants.SCREEN_HEIGHT / 2.5);
         ImageFactory.setNodeSize(label, Constants.SCREEN_WIDTH/5.25, Constants.SCREEN_HEIGHT/8);
-        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), Constants.SCREEN_HEIGHT/36);
+        Font font = Font.loadFont(getClass().getResource("/fonts/BreakdownPG.otf").toExternalForm(), 25);
         label.setFont(font);
         label.setStyle(
                 "-fx-text-fill: rgb(214, 178, 94);" +

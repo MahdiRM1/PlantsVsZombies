@@ -44,7 +44,7 @@ public class PlantSelection{
         gameMode = mode;
         music();
         createPane();
-        Scene scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 35);
+        Scene scene = new Scene(mainPane, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
     }
@@ -105,7 +105,7 @@ public class PlantSelection{
 
     private Button startGameBtn() {
         Button start = Utils.createButton("Let's Rock", Constants.SCREEN_WIDTH / 7, Constants.SCREEN_HEIGHT / 14);
-        ImageFactory.setNodePosition(start, Constants.SCREEN_WIDTH / 5.7, Constants.SCREEN_HEIGHT / 1.126);
+        ImageFactory.setNodePosition(start, Constants.SCREEN_WIDTH / 6.2    , Constants.SCREEN_HEIGHT / 1.126);
         start.setStyle("-fx-text-fill: rgba(50, 50, 50, 0.7);");
 
         start.setOnMouseEntered(event -> {
@@ -224,7 +224,7 @@ public class PlantSelection{
     private void menu(){
         SoundManager.playSound("pause");
 
-        Pane menuPane = Utils.createMenu();
+        Pane menuPane = Utils.createMenu(stage);
         menuPane.setStyle("-fx-background-color: rgba(56, 56, 56, 0.7);");
 
         Button mainMenu = mainMenuBtn();

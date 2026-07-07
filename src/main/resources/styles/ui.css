@@ -55,3 +55,23 @@
 .menuBtn .text, .submitBtn .text{
     -fx-effect: dropshadow(one-pass-box, black, 5, 1, 0, 0);
 }
+
+.gameCheckBox {
+    -fx-padding: 0;
+}
+
+.gameCheckBox .box {
+    -fx-background-color: transparent;
+    -fx-border-color: rgb(25, 25, 25);
+    -fx-border-width: 6px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.gameCheckBox .mark {
+    -fx-background-color: transparent;
+}
+
+.gameCheckBox:selected .mark {
+    -fx-background-color: limegreen;
+}

@@ -11,7 +11,7 @@ import main.plantsvszombies.Zombies.Zombie;
 public abstract class Plant {
 
     protected final int row, col;
-    protected final long timeCreated;
+    protected long timeCreated;
     protected int price;
     protected double HP;
     protected ImageView picture;
@@ -82,5 +82,13 @@ public abstract class Plant {
 
     public int getRechargeTime() {
         return rechargeTime;
+    }
+
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(long timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }

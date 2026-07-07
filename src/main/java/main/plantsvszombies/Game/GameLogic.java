@@ -68,6 +68,7 @@ public class GameLogic {
             if (data.getType().equals("CoffeeBean")|| data.getType().equals("GraveBuster")) continue;
             Plant plant = Utils.buildPlant(data.getRow(), data.getCol(), data.getType(), data.isSleep());
             plant.setHP(data.getHP());
+            plant.setTimeCreated(data.getTimeCreated());
             plants.add(plant);
         }
     }
