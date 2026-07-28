@@ -40,7 +40,7 @@ public class ImageFactory {
                 Constants.TILE_SIZE * 0.8,
                 plantName.equals("TallNut") ? Constants.TILE_SIZE * 1.2 : Constants.TILE_SIZE * 0.8);
         setNodePosition(plant, Constants.BOARD_X + (col * Constants.TILE_SIZE),
-                plantName.equals("TallNut") ? (Constants.BOARD_Y) + ((row - 0.5) * Constants.TILE_SIZE) : (Constants.BOARD_Y) + (row * Constants.TILE_SIZE));
+                plantName.equals("TallNut") ? (Constants.BOARD_Y) + (row * Constants.TILE_SIZE) : (Constants.BOARD_Y) + ((row+0.2) * Constants.TILE_SIZE));
         plant.setMouseTransparent(true);
         return plant;
     }
@@ -58,7 +58,7 @@ public class ImageFactory {
                 Constants.BULLET_SIZE, Constants.BULLET_SIZE);
         setNodePosition(bullet, Constants.BOARD_X + ((col + 0.6) * Constants.TILE_SIZE),
                 bulletType == BulletType.SHROOM_BULLET ?
-                        Constants.BOARD_Y + ((row + 0.35) * Constants.TILE_SIZE) : Constants.BOARD_Y + ((row + 0.15) * Constants.TILE_SIZE));
+                        Constants.BOARD_Y + ((row + 0.55) * Constants.TILE_SIZE) : Constants.BOARD_Y + ((row + 0.35) * Constants.TILE_SIZE));
         return bullet;
     }
 
@@ -72,8 +72,8 @@ public class ImageFactory {
     public static void createZombiePicture(ImageView picture, ImageView headPicture, int row, int col) {
         setNodeSize(picture, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
         setNodeSize(headPicture, Constants.ZOMBIE_PIC_WIDTH, Constants.ZOMBIE_PIC_HEIGHT);
-        setNodePosition(picture, Constants.BOARD_X + ((col - 0.5) * Constants.TILE_SIZE), Constants.BOARD_Y + ((row - 0.8) * Constants.TILE_SIZE));
-        setNodePosition(headPicture, Constants.BOARD_X + ((col - 0.5) * Constants.TILE_SIZE), Constants.BOARD_Y + ((row - 0.8) * Constants.TILE_SIZE));
+        setNodePosition(picture, Constants.BOARD_X + ((col - 0.5) * Constants.TILE_SIZE), Constants.BOARD_Y + ((row - 0.5) * Constants.TILE_SIZE));
+        setNodePosition(headPicture, picture.getLayoutX(), picture.getLayoutY());
         changeScale(headPicture, 1.2);
     }
 

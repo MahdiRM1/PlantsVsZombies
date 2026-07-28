@@ -160,7 +160,7 @@ public class GameLogic {
             }
         }
 
-        zombies.removeAll(died);
+        lawnCleaners.removeAll(died);
         return died;
     }
 

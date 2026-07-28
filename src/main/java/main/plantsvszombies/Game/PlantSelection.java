@@ -78,26 +78,26 @@ public class PlantSelection{
     }
 
     private HBox[] plants(){
-        double cardSpacing = Constants.SCREEN_WIDTH / 80;
+//        double cardSpacing = Constants.SCREEN_WIDTH / 120;
+        double cardSpacing = 0;
 
         HBox box1 = new HBox(cardSpacing,
                 getCardButton("PeaShooter"), getCardButton("SunFlower"),
                 getCardButton("PotatoMine"), getCardButton("SnowPea"),
-                getCardButton("Repeater")
+                getCardButton("Repeater") , getCardButton("WallNut")
         );
         HBox box2 = new HBox(cardSpacing,
                 getCardButton("CherryBomb"), getCardButton("Jalapeno"),
-                getCardButton("WallNut"), getCardButton("TallNut"),
-                getCardButton("CoffeeBean")
+                getCardButton("CoffeeBean"), getCardButton("TallNut"),
+                getCardButton("Squash"), getCardButton("Chomper")
         );
         HBox box3 = new HBox(cardSpacing,
                 getCardButton("PuffShroom"), getCardButton("ScaredyShroom"),
                 getCardButton("IceShroom"), getCardButton("HypnoShroom"),
-                getCardButton("GraveBuster")
+                getCardButton("GraveBuster") , getCardButton("DoomShroom")
         );
         HBox box4 = new HBox(cardSpacing,
-                getCardButton("DoomShroom"), getCardButton("Plantern"),
-                getCardButton("Blover")
+                getCardButton("Plantern"), getCardButton("Blover")
         );
 
         return new HBox[]{box1, box2, box3, box4};

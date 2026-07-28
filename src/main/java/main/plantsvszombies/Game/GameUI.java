@@ -36,11 +36,7 @@ import main.plantsvszombies.GameState.GameState;
 import main.plantsvszombies.Items.*;
 import main.plantsvszombies.Plants.BombPlants.BombPlant;
 import main.plantsvszombies.Plants.BombPlants.DoomShroom;
-import main.plantsvszombies.Plants.OtherPlants.Blover;
-import main.plantsvszombies.Plants.OtherPlants.CoffeeBean;
-import main.plantsvszombies.Plants.OtherPlants.GraveBuster;
-import main.plantsvszombies.Plants.OtherPlants.Plantern;
-import main.plantsvszombies.Plants.OtherPlants.SunFlower;
+import main.plantsvszombies.Plants.OtherPlants.*;
 import main.plantsvszombies.Plants.PeaPlants.PeaPlant;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Plants.Shroom;
@@ -103,7 +99,7 @@ public class GameUI {
         for (int i = 0; i < plantsName.size(); i++) {
             cards.add(new Card(plantsName.get(i), i));
         }
-        initStackPane(cardBar(), mode == GameMode.DAY ? 50 : 100, 0);
+        initStackPane(cardBar(), mode == GameMode.DAY ? 500 : 1000, 0);
         if (mode == GameMode.NIGHT)
             initFog((int) (Math.random() * 3) + 5);
         SoundManager.playSound("readysetplant");
@@ -166,7 +162,7 @@ public class GameUI {
 
     // loads the potted plants
     private void loadPlants() {
-        for (Plant plant : gameLogic.getPottedPlants()) borderPane.getChildren().add(plant.getPicture());
+        for (Plant plant : gameLogic.getPottedPlants()) pane.getChildren().add(plant.getPicture());
     }
 
     // loads the zombies
@@ -228,7 +224,7 @@ public class GameUI {
         if (placed) {
             gameLogic.setPlant(plant);
             cards.get(selectedButton).updateLastSelected();
-            borderPane.getChildren().add(plant.getPicture());
+            pane.getChildren().add(plant.getPicture());
             btn.setOnMouseClicked(event -> correctClick(btn));
         }
 
@@ -240,7 +236,7 @@ public class GameUI {
     private void useShovel(int row, int col, Button btn) {
         Plant plant = gameLogic.getPlant(row, col);
         if (!gameLogic.isPlantable(row, col) && !(plant instanceof DoomShroom ds && !ds.isSleep()))
-            gameLogic.removePlant(row, col, borderPane);
+            gameLogic.removePlant(row, col, pane);
         else btn.setOnMouseClicked(event -> wrongClick(btn));
 
         Pane buttons = (Pane) mainPane.getChildren().getLast();
@@ -359,7 +355,7 @@ public class GameUI {
 
     // removes garbage images of struck bullets,dead zombies and eaten plants
     private void cleanUpImages() {
-        for (Plant plantToRemove : gameLogic.plantsToRemove()) borderPane.getChildren().remove(plantToRemove.getPicture());
+        for (Plant plantToRemove : gameLogic.plantsToRemove()) pane.getChildren().remove(plantToRemove.getPicture());
         for (LawnCleaner lc : gameLogic.LCToRemove()) pane.getChildren().remove(lc.getPicture());
         for (Bullet bullet : gameLogic.checkBulletStrike()) pane.getChildren().remove(bullet.getPicture());
         for (Zombie zombie : gameLogic.zombieToRemove()) pane.getChildren().removeAll(zombie.getPicture(), zombie.getSecondPicture());
@@ -384,6 +380,7 @@ public class GameUI {
                 case GraveBuster graveBuster -> gameLogic.removeGrave(graveBuster.action(), borderPane);
                 case Plantern plantern -> plantern.action(fog);
                 case Blover blover -> blover.action(fog);
+                case Chomper chomper -> chomper.action(gameLogic.getZombies());
                 default -> {}
             }
         }
