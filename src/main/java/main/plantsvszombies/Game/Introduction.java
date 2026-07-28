@@ -342,10 +342,10 @@ public class Introduction {
             startGame(new DefaultMode());
         });
 
-        double sizePlant = Constants.SCREEN_HEIGHT / 6.3;
+        double sizePlant = Constants.SCREEN_HEIGHT / 8;
         ImageView plant = new ImageView(new Image(getClass().getResource("/Pictures/plantPictures/SunFlower/gif.gif").toExternalForm()));
         ImageFactory.setNodeSize(plant, sizePlant, sizePlant);
-        ImageFactory.setNodePosition(plant, Constants.SCREEN_WIDTH / 3.3, Constants.SCREEN_HEIGHT / 3.7);
+        ImageFactory.setNodePosition(plant, Constants.SCREEN_WIDTH / 3.2, Constants.SCREEN_HEIGHT / 3.6);
 
         ImageView night = ImageFactory.createButton("NightMode", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2);
         ImageFactory.setNodePosition(night, Constants.SCREEN_WIDTH / 1.8, Constants.SCREEN_HEIGHT / 4);

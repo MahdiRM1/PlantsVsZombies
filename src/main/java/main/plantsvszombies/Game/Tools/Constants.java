@@ -12,8 +12,8 @@ public final class Constants {
     public static final double SCREEN_HEIGHT = SCREEN_WIDTH * 9 / 16;
 
     public static final double TILE_SIZE = SCREEN_HEIGHT / 7.3;
-    public static final double ZOMBIE_PIC_HEIGHT = SCREEN_HEIGHT / 4.2;
-    public static final double ZOMBIE_PIC_WIDTH = SCREEN_WIDTH / 10;
+    public static final double ZOMBIE_PIC_HEIGHT = SCREEN_HEIGHT / 4.8;
+    public static final double ZOMBIE_PIC_WIDTH = SCREEN_WIDTH / 11;
     public static final double BULLET_SIZE = SCREEN_HEIGHT / 24.5;
     public static final double PLANT_CARD_HEIGHT = SCREEN_HEIGHT / 7.3;
     public static final double PLANT_CARD_WIDTH = SCREEN_WIDTH / 20.6;
