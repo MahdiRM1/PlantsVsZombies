@@ -11,7 +11,7 @@
 
 </div>
 
-[![Gameplay](screenshots/in%20game.png)](screenshots/gameplay.mp4)
+<p align="center"> <video src="screenshots/gameplay.mp4" controls width="900"></video> </p>
 
 ## 📖 About
 
