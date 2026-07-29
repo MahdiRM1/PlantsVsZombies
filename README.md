@@ -53,7 +53,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Main Menu
 
 <p align="center">
-<img src="screenshots/menu.png" width="900">
+<img src="screenshots/manu.png" width="900">
 </p>
 
 ---
