@@ -25,17 +25,13 @@ public class Squash extends BombPlant{
         super(row, col);
         price = 50;
         HP = 100;
-        rechargeTime = 1;
+        rechargeTime = 25;
     }
 
     private void zombieCollision(List<Zombie> zombies){
         for (Zombie z : zombies)
             if (this.getRow() == z.getRow() && Math.abs(this.col - z.getCol()) < 2 && !z.isHypnotized()) {
-                zombie = z;
-                maxTop = z.getPicture().getLayoutY() + z.getPicture().getFitHeight()/8;
-                maxBottom = maxTop + z.getPicture().getFitHeight();
-                if (zombie.layoutX() < this.layoutX()) picture.setScaleX(-1);
-                see();
+                see(z);
                 return;
             }
     }
@@ -68,9 +64,16 @@ public class Squash extends BombPlant{
             double down = (maxBottom - (picture.getLayoutY()+picture.getFitHeight()))/2;
             ImageFactory.setNodePosition(picture, picture.getLayoutX(), picture.getLayoutY() + down);
         }
+
+        if (nowPic == 40) SoundManager.playSound("bonk");
     }
 
-    private void see(){
+    private void see(Zombie z){
+        SoundManager.playSound("hmm");
+        zombie = z;
+        maxTop = z.getPicture().getLayoutY() + z.getPicture().getFitHeight()/8;
+        maxBottom = maxTop + z.getPicture().getFitHeight();
+        if (zombie.layoutX() < this.layoutX()) picture.setScaleX(-1);
         nowPic = 0;
     }
 

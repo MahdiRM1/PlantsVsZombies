@@ -1,10 +1,12 @@
 package main.plantsvszombies.Plants.OtherPlants;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import main.plantsvszombies.Enums.ChomperState;
 import main.plantsvszombies.Enums.ZombieState;
 import main.plantsvszombies.Game.Tools.Constants;
 import main.plantsvszombies.Game.Tools.ImageFactory;
+import main.plantsvszombies.Game.Tools.SoundManager;
 import main.plantsvszombies.Plants.Plant;
 import main.plantsvszombies.Zombies.Zombie;
 
@@ -19,16 +21,19 @@ public class Chomper extends Plant {
     private static final int DIGEST_FRAME_COUNT = 16;
     private ChomperState state = ChomperState.READY;
     private long chompTime = -1;
+    private static final AudioClip voice;
 
     static {
         NORMAL_FRAMES = ImageFactory.arrayImage("plantPictures/Chomper/normal/frame_", FRAME_COUNT);
         ATTACK_FRAMES = ImageFactory.arrayImage("plantPictures/Chomper/attack/frame_", ATTACK_FRAME_COUNT);
         DIGEST_FRAMES = ImageFactory.arrayImage("plantPictures/Chomper/digest/frame_", DIGEST_FRAME_COUNT);
+        voice = SoundManager.setSound("bigchomp");
     }
 
     public Chomper(int row, int col) {
         super(row, col);
-        ImageFactory.changeScale(picture, 1.5);
+        ImageFactory.changeScale(picture, 1.3);
+        picture.setLayoutX(picture.getLayoutX() + Constants.TILE_SIZE/6);
         price = 150;
         HP = 100;
         rechargeTime = 15;
@@ -38,6 +43,7 @@ public class Chomper extends Plant {
         for (Zombie z : zombies)
             if (this.getRow() == z.getRow() && this.col - z.getCol() < 2 && this.col - z.getCol() > -1 && !z.isHypnotized()) {
                 setState(ChomperState.CHOMP);
+                voice.play();
                 return;
             }
     }
