@@ -53,7 +53,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Main Menu
 
 <p align="center">
-<img src="screenshots/manu.png" width="900">
+<img src="screenshots/manu.jpg" width="900">
 </p>
 
 ---
@@ -61,7 +61,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Plant Selection
 
 <p align="center">
-<img src="screenshots/plant selection.png" width="900">
+<img src="screenshots/plant selection.jpg" width="900">
 </p>
 
 ---
@@ -69,7 +69,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Gameplay
 
 <p align="center">
-<img src="screenshots/in game.png" width="900">
+<img src="screenshots/in game.jpg" width="900">
 </p>
 
 ---
@@ -77,7 +77,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Multiplayer
 
 <p align="center">
-<img src="screenshots/socket.png" width="900">
+<img src="screenshots/socket.jpg" width="900">
 </p>
 
 ---
@@ -85,7 +85,7 @@ The game includes animated plants and zombies, a plant selection system, a multi
 ### Settings
 
 <p align="center">
-<img src="screenshots/options.png" width="900">
+<img src="screenshots/options.jpg" width="900">
   
 </p>
 ## 📦 Download
